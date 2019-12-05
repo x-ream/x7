@@ -1,0 +1,1 @@
+nohup java -Dnu=demo  -Dspring.profiles.active=test -jar app.jar >/logs/demo.log &

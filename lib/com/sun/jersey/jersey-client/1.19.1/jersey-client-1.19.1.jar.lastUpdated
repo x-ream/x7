@@ -1,0 +1,6 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Oct 28 14:49:51 CST 2016
+http\://121.40.172.95\:8080/nexus/content/groups/public/.lastUpdated=1477627039370
+@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1477054628067
+http\://maven.aliyun.com/nexus/content/groups/public/.lastUpdated=1477637391568
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact com.sun.jersey\:jersey-client\:jar\:1.19.1 from/to central (https\://repo.maven.apache.org/maven2)\: The operation was cancelled.

@@ -1,0 +1,15 @@
+package $package;
+
+
+/**
+ * 
+ * @author BeanKeyGenerator
+ *
+ */
+public interface ${className} {
+
+#foreach( $prop in $propList ) 
+	String $prop = "${prop}";
+#end
+
+}

@@ -1,0 +1,21 @@
+package beankey;
+
+
+/**
+ * 
+ * @author BeanKeyGenerator
+ *
+ */
+public interface Key {
+
+#foreach( $clz in $clzList ) 
+#set ($clzName = $clz.clzName)
+	interface $clzName {
+#set ($propList = $clz.propList)
+#foreach( $prop in $propList ) 
+		String $prop = "${prop}";
+#end
+
+	}
+#end
+}

@@ -1,0 +1,8 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Oct 28 16:43:33 CST 2016
+https\://maven-repository.dev.java.net/nonav/repository/.error=Could not transfer artifact com.sun.jmx\:jmxri\:jar\:1.2.1 from/to java.net (https\://maven-repository.dev.java.net/nonav/repository)\: Cannot access https\://maven-repository.dev.java.net/nonav/repository with type legacy using the available connector factories\: AetherRepositoryConnectorFactory, BasicRepositoryConnectorFactory
+http\://maven.aliyun.com/nexus/content/groups/public/.error=
+@legacy-java.net-https\://maven-repository.dev.java.net/nonav/repository/.lastUpdated=1477643560635
+https\://repo.maven.apache.org/maven2/.lastUpdated=1477644213599
+https\://repo.maven.apache.org/maven2/.error=
+http\://maven.aliyun.com/nexus/content/groups/public/.lastUpdated=1477643560576
