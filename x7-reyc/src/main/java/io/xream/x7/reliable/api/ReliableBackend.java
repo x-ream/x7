@@ -37,11 +37,11 @@ public interface ReliableBackend {
      * @param underConstruction message underConstruction
      * @param topic message topic
      * @param body  message body
-     * @param messageTracing getMsgId(), set tracingId
+     * @param messageTraceable getMsgId(), set tracingId
      * @param svcs  the nameList of other listening domain service
      * @param callable  the service or controller handle the bisiness
      */
-    Object produceReliably(Boolean useTcc, String id, int retryMax, boolean underConstruction, String topic, Object body, MessageTraceable messageTracing, String[] svcs, Callable callable);
+    Object produceReliably(Boolean useTcc, String id, int retryMax, boolean underConstruction, String topic, Object body, MessageTraceable messageTraceable, String[] svcs, Callable callable);
 
     /**
      *
