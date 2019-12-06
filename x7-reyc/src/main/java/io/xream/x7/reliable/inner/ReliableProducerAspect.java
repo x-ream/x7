@@ -80,12 +80,7 @@ public class ReliableProducerAspect {
             }
         }
 
-        int retryMax = reliableProducer.retryMax();
-
-
-        if (reliableProducer.useTcc()){
-            retryMax = retryMax > 3 ? 3 : retryMax;
-        }
+        final int retryMax = reliableProducer.useTcc() ? 0 : reliableProducer.retryMax();
 
         final String msgId = MessageIdGenerator.get();
 
@@ -123,9 +118,10 @@ public class ReliableProducerAspect {
         if (reliableProducer.async() && ! reliableProducer.useTcc())
             return result;
 
+        final long durationBaseOne = 100;//FIXME： require test
         boolean isOk = false;
         int replayMax = 3;
-        long duration = 100;
+        long duration = durationBaseOne;
         int replay = 0;
         while (replay < replayMax)
         {
@@ -140,12 +136,12 @@ public class ReliableProducerAspect {
             }catch (Exception e) {
                 break;
             }
-            duration *= 2;
+            duration += durationBaseOne;
         }
 
-        retryMax += 3;
-        duration = 500;
-        replayMax = replay + retryMax;
+        final long durationBaseTwo = 1000;
+        duration = durationBaseTwo;
+        replayMax = replay + 3;
         while (replay < replayMax)
         {
             try {
@@ -159,12 +155,14 @@ public class ReliableProducerAspect {
             }catch (Exception e) {
                 break;
             }
-            duration *= 2;
+            duration += durationBaseTwo;
         }
 
-        if (reliableProducer.useTcc()) {
-            this.backend.cancel(msgId);
-            logger.info("handled FAIL, time: {} ,replay = {} ,for {}" , System.currentTimeMillis() - startTime , replay ,proceedingJoinPoint.getSignature());
+        if (retryMax == 0) {
+            if (reliableProducer.useTcc()) {
+                this.backend.cancel(msgId);
+            }
+            logger.info("handled FAIL, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
             throw new BusyException("TIMEOUT, X TRANSACTION UN FINISHED");
         }
 
