@@ -33,7 +33,7 @@ public interface ReliableBackend {
      *     any exception occured, produce 'TOPIC'_TCC_CANCEL <br>
      *     anyway, when isTcc = true, has to prepare 3 listeners <br>
      * @param id framework generate id
-     * @param maxRetry message maxRetry
+     * @param retryMax message retryMax
      * @param underConstruction message underConstruction
      * @param topic message topic
      * @param body  message body
@@ -41,7 +41,7 @@ public interface ReliableBackend {
      * @param svcs  the nameList of other listening domain service
      * @param callable  the service or controller handle the bisiness
      */
-    Object produceReliably(Boolean useTcc, String id, int maxRetry, boolean underConstruction, String topic, Object body, MessageTraceable messageTracing, String[] svcs, Callable callable);
+    Object produceReliably(Boolean useTcc, String id, int retryMax, boolean underConstruction, String topic, Object body, MessageTraceable messageTracing, String[] svcs, Callable callable);
 
     /**
      *

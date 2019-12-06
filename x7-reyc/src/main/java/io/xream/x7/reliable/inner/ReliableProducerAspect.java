@@ -80,13 +80,13 @@ public class ReliableProducerAspect {
             }
         }
 
-        int maxRetry = reliableProducer.retryMax();
+        int retryMax = reliableProducer.retryMax();
 
 
         if (reliableProducer.useTcc()){
-            maxRetry = maxRetry > 3 ? 3 : maxRetry;
+            retryMax = retryMax > 3 ? 3 : retryMax;
         }else {
-            maxRetry = maxRetry < 3 ? 3 : maxRetry;
+            retryMax = retryMax < 3 ? 3 : retryMax;
         }
 
         final String msgId = MessageIdGenerator.get();
@@ -101,7 +101,7 @@ public class ReliableProducerAspect {
         Object result = this.backend.produceReliably(
                 reliableProducer.useTcc(),//
                 msgId,//
-                maxRetry,//
+                retryMax,//
                 reliableProducer.underConstruction(),//
                 reliableProducer.topic(),//
                 body,//
@@ -126,10 +126,10 @@ public class ReliableProducerAspect {
             return result;
 
         boolean isOk = false;
-        int maxReplay = 3;
+        int replayMax = 3;
         long duration = 15;
         int replay = 0;
-        while (replay < maxReplay)
+        while (replay < replayMax)
         {
             try {
                 TimeUnit.MILLISECONDS.sleep(duration);
@@ -144,10 +144,10 @@ public class ReliableProducerAspect {
             }
         }
 
-        maxRetry = 6;
+        retryMax = 6;
         duration = 1000;
-        maxReplay = replay + maxRetry;
-        while (replay < maxReplay)
+        replayMax = replay + retryMax;
+        while (replay < replayMax)
         {
             try {
                 TimeUnit.MILLISECONDS.sleep(duration);
