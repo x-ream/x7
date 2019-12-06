@@ -85,8 +85,6 @@ public class ReliableProducerAspect {
 
         if (reliableProducer.useTcc()){
             retryMax = retryMax > 3 ? 3 : retryMax;
-        }else {
-            retryMax = retryMax < 3 ? 3 : retryMax;
         }
 
         final String msgId = MessageIdGenerator.get();
@@ -127,7 +125,7 @@ public class ReliableProducerAspect {
 
         boolean isOk = false;
         int replayMax = 3;
-        long duration = 15;
+        long duration = 100;
         int replay = 0;
         while (replay < replayMax)
         {
@@ -142,10 +140,11 @@ public class ReliableProducerAspect {
             }catch (Exception e) {
                 break;
             }
+            duration *= 2;
         }
 
-        retryMax = 6;
-        duration = 1000;
+        retryMax += 3;
+        duration = 500;
         replayMax = replay + retryMax;
         while (replay < replayMax)
         {
@@ -160,6 +159,7 @@ public class ReliableProducerAspect {
             }catch (Exception e) {
                 break;
             }
+            duration *= 2;
         }
 
         if (reliableProducer.useTcc()) {
