@@ -21,15 +21,33 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 1. retryMax=0,useTcc=false,async=false, mean: simple prepare,
+ *      producer local tx create preparing status record or log record
+ *      listener local tx create preparing status record or log record
+ * 2. useTcc=true, anyway, framework will set retryMax = 0
+ * 3. retryMax=3, final consistent; if underConstruction, will save the message
+ *
+ * usage:
+ * 1. create orderBean: (useTcc=true)
+ * 2. pay:  preparing(retryMax=0,useTcc=false,async=false), paid callback(retryMax=3,async=true)
+ * 3. logistics warehousing: (retryMax=3), and client ui vision compensation
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface ReliableProducer {
 
     boolean useTcc() default false;
+
     String topic() default "";
-    Class<?> type()  default Void.class;
+
+    Class<?> type() default Void.class;
+
     String[] svcs() default {};
+
     int retryMax() default 0;
+
     boolean async() default false;
+
     boolean underConstruction() default false;
 }
