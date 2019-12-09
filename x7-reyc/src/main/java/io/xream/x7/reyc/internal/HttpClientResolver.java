@@ -133,7 +133,7 @@ public class HttpClientResolver {
             List<String> regExList = StringUtil.listByRegEx(url, pattern);
             int size = regExList.size();
             for (int i = 0; i < size; i++) {
-                url = url.replaceAll(regExList.get(i), args[i].toString());
+                url = url.replace(regExList.get(i), args[i].toString());
             }
             result = HttpClientUtil.get(url, headerList, properies.getConnectTimeout(), properies.getSocketTimeout(), httpclient);
         }
