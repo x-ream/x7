@@ -38,7 +38,7 @@ public interface MessageTraceable {
      * for server, scheduling retry, java code like:  <br>
      *     if ( message.getTime() < now-duration) <br>
      * for client, as condition of sql update for 2pc business, sql code like: <br>
-     *    update inventory set count = count - 1 where id = 1 and refreshAt < ${message.time} <br>
+     *    update inventory set refreshAt = ${message.time} where id = 1 and refreshAt < ${message.time} <br>
      * not support TCC, if useTcc, no retry, to get the fastest response, java code like:  <br>
      *    create(orderBean) <br>
      */

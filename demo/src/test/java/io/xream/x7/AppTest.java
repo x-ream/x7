@@ -56,7 +56,7 @@ public class AppTest {
 //        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.refresh();
-xxxTest.testRefreshCondition();
+xxxTest.refreshByCondition();
     }
 
 

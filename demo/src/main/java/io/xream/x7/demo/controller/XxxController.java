@@ -51,7 +51,7 @@ public class XxxController {
 		return ViewEntity.ok();
 	}
 
-	@RequestMapping("/refresh")
+	@RequestMapping("/refreshByCondition")
 	public ViewEntity refreshByCondition(@RequestBody Cat cat){
 
 
@@ -77,6 +77,7 @@ public class XxxController {
 		refreshCondition.refresh("testBoo",TestBoo.TEST);
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);
+		refreshCondition.refresh("test = test - 3");
 //		refreshCondition.refresh("createAt",new Date());
 		//refreshCondition.refresh("test=test+1");//表达式更新
 //		refreshCondition.refresh("test",3333).refresh("type","XL");//赋值更新
@@ -90,6 +91,12 @@ public class XxxController {
 //		if (true){
 //			throw new RuntimeException("xxxxxxxxxxxxxxxxxxxx");
 //		}
+
+		try {
+			TimeUnit.MILLISECONDS.sleep(3000);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 
 		return ViewEntity.ok();
 	}

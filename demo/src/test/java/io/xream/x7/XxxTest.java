@@ -16,6 +16,8 @@ import x7.core.web.Direction;
 import x7.core.web.ViewEntity;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 @Component
@@ -34,12 +36,27 @@ public class XxxTest {
         Cat cat = new Cat();
 
         cat.setDogId(2323);
-        cat.setId(122);
+        cat.setId(4);
 
-        ViewEntity ve = this.controller.refreshByCondition(cat);
+        Executor executor = Executors.newFixedThreadPool(3);
 
-        System.out.println("\n______Result: " + ve);
+        for (int i=0; i<3; i++) {
 
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    ViewEntity ve = testServiceRemote.refreshByCondition(cat);
+                    System.out.println("--------------- "+ve);
+                }
+            });
+
+        }
+
+        try {
+            Thread.sleep(10000000);
+        }catch (Exception e){
+
+        }
     }
 
     public  void test() {
@@ -126,10 +143,6 @@ public class XxxTest {
         return testServiceRemote.getBase();
     }
 
-
-    public ViewEntity refresh(){
-        return this.controller.refreshByCondition(null);
-    }
 
     public ViewEntity testCriteria(){
 
