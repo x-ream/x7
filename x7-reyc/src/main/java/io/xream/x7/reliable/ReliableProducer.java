@@ -22,14 +22,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 1. retryMax=0,useTcc=false,async=false, mean: simple prepare,
+ * 1. retryMax=0,use2.2.7=false,async=false, mean: simple prepare,
  *      producer local tx create preparing status record or log record
  *      listener local tx create preparing status record or log record
  * 2. useTcc=true, anyway, framework will set retryMax = 0
  * 3. retryMax=3, final consistent; if underConstruction, will save the message
  *
  * usage:
- * 1. create orderBean: (useTcc=true)
+ * 1. create orderBean: (useTcc=true) or (retryMax=0,useTcc=false,async=false)
  * 2. pay:  preparing(retryMax=0,useTcc=false,async=false), paid callback(retryMax=3,async=true)
  * 3. logistics warehousing: (retryMax=3), and client ui vision compensation
  */
