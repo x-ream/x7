@@ -220,8 +220,10 @@ public class CriteriaBuilder {
 
             if (value == null)
                 return instance;
-            if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(value))
                 return instance;
 
@@ -237,9 +239,10 @@ public class CriteriaBuilder {
 
             if (value == null)
                 return instance;
-
-            if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(value))
                 return instance;
 
@@ -255,8 +258,10 @@ public class CriteriaBuilder {
 
             if (value == null)
                 return instance;
-            if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(value))
                 return instance;
 
@@ -272,9 +277,10 @@ public class CriteriaBuilder {
 
             if (value == null)
                 return instance;
-
-            if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(value))
                 return instance;
 
@@ -290,9 +296,10 @@ public class CriteriaBuilder {
 
             if (value == null)
                 return instance;
-
-            if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(value))
                 return instance;
 
@@ -347,9 +354,10 @@ public class CriteriaBuilder {
 
             if (min == null || max == null)
                 return instance;
-
-            if (BeanUtilX.isBaseType_0(property, max,criteria.getParsed()))
-                return instance;
+            if (Objects.nonNull(criteria.getParsed())) {
+                if (BeanUtilX.isBaseType_0(property, max,criteria.getParsed()))
+                    return instance;
+            }
             if (isNullOrEmpty(max))
                 return instance;
             if (isNullOrEmpty(min))
@@ -376,8 +384,10 @@ public class CriteriaBuilder {
             for (Object obj : list) {
                 if (Objects.isNull(obj))
                     continue;
-                if (BeanUtilX.isBaseType_0(property,obj,criteria.getParsed()))
-                    continue;
+                if (Objects.nonNull(criteria.getParsed())) {
+                    if (BeanUtilX.isBaseType_0(property, obj,criteria.getParsed()))
+                        continue;
+                }
                 if (!tempList.contains(obj)) {
                     tempList.add(obj);
                 }
@@ -407,6 +417,10 @@ public class CriteriaBuilder {
             for (Object obj : list) {
                 if (Objects.isNull(obj))
                     continue;
+                if (Objects.nonNull(criteria.getParsed())) {
+                    if (BeanUtilX.isBaseType_0(property, obj,criteria.getParsed()))
+                        continue;
+                }
                 if (!tempList.contains(obj)) {
                     tempList.add(obj);
                 }
