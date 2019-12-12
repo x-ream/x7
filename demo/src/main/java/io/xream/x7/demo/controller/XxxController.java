@@ -246,10 +246,11 @@ public class XxxController {
 		ro.setDirection(Direction.DESC);
 //		ro.setSortList(sortList);
 
-		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class,ro);
-		//builder.distinct("catTest.id").reduce(Reduce.ReduceType.COUNT,"catTest.id").groupBy("catTest.id");
+		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class);
+		builder.distinct("c.id").reduce(Reduce.ReduceType.COUNT,"c.id").groupBy("c.id");
 		builder.and().in("c.catFriendName", inList);
-//		builder.paged().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
+		//按IN查询条件排序，有值，就过滤掉orderBy
+		builder.paged().orderIn("c.catFriendName",inList).sort("c.id",Direction.DESC);
 		String sourceScript = "catTest c LEFT JOIN dogTest d on c.dogId = d.id";
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 		resultMapped.setSourceScript(sourceScript);
