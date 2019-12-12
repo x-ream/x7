@@ -67,7 +67,7 @@ public class ReliableProducerAspect {
         }
 
         Signature signature = proceedingJoinPoint.getSignature();
-        String str = signature.getDeclaringTypeName() + "."+ signature.getName();
+        String str = signature.getDeclaringTypeName() + "." + signature.getName();
 
         if (body == null)
             throw new IllegalArgumentException(str + ", ReliableMessage arg can not be null, type: " + reliableProducer.type());
@@ -85,7 +85,7 @@ public class ReliableProducerAspect {
         final String msgId = MessageIdGenerator.get();
 
         String[] svcs = reliableProducer.svcs();
-        for (String svc : svcs){
+        for (String svc : svcs) {
             if (svc.contains(",")) {
                 throw new IllegalArgumentException(str + ", " + ReliableProducer.class.getName() + ", svcs: " + svcs);
             }
@@ -115,7 +115,7 @@ public class ReliableProducerAspect {
                 }
         );
 
-        if (reliableProducer.async() && ! reliableProducer.useTcc())
+        if (reliableProducer.async() && !reliableProducer.useTcc())
             return result;
 
         final long durationBaseOne = 100;//FIXME： require test
@@ -123,17 +123,16 @@ public class ReliableProducerAspect {
         int replayMax = 3;
         long duration = durationBaseOne;
         int replay = 0;
-        while (replay < replayMax)
-        {
+        while (replay < replayMax) {
             try {
                 TimeUnit.MILLISECONDS.sleep(duration);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
-                  logger.info("handled OK time: {} ,replay = {} ,for {}" , System.currentTimeMillis() - startTime , replay ,proceedingJoinPoint.getSignature());
-                  return result;
+                    logger.info("handled OK time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+                    return result;
                 }
                 replay++;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 break;
             }
             duration += durationBaseOne;
@@ -142,17 +141,16 @@ public class ReliableProducerAspect {
         final long durationBaseTwo = 1000;
         duration = durationBaseTwo;
         replayMax = replay + 3;
-        while (replay < replayMax)
-        {
+        while (replay < replayMax) {
             try {
                 TimeUnit.MILLISECONDS.sleep(duration);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
-                    logger.info("handled OK, time: {} ,replay = {} ,for {}" , System.currentTimeMillis() - startTime , replay ,proceedingJoinPoint.getSignature());
+                    logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
                     return result;
                 }
                 replay++;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 break;
             }
             duration += durationBaseTwo;
@@ -160,7 +158,21 @@ public class ReliableProducerAspect {
 
         if (retryMax == 0) {
             if (reliableProducer.useTcc()) {
-                this.backend.cancel(msgId);
+                boolean flag = this.backend.cancel(msgId);
+                while (!flag) {
+                    // has to wait for a long time to try to cancel
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(durationBaseTwo);
+                        isOk = this.backend.tryToConfirm(msgId);
+                        if (isOk) {
+                            logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+                            return result;
+                        }
+                        flag = this.backend.cancel(msgId);
+                    }catch (Exception e){
+                        flag = true;
+                    }
+                }
             }
             logger.info("handled FAIL, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
             throw new BusyException("TIMEOUT, X TRANSACTION UN FINISHED");

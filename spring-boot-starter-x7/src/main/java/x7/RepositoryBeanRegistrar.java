@@ -34,6 +34,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -47,6 +48,16 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
         String basePackage = startClassName.substring(0, startClassName.lastIndexOf("."));
 
         Set<Class<?>> set = ClassFileReader.getClasses(basePackage);
+
+        Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7Repository.class.getName());
+        Object obj = attributes.get("basePackages");
+        if (obj != null){
+            String[] strs = (String[]) obj;
+            for (String str : strs){
+                Set<Class<?>> set1 = ClassFileReader.getClasses(str);
+                set.addAll(set1);
+            }
+        }
 
         List<String> beanNameList = new ArrayList<>();
 

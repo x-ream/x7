@@ -30,4 +30,5 @@ import java.lang.annotation.*;
 @Import({TracingConfig.class, ReyTemplateConfig.class, ReyClientConfig.class,ReyClientBeanRegistrar.class})
 public @interface EnableReyClient {
 
+    String[] basePackages() default {};
 }

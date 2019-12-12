@@ -35,4 +35,6 @@ public @interface EnableX7Repository {
      */
     String mappingSpec() default "";
 
+    String[] basePackages() default {};
+
 }

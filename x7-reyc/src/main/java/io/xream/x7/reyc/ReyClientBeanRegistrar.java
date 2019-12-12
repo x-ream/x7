@@ -16,6 +16,7 @@
  */
 package io.xream.x7.reyc;
 
+import io.xream.x7.EnableReyClient;
 import io.xream.x7.reyc.internal.ClientParser;
 import io.xream.x7.reyc.internal.HttpClientProxy;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -29,6 +30,7 @@ import x7.core.util.ClassFileReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -42,6 +44,16 @@ public class ReyClientBeanRegistrar implements EnvironmentAware,ImportBeanDefini
         String basePackage = startClassName.substring(0, startClassName.lastIndexOf("."));
 
         Set<Class<?>> set = ClassFileReader.getClasses(basePackage);
+
+        Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableReyClient.class.getName());
+        Object obj = attributes.get("basePackages");
+        if (obj != null){
+            String[] strs = (String[]) obj;
+            for (String str : strs){
+                Set<Class<?>> set1 = ClassFileReader.getClasses(str);
+                set.addAll(set1);
+            }
+        }
 
         List<String> beanNameList = new ArrayList<>();
 
