@@ -118,14 +118,14 @@ public class ReliableProducerAspect {
         if (reliableProducer.async() && !reliableProducer.useTcc())
             return result;
 
-        final long durationBaseOne = 100;//FIXME： require test
+        final long intervalBaseOne = 100;//FIXME： require test
         boolean isOk = false;
         int replayMax = 3;
-        long duration = durationBaseOne;
+        long interval = intervalBaseOne;
         int replay = 0;
         while (replay < replayMax) {
             try {
-                TimeUnit.MILLISECONDS.sleep(duration);
+                TimeUnit.MILLISECONDS.sleep(interval);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
                     logger.info("handled OK time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
@@ -135,15 +135,15 @@ public class ReliableProducerAspect {
             } catch (Exception e) {
                 break;
             }
-            duration += durationBaseOne;
+            interval += intervalBaseOne;
         }
 
-        final long durationBaseTwo = 1000;
-        duration = durationBaseTwo;
+        final long intervalBaseTwo = 1000;
+        interval = intervalBaseTwo;
         replayMax = replay + 3;
         while (replay < replayMax) {
             try {
-                TimeUnit.MILLISECONDS.sleep(duration);
+                TimeUnit.MILLISECONDS.sleep(interval);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
                     logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
@@ -153,7 +153,7 @@ public class ReliableProducerAspect {
             } catch (Exception e) {
                 break;
             }
-            duration += durationBaseTwo;
+            interval += intervalBaseTwo;
         }
 
         if (retryMax == 0) {
@@ -162,7 +162,7 @@ public class ReliableProducerAspect {
                 while (!flag) {
                     // has to wait for a long time to try to cancel
                     try {
-                        TimeUnit.MILLISECONDS.sleep(durationBaseTwo);
+                        TimeUnit.MILLISECONDS.sleep(intervalBaseTwo);
                         isOk = this.backend.tryToConfirm(msgId);
                         if (isOk) {
                             logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());

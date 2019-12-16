@@ -36,7 +36,7 @@ public interface MessageTraceable {
 
     /**
      * for server, scheduling retry, java code like:  <br>
-     *     if ( message.getTime() < now-duration) <br>
+     *     if ( message.getTime() < now-interval) <br>
      * for client, as condition of sql update for 2pc business, sql code like: <br>
      *    update inventory set refreshAt = ${message.time} where id = 1 and refreshAt < ${message.time} <br>
      */
