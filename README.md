@@ -7,7 +7,7 @@
           
        x7-reyc
           /reyc
-             @EnableReyClient  or  @EnableReycSupport
+             @EnableReyClient  or  @EnableReySupport
              @ReyClient
           /reliable
              @EnableReliabilityManagement
