@@ -38,25 +38,27 @@ public class XxxTest {
         cat.setDogId(2323);
         cat.setId(4);
 
-        Executor executor = Executors.newFixedThreadPool(3);
+        ViewEntity ve = controller.refreshByCondition(cat);
 
-        for (int i=0; i<3; i++) {
-
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    ViewEntity ve = testServiceRemote.refreshByCondition(cat);
-                    System.out.println("--------------- "+ve);
-                }
-            });
-
-        }
-
-        try {
-            Thread.sleep(10000000);
-        }catch (Exception e){
-
-        }
+//        Executor executor = Executors.newFixedThreadPool(3);
+//
+//        for (int i=0; i<3; i++) {
+//
+//            executor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ViewEntity ve = testServiceRemote.refreshByCondition(cat);
+//                    System.out.println("--------------- "+ve);
+//                }
+//            });
+//
+//        }
+//
+//        try {
+//            Thread.sleep(10000000);
+//        }catch (Exception e){
+//
+//        }
     }
 
     public  void test() {

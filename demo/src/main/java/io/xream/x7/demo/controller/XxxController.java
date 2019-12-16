@@ -72,8 +72,9 @@ public class XxxController {
 		dark.setId("33");
 		dark.setTest("testKKKKK");
 
+
 		RefreshCondition<Cat> refreshCondition = new RefreshCondition();
-		refreshCondition.and().eq("id",4);
+		refreshCondition.and().in("id",Arrays.asList(4,5));
 		refreshCondition.refresh("testBoo",TestBoo.TEST);
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);

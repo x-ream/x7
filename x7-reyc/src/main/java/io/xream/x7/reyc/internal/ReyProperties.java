@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ReycProperties {
+public class ReyProperties {
 
     @Value("${x7.reyc.fallback.remote-exception:'Exception'}")
     private String remoteException;

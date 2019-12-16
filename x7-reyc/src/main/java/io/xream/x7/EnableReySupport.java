@@ -26,6 +26,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Import({TracingConfig.class, ReyTemplateConfig.class})
-public @interface EnableReycSupport {
+public @interface EnableReySupport {
 
 }

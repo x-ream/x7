@@ -21,20 +21,18 @@ import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.internal.HttpClientProperies;
 import io.xream.x7.reyc.internal.HttpClientResolver;
-import io.xream.x7.reyc.internal.ReycProperties;
+import io.xream.x7.reyc.internal.ReyProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@Import({HttpClientProperies.class, ReycProperties.class})
+@Import({HttpClientProperies.class, ReyProperties.class})
 public class ReyClientConfig {
 
 
     public ReyClientConfig(HttpClientProperies properies,  ReyTemplate reyTemplate){
-
         HttpClientResolver.init(properies,reyTemplate);
-
     }
 
     @ConditionalOnMissingBean(ReyTracing.class)

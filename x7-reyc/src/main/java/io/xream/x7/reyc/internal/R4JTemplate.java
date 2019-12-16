@@ -40,12 +40,12 @@ public class R4JTemplate implements ReyTemplate {
     private CircuitBreakerRegistry circuitBreakerRegistry;
     private RetryRegistry retryRegistry;
 
-    private static ReycProperties reycProperties;
+    private static ReyProperties reyProperties;
 
-    public R4JTemplate(CircuitBreakerRegistry circuitBreakerRegistry, RetryRegistry retryRegistry, ReycProperties reycProperties) {
+    public R4JTemplate(CircuitBreakerRegistry circuitBreakerRegistry, RetryRegistry retryRegistry, ReyProperties reyProperties) {
         this.circuitBreakerRegistry = circuitBreakerRegistry;
         this.retryRegistry = retryRegistry;
-        this.reycProperties = reycProperties;
+        this.reyProperties = reyProperties;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class R4JTemplate implements ReyTemplate {
         if (result == null)
             return;
 
-        if (result.contains(reycProperties.getRemoteException())){
+        if (result.contains(reyProperties.getRemoteException())){
             backendService.fallback();
 
             if (logger.isErrorEnabled()) {
