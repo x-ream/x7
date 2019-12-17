@@ -19,7 +19,9 @@ package io.xream.x7.reyc;
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
 import io.xream.x7.reyc.api.ReyTemplate;
-import io.xream.x7.reyc.internal.HttpClientProperies;
+import io.xream.x7.reyc.api.SimpleRestTemplate;
+import io.xream.x7.reyc.internal.DefaultRestTemplate;
+import io.xream.x7.reyc.internal.HttpClientProperties;
 import io.xream.x7.reyc.internal.HttpClientResolver;
 import io.xream.x7.reyc.internal.ReyProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -27,19 +29,25 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@Import({HttpClientProperies.class, ReyProperties.class})
+@Import({HttpClientProperties.class, ReyProperties.class})
 public class ReyClientConfig {
 
 
-    public ReyClientConfig(HttpClientProperies properies,  ReyTemplate reyTemplate){
-        HttpClientResolver.init(properies,reyTemplate);
+    @Bean
+    public SimpleRestTemplate simpleRestTemplate(HttpClientProperties properies, ReyTemplate reyTemplate) {
+        SimpleRestTemplate simpleRestTemplate = new DefaultRestTemplate(properies,null,null);
+        HttpClientResolver.init(reyTemplate, simpleRestTemplate);
+        return simpleRestTemplate;
     }
 
     @ConditionalOnMissingBean(ReyTracing.class)
     @ConditionalOnBean({BraveHttpRequestInterceptor.class,BraveHttpResponseInterceptor.class})
     @Bean
-    public ReyTracing enableReyTracing(BraveHttpRequestInterceptor req,BraveHttpResponseInterceptor rep){
-        HttpClientResolver.initInterceptor(req,  rep);
-        return new ReyTracing();
+    public ReyTracing enableReyTracing(BraveHttpRequestInterceptor req,BraveHttpResponseInterceptor rep,SimpleRestTemplate simpleRestTemplate){
+
+        ((DefaultRestTemplate) simpleRestTemplate).setRequestInterceptor(req);
+        ((DefaultRestTemplate) simpleRestTemplate).setResponseInterceptor(rep);
+
+        return new ReyTracing(){};
     }
 }

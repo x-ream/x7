@@ -16,5 +16,6 @@
  */
 package io.xream.x7.reyc;
 
-public class ReyTracing {
+
+public interface ReyTracing {
 }

@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(
         prefix = "http"
 )
-public class HttpClientProperies {
+public class HttpClientProperties {
 
     private int connectTimeout = 6000;
     private int socketTimeout = 15000;
@@ -45,7 +45,7 @@ public class HttpClientProperies {
 
     @Override
     public String toString() {
-        return "HttpClientProperies{" +
+        return "HttpClientProperties{" +
                 "connectTimeout=" + connectTimeout +
                 ", socketTimeout=" + socketTimeout +
                 '}';

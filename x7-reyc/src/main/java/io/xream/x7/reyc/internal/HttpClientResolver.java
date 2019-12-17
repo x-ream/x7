@@ -16,17 +16,15 @@
  */
 package io.xream.x7.reyc.internal;
 
-import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
-import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
-import io.xream.x7.reyc.*;
+import io.xream.x7.reyc.BackendService;
+import io.xream.x7.reyc.ReyClient;
+import io.xream.x7.reyc.Url;
 import io.xream.x7.reyc.api.ReyTemplate;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 import x7.core.bean.KV;
-import x7.core.exception.RemoteServiceException;
 import x7.core.util.HttpClientUtil;
 import x7.core.util.JsonX;
 import x7.core.util.StringUtil;
@@ -43,20 +41,13 @@ public class HttpClientResolver {
 
     private static ReyTemplate reyTemplate;
 
-    private static BraveHttpRequestInterceptor requestInterceptor;
-    private static BraveHttpResponseInterceptor responseInterceptor;
+    private static SimpleRestTemplate restTemplate;
 
-    private static HttpClientProperies properies;
-
-    public static void init(HttpClientProperies p, ReyTemplate rt) {
-        properies = p;
+    public static void init( ReyTemplate rt, SimpleRestTemplate simpleRestTemplate) {
         reyTemplate = rt;
+        restTemplate = simpleRestTemplate;
     }
 
-    public static void initInterceptor(BraveHttpRequestInterceptor req, BraveHttpResponseInterceptor rep) {
-        requestInterceptor = req;
-        responseInterceptor = rep;
-    }
 
     private static Pattern pattern = Pattern.compile("\\{[\\w]*\\}");
 
@@ -114,20 +105,15 @@ public class HttpClientResolver {
         String url = r.getUrl();
         List<KV> headerList = r.getHeaderList();
 
-        CloseableHttpClient httpclient = null;
-        if (requestInterceptor != null && responseInterceptor != null) {
-            httpclient = TracingConfig.httpClient(requestInterceptor, responseInterceptor);
-        } else {
-            httpclient = HttpClients.createDefault();
-        }
+
 
         String result = null;
         if (requestMethod == RequestMethod.POST) {
 
             if (args != null && args.length > 0) {
-                result = HttpClientUtil.post(url, args[0], headerList, properies.getConnectTimeout(), properies.getSocketTimeout(), httpclient);
+                 result = restTemplate.post(url,args[0],headerList);
             } else {
-                result = HttpClientUtil.post(url, null, headerList, properies.getConnectTimeout(), properies.getSocketTimeout(), httpclient);
+                result = restTemplate.post(url,null,headerList);
             }
         } else {
             List<String> regExList = StringUtil.listByRegEx(url, pattern);
@@ -135,7 +121,7 @@ public class HttpClientResolver {
             for (int i = 0; i < size; i++) {
                 url = url.replace(regExList.get(i), args[i].toString());
             }
-            result = HttpClientUtil.get(url, headerList, properies.getConnectTimeout(), properies.getSocketTimeout(), httpclient);
+            result = restTemplate.get(url,headerList);
         }
 
         if (StringUtil.isNullOrEmpty(result))
