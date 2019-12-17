@@ -14,20 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc.api;
+package io.xream.x7.reyc.api.custom;
 
-import x7.core.bean.KV;
+import io.xream.x7.reyc.api.SimpleRestTemplate;
 
-import java.util.List;
+public interface RestTemplateCustomizer {
 
-public interface SimpleRestTemplate {
-
-
-    void add(HeaderInterceptor headerInterceptor);
-
-    KV header(String key, String value);
-
-    String post(String url, Object request, List<KV> headerList);
-
-    String get(String url, List<KV> headerList);
+    SimpleRestTemplate customize();
 }

@@ -2,4 +2,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
  x7.BootConfiguration
 
 org.springframework.context.ApplicationListener=\
- x7.RepositoryListener
+ x7.RepositoryListener,\
+ x7.reyc.ReyListener

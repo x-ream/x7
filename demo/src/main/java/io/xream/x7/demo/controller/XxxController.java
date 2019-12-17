@@ -12,6 +12,7 @@ import x7.core.web.Direction;
 import x7.core.web.Page;
 import x7.core.web.ViewEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +32,14 @@ public class XxxController {
 
 	@Autowired
 	private TimeJackRepository timeJackRepository;
+
+	@RequestMapping("/test/rest")
+	public ViewEntity testRest(@RequestBody CatTest catTest, HttpServletRequest request){
+
+		String xid = request.getHeader("TX_XID");
+
+		return ViewEntity.ok("test_rest_ok_" + xid);
+	}
 
 
 	@RequestMapping("/create")
@@ -367,12 +376,15 @@ public class XxxController {
 	@RequestMapping(value = "/reyc/test")
 	public List<Cat> testRecClient() {
 
-		try {
-			TimeUnit.HOURS.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			TimeUnit.HOURS.sleep(1);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		List<Cat> list = new ArrayList<>();
+		Cat cat = new Cat();
+		cat.setTest(100);
+		list.add(cat);
 		return list;
 	}
 

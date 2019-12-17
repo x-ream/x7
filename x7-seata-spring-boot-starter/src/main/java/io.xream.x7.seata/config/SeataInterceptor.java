@@ -14,20 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc.api;
+package io.xream.x7.seata.config;
 
+import io.seata.core.context.RootContext;
+import io.xream.x7.reyc.api.HeaderInterceptor;
+import io.xream.x7.reyc.api.SimpleRestTemplate;
 import x7.core.bean.KV;
 
-import java.util.List;
+public class SeataInterceptor implements HeaderInterceptor {
+    @Override
+    public KV apply(SimpleRestTemplate template) {
 
-public interface SimpleRestTemplate {
-
-
-    void add(HeaderInterceptor headerInterceptor);
-
-    KV header(String key, String value);
-
-    String post(String url, Object request, List<KV> headerList);
-
-    String get(String url, List<KV> headerList);
+        String xid = RootContext.getXID();
+        if (xid != null && !xid.trim().equals("")) {
+            return template.header(RootContext.KEY_XID, xid);
+        }
+        return null;
+    }
 }

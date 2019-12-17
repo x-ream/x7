@@ -48,6 +48,10 @@ public class HttpClientResolver {
         restTemplate = simpleRestTemplate;
     }
 
+    public static void setRestTemplate(SimpleRestTemplate simpleRestTemplate){
+        restTemplate = simpleRestTemplate;
+    }
+
 
     private static Pattern pattern = Pattern.compile("\\{[\\w]*\\}");
 

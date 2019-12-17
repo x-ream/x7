@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- io.xream.x7.seata.SeataConfig
+ io.xream.x7.seata.config.SeataConfig

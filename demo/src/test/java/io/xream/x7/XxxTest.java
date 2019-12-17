@@ -1,5 +1,7 @@
 package io.xream.x7;
 
+//import io.seata.spring.annotation.GlobalTransactional;
+
 import io.xream.x7.demo.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
@@ -8,7 +10,12 @@ import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import x7.core.bean.Criteria;
 import x7.core.bean.CriteriaBuilder;
 import x7.core.bean.condition.RefreshCondition;
@@ -16,8 +23,6 @@ import x7.core.web.Direction;
 import x7.core.web.ViewEntity;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 @Component
@@ -118,6 +123,7 @@ public class XxxTest {
         System.out.println(ve);
     }
 
+//    @GlobalTransactional
     public void testReyClient(){
 
 //        testServiceRemote.test(new CatRO(), new Url() {
@@ -198,6 +204,27 @@ public class XxxTest {
 
     public ViewEntity testListCriteria(){
         return this.controller.listCriteria();
+    }
+
+
+    public ViewEntity testRestTemplate(){
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(60000);
+        requestFactory.setReadTimeout(60000);
+
+        String url = "http://127.0.0.1:8868/xxx/test/rest";
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("TX_XID", "eg564ssasdd");
+
+        CatTest cat = new CatTest();
+        cat.setType("TEST_CAT");
+        HttpEntity<CatTest> requestEntity = new HttpEntity<CatTest>(cat,httpHeaders);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        ResponseEntity<String> result = restTemplate.postForEntity(url, requestEntity,String.class);
+
+        return null;
     }
 
 }

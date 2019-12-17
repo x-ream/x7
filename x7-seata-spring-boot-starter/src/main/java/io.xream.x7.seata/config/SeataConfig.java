@@ -14,24 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc;
+package io.xream.x7.seata.config;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.retry.RetryRegistry;
-import io.xream.x7.reyc.api.ReyTemplate;
-import io.xream.x7.reyc.internal.R4JTemplate;
-import io.xream.x7.reyc.internal.ReyProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import io.seata.rm.datasource.DataSourceProxy;
+import io.xream.x7.reyc.api.SimpleRestTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 
-@Import({ReyProperties.class})
-public class ReyTemplateConfig {
+import javax.sql.DataSource;
 
-    @ConditionalOnMissingBean(ReyTemplate.class)
+public class SeataConfig {
+
+    @ConditionalOnBean(SimpleRestTemplate.class)
     @Bean
-    public ReyTemplate reyTemplate(CircuitBreakerRegistry circuitBreakerRegistry, ReyProperties reyProperties) {
-        RetryRegistry retryRegistry = RetryRegistry.ofDefaults();
-        return new R4JTemplate(circuitBreakerRegistry,retryRegistry,reyProperties);
+    public SeataInterceptor seataInterceptor(SimpleRestTemplate simpleRestTemplate){
+        SeataInterceptor seataInterceptor = new SeataInterceptor();
+        simpleRestTemplate.add(seataInterceptor);
+        return seataInterceptor;
+    }
+
+
+    @Lazy
+    @ConditionalOnBean(DataSource.class)
+    @Primary
+    @Bean("dataSource")
+    public DataSource dataSource(DataSource dataSource) {
+        return new DataSourceProxy(dataSource);
     }
 }

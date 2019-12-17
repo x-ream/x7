@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.xream.x7</groupId>
 		<artifactId>x7-parent</artifactId>
-		<version>2.2.7.RELEASE</version>
+		<version>2.2.8</version>
 	</parent>
 
 	<artifactId>x7-repository</artifactId>
