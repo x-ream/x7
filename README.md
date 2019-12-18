@@ -18,3 +18,8 @@
              @EnableReliabilityManagement
              @ReliableProducer
              @ReliableOnConsumed
+        
+       x7-spring-boot-starter
+       
+       x7-seata-spring-boot-starter
+       
