@@ -8,6 +8,8 @@
   
        x7-repository
           extends BaseRepository<Foo>
+          @EnableX7Repository
+          @EnableX7L3Caching
           
        x7-reyc
           /reyc
@@ -17,6 +19,3 @@
              @EnableReliabilityManagement
              @ReliableProducer
              @ReliableOnConsumed
-
-
-
