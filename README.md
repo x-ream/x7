@@ -6,18 +6,20 @@
 
        
        x7-repository
-          extends BaseRepository<Foo>
-          @EnableX7Repository
-          @EnableX7L3Caching
+          @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
+          @EnableX7L3Caching            @CacheableL3
+          @EnableDistributionLock       @Lock             or  
+             { DistributionLock.by(key).lock(task) }
           
        x7-reyc
-          /reyc
-             @EnableReyClient  or  @EnableReySupport
-             @ReyClient
-          /reliable
-             @EnableReliabilityManagement
-             @ReliableProducer
-             @ReliableOnConsumed
+          /reyc  (wrapped Resilience4J)
+             @EnableReySupport                            and { private ReyTemplate reyTemplate }
+             @EnableReyClient           @ReyClient
+           
+          /reliable  (mq transaction api)
+             @EnableReliabilityManagement     
+                 @ReliableProducer
+                 @ReliableOnConsumed
         
        x7-spring-boot-starter
        
@@ -27,6 +29,6 @@
 ## Notes
        A method, coded with io.xream/reliable or seata, maybe we can not use:
             @Lock  or 
-            DistributionLock.by(key).lock(task);
+            { DistributionLock.by(key).lock(task) }
             
             
