@@ -29,7 +29,6 @@ public class DistributionLock {
     private static Logger logger = LoggerFactory.getLogger(DistributionLock.class);
 
     private static int INTERVAL = 1000;
-    private static int RETRY_MAX = 10;
     protected static int TIMEOUT = 10 * 1000;
 
     private static LockStorage lockStorage;
@@ -39,8 +38,9 @@ public class DistributionLock {
 
     private static void lock(String key, int interval, int timeout) {
 
+        int i = 1;
         boolean locked = lockStorage.lock(key,timeout);
-        int i = 0;
+        int retryMax = timeout / interval ;
         while (!locked) {
             try{
                 TimeUnit.MILLISECONDS.sleep(interval);
@@ -49,7 +49,7 @@ public class DistributionLock {
             }catch (Exception e) {
                 break;
             }
-            if (i > RETRY_MAX) break;
+            if (i >= retryMax) break;
         }
 
         if (!locked) {

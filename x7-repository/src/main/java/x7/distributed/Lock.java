@@ -22,5 +22,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 public @interface Lock {
+    int interval() default 1000;
+    int timeout() default 100000;
     String condition() default "";
 }

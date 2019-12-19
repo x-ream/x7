@@ -43,8 +43,13 @@ public class LockAspect {
         Object[] args = proceedingJoinPoint.getArgs();
 
         String key = KeyUtil.makeKey(prefix,suffix,condition,args);
+        int interval = lock.interval();
+        int timeout = lock.timeout();
 
-        return DistributionLock.by(key).lock(task -> {
+        return DistributionLock.by(key).lock(
+                interval,
+                timeout,
+                task -> {
             Class returnType = ms.getReturnType();
             try {
                 if (returnType == void.class) {

@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 import x7.core.bean.KV;
-import x7.core.util.HttpClientUtil;
 import x7.core.util.JsonX;
 import x7.core.util.StringUtil;
 
