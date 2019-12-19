@@ -112,7 +112,7 @@ public class DaoImpl implements Dao {
             Class keyOneType = keyOneField.getType();
             if (keyOneType != String.class) {
                 Object keyValue = keyOneField.get(obj);
-                if (keyOneValue != null ) {
+                if (keyValue != null ) {
                     keyOneValue = Long.valueOf(keyValue.toString());
                 }
             }
