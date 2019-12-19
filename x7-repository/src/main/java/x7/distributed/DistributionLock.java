@@ -30,21 +30,21 @@ public class DistributionLock {
 
     private static int INTERVAL = 1000;
     private static int RETRY_MAX = 10;
-    protected static int DURATION_SECONDS = 10;
+    protected static int TIMEOUT = 10 * 1000;
 
     private static LockStorage lockStorage;
     protected static void init(LockStorage ls) {
         lockStorage = ls;
     }
 
-    private static void lock(String key) {
+    private static void lock(String key, int interval, int timeout) {
 
-        boolean locked = lockStorage.lock(key);
+        boolean locked = lockStorage.lock(key,timeout);
         int i = 0;
         while (!locked) {
             try{
-                TimeUnit.MILLISECONDS.sleep(INTERVAL);
-                locked = lockStorage.lock(key);
+                TimeUnit.MILLISECONDS.sleep(interval);
+                locked = lockStorage.lock(key,timeout);
                 i++;
             }catch (Exception e) {
                 break;
@@ -62,9 +62,6 @@ public class DistributionLock {
         lockStorage.unLock(key);
     }
 
-    private static void unLockAsync( String key){
-
-    }
 
     public static Lock by(String key){
         Lock ml = new Lock();
@@ -80,7 +77,15 @@ public class DistributionLock {
         }
 
         public <T> T lock(Task<T> obj){
-            DistributionLock.lock(key);
+            return lock(INTERVAL,TIMEOUT,obj);
+        }
+
+        public <T> T lock(
+                int intervalMS,
+                int timeoutMS,
+                Task<T> obj){
+
+            DistributionLock.lock(key,intervalMS,timeoutMS);
             T o = null;
             try {
                 o = obj.run(obj);

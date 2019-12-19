@@ -29,19 +29,20 @@ public class LockStorage {
         DistributionLock.init(this);
     }
 
-    public boolean lock(String key){
+    public boolean lock(String key, int timeout){
 
         boolean isLock;
 
-        final String value = "LOCK";
+        final String value = "~LOCK";
 
         isLock = this.stringRedisTemplate.opsForValue().setIfAbsent(key, value);
         if (isLock) {
-            this.stringRedisTemplate.expire(key,DistributionLock.DURATION_SECONDS, TimeUnit.SECONDS);
+            this.stringRedisTemplate.expire(key,timeout, TimeUnit.MILLISECONDS);
         }
 
         return isLock;
     }
+
 
     public void unLock(String key){
         this.stringRedisTemplate.delete(key);
