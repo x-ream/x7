@@ -111,7 +111,10 @@ public class DaoImpl implements Dao {
                 throw new PersistenceException("No setting of PrimaryKey by @X.Key");
             Class keyOneType = keyOneField.getType();
             if (keyOneType != String.class) {
-                keyOneValue = keyOneField.getLong(obj);
+                Object keyValue = keyOneField.get(obj);
+                if (keyOneValue != null ) {
+                    keyOneValue = Long.valueOf(keyValue.toString());
+                }
             }
 
             conn = DataSourceUtil.getConnection();
