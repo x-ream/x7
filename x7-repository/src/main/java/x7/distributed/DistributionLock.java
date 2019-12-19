@@ -21,10 +21,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import x7.core.exception.DistributionLockException;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class DistributionLock {
 
     private static Logger logger = LoggerFactory.getLogger(DistributionLock.class);
+
+    private static int INTERVAL = 1000;
+    private static int RETRY_MAX = 10;
+    protected static int DURATION_SECONDS = 10;
 
     private static LockStorage lockStorage;
     protected static void init(LockStorage ls) {
@@ -34,6 +40,18 @@ public class DistributionLock {
     private static void lock(String key) {
 
         boolean locked = lockStorage.lock(key);
+        int i = 0;
+        while (!locked) {
+            try{
+                TimeUnit.MILLISECONDS.sleep(INTERVAL);
+                locked = lockStorage.lock(key);
+                i++;
+            }catch (Exception e) {
+                break;
+            }
+            if (i > RETRY_MAX) break;
+        }
+
         if (!locked) {
             logger.info("Get distributed lock failed, lockKey: " + key);
             throw new DistributionLockException();
@@ -79,23 +97,6 @@ public class DistributionLock {
             return o;
         }
 
-        public <T> T lockAsync(Task<T> obj){
-            DistributionLock.lock(key);
-            T o = null;
-            try {
-                o = obj.run(obj);
-            }catch (Exception e) {
-                DistributionLock.unLock(key);
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                }else {
-                    throw new RuntimeException(e.getMessage());
-                }
-            }finally {
-                DistributionLock.unLockAsync(key);
-            }
-            return o;
-        }
     }
 
     public interface Task<T> {

@@ -15,7 +15,7 @@ public class Cat implements Serializable, IdView {
 	private static final long serialVersionUID = 5708147778966785698L;
 
 	@X.Key
-	private long id;
+	private Long id;
 	@X.Mapping("cat_type")
 	private String type;
 	private String taxType;
@@ -24,7 +24,7 @@ public class Cat implements Serializable, IdView {
 	private List<Long> list;
 	private Date createAt;
 	private TestBoo testBoo;
-	private List<String> testList = new ArrayList<>();
+	private List<String> testList;
 	private Dark testObj;
 
 	private transient Map<Object,Object> viewMap;
@@ -38,11 +38,11 @@ public class Cat implements Serializable, IdView {
 
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -121,10 +121,18 @@ public class Cat implements Serializable, IdView {
 
 	@Override
 	public String toString() {
-		return "zxt.oop.xxx.Cat{" +
+		return "Cat{" +
 				"id=" + id +
 				", type='" + type + '\'' +
 				", taxType='" + taxType + '\'' +
+				", dogId=" + dogId +
+				", test=" + test +
+				", list=" + list +
+				", createAt=" + createAt +
+				", testBoo=" + testBoo +
+				", testList=" + testList +
+				", testObj=" + testObj +
+				", viewMap=" + viewMap +
 				'}';
 	}
 }

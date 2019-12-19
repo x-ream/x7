@@ -1,6 +1,7 @@
 package io.xream.x7;
 
 
+import io.xream.x7.demo.bean.Cat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,9 @@ public class AppTest {
 //        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.refresh();
-//xxxTest.refreshByCondition();
-        xxxTest.testRestTemplate();
+//        xxxTest.refreshByCondition();
+//        xxxTest.testRestTemplate();
+//        xxxTest.get();
     }
 
 

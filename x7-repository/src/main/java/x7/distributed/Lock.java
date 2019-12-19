@@ -16,34 +16,11 @@
  */
 package x7.distributed;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
+import java.lang.annotation.*;
 
-import java.util.concurrent.TimeUnit;
-
-public class LockStorage {
-
-    private StringRedisTemplate stringRedisTemplate;
-
-    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate){
-        this.stringRedisTemplate = stringRedisTemplate;
-        DistributionLock.init(this);
-    }
-
-    public boolean lock(String key){
-
-        boolean isLock;
-
-        final String value = "LOCK";
-
-        isLock = this.stringRedisTemplate.opsForValue().setIfAbsent(key, value);
-        if (isLock) {
-            this.stringRedisTemplate.expire(key,DistributionLock.DURATION_SECONDS, TimeUnit.SECONDS);
-        }
-
-        return isLock;
-    }
-
-    public void unLock(String key){
-        this.stringRedisTemplate.delete(key);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface Lock {
+    String condition() default "";
 }

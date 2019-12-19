@@ -41,14 +41,22 @@ public class XxxController {
 		return ViewEntity.ok("test_rest_ok_" + xid);
 	}
 
+	@RequestMapping("/get")
+//	@Transactional
+	public ViewEntity get(){
+		Cat cat = this.catRepository.get(247);
+		System.out.println(cat);
+		return ViewEntity.ok(cat);
+	}
 
 	@RequestMapping("/create")
 //	@Transactional
 	public ViewEntity create(){
 
 		Cat cat = new Cat();
-		cat.setId(245);
+		cat.setId(248L);
 		cat.setDogId(2);
+		cat.setCreateAt(new Date());
 		cat.setTestBoo(TestBoo.TEST);
 
 		this.catRepository.create(cat);
@@ -388,16 +396,7 @@ public class XxxController {
 		return list;
 	}
 
-	@RequestMapping(value = "/get")
-	public ViewEntity get() {
 
-//		try {
-//			TimeUnit.HOURS.sleep(1);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		return ViewEntity.ok(true);
-	}
 
 	@RequestMapping(value = "/time/test", method = RequestMethod.GET)
 	public ViewEntity testTime() {

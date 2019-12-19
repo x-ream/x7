@@ -20,7 +20,7 @@ public class CatTest {
     public void create(){
 
         Cat cat = new Cat();
-        cat.setId(1212);
+        cat.setId(1212L);
         cat.setDogId(2);
 
         this.repository.create(cat);
@@ -30,7 +30,7 @@ public class CatTest {
     public void refresh(){
 
         Cat cat = new Cat();
-        cat.setId(1212);
+        cat.setId(1212L);
         cat.setDogId(2222);
 
 //        this.repository.refresh(cat);

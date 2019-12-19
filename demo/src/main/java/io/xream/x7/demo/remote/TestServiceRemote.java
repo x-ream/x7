@@ -46,4 +46,11 @@ public interface TestServiceRemote {
     @RequestMapping("/refresh")
     ViewEntity refreshByCondition(Cat cat);
 
+
+    @RequestMapping("/create")
+    ViewEntity create();
+
+    @RequestMapping("/get")
+    ViewEntity get();
+
 }

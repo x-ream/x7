@@ -21,6 +21,7 @@ import x7.*;
 @EnableCorsConfig
 @EnableDateToLongForJackson
 //@EnableX7L3Caching
+@EnableDistributionLock
 public class App {
     public static void main( String[] args )
     {

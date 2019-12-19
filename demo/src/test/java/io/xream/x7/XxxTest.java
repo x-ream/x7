@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import x7.core.bean.Criteria;
 import x7.core.bean.CriteriaBuilder;
 import x7.core.bean.condition.RefreshCondition;
+import x7.core.util.JsonX;
 import x7.core.web.Direction;
 import x7.core.web.ViewEntity;
 
@@ -36,12 +37,15 @@ public class XxxTest {
     @Autowired
     private XxxController controller;
 
+    @Autowired
+    private DistributionLockTester distributionLockTester;
+
     public  void refreshByCondition() {
 
         Cat cat = new Cat();
 
         cat.setDogId(2323);
-        cat.setId(4);
+        cat.setId(4L);
 
         ViewEntity ve = controller.refreshByCondition(cat);
 
@@ -110,7 +114,7 @@ public class XxxTest {
     }
 
     public void create(){
-        this.controller.create();
+        this.testServiceRemote.create();
     }
 
     public void domain(){
@@ -144,6 +148,13 @@ public class XxxTest {
 
         boolean flag = testServiceRemote.testTimeJack();
 
+    }
+
+    public ViewEntity get(){
+        ViewEntity ve = this.testServiceRemote.get();
+        Cat cat = JsonX.toObject(ve.getBody(),Cat.class);
+        System.out.println(cat);
+        return ve;
     }
 
     public int getBase(){
@@ -225,6 +236,13 @@ public class XxxTest {
         ResponseEntity<String> result = restTemplate.postForEntity(url, requestEntity,String.class);
 
         return null;
+    }
+
+    public void testLock(){
+        Cat cat = new Cat();
+        cat.setId(100L);
+        cat.setType("LOCK");
+        distributionLockTester.test(cat);
     }
 
 }
