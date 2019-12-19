@@ -227,7 +227,10 @@ public class DaoImpl implements Dao {
             if (keyOneType == String.class) {
                 keyOneValue = 1L;
             }else{
-                keyOneValue = keyOneField.getLong(obj);
+                Object keyValue = keyOneField.get(obj);
+                if (keyValue != null) {
+                    keyOneValue = Long.valueOf(keyValue.toString());
+                }
             }
 
             /*
