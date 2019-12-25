@@ -14,35 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.core.bean;
+package x7.repository.exception;
 
-public interface SqlScript {
+public class QueryException extends RuntimeException{
 
-	String SELECT = "SELECT";
-	String DISTINCT = "DISTINCT";
-	String WHERE = " WHERE ";
-	String FROM = "FROM";
-	String LIMIT = " LIMIT ";
-	String SET = " SET ";
-	String UPDATE = "UPDATE";
-	String IN = " IN ";
+	private static final long serialVersionUID = 5749142995896266081L;
+	private String message;
 
-	String AS = " AS ";
+	public QueryException(){
 
-	String NONE = "";
-	String SPACE = " ";
-	String PLACE_HOLDER = "?";
-	String EQ_PLACE_HOLDER = " = ?";
-	String LIKE_HOLDER = "%";
-	String POINT = ".";
-	String COMMA = ",";
-	String STAR = "*";
-	String UNDER_LINE = "_";
-	String LEFT_PARENTTHESIS = "(";
-	String RIGHT_PARENTTHESIS = ")";
-	String WELL_NO = "#";
-	String SINGLE_QUOTES = "'";
-	String KEY_SQL = "`";
+	}
 
-	String sql();
+	public QueryException(String message){
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
 }

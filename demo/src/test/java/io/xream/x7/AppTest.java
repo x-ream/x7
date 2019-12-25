@@ -54,12 +54,13 @@ public class AppTest {
 //        xxxTest.testUnion();
 //        xxxTest.test();
 //        xxxTest.testListCriteria();
-//        xxxTest.create();
-//        xxxTest.refresh();
+        xxxTest.create();
+//        xxxTest.refresh()
+//        xxxTest.testRemove();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
-//        xxxTest.get();
-        xxxTest.testLock();
+//        xxxTest.testList();
+//        xxxTest.testLock();
     }
 
 

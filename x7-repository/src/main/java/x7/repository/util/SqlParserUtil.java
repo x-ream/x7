@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package x7.repository.util;
 
 import x7.core.bean.BeanElement;
@@ -119,100 +135,10 @@ public class SqlParserUtil {
 
     }
 
-    /**
-     * 默认值为0的不做查询条件<br>
-     * 额外条件从另外一个map参数获得<br>
-     * boolean必须从另外一个map参数获得
-     */
-    @SuppressWarnings({ "rawtypes", "unused" })
-    public static Map<String, Object> getQueryMap(Parsed parsed, Object obj) {
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        Class clz = obj.getClass();
-        try {
-            for (BeanElement element : parsed.getBeanElementList()) {
-
-                Method method = element.getMethod;
-                Object value = method.invoke(obj);
-                Class type = method.getReturnType();
-
-                String property = element.getProperty();
-
-                if (type == long.class) {
-                    if ((long) value != 0) {
-                        map.put(property, value);
-                    }
-                } else if (type == Long.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else if (type == String.class) {
-                    if (value != null && !value.equals("")) {
-                        map.put(property, value);
-                    }
-                }else if (type.isEnum()){
-                    if (value != null) {
-                        map.put(property, ((Enum)value).name());
-                    }
-                } else if (type == int.class) {
-                    if ((int) value != 0) {
-                        map.put(property, value);
-                    }
-                } else if (type == Integer.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else if (type == double.class) {
-                    if ((double) value != 0) {
-                        map.put(property, value);
-                    }
-                } else if (type == Double.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else if (type == float.class) {
-                    if ((float) value != 0) {
-                        map.put(property, value);
-                    }
-                } else if (type == Float.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else if (type == boolean.class) {
-                    if ((boolean) value != false) {
-                        map.put(property, value);
-                    }
-                } else if (type == BigDecimal.class){
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                }else if (type == Boolean.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else if (type == Date.class || clz == java.sql.Date.class || type == Timestamp.class) {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                } else {
-                    if (value != null) {
-                        map.put(property, value);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (ConfigAdapter.isIsShowSql())
-            System.out.println("_queryMap: " + map);
-
-        return map;
-
-    }
 
     public static String mapperForManu(String sql, Parsed parsed) {
+
+        sql = mapper(sql,parsed);
 
         if (parsed.isNoSpec())
             return sql;

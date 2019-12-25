@@ -23,9 +23,7 @@ import x7.repository.SqlParsed;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface Mapper {
 
@@ -96,23 +94,20 @@ public interface Mapper {
         String INCREAMENT = " ${INCREAMENT}";
         String ENGINE = " ${ENGINE}";
 
-        String match(SqlParsed sql, long start, long rows);
+
         String match(String sql, long start, long rows);
 
         String match(String sql, String sqlType);
 
-
-        <T> void initObj(T obj, ResultSet rs, BeanElement tempEle, List<BeanElement> eles) throws Exception;
-
-        void setObject(int i, Object obj, PreparedStatement pstm) throws Exception ;
-
-
-        void setJSON(int i, String str, PreparedStatement pstmt) throws Exception ;
-
-        Object mappedResult(String property, String mapper, Map<String,String> aliaMap,Map<String,String> resultAliaMap, ResultSet rs) throws Exception;
+        String transformAlia(String mapper, Map<String,String> aliaMap,Map<String,String> resultAliaMap) ;
 
         Object filterValue(Object value);
 
-        String filterResultKey(String mapper, Criteria.ResultMappedCriteria criteria);
+        String resultKeyAlian(String mapper, Criteria.ResultMappedCriteria criteria);
+
+        Object[] toArr(Collection<Object> list);
+
+        Object mappingToObject( Object obj, BeanElement element);
+
     }
 }

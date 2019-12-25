@@ -5,6 +5,7 @@ package io.xream.x7;
 import io.xream.x7.demo.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
+import io.xream.x7.demo.bean.Dark;
 import io.xream.x7.demo.bean.DogTest;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
@@ -42,10 +43,15 @@ public class XxxTest {
 
     public  void refreshByCondition() {
 
+        Dark dark = new Dark();
+        dark.setTest("REFRESHED");
+        dark.setId("666");
+
         Cat cat = new Cat();
 
         cat.setDogId(2323);
         cat.setId(4L);
+        cat.setTestObj(dark);
 
         ViewEntity ve = controller.refreshByCondition(cat);
 
@@ -114,7 +120,7 @@ public class XxxTest {
     }
 
     public void create(){
-        this.testServiceRemote.create();
+        this.controller.create();
     }
 
     public void domain(){
@@ -243,6 +249,15 @@ public class XxxTest {
         cat.setId(100L);
         cat.setType("LOCK");
         distributionLockTester.test(cat);
+    }
+
+
+    public void testList(){
+        this.controller.list();
+    }
+
+    public ViewEntity testRemove(){
+        return this.controller.remove();
     }
 
 }

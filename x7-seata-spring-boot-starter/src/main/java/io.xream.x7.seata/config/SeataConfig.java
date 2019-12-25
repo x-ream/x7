@@ -16,14 +16,9 @@
  */
 package io.xream.x7.seata.config;
 
-import io.seata.rm.datasource.DataSourceProxy;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
-
-import javax.sql.DataSource;
 
 public class SeataConfig {
 
@@ -35,12 +30,4 @@ public class SeataConfig {
         return seataInterceptor;
     }
 
-
-    @Lazy
-    @ConditionalOnBean(DataSource.class)
-    @Primary
-    @Bean("dataSource")
-    public DataSource dataSource(DataSource dataSource) {
-        return new DataSourceProxy(dataSource);
-    }
 }

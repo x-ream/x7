@@ -22,10 +22,7 @@ import x7.core.util.BeanUtilX;
 import x7.core.util.StringUtil;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Parsed {
@@ -86,6 +83,16 @@ public class Parsed {
 		return elementMap.get(property);
 	}
 
+	public BeanElement getElementExisted(String property) {
+
+		BeanElement be = elementMap.get(property);
+		if (be == null)
+			throw new RuntimeException(
+					"Not exist: "
+							+ property);
+		return be;
+	}
+
 	public Map<String, BeanElement> getElementMap() {
 		return elementMap;
 	}
@@ -103,13 +110,43 @@ public class Parsed {
 	}
 	
 	public Field getKeyField(int index){
-		return keyFieldMap.get(index);
+		Field field = keyFieldMap.get(index);
+		if (Objects.isNull(field))
+			throw new RuntimeException("No setting of PrimaryKey by @X.Key");
+		return field;
+	}
+
+	public boolean isAutoIncreaseId(Long keyOneValue){
+		Field keyOneField = getKeyField(X.KEY_ONE);
+		Class keyOneType = keyOneField.getType();
+
+		return keyOneType != String.class && (keyOneValue == null || keyOneValue == 0);
 	}
 
 	public String getKey(int index){
-		if (keyMap.isEmpty() && index == X.KEY_ONE) //DEFAULT
-			return "id";
-		return keyMap.get(index);
+		String key = keyMap.get(index);
+		if (Objects.isNull(key))
+			throw new RuntimeException("No setting of PrimaryKey by @X.Key");
+		return key;
+	}
+
+	public Long tryToGetLongKey(Object obj){
+		Long keyOneValue = 0L;
+		Field keyOneField = getKeyField(X.KEY_ONE);
+		if (Objects.isNull(keyOneField))
+			throw new RuntimeException("No setting of PrimaryKey by @X.Key");
+		Class keyOneType = keyOneField.getType();
+		if (keyOneType != String.class) {
+			try {
+				Object keyValue = keyOneField.get(obj);
+				if (keyValue != null) {
+					keyOneValue = Long.valueOf(keyValue.toString());
+				}
+			}catch (Exception e){
+				throw new RuntimeException(e.getMessage());
+			}
+		}
+		return keyOneValue;
 	}
 
 	public List<BeanElement> getBeanElementList() {

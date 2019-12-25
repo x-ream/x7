@@ -16,6 +16,8 @@
  */
 package x7.core.bean;
 
+import x7.core.util.StringUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +43,10 @@ public class MapMapper {
     }
 
     public String property(String mapper) {
-        return this.mapperPropertyMap.get(mapper);
+        String property = this.mapperPropertyMap.get(mapper);
+        if (property == null)
+            return mapper;
+        return property;
     }
 
     @Override

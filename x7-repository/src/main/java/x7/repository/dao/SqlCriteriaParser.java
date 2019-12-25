@@ -76,6 +76,8 @@ public class SqlCriteriaParser implements CriteriaParser {
             Parsed parsed = Parser.get(key);
             if (parsed != null) {
                 return parsed.getTableName();
+            }else{
+                return key;
             }
 
         }
@@ -187,10 +189,11 @@ public class SqlCriteriaParser implements CriteriaParser {
             int i = 0;
             for (String resultKey : list) {
 
-                String value = mapping(resultKey, criteria);
-                column.append(SqlScript.SPACE).append(value);
+                String mapper = mapping(resultKey, criteria);
                 resultMapped.getResultKeyList().add(resultKey);//返回值
-                mapMapper.put(resultKey, value);//REDUCE ALIAN NAME
+                mapMapper.put(resultKey, mapper);//REDUCE ALIAN NAME
+                mapper = this.dialect.resultKeyAlian(mapper,resultMapped);
+                column.append(SqlScript.SPACE).append(mapper);
                 i++;
                 if (i < size) {
                     column.append(SqlScript.COMMA);
@@ -210,19 +213,18 @@ public class SqlCriteriaParser implements CriteriaParser {
                 if (flag) {
                     column.append(SqlScript.COMMA);
                 }
-                String alianProperty = reduce.getProperty() + SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
-                String alianName = alianProperty.replace(SqlScript.POINT, SqlScript.UNDER_LINE);
+                String alianProperty = reduce.getProperty()+ SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
+                String alianName = alianProperty.replace(SqlScript.POINT, SqlScript.DOLLOR);
+                resultMapped.getResultAliaMap().put(alianName,alianProperty);
+
                 String value = mapping(reduce.getProperty(), criteria);
                 column.append(SqlScript.SPACE)
                         .append(reduce.getType())
                         .append(SqlScript.LEFT_PARENTTHESIS)//" ( "
                         .append(value)
                         .append(SqlScript.RIGHT_PARENTTHESIS).append(SqlScript.SPACE)//" ) "
-                        .append(alianName);
+                        .append(SqlScript.AS).append(SqlScript.SPACE).append(alianName);
 
-//                String alianProperty = reduce.getProperty() + BeanUtil.getByFirstUpper(reduce.getType().toString().toLowerCase());
-                mapMapper.put(alianProperty, alianName);//REDUCE ALIAN NAME
-                resultMapped.getResultKeyList().add(alianProperty);
                 flag = true;
             }
         }
@@ -241,7 +243,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                     String key = resultList.get(i);
                     String mapper = mapping(key,criteria);
                     mapMapper.put(key, mapper);
-                    mapper = this.dialect.filterResultKey(mapper,resultMapped);
+                    mapper = this.dialect.resultKeyAlian(mapper,resultMapped);
                     sb.append(SqlScript.SPACE ).append(mapper);
                     if (i < size - 1) {
                         sb.append(SqlScript.COMMA );

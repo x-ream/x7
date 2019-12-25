@@ -318,6 +318,10 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 			this.resultKeyList = columnList;
 		}
 
+		@Override
+		public Class<?> getClz() {
+			return Map.class;
+		}
 
 		@Override
 		public String sourceScript() {

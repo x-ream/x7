@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.repository.dao;
+package x7.repository.config.datasource;
 
-import java.sql.PreparedStatement;
+import java.lang.annotation.*;
 
-public interface StatementBuildable {
-
-    void buildStatement(PreparedStatement pstmt);
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Documented
+public @interface ReadOnly {
 }

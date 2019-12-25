@@ -66,8 +66,9 @@ public class CacheableRepository implements Repository {
 
             Field field = obj.getClass().getDeclaredField(parsed.getKey(X.KEY_ONE));
             field.setAccessible(true);
-            String keyOne = field.get(obj).toString();
-            return keyOne;
+            Object keyOneObj = field.get(obj);
+            if (keyOneObj != null)
+                return keyOneObj.toString();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -392,8 +393,8 @@ public class CacheableRepository implements Repository {
         b = dataTransform.execute(obj, sql);
 
         if (b) {
-            String key = getCacheKey(obj, parsed);
             if (!isNoCache() && !parsed.isNoCache()) {
+                String key = getCacheKey(obj, parsed);
                 if (key != null) {
                     cacheResolver.remove(obj.getClass(), key);
                 }

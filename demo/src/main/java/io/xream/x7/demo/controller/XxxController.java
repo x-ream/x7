@@ -44,7 +44,7 @@ public class XxxController {
 	@RequestMapping("/get")
 //	@Transactional
 	public ViewEntity get(){
-		Cat cat = this.catRepository.get(247);
+		Cat cat = this.catRepository.get(251);
 		System.out.println(cat);
 		return ViewEntity.ok(cat);
 	}
@@ -54,69 +54,54 @@ public class XxxController {
 	public ViewEntity create(){
 
 		Cat cat = new Cat();
-		cat.setId(248L);
+		cat.setId(252L);
 		cat.setDogId(2);
 		cat.setCreateAt(new Date());
 		cat.setTestBoo(TestBoo.TEST);
+		cat.setList(Arrays.asList(6L,8L));
+		cat.setTestList(Arrays.asList("BIG CAT","small cat"));
 
 		this.catRepository.create(cat);
 
+		cat = new Cat();
+		cat.setId(253L);
+		cat.setDogId(2);
+		cat.setCreateAt(new Date());
+		cat.setTestBoo(TestBoo.TEST);
+		cat.setList(Arrays.asList(1L,2L));
+		cat.setTestList(Arrays.asList("THR CAT","moo cat"));
 
+		this.catRepository.create(cat);
+		throw new RuntimeException("-----------------------------> test wawawawa");
 
-//		throw new RuntimeException("-----------------------------> test wawawawa");
-
-		return ViewEntity.ok();
+//		return ViewEntity.ok();
 	}
 
 	@RequestMapping("/refreshByCondition")
 	public ViewEntity refreshByCondition(@RequestBody Cat cat){
 
 
-//		System.out.println("______: "  + test);
-//		CriteriaBuilder builder = CriteriaBuilder.buildCondition();
-//		builder.and().eq("type","NL");
-//		builder.and().eq("id",2);
-//
-//		CriteriaCondition criteriaCondition = builder.get();
-
-//		this.catRepository.create(cat);
-
 		List<String> testList = new ArrayList<>();
 		testList.add("1111");
 		testList.add("2222");
 
 		Dark dark = new Dark();
-		dark.setId("33");
-		dark.setTest("testKKKKK");
+		dark.setTest("REFRESHED");
+		dark.setId("666");
 
 
 		RefreshCondition<Cat> refreshCondition = new RefreshCondition();
 		refreshCondition.and().in("id",Arrays.asList(4,5));
-		refreshCondition.refresh("testBoo",TestBoo.TEST);
+		refreshCondition.refresh("testBoo",TestBoo.BOO);
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);
 		refreshCondition.refresh("test = test - 3");
-//		refreshCondition.refresh("createAt",new Date());
-		//refreshCondition.refresh("test=test+1");//表达式更新
-//		refreshCondition.refresh("test",3333).refresh("type","XL");//赋值更新
-
-//		String str = JsonX.toJson(refreshCondition);
-//		refreshCondition = JsonX.toObject(str,RefreshCondition.class);
+		refreshCondition.refresh("createAt = null");
 
 		boolean flag = this.catRepository.refresh(refreshCondition);//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
 
-//		if (true){
-//			throw new RuntimeException("xxxxxxxxxxxxxxxxxxxx");
-//		}
-
-		try {
-			TimeUnit.MILLISECONDS.sleep(3000);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-
-		return ViewEntity.ok();
+		return ViewEntity.ok(flag);
 	}
 
 
@@ -139,7 +124,7 @@ public class XxxController {
 	}
 
 
-	@CacheableL3(expireTime = 3, timeUnit = TimeUnit.MINUTES)
+//	@CacheableL3(expireTime = 3, timeUnit = TimeUnit.MINUTES)
 	@RequestMapping("/test")
 	public ViewEntity test(@RequestBody CatRO ro) {
 
@@ -161,7 +146,7 @@ public class XxxController {
 		String[] resultKeys = {
 				"catTest.id",
 				"catTest.catFriendName",
-//				"dogTest.number",
+				"dogTest.id",
 				"dogTest.userName"
 		};
 
@@ -471,5 +456,21 @@ public class XxxController {
 		List<Cat> list = catRepository.list(criteria);
 
 		return ViewEntity.ok(list);
+	}
+
+	@RequestMapping("/list")
+	public ViewEntity list() {
+		Cat cat = new Cat();
+		cat.setType("NL");
+		List<Cat> list = catRepository.list(cat);
+		System.out.println(list);
+		return ViewEntity.ok(list);
+	}
+
+	@RequestMapping("/remove")
+	public ViewEntity remove() {
+
+		boolean flag = this.catRepository.remove(251);
+		return ViewEntity.ok(flag);
 	}
 }

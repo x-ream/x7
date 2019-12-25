@@ -20,11 +20,14 @@ import x7.core.bean.*;
 import x7.core.bean.condition.RefreshCondition;
 import x7.core.util.*;
 import x7.repository.CriteriaParser;
+import x7.repository.SqlParsed;
 import x7.repository.exception.PersistenceException;
+import x7.repository.exception.SqlBuildException;
+import x7.repository.mapper.Mapper;
 import x7.repository.util.SqlParserUtil;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.*;
@@ -54,15 +57,6 @@ public class SqlUtil {
         }
     }
 
-    protected static void adpterSqlKey(PreparedStatement pstmt, Field keyOneF, Object obj, int i){
-        try {
-            pstmt.setObject(i++, obj);
-        }catch (Exception e){
-            throw new PersistenceException(ExceptionUtil.getMessage(e));
-        }
-
-    }
-
     /**
      * 拼接SQL
      */
@@ -90,11 +84,14 @@ public class SqlUtil {
     }
 
 
+    protected static String buildRefresh(Parsed parsed, RefreshCondition refreshCondition, CriteriaParser criteriaParser){
+        StringBuilder sb = new StringBuilder();
+        sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(parsed.getTableName()).append(SqlScript.SPACE);
+        return concatRefresh(sb, parsed, refreshCondition, criteriaParser);
+    }
 
-    /**
-     * 拼接SQL
-     */
-    protected static String concatRefresh(StringBuilder sb, Parsed parsed,
+
+    private static String concatRefresh(StringBuilder sb, Parsed parsed,
                                           RefreshCondition refreshCondition, CriteriaParser criteriaParser) {
 
         sb.append(SqlScript.SET);
@@ -176,13 +173,7 @@ public class SqlUtil {
 
                 }
 
-                Object v = x.getValue();
-                if (v instanceof Enum){
-                    String name = ((Enum) v).name();
-                    x.setValue(name);
-                }
                 refreshValueList.add(x.getValue());
-
             }
 
         }
@@ -199,30 +190,73 @@ public class SqlUtil {
 
         sb.append(conditionSql);
 
+        String sql = sb.toString();
+
+        if (sql.contains("SET  WHERE"))
+            throw new SqlBuildException(sql);
+
+        return sql;
+    }
+
+
+    protected static String buildIn(String sql,String mapper,BeanElement be, List<? extends Object> inList) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(sql).append(SqlScript.WHERE);
+        sb.append(mapper).append(SqlScript.IN).append(SqlScript.LEFT_PARENTTHESIS);//" IN ("
+
+        Class<?> keyType = be.getMethod.getReturnType();
+        boolean isNumber = (keyType == long.class || keyType == int.class || keyType == Long.class
+                || keyType == Integer.class);
+
+        int size = inList.size();
+        if (isNumber) {
+            for (int i = 0; i < size; i++) {
+                Object id = inList.get(i);
+                if (id == null)
+                    continue;
+                sb.append(id);
+                if (i < size - 1) {
+                    sb.append(SqlScript.COMMA);
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                Object id = inList.get(i);
+                if (id == null || StringUtil.isNullOrEmpty(id.toString()))
+                    continue;
+                sb.append(SqlScript.SINGLE_QUOTES).append(id).append(SqlScript.SINGLE_QUOTES);
+                if (i < size - 1) {
+                    sb.append(SqlScript.COMMA);
+                }
+            }
+        }
+
+        sb.append(SqlScript.RIGHT_PARENTTHESIS);
+
         return sb.toString();
     }
 
-    protected static void adpterRefreshCondition(PreparedStatement pstmt,
-                                                 int i, CriteriaCondition condition) {
 
-        if (Objects.nonNull(condition)) {
-            for (Object v : condition.getValueList()) {
-                setValue(i,pstmt,v);
-                i++;
-            }
-        }
+    protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser,Mapper.Dialect dialect){
+        SqlParsed sqlParsed = criteriaParser.parse(criteria);
+        String sql = sqlParsed.getSql().toString();
+
+        int page = criteria.getPage();
+        int rows = criteria.getRows();
+
+        int start = (page - 1) * rows;
+
+        sql = dialect.match(sql, start, rows);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(sql);
+        sqlParsed.setSql(sb);
+        return sqlParsed;
     }
 
-    public static void setValue(int i, PreparedStatement pstmt, Object obj) {
-        try {
-            if (Objects.nonNull(obj) && obj.getClass().isEnum()) {
-                pstmt.setObject(i, ((Enum)obj).name());
-            } else {
-                pstmt.setObject(i, obj);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
-        }
+    protected static String filter(String sql){
+        sql = sql.replace("drop", SqlScript.SPACE).replace("delete", SqlScript.SPACE).replace("insert", SqlScript.SPACE).replace(";", SqlScript.SPACE); // 手动拼接SQL,
+        return sql;
     }
-
 }

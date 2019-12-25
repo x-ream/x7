@@ -16,25 +16,23 @@
  */
 package x7.repository.dialect;
 
-import x7.core.bean.*;
+import x7.core.bean.BeanElement;
+import x7.core.bean.Criteria;
+import x7.core.bean.SqlScript;
+import x7.core.util.ExceptionUtil;
 import x7.core.util.JsonX;
 import x7.core.util.StringUtil;
-import x7.repository.SqlParsed;
 import x7.repository.mapper.Mapper;
 
 import java.io.Reader;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.*;
 
 public class OracleDialect implements Mapper.Dialect {
 
-    private final String ALIA_NAME = "AAA";
-
-    private Map<String, String> map = new HashMap<String, String>() {
+    private final Map<String, String> map = new HashMap<String, String>() {
         {
             put(DATE, "date");
             put(BYTE, "number(3, 0)");
@@ -55,12 +53,6 @@ public class OracleDialect implements Mapper.Dialect {
     private final static String ORACLE_PAGINATION_REGX_BEGIN = "${BEGIN}";
     private final static String ORACLE_PAGINATION_REGX_END = "${END}";
 
-
-    public String match(SqlParsed sqlParsed, long start, long rows) {
-
-
-        return null;
-    }
 
     public String match(String sql, long start, long rows) {
 
@@ -89,31 +81,42 @@ public class OracleDialect implements Mapper.Dialect {
                 .replace(INCREAMENT.trim(), increamentV).replace(ENGINE.trim(), engineV);
     }
 
-    private Object getObject(final String mapper, ResultSet rs, BeanElement element) throws Exception {
+    public Object mappingToObject(Object obj, BeanElement element) {
+        if (obj == null)
+            return null;
 
-        Object obj = null;
         Class ec = element.clz;
 
         if (element.isJson) {
-            obj = rs.getObject(mapper);
-            if (Objects.isNull(obj))
-                return null;
 
             String str = null;
-            if (obj instanceof String) {
-                str = obj.toString();
-            } else if (obj instanceof oracle.sql.NCLOB) {
+            if (obj instanceof oracle.sql.NCLOB) {
 
                 oracle.sql.NCLOB clob = (oracle.sql.NCLOB) obj;
 
-                Reader reader = clob.getCharacterStream();
+                Reader reader = null;
+                try {
+                    reader = clob.getCharacterStream();
 
-                char[] charArr = new char[(int) clob.length()];
-                reader.read(charArr);
-                reader.close();
+                    char[] charArr = new char[(int) clob.length()];
+                    reader.read(charArr);
+                    str = new String(charArr);//FIXME UIF-8 ?
+                } catch (Exception e) {
+                    throw new RuntimeException(ExceptionUtil.getMessage(e));
+                }finally{
+                    if (reader !=null) {
+                        try {
+                            reader.close();
+                        }catch (Exception e){
 
-                str = new String(charArr);//FIXME UIF-8 ?
+                        }
+                    }
+                }
+
+            }else if (obj instanceof String) {
+                str = obj.toString();
             }
+
             if (StringUtil.isNullOrEmpty(str))
                 return null;
 
@@ -130,12 +133,6 @@ public class OracleDialect implements Mapper.Dialect {
                 return JsonX.toObject(str, ec);
             }
         }
-
-
-        obj = rs.getObject(mapper);
-
-        if (obj == null)
-            return null;
 
         if (obj instanceof BigDecimal) {
 
@@ -179,88 +176,40 @@ public class OracleDialect implements Mapper.Dialect {
     }
 
     @Override
-    public Object mappedResult(String property, String mapper, Map<String,String> aliaMap, Map<String,String> resultAliaMap, ResultSet rs) throws Exception {
+    public String transformAlia(String mapper, Map<String, String> aliaMap, Map<String, String> resultAliaMap) {
 
-        if (mapper == null)
-            throw new RuntimeException("Result key is empty?");
+        if (!resultAliaMap.isEmpty()) {
+            mapper = resultAliaMap.get(mapper);
+        }
+        if (aliaMap.isEmpty())
+            return mapper;
 
-        if (property.contains(".")) {
-            String[] arr = property.split("\\.");
+        if (mapper.contains(".")) {
+            String[] arr = mapper.split("\\.");
             String alia = arr[0];
             String p = arr[1];
             String clzName = aliaMap.get(alia);
-            if (StringUtil.isNullOrEmpty(clzName)){
+            if (StringUtil.isNullOrEmpty(clzName)) {
                 clzName = alia;
             }
-            Parsed parsed = Parser.get(clzName);
-            BeanElement element = parsed.getElement(p);
-
-            if (mapper.contains(SqlScript.KEY_SQL)) {
-                mapper = mapper.replace(SqlScript.KEY_SQL, SqlScript.NONE);
-            }
-
-            String m = resultAliaMap.get(mapper);
-            mapper = (m == null ? mapper : m);
-
-            if (element == null) {
-                return rs.getObject(mapper);
-            }
-
-            return getObject(mapper, rs, element);
-        } else {
-            if (mapper.contains(SqlScript.KEY_SQL)) {
-                mapper = mapper.replace(SqlScript.KEY_SQL, SqlScript.NONE);
-            }
-            return rs.getObject(mapper);
+            return clzName + "." + p;
         }
+
+        return mapper;
 
     }
 
     @Override
-    public <T> void initObj(T obj, ResultSet rs, BeanElement tempEle, List<BeanElement> eles) throws Exception {
+    public String resultKeyAlian(String mapper, Criteria.ResultMappedCriteria criteria) {
 
-
-        for (BeanElement ele : eles) {
-
-            Method method = ele.setMethod;
-            String mapper = ele.getMapper();
-
-
-            Object value = getObject(mapper, rs, ele);
-            if (value != null) {
-                method.invoke(obj, value);
-            }
-
+        if (mapper.contains(".") && (!mapper.contains(SqlScript.SPACE) || !mapper.contains(SqlScript.AS) )) {
+            Map<String, String> aliaMap = criteria.getResultAliaMap();
+            String alian = "c" + aliaMap.size();
+            aliaMap.put(alian, mapper);
+            String target = mapper + SqlScript.AS + alian;
+            return target;
         }
-    }
-
-    @Override
-    public String filterResultKey(String mapper, Criteria.ResultMappedCriteria criteria) {
-        Map<String,String> aliaMap = criteria.getResultAliaMap();
-        String alian = ALIA_NAME + aliaMap.size();
-        aliaMap.put(mapper, alian);
-        String target = mapper + SqlScript.AS + alian;
-        return target;
-    }
-
-
-    public void setJSON(int i, String str, PreparedStatement pstmt) throws Exception {
-
-//        Reader reader = new StringReader(str);
-//        pstmt.setNClob(i, reader);
-//        reader.close();//FIXME ?
-
-        pstmt.setObject(i, str);
-
-    }
-
-    public void setObject(int i, Object obj, PreparedStatement pstm) throws Exception {
-        if (obj instanceof Reader) {
-            Reader reader = (Reader) obj;
-            pstm.setNClob(i, reader);
-        } else {
-            pstm.setObject(i, obj);
-        }
+        return mapper;
     }
 
     public Object filterValue(Object value) {
@@ -275,7 +224,24 @@ public class OracleDialect implements Mapper.Dialect {
             Boolean b = (Boolean) value;
             return b.booleanValue() == true ? 1 : 0;
         }
+        if (Objects.nonNull(value) && value.getClass().isEnum())
+            return ((Enum) value).name();
         return value;
+    }
+
+    @Override
+    public Object[] toArr(Collection<Object> list) {
+
+        if (list == null || list.isEmpty())
+            return null;
+        int size = list.size();
+        Object[] arr = new Object[size];
+        int i = 0;
+        for (Object obj : list) {
+            obj = filterValue(obj);
+            arr[i++] = obj;
+        }
+        return arr;
     }
 
 }

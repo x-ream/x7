@@ -16,24 +16,21 @@
  */
 package x7.repository.dialect;
 
-import x7.core.bean.*;
+import x7.core.bean.BeanElement;
+import x7.core.bean.Criteria;
+import x7.core.bean.SqlScript;
 import x7.core.util.JsonX;
 import x7.core.util.StringUtil;
-import x7.repository.SqlParsed;
-import x7.repository.dao.SqlUtil;
 import x7.repository.mapper.Mapper;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MySqlDialect implements Mapper.Dialect {
 
-    private Map<String, String> map = new HashMap<String, String>() {
+    private final Map<String, String> map = new HashMap<String, String>() {
         {
 
             put(DATE, "timestamp");
@@ -51,11 +48,6 @@ public class MySqlDialect implements Mapper.Dialect {
 
     };
 
-    public String match(SqlParsed sqlParsed, long start, long rows) {
-
-
-        return null;
-    }
 
     public String match(String sql, long start, long rows) {
 
@@ -86,14 +78,11 @@ public class MySqlDialect implements Mapper.Dialect {
                 .replace(INCREAMENT.trim(), increamentV).replace(ENGINE.trim(), engineV);
     }
 
-
-    private Object getObject(final String mapper, ResultSet rs, BeanElement element) throws Exception {
-
-        Class ec = element.clz;
-        Object obj = rs.getObject(mapper);
-
+    @Override
+    public Object mappingToObject( Object obj, BeanElement element) {
         if (obj == null)
             return null;
+        Class ec = element.clz;
 
         if (ec.isEnum()) {
             return Enum.valueOf(ec, obj.toString());
@@ -116,72 +105,28 @@ public class MySqlDialect implements Mapper.Dialect {
     }
 
     @Override
-    public Object mappedResult(String property, String mapper,Map<String, String> aliaMap,  Map<String, String> resultAliaMap, ResultSet rs) throws Exception {
+    public String transformAlia(String mapper,Map<String, String> aliaMap,  Map<String, String> resultAliaMap) {
 
-        if (mapper == null)
-            throw new RuntimeException("Result key is empty?");
+        if (!resultAliaMap.isEmpty()) {
+            if (resultAliaMap.containsKey(mapper)) {
+                mapper = resultAliaMap.get(mapper);
+            }
+        }
+        if (aliaMap.isEmpty())
+            return mapper;
 
-        if (property.contains(".")) {
-            String[] arr = property.split("\\.");
+        if (mapper.contains(".")) {
+            String[] arr = mapper.split("\\.");
             String alia = arr[0];
             String p = arr[1];
             String clzName = aliaMap.get(alia);
             if (StringUtil.isNullOrEmpty(clzName)){
                 clzName = alia;
             }
-            Parsed parsed = Parser.get(clzName);
-            BeanElement element = parsed.getElement(p);
-
-
-            if (mapper.contains("`")) {
-                mapper = mapper.replace("`", "");
-            }
-
-            if (element == null) {
-                return rs.getObject(mapper);
-            }
-
-            return getObject(mapper, rs, element);
-        } else {
-            if (mapper.contains("`")) {
-                mapper = mapper.replace("`", "");
-            }
-            return rs.getObject(mapper);
+            return clzName+"."+p;
         }
 
-
-    }
-
-    @Override
-    public <T> void initObj(T obj, ResultSet rs, BeanElement tempEle, List<BeanElement> eles) throws Exception {
-
-        for (BeanElement ele : eles) {
-
-            Method method = ele.setMethod;
-            String mapper = ele.getMapper();
-
-            if (mapper.contains("`")) {
-                mapper = mapper.replace("`", "");
-            }
-
-            Object value = getObject(mapper, rs, ele);
-            method.invoke(obj, value);
-
-        }
-
-    }
-
-
-    public void setJSON(int i, String str, PreparedStatement pstmt) throws Exception {
-
-        pstmt.setString(i, str);
-
-    }
-
-    public void setObject(int i, Object obj, PreparedStatement pstm) throws Exception {
-
-//        pstm.setObject(i, obj);
-        SqlUtil.setValue(i,pstm,obj);
+        return mapper;
 
     }
 
@@ -191,12 +136,41 @@ public class MySqlDialect implements Mapper.Dialect {
             String str = (String) value;
             value = str.replace("<", "&lt").replace(">", "&gt");
         }
+        if (Objects.nonNull(value) && value.getClass().isEnum())
+            return ((Enum)value).name();
+
         return value;
     }
 
 
     @Override
-    public String filterResultKey(String mapper, Criteria.ResultMappedCriteria criteria) {
+    public String resultKeyAlian(String mapper, Criteria.ResultMappedCriteria criteria) {
+
+        if (mapper.contains(".") && (!mapper.contains(SqlScript.SPACE) || !mapper.contains(SqlScript.AS) )) {
+            Map<String, String> aliaMap = criteria.getResultAliaMap();
+            String alian = "c" + aliaMap.size();
+            aliaMap.put(alian, mapper);
+            String target = mapper + SqlScript.AS + alian;
+            return target;
+        }
         return mapper;
     }
+
+    @Override
+    public Object[] toArr(Collection<Object> list) {
+
+        if (list == null || list.isEmpty())
+            return null;
+        int size = list.size();
+        Object[] arr = new Object[size];
+        int i =0;
+        for (Object obj : list) {
+            obj = filterValue(obj);
+            arr[i++] = obj;
+        }
+
+        return arr;
+    }
+
+
 }

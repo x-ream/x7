@@ -14,34 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.repository.dao;
+package x7.repository.exception;
 
-import org.springframework.jdbc.datasource.DataSourceUtils;
+public class SqlBuildException extends RuntimeException {
 
-import javax.sql.DataSource;
-import java.sql.Connection;
+    private static final long serialVersionUID = 5741842995896266081L;
+    private String message;
 
-
-public class DataSourceUtil {
-
-
-    public static Connection getConnection() {
-
-//        String key = DataSourceHolder.WRITEABLE_DEFAULT;
-        DataSource ds = DataSourceHolder.getDataSource();
-
-        Connection conn = DataSourceUtils.getConnection(ds);
-
-        return conn;
+    public SqlBuildException(){
     }
 
-    public static void releaseConnection(Connection conn){
-
-//        String key = DataSourceHolder.WRITEABLE_DEFAULT;
-        DataSource ds = DataSourceHolder.getDataSource();
-
-        DataSourceUtils.releaseConnection(conn,ds);
+    public SqlBuildException(String message){
+        this.message = message;
     }
 
-
+    public String getMessage() {
+        return message;
+    }
 }

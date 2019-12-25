@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.repository.dao;
+package x7.repository.config.datasource;
 
-import java.sql.PreparedStatement;
+public enum DataSourceType {
 
-public interface IdBuildable {
-
-    long buildId(PreparedStatement pstmt);
-
+    WRITE,
+    READ
 }

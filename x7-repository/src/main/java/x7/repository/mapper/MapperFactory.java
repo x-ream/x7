@@ -395,16 +395,7 @@ public class MapperFactory implements Mapper {
 				System.out.println(sql);
 
 			return sql;
-
 		}
-
-
-	}
-
-	public static String getTableName(Class clz) {
-
-		Parsed parsed = Parser.get(clz);
-		return parsed.getTableName();
 	}
 
 }

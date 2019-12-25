@@ -14,17 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.interceptor;
+package x7.core.bean;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+public interface SqlScript {
 
-@Configuration
-public class RcDataSrouceConfiguration extends WebMvcConfigurerAdapter {
+	String SELECT = "SELECT";
+	String DISTINCT = "DISTINCT";
+	String WHERE = " WHERE ";
+	String FROM = "FROM";
+	String LIMIT = " LIMIT ";
+	String SET = " SET ";
+	String UPDATE = "UPDATE";
+	String IN = " IN ";
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RcDataSourceInterceptor()).addPathPatterns("/**");
-    }
+	String AS = " AS ";
+
+	String NONE = "";
+	String SPACE = " ";
+	String PLACE_HOLDER = "?";
+	String EQ_PLACE_HOLDER = " = ?";
+	String LIKE_HOLDER = "%";
+	String POINT = ".";
+	String COMMA = ",";
+	String STAR = "*";
+	String UNDER_LINE = "_";
+	String LEFT_PARENTTHESIS = "(";
+	String RIGHT_PARENTTHESIS = ")";
+	String WELL_NO = "#";
+	String DOLLOR = "$";
+	String SINGLE_QUOTES = "'";
+	String KEY_SQL = "`";
+
+	String sql();
 }
