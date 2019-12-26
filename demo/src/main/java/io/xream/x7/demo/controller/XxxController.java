@@ -473,4 +473,35 @@ public class XxxController {
 		boolean flag = this.catRepository.remove(251);
 		return ViewEntity.ok(flag);
 	}
+
+	@RequestMapping("/createBatch")
+//	@Transactional
+	public ViewEntity createBatch(){
+
+		Cat cat = new Cat();
+		cat.setId(256L);
+		cat.setDogId(2);
+		cat.setCreateAt(new Date());
+		cat.setTestBoo(TestBoo.TEST);
+		cat.setList(Arrays.asList(6L,8L));
+		cat.setTestList(Arrays.asList("BIG CAT","small cat"));
+
+
+		Cat cat1 = new Cat();
+		cat1.setId(257L);
+		cat1.setDogId(2);
+		cat1.setCreateAt(new Date());
+		cat1.setTestBoo(TestBoo.TEST);
+		cat1.setList(Arrays.asList(1L,2L));
+		cat1.setTestList(Arrays.asList("THR CAT","moo cat"));
+
+		List<Cat> catList = new ArrayList<>();
+		catList.add(cat);
+		catList.add(cat1);
+
+		this.catRepository.createBatch(catList);
+
+
+		return ViewEntity.ok();
+	}
 }

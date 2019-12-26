@@ -54,7 +54,8 @@ public class AppTest {
 //        xxxTest.testUnion();
 //        xxxTest.test();
 //        xxxTest.testListCriteria();
-        xxxTest.create();
+//        xxxTest.create();
+        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
 //        xxxTest.refreshByCondition();

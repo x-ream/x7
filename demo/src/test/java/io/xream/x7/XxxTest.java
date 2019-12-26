@@ -260,4 +260,8 @@ public class XxxTest {
         return this.controller.remove();
     }
 
+    public ViewEntity createBatch() {
+        return this.controller.createBatch();
+    }
+
 }
