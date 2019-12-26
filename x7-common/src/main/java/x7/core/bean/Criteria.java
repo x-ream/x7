@@ -320,13 +320,13 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 
 		@Override
 		public Class<?> getClz() {
-			return Map.class;
+			return super.clz == null ? Map.class : super.clz;
 		}
 
 		@Override
 		public String sourceScript() {
 			if (sourceScript == null) {
-				return BeanUtil.getByFirstLower(getClz().getSimpleName());
+				return BeanUtil.getByFirstLower(super.getClz().getSimpleName());
 			} else {
 				return sourceScript;
 			}

@@ -17,7 +17,7 @@
         <dependency>
             <groupId>io.xream.x7</groupId>
             <artifactId>x7-common</artifactId>
-            <version>2.3.0.RELEASE</version>
+            <version>${x7.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-spring-boot2 -->
         <dependency>
