@@ -29,7 +29,7 @@ import java.util.*;
 
 public class DataObjectConverter {
 
-    public static List<Map<String,Object>> dataToPropertyObjectMap(Class clz, List<Map<String,Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Mapper.Dialect dialect) {
+    public static List<Map<String,Object>> dataToPropertyObjectMap(Class clz, List<Map<String,Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
         List<Map<String, Object>> propertyMapList = new ArrayList<>();
 
         for (Map<String, Object> mapperMap : dataMapList) {
@@ -89,7 +89,7 @@ public class DataObjectConverter {
 
 
 
-    public static List<Object> objectToListForCreate(Object obj, List<BeanElement> eles, Mapper.Dialect dialect){
+    public static List<Object> objectToListForCreate(Object obj, List<BeanElement> eles, Dialect dialect){
 
         List<Object> list = new ArrayList<>();
         try {

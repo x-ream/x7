@@ -18,11 +18,11 @@ package x7.repository;
 
 import x7.core.bean.Criteria;
 import x7.core.bean.CriteriaCondition;
-import x7.repository.mapper.Mapper;
+import x7.repository.mapper.Dialect;
 
 public interface CriteriaParser {
 
-    void setDialect(Mapper.Dialect dialect);
+    void setDialect(Dialect dialect);
 
     String parseCondition(CriteriaCondition criteriaCondition) ;
 

@@ -24,7 +24,7 @@ import x7.core.util.StringUtil;
 import x7.core.web.Direction;
 import x7.repository.CriteriaParser;
 import x7.repository.SqlParsed;
-import x7.repository.mapper.Mapper;
+import x7.repository.mapper.Dialect;
 
 import java.util.List;
 import java.util.Map;
@@ -33,9 +33,9 @@ import java.util.Objects;
 public class SqlCriteriaParser implements CriteriaParser {
 
     @Autowired
-    private Mapper.Dialect dialect;
+    private Dialect dialect;
 
-    public void setDialect(Mapper.Dialect dialect) {
+    public void setDialect(Dialect dialect) {
         this.dialect = dialect;
     }
 

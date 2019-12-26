@@ -23,14 +23,16 @@ import x7.repository.CriteriaParser;
 import x7.repository.SqlParsed;
 import x7.repository.exception.PersistenceException;
 import x7.repository.exception.SqlBuildException;
-import x7.repository.mapper.Mapper;
+import x7.repository.mapper.Dialect;
 import x7.repository.util.SqlParserUtil;
 
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 public class SqlUtil {
@@ -238,7 +240,7 @@ public class SqlUtil {
     }
 
 
-    protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser,Mapper.Dialect dialect){
+    protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser, Dialect dialect){
         SqlParsed sqlParsed = criteriaParser.parse(criteria);
         String sql = sqlParsed.getSql().toString();
 

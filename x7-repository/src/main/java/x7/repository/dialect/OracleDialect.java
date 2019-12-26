@@ -22,15 +22,14 @@ import x7.core.bean.SqlScript;
 import x7.core.util.ExceptionUtil;
 import x7.core.util.JsonX;
 import x7.core.util.StringUtil;
-import x7.repository.mapper.Mapper;
+import x7.repository.mapper.Dialect;
 
 import java.io.Reader;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
-public class OracleDialect implements Mapper.Dialect {
+public class OracleDialect implements Dialect {
 
     private final Map<String, String> map = new HashMap<String, String>() {
         {

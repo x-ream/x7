@@ -22,13 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DialectHolder {
 
-    private static Map<String,Mapper.Dialect> map = new ConcurrentHashMap<>();
+    private static Map<String,Dialect> map = new ConcurrentHashMap<>();
 
-    public static void put(String dataSourceId, Mapper.Dialect dialect) {
+    public static void put(String dataSourceId, Dialect dialect) {
         map.put(dataSourceId,dialect);
     }
 
-    public static Mapper.Dialect get(String dataSourceId) {
+    public static Dialect get(String dataSourceId) {
         return map.get(dataSourceId);
     }
 

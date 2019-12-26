@@ -264,4 +264,8 @@ public class XxxTest {
         return this.controller.createBatch();
     }
 
+    public ViewEntity in(){
+        return this.controller.in();
+    }
+
 }

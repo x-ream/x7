@@ -43,7 +43,7 @@ import x7.repository.id.DefaultIdGenerator;
 import x7.repository.id.DefaultIdGeneratorPolicy;
 import x7.repository.id.IdGeneratorPolicy;
 import x7.repository.internal.DomainObjectRepositoy;
-import x7.repository.mapper.Mapper;
+import x7.repository.mapper.Dialect;
 import x7.repository.mapper.MapperFactory;
 import x7.repository.transform.DataTransform;
 import x7.repository.transform.SqlDataTransform;
@@ -59,7 +59,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(2)
-    public Mapper.Dialect dialect(Environment environment){
+    public Dialect dialect(Environment environment){
         String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
         String driver = null;
@@ -70,14 +70,14 @@ public class RepositoryStarter  {
         }
 
         driver = driver.toLowerCase();
-        Mapper.Dialect dialect = null;
+        Dialect dialect = null;
         try {
             if (driver.contains(DbType.MYSQL)) {
                 DbType.value = DbType.MYSQL;
-                dialect = (Mapper.Dialect) Class.forName("x7.repository.dialect.MySqlDialect").newInstance();
+                dialect = (Dialect) Class.forName("x7.repository.dialect.MySqlDialect").newInstance();
             } else if (driver.contains(DbType.ORACLE)) {
                 DbType.value = DbType.ORACLE;
-                dialect = (Mapper.Dialect) Class.forName("x7.repository.dialect.OracleDialect").newInstance();
+                dialect = (Dialect) Class.forName("x7.repository.dialect.OracleDialect").newInstance();
             }
             initDialect(dialect);
         }catch (Exception e){
@@ -89,7 +89,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(3)
-    public CriteriaParser criteriaParser(Mapper.Dialect dialect,Environment environment) {
+    public CriteriaParser criteriaParser(Dialect dialect,Environment environment) {
 
         String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
@@ -219,7 +219,7 @@ public class RepositoryStarter  {
      *      改成Map,可以动态获取方言
      * @param dialect
      */
-    private void initDialect(Mapper.Dialect dialect) {
+    private void initDialect(Dialect dialect) {
         MapperFactory.Dialect = dialect;
     }
 

@@ -35,7 +35,7 @@ public class MapperFactory implements Mapper {
 
 	private static Map<Class, Map<String, String>> sqlsMap = new HashMap<>();
 
-	public static Mapper.Dialect Dialect;
+	public static Dialect Dialect;
 
 	public static Map<String, String> getSqlMap(Class clzz) {
 		return sqlsMap.get(clzz);

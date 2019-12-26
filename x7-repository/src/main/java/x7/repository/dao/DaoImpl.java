@@ -40,6 +40,7 @@ import x7.repository.SqlParsed;
 import x7.repository.exception.QueryException;
 import x7.repository.exception.RollbackException;
 import x7.repository.mapper.DataObjectConverter;
+import x7.repository.mapper.Dialect;
 import x7.repository.mapper.Mapper;
 import x7.repository.mapper.MapperFactory;
 import x7.repository.util.ResultSortUtil;
@@ -62,7 +63,7 @@ public class DaoImpl implements Dao {
     @Autowired
     private CriteriaParser criteriaParser;
     @Autowired
-    private Mapper.Dialect dialect;
+    private Dialect dialect;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -137,7 +138,7 @@ public class DaoImpl implements Dao {
                         pstmt.setObject(i++, value);
                     }
                     return pstmt;
-                }, keyHolder);//TODO:
+                }, keyHolder);
 
             } else {
                 this.jdbcTemplate.update(connection -> {
@@ -147,7 +148,7 @@ public class DaoImpl implements Dao {
                         pstmt.setObject(i++, value);
                     }
                     return pstmt;
-                });//TODO:
+                });
             }
 
             if (isAutoIncreaseId) {
@@ -339,7 +340,7 @@ public class DaoImpl implements Dao {
     }
 
 
-    private boolean update(String sql, Collection<Object> list, Mapper.Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private boolean update(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate) {
         try {
             Object[] arr = dialect.toArr(list);
             if (arr == null)
@@ -353,7 +354,7 @@ public class DaoImpl implements Dao {
         }
     }
 
-    private List<Map<String, Object>> queryForMapList(String sql, Collection<Object> list, Mapper.Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private List<Map<String, Object>> queryForMapList(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate) {
         if (list == null || list.isEmpty()) {
             return jdbcTemplate.queryForList(sql);
         } else {
@@ -362,7 +363,7 @@ public class DaoImpl implements Dao {
         }
     }
 
-    private <T> List<T> queryForList(String sql, Class<T> clz, Collection<Object> list, Mapper.Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private <T> List<T> queryForList(String sql, Class<T> clz, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate) {
         List<Map<String, Object>> dataMapList = this.queryForMapList(sql, list, dialect, jdbcTemplate);
         List<Map<String, Object>> propertyMapList = DataObjectConverter.dataToPropertyObjectMap(clz, dataMapList, null, dialect);
         List<T> tList = new ArrayList<>();
@@ -379,7 +380,7 @@ public class DaoImpl implements Dao {
     }
 
 
-    private List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMappedCriteria resultMapped, Mapper.Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMappedCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
 
         List<Object> list = resultMapped.getValueList();
         List<Map<String, Object>> dataMapList = queryForMapList(sql, list, dialect, jdbcTemplate);

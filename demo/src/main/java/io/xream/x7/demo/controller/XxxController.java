@@ -5,6 +5,7 @@ import io.xream.x7.demo.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import x7.core.bean.*;
+import x7.core.bean.condition.InCondition;
 import x7.core.bean.condition.RefreshCondition;
 import x7.core.repository.CacheableL3;
 import x7.core.util.JsonX;
@@ -504,4 +505,16 @@ public class XxxController {
 
 		return ViewEntity.ok();
 	}
+
+    @RequestMapping("/in")
+//	@Transactional
+    public ViewEntity in(){
+
+        InCondition inCondition = new InCondition("id",Arrays.asList(254,255));
+
+        List<Cat> catList = this.catRepository.in(inCondition);
+
+
+        return ViewEntity.ok(catList);
+    }
 }

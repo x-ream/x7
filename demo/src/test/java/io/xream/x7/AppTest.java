@@ -55,13 +55,14 @@ public class AppTest {
 //        xxxTest.test();
 //        xxxTest.testListCriteria();
 //        xxxTest.create();
-        xxxTest.createBatch();
+//        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
 //        xxxTest.testList();
 //        xxxTest.testLock();
+        xxxTest.in();
     }
 
 
