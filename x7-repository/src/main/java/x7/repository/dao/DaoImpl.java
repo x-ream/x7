@@ -100,7 +100,7 @@ public class DaoImpl implements Dao {
         return true;
     }
 
-
+    @Override
     public <T> boolean remove(KeyOne<T> keyOne) {
 
         Class clz = keyOne.getClzz();
