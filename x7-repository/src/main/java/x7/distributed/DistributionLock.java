@@ -62,6 +62,8 @@ public class DistributionLock {
         lockStorage.unLock(key);
     }
 
+    private static void unLockAsync( String key){
+    }
 
     public static Lock by(String key){
         Lock ml = new Lock();
@@ -102,7 +104,26 @@ public class DistributionLock {
             return o;
         }
 
+        public <T> T lockAsync(Task<T> obj){
+            DistributionLock.lock(key,INTERVAL,TIMEOUT);
+            T o = null;
+            try {
+                o = obj.run(obj);
+            }catch (Exception e) {
+                DistributionLock.unLock(key);
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }else {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }finally {
+                DistributionLock.unLockAsync(key);
+            }
+            return o;
+        }
     }
+
+
 
     public interface Task<T> {
         T run(Object obj);

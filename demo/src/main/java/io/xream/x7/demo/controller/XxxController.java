@@ -45,7 +45,7 @@ public class XxxController {
 	@RequestMapping("/get")
 //	@Transactional
 	public ViewEntity get(){
-		Cat cat = this.catRepository.get(251);
+		Cat cat = this.catRepository.get(0);
 		System.out.println(cat);
 		return ViewEntity.ok(cat);
 	}

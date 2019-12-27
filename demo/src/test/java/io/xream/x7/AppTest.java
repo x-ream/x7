@@ -62,6 +62,7 @@ public class AppTest {
         xxxTest.testList();
 //        xxxTest.testLock();
         xxxTest.in();
+        xxxTest.get();
     }
 
 

@@ -157,7 +157,7 @@ public class XxxTest {
     }
 
     public ViewEntity get(){
-        ViewEntity ve = this.testServiceRemote.get();
+        ViewEntity ve = this.controller.get();
         Cat cat = JsonX.toObject(ve.getBody(),Cat.class);
         System.out.println(cat);
         return ve;
@@ -270,5 +270,6 @@ public class XxxTest {
     public ViewEntity in(){
         return this.controller.in();
     }
+
 
 }
