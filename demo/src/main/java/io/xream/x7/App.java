@@ -13,7 +13,7 @@ import x7.*;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@EnableTransactionManagementReadable
+@EnableReadOnly
 //@EnableX7L2Caching(timeSeconds = 120)
 @EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient

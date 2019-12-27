@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Import({DataSourceAspect.class})
-public @interface EnableTransactionManagementReadable {
+public @interface EnableReadOnly {
 }
