@@ -39,8 +39,8 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
-//        xxxTest.testResultMapped();
+        xxxTest.testCriteria();
+        xxxTest.testResultMapped();
 //        xxxTest.testDomain();
 
 //        xxxTest.testRefreshCondition();
@@ -48,19 +48,18 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.distinct();
 
-//        xxxTest.testUnion();
-//        xxxTest.test();
-//        xxxTest.testListCriteria();
+        xxxTest.test();
+        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
-//        xxxTest.testList();
+        xxxTest.testList();
 //        xxxTest.testLock();
         xxxTest.in();
     }

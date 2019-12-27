@@ -174,15 +174,16 @@ public class XxxTest {
         CriteriaBuilder builder = CriteriaBuilder.build(CatTest.class);
         builder.paged().sort("id", Direction.DESC).page(1).rows(10);
         Criteria criteria = builder.get();
-        return testServiceRemote.testCriteria(criteria);
+        System.out.println(criteria);
+        System.out.println(JsonX.toJson(criteria));
+        return controller.testCriteria(criteria);
     }
 
     public ViewEntity testResultMapped(){
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class);
-        builder.paged().sort("catTest.id", Direction.DESC).page(1).rows(10);
-        Criteria.ResultMappedCriteria criteria = builder.get();
-        return testServiceRemote.testResultMap(criteria);
+        ViewEntity ve =  controller.testResultMap();
+        System.out.println(ve);
+        return ve;
     }
 
     public ViewEntity testDomain(){
@@ -220,7 +221,9 @@ public class XxxTest {
 
 
     public ViewEntity testListCriteria(){
-        return this.controller.listCriteria();
+        ViewEntity ve = this.controller.listCriteria();
+        System.out.println(ve);
+        return ve;
     }
 
 
@@ -241,7 +244,7 @@ public class XxxTest {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
         ResponseEntity<String> result = restTemplate.postForEntity(url, requestEntity,String.class);
 
-        return null;
+        return ViewEntity.ok(result);
     }
 
     public void testLock(){

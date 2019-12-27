@@ -33,8 +33,6 @@ public interface TestServiceRemote {
     @RequestMapping("/criteria/test")
     ViewEntity testCriteria(Criteria criteria);
 
-    @RequestMapping("/resultmap/test")
-    ViewEntity testResultMap(Criteria.ResultMappedCriteria criteria);
 
     @RequestMapping("/domain/test")
     ViewEntity testDomain(Criteria.DomainObjectCriteria criteria);

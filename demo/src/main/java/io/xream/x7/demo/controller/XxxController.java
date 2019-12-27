@@ -299,16 +299,6 @@ public class XxxController {
 		builder.and().in("type", inList);
 		builder.paged().orderIn("type",inList);
 
-
-//		builder.or().beginSub().eq("dogTest.userName","yyy")
-//				.or().like("dogTest.userName",null)
-//				.or().likeRight("dogTest.userName", "xxx")
-//				.endSub();
-//		builder.or().beginSub().eq("dogTest.userName", "uuu").endSub();
-
-
-//		String sourceScript = "cat";
-
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 
 		Page<Map<String,Object>> pagination = repository.find(resultMapped);
@@ -419,14 +409,19 @@ public class XxxController {
 		return 10;
 	}
 
-	@RequestMapping("/criteria/test")
-	public ViewEntity testCtriteria(@RequestBody Criteria criteria){
-		return ViewEntity.ok(criteria);
-	}
 
 	@RequestMapping("/resultmap/test")
-	public ViewEntity testResultMap(@RequestBody Criteria.ResultMappedCriteria criteria){
-		return ViewEntity.ok(criteria);
+	public ViewEntity testResultMap(){
+
+		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
+		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+
+		builder.paged().page(1).rows(10).sort("id",Direction.DESC);
+
+		Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
+		Page<Map<String,Object>> page = this.catRepository.find(resultMappedCriteria);
+
+		return ViewEntity.ok(page);
 	}
 
 	@RequestMapping("/domain/test")
@@ -517,4 +512,10 @@ public class XxxController {
 
         return ViewEntity.ok(catList);
     }
+
+    @RequestMapping("/criteria/test")
+    public ViewEntity testCriteria(@RequestBody Criteria criteria) {
+		System.out.println(criteria);
+		return ViewEntity.ok(criteria);
+	}
 }

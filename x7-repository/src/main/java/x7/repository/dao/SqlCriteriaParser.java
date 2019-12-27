@@ -72,14 +72,10 @@ public class SqlCriteriaParser implements CriteriaParser {
         }
 
         if (criteria instanceof Criteria.ResultMappedCriteria) {
-
             Parsed parsed = Parser.get(key);
             if (parsed != null) {
                 return parsed.getTableName();
-            }else{
-                return key;
             }
-
         }
 
         Class clz = criteria.getClz();

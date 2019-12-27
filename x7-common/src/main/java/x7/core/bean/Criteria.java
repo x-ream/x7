@@ -356,15 +356,6 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 
 		}
 
-		public List<String> listAllResultKey() {
-			List<String> list = new ArrayList<String>();
-			Parsed parsed = Parser.get(getClz());
-
-			for (BeanElement be : parsed.getBeanElementList()) {
-				list.add(be.getMapper());
-			}
-			return list;
-		}
 
 		@Override
 		public String toString() {

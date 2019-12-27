@@ -30,7 +30,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * Standard Query Builder
  *
  * @author Sim
  */
@@ -606,6 +605,7 @@ public class CriteriaBuilder {
         return builder;
     }
 
+
     public static DomainObjectBuilder buildDomainObject(Class<?> mainClz, Class<?> withClz) {
         CriteriaBuilder b = new CriteriaBuilder();
         DomainObjectBuilder builder = b.new DomainObjectBuilder(mainClz, withClz);
@@ -695,7 +695,6 @@ public class CriteriaBuilder {
 
         private void init() {
             super.instance = this;
-//            Criteria c = new Criteria();
             Criteria.ResultMappedCriteria resultMapped = new Criteria.ResultMappedCriteria();
             super.criteria = resultMapped;
         }
@@ -711,7 +710,6 @@ public class CriteriaBuilder {
             init();
             init(clz);
         }
-
 
         private void xAddResultKey(List<String> xExpressionList) {
             for (String xExpression : xExpressionList) {
@@ -788,7 +786,6 @@ public class CriteriaBuilder {
             return this;
         }
 
-
         public ResultMappedBuilder reduce(Reduce.ReduceType type, String property) {
             Reduce reduce = new Reduce();
             reduce.setType(type);
@@ -796,8 +793,6 @@ public class CriteriaBuilder {
             get().getReduceList().add(reduce);
             return this;
         }
-
-
 
     }
 
