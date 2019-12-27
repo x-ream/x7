@@ -58,19 +58,27 @@ public class ReliableProducerAspect {
         long startTime = System.currentTimeMillis();
 
         Object[] args = proceedingJoinPoint.getArgs();
-        Object body = null;
-        for (Object arg : args) {
-            if (arg.getClass() == reliableProducer.type()) {
-                body = arg;
-                break;
-            }
-        }
 
         Signature signature = proceedingJoinPoint.getSignature();
-        String str = signature.getDeclaringTypeName() + "." + signature.getName();
+        String logStr = signature.getDeclaringTypeName() + "." + signature.getName();
 
-        if (body == null)
-            throw new IllegalArgumentException(str + ", ReliableMessage arg can not be null, type: " + reliableProducer.type());
+        if (args == null || args.length == 0)
+            throw new IllegalArgumentException(logStr + ", for ReliableMessage body can not be null, no args");
+
+        Object body = null;
+        if (reliableProducer.type() != Void.class) {
+            for (Object arg : args) {
+                if (arg.getClass() == reliableProducer.type()) {
+                    body = arg;
+                    break;
+                }
+            }
+            if (body == null)
+                throw new IllegalArgumentException(logStr + ", for ReliableMessage body can not be null, reliableProducer.type: " + reliableProducer.type());
+        }
+        if (body == null) {
+            body = args[0];
+        }
 
         MessageTraceable tracing = null;
         for (Object arg : args) {
@@ -87,7 +95,7 @@ public class ReliableProducerAspect {
         String[] svcs = reliableProducer.svcs();
         for (String svc : svcs) {
             if (svc.contains(",")) {
-                throw new IllegalArgumentException(str + ", " + ReliableProducer.class.getName() + ", svcs: " + svcs);
+                throw new IllegalArgumentException(logStr + ", " + ReliableProducer.class.getName() + ", svcs: " + svcs);
             }
         }
 
@@ -128,7 +136,7 @@ public class ReliableProducerAspect {
                 TimeUnit.MILLISECONDS.sleep(interval);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
-                    logger.info("handled OK time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+                    logger.info("handled OK time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, logStr);
                     return result;
                 }
                 replay++;
@@ -146,7 +154,7 @@ public class ReliableProducerAspect {
                 TimeUnit.MILLISECONDS.sleep(interval);
                 isOk = this.backend.tryToConfirm(msgId);
                 if (isOk) {
-                    logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+                    logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, logStr);
                     return result;
                 }
                 replay++;
@@ -165,7 +173,7 @@ public class ReliableProducerAspect {
                         TimeUnit.MILLISECONDS.sleep(intervalBaseTwo);
                         isOk = this.backend.tryToConfirm(msgId);
                         if (isOk) {
-                            logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+                            logger.info("handled OK, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, logStr);
                             return result;
                         }
                         flag = this.backend.cancel(msgId);
@@ -174,7 +182,7 @@ public class ReliableProducerAspect {
                     }
                 }
             }
-            logger.info("handled FAIL, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, proceedingJoinPoint.getSignature());
+            logger.info("handled FAIL, time: {} ,replay = {} ,for {}", System.currentTimeMillis() - startTime, replay, logStr);
             throw new BusyException("TIMEOUT, X TRANSACTION UN FINISHED");
         }
 

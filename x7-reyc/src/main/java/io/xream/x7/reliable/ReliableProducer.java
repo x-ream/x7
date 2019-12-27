@@ -41,6 +41,9 @@ public @interface ReliableProducer {
 
     String topic() default "";
 
+    /**
+     * define which arg is the message body, while has multi args
+     */
     Class<?> type() default Void.class;
 
     String[] svcs() default {};
