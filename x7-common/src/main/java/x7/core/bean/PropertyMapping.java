@@ -16,34 +16,33 @@
  */
 package x7.core.bean;
 
-import x7.core.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapMapper {
-    private Map<String, String> propertyMapperMap = new HashMap<String, String>();
-    private Map<String, String> mapperPropertyMap = new HashMap<String, String>();
+public class PropertyMapping {
+    private Map<String, String> propertyMappingMap = new HashMap<String, String>();
+    private Map<String, String> columnPropertyMap = new HashMap<String, String>();
 
-    public Map<String, String> getPropertyMapperMap() {
-        return propertyMapperMap;
+    public Map<String, String> getPropertyMappingMap() {
+        return propertyMappingMap;
     }
 
-    public Map<String, String> getMapperPropertyMap() {
-        return mapperPropertyMap;
+    public Map<String, String> getColumnPropertyMap() {
+        return columnPropertyMap;
     }
 
     public void put(String property, String mapper) {
-        this.propertyMapperMap.put(property, mapper);
-        this.mapperPropertyMap.put(mapper, property);
+        this.propertyMappingMap.put(property, mapper);
+        this.columnPropertyMap.put(mapper, property);
     }
 
     public String mapper(String property) {
-        return this.propertyMapperMap.get(property);
+        return this.propertyMappingMap.get(property);
     }
 
     public String property(String mapper) {
-        String property = this.mapperPropertyMap.get(mapper);
+        String property = this.columnPropertyMap.get(mapper);
         if (property == null)
             return mapper;
         return property;
@@ -51,7 +50,7 @@ public class MapMapper {
 
     @Override
     public String toString() {
-        return "MapMapper [propertyMapperMap=" + propertyMapperMap + ", mapperPropertyMap=" + mapperPropertyMap
+        return "PropertyMapping [propertyMappingMap=" + propertyMappingMap + ", columnPropertyMap=" + columnPropertyMap
                 + "]";
     }
 }

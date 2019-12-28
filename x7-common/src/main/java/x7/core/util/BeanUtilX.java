@@ -645,7 +645,6 @@ public class BeanUtilX extends BeanUtil {
 			}
 		}
 
-		System.out.println(map);
 		return map;
 	}
 

@@ -119,7 +119,10 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 	}
 
 	public void setCustomedResultKey(String str){
-		this.customedResultKey = str;
+		if (StringUtil.isNullOrEmpty(str))
+			this.customedResultKey = SqlScript.STAR;
+		else
+			this.customedResultKey = str;
 	}
 
 	public String resultAllScript() {
@@ -218,14 +221,14 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 		private String groupBy;
 		private List<Reduce> reduceList = new ArrayList<>();
 		@JsonIgnore
-		private transient MapMapper mapMapper;
+		private transient PropertyMapping propertyMapping;
 		@JsonIgnore
 		private transient Map<String,String> aliaMap;
 		/*
 		 * only for oracle
 		 */
 		@JsonIgnore
-		private transient Map<String,String> resultAliaMap = new HashMap<>();
+		private transient Map<String,String> resultKeyAliaMap = new HashMap<>();
 
 		public Distinct getDistinct() {
 			return distinct;
@@ -261,16 +264,16 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 			this.distinct = distinct;
 		}
 
-		public MapMapper getMapMapper() {
-			return this.mapMapper;
+		public PropertyMapping getPropertyMapping() {
+			return this.propertyMapping;
 		}
 
-		public void setMapMapper(MapMapper mapMapper) {
-			this.mapMapper = mapMapper;
+		public void setPropertyMapping(PropertyMapping propertyMapping) {
+			this.propertyMapping = propertyMapping;
 		}
 
-		public Map<String, String> getResultAliaMap() {
-			return this.resultAliaMap;
+		public Map<String, String> getResultKeyAliaMap() {
+			return this.resultKeyAliaMap;
 		}
 
 		public Map<String, String> getAliaMap() {
@@ -281,8 +284,8 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 			this.aliaMap = aliaMap;
 		}
 
-		public void setResultAliaMap(Map<String, String> aliaMap) {
-			this.resultAliaMap = aliaMap;
+		public void setResultKeyAliaMap(Map<String, String> aliaMap) {
+			this.resultKeyAliaMap = aliaMap;
 		}
 
 		public String getResultScript() {
@@ -293,7 +296,7 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 				int i = 0;
 				int size = resultKeyList.size() - 1;
 				for (String str : resultKeyList){
-					String mapper = getMapMapper().mapper(str);
+					String mapper = getPropertyMapping().mapper(str);
 					sb.append(mapper);
 					if (i < size){
 						sb.append(SqlScript.COMMA);

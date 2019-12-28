@@ -103,11 +103,11 @@ public class MySqlDialect implements Dialect {
     }
 
     @Override
-    public String transformAlia(String mapper,Map<String, String> aliaMap,  Map<String, String> resultAliaMap) {
+    public String transformAlia(String mapper,Map<String, String> aliaMap,  Map<String, String> resultKeyAliaMap) {
 
-        if (!resultAliaMap.isEmpty()) {
-            if (resultAliaMap.containsKey(mapper)) {
-                mapper = resultAliaMap.get(mapper);
+        if (!resultKeyAliaMap.isEmpty()) {
+            if (resultKeyAliaMap.containsKey(mapper)) {
+                mapper = resultKeyAliaMap.get(mapper);
             }
         }
         if (aliaMap.isEmpty())
@@ -145,9 +145,9 @@ public class MySqlDialect implements Dialect {
     public String resultKeyAlian(String mapper, Criteria.ResultMappedCriteria criteria) {
 
         if (mapper.contains(".") && (!mapper.contains(SqlScript.SPACE) || !mapper.contains(SqlScript.AS) )) {
-            Map<String, String> aliaMap = criteria.getResultAliaMap();
-            String alian = "c" + aliaMap.size();
-            aliaMap.put(alian, mapper);
+            Map<String, String> resultKeyAliaMap = criteria.getResultKeyAliaMap();
+            String alian = "c" + resultKeyAliaMap.size();
+            resultKeyAliaMap.put(alian, mapper);
             String target = mapper + SqlScript.AS + alian;
             return target;
         }

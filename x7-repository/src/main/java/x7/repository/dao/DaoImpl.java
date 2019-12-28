@@ -311,7 +311,7 @@ public class DaoImpl implements Dao {
         if (ConfigAdapter.isIsShowSql())
             logger.info(sql);
 
-        List<Map<String, Object>> list = list(resultMapped);
+        List<Map<String, Object>> list = queryForMapList(sql, resultMapped, this.dialect, jdbcTemplate);
 
         Page<Map<String, Object>> pagination = PageBuilder.build(resultMapped, list, () -> getCount(sqlParsed.getCountSql(), resultMapped.getValueList()));
 

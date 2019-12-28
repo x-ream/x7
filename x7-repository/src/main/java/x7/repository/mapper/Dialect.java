@@ -41,7 +41,7 @@ public interface Dialect {
 
     String match(String sql, String sqlType);
 
-    String transformAlia(String mapper, Map<String,String> aliaMap, Map<String,String> resultAliaMap) ;
+    String transformAlia(String mapper, Map<String,String> aliaMap, Map<String,String> resultKeyAliaMap) ;
 
     Object filterValue(Object value);
 

@@ -174,8 +174,6 @@ public class XxxTest {
         CriteriaBuilder builder = CriteriaBuilder.build(CatTest.class);
         builder.paged().sort("id", Direction.DESC).page(1).rows(10);
         Criteria criteria = builder.get();
-        System.out.println(criteria);
-        System.out.println(JsonX.toJson(criteria));
         return controller.testCriteria(criteria);
     }
 

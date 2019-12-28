@@ -291,11 +291,11 @@ public class XxxController {
 		ro.setResultKeys(resultKeys);
 
 		List<Object> inList = new ArrayList<>();
-		inList.add("NL");
-		inList.add("BL");
+		inList.add("WHITE");
+		inList.add("BLACK");
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class,ro);
-		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+//		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
 		builder.and().in("type", inList);
 		builder.paged().orderIn("type",inList);
 
@@ -506,16 +506,15 @@ public class XxxController {
     public ViewEntity in(){
 
         InCondition inCondition = new InCondition("id",Arrays.asList(254,255));
-
         List<Cat> catList = this.catRepository.in(inCondition);
-
 
         return ViewEntity.ok(catList);
     }
 
     @RequestMapping("/criteria/test")
     public ViewEntity testCriteria(@RequestBody Criteria criteria) {
-		System.out.println(criteria);
-		return ViewEntity.ok(criteria);
+		Page<CatTest> page = this.repository.find(criteria);
+		System.out.println(page);
+		return ViewEntity.ok(page);
 	}
 }

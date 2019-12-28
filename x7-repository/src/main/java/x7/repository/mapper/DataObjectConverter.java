@@ -46,10 +46,10 @@ public class DataObjectConverter {
                 }else {
 
                     if (mapper.contains(SqlScript.DOLLOR)){
-                        property = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultAliaMap());
+                        property = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
                     }else {
-                        mapper = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultAliaMap());
-                        property = resultMapped.getMapMapper().property(mapper);
+                        mapper = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
+                        property = resultMapped.getPropertyMapping().property(mapper);
 
                         if (property.contains(".")) {
                             String[] arr = property.split("\\.");

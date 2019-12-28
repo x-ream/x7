@@ -175,10 +175,12 @@ public class OracleDialect implements Dialect {
     }
 
     @Override
-    public String transformAlia(String mapper, Map<String, String> aliaMap, Map<String, String> resultAliaMap) {
+    public String transformAlia(String mapper, Map<String, String> aliaMap, Map<String, String> resultKeyAliaMap) {
 
-        if (!resultAliaMap.isEmpty()) {
-            mapper = resultAliaMap.get(mapper);
+        if (!resultKeyAliaMap.isEmpty()) {
+            if (resultKeyAliaMap.containsKey(mapper)) {
+                mapper = resultKeyAliaMap.get(mapper);
+            }
         }
         if (aliaMap.isEmpty())
             return mapper;
@@ -202,7 +204,7 @@ public class OracleDialect implements Dialect {
     public String resultKeyAlian(String mapper, Criteria.ResultMappedCriteria criteria) {
 
         if (mapper.contains(".") && (!mapper.contains(SqlScript.SPACE) || !mapper.contains(SqlScript.AS) )) {
-            Map<String, String> aliaMap = criteria.getResultAliaMap();
+            Map<String, String> aliaMap = criteria.getResultKeyAliaMap();
             String alian = "c" + aliaMap.size();
             aliaMap.put(alian, mapper);
             String target = mapper + SqlScript.AS + alian;

@@ -127,18 +127,18 @@ public class SqlCriteriaParser implements CriteriaParser {
          */
         groupBy(sb, criteria);
 
-        StringBuilder countSql = count(sb,criteria);
+        StringBuilder countSql = count(sb, criteria);
         /*
          * sort
          */
         sort(sb, criteria);
 
-        SqlParsed sqlParsed = sqlArr(sb, criteria,countSql);
+        SqlParsed sqlParsed = sqlArr(sb, criteria, countSql);
 
         return sqlParsed;
     }
 
-    private SqlParsed sqlArr(StringBuilder sb, Criteria criteria, StringBuilder countSql){
+    private SqlParsed sqlArr(StringBuilder sb, Criteria criteria, StringBuilder countSql) {
 
         SqlParsed sqlParsed = new SqlParsed();
 
@@ -156,10 +156,10 @@ public class SqlCriteriaParser implements CriteriaParser {
     private void env(Criteria criteria) {
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             Criteria.ResultMappedCriteria resultMapped = (Criteria.ResultMappedCriteria) criteria;
-            MapMapper mapMapper = resultMapped.getMapMapper();//
-            if (Objects.isNull(mapMapper)) {
-                mapMapper = new MapMapper();
-                resultMapped.setMapMapper(mapMapper);
+            PropertyMapping propertyMapping = resultMapped.getPropertyMapping();//
+            if (Objects.isNull(propertyMapping)) {
+                propertyMapping = new PropertyMapping();
+                resultMapped.setPropertyMapping(propertyMapping);
             }
         }
     }
@@ -173,7 +173,7 @@ public class SqlCriteriaParser implements CriteriaParser {
         Criteria.ResultMappedCriteria resultMapped = (Criteria.ResultMappedCriteria) criteria;
         StringBuilder column = new StringBuilder();
 
-        MapMapper mapMapper = resultMapped.getMapMapper();
+        PropertyMapping propertyMapping = resultMapped.getPropertyMapping();
 
         if (Objects.nonNull(resultMapped.getDistinct())) {
 
@@ -186,9 +186,8 @@ public class SqlCriteriaParser implements CriteriaParser {
             for (String resultKey : list) {
 
                 String mapper = mapping(resultKey, criteria);
-                resultMapped.getResultKeyList().add(resultKey);//返回值
-                mapMapper.put(resultKey, mapper);//REDUCE ALIAN NAME
-                mapper = this.dialect.resultKeyAlian(mapper,resultMapped);
+                propertyMapping.put(resultKey, mapper);//REDUCE ALIAN NAME
+                mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
                 column.append(SqlScript.SPACE).append(mapper);
                 i++;
                 if (i < size) {
@@ -209,9 +208,9 @@ public class SqlCriteriaParser implements CriteriaParser {
                 if (flag) {
                     column.append(SqlScript.COMMA);
                 }
-                String alianProperty = reduce.getProperty()+ SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
+                String alianProperty = reduce.getProperty() + SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
                 String alianName = alianProperty.replace(SqlScript.POINT, SqlScript.DOLLOR);
-                resultMapped.getResultAliaMap().put(alianName,alianProperty);
+                resultMapped.getResultKeyAliaMap().put(alianName, alianProperty);
 
                 String value = mapping(reduce.getProperty(), criteria);
                 column.append(SqlScript.SPACE)
@@ -225,32 +224,29 @@ public class SqlCriteriaParser implements CriteriaParser {
             }
         }
 
-
-        String cs = column.toString();
-        if (StringUtil.isNullOrEmpty(cs)) {
-            List<String> resultList = resultMapped.getResultKeyList();
-
-            StringBuilder sb = new StringBuilder();
-            if (resultList.isEmpty()) {
-                throw new RuntimeException("Suggest API: find(Criteria criteria)");
-            } else {
-                int size = resultList.size();
-                for (int i = 0; i < size; i++) {
-                    String key = resultList.get(i);
-                    String mapper = mapping(key,criteria);
-                    mapMapper.put(key, mapper);
-                    mapper = this.dialect.resultKeyAlian(mapper,resultMapped);
-                    sb.append(SqlScript.SPACE ).append(mapper);
-                    if (i < size - 1) {
-                        sb.append(SqlScript.COMMA );
-                    }
+        List<String> resultList = resultMapped.getResultKeyList();
+        if (!resultList.isEmpty()) {
+            if (flag) {
+                column.append(SqlScript.COMMA);
+            }
+            int size = resultList.size();
+            for (int i = 0; i < size; i++) {
+                String key = resultList.get(i);
+                String mapper = mapping(key, criteria);
+                propertyMapping.put(key, mapper);
+                mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
+                column.append(SqlScript.SPACE).append(mapper);
+                if (i < size - 1) {
+                    column.append(SqlScript.COMMA);
                 }
             }
-
-            criteria.setCustomedResultKey(sb.toString());
-        } else {
-            criteria.setCustomedResultKey(column.toString());
         }
+
+        String script = column.toString();
+        if (StringUtil.isNullOrEmpty(script)) {
+            throw new RuntimeException("Suggest API: find(Criteria criteria), no any resultKey for ResultMappedCriteria");
+        }
+        criteria.setCustomedResultKey(column.toString());
     }
 
     private void select(StringBuilder sb, Criteria criteria) {
@@ -323,7 +319,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             return;
 
         List<Sort> sortList = criteria.getSortList();
-        if (sortList !=null && !sortList.isEmpty()){
+        if (sortList != null && !sortList.isEmpty()) {
 
             sb.append(Conjunction.ORDER_BY.sql());
             int size = sortList.size();
@@ -335,7 +331,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                 Direction direction = sort.getDirection();
                 if (direction == null) {
                     sb.append(Direction.DESC);
-                }else{
+                } else {
                     sb.append(direction);
                 }
                 i++;
@@ -345,38 +341,6 @@ public class SqlCriteriaParser implements CriteriaParser {
             }
         }
 
-    }
-
-    private StringBuilder sortScript(Criteria criteria) {
-
-        StringBuilder sb = new StringBuilder();
-
-        if (criteria.isFixedSort())
-            return null;
-
-        List<Sort> sortList = criteria.getSortList();
-        if (sortList !=null && !sortList.isEmpty()){
-
-            sb.append(Conjunction.ORDER_BY.sql());
-            int size = sortList.size();
-            int i = 0;
-            for (Sort sort : sortList) {
-                String orderBy = sort.getOrderBy();
-                String mapper = mapping(orderBy, criteria);
-                sb.append(mapper).append(SqlScript.SPACE);
-                Direction direction = sort.getDirection();
-                if (direction == null) {
-                    sb.append(Direction.DESC);
-                }else{
-                    sb.append(direction);
-                }
-                i++;
-                if (i < size) {
-                    sb.append(SqlScript.COMMA).append(SqlScript.SPACE);
-                }
-            }
-        }
-        return sb;
     }
 
     private void x(StringBuilder sb, List<Criteria.X> xList, CriteriaCondition criteria, boolean isWhere) {
@@ -387,9 +351,9 @@ public class SqlCriteriaParser implements CriteriaParser {
                 sb.append(x.getKey());
                 Object valueObject = x.getValue();
                 if (valueObject != null) {
-                    if (valueObject instanceof List){
-                        criteria.getValueList().addAll((List<Object>)valueObject);
-                    }else{
+                    if (valueObject instanceof List) {
+                        criteria.getValueList().addAll((List<Object>) valueObject);
+                    } else {
                         criteria.getValueList().add(valueObject);
                     }
                 }
@@ -532,8 +496,8 @@ public class SqlCriteriaParser implements CriteriaParser {
 
             if (clz.getSuperclass().isEnum() || clz.isEnum()) {
                 try {
-                    criteria.getValueList().add(((Enum)v).name());
-                }catch (Exception e){
+                    criteria.getValueList().add(((Enum) v).name());
+                } catch (Exception e) {
 
                 }
             } else {
