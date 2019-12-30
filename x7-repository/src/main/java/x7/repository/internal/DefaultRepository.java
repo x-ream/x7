@@ -112,21 +112,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
         if (id == 0)
             throw new PersistenceException("UNEXPECTED EXCEPTION WHILE CREATING ID");
 
-        CasualWorker.accept(() -> {
-            IdGenerator generator = new IdGenerator();
-            generator.setClzName(clzName);
-            generator.setMaxId(id);
-            StringBuilder sb = new StringBuilder();
-            sb.append("update idGenerator set maxId = ").append(id).append(" where clzName = '").append(clzName)
-                    .append("' and ").append(id).append(" > maxId ;");//sss
-
-            try {
-                ManuRepository.execute(generator, sb.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        });
+        GlobalIdPersistencePolicy.persist(id, clzName);
 
         return id;
     }
@@ -157,7 +143,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
         Parsed parsed = Parser.get(this.clz);
         Field keyField = parsed.getKeyField(X.KEY_ONE);
         if (Objects.isNull(keyField))
-            throw new PersistenceException("No PrimaryKey, UnSafe Refresh, try to invoke DefaultRepository.refreshUnSafe(RefreshCondition<T> refreshCondition)");
+            throw new CriteriaSyntaxException("No PrimaryKey, UnSafe Refresh, try to invoke DefaultRepository.refreshUnSafe(RefreshCondition<T> refreshCondition)");
 
         CriteriaCondition criteriaCondition = refreshCondition.getCondition();
 
