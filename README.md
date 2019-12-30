@@ -5,14 +5,14 @@
 [![maven](https://img.shields.io/maven-central/v/io.xream.x7/x7-parent.svg)](https://search.maven.org/search?q=io.xream)
 
        
-       x7-repository
+       x7-repository     (wrapped Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
           @EnableX7L3Caching            @CacheableL3
           @EnableDistributionLock       @Lock             or  
              { DistributionLock.by(key).lock(task) }
           
        x7-reyc
-          /reyc  (wrapped Resilience4J)
+          /reyc     (wrapped Resilience4J)
              @EnableReySupport                            and { private ReyTemplate reyTemplate }
              @EnableReyClient           @ReyClient
            
