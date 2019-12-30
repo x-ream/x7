@@ -122,12 +122,13 @@ public class SqlCriteriaParser implements CriteriaParser {
          * StringList
          */
         x(sb, criteria.getListX(), criteria);
+
+        StringBuilder countSql = count(sb, criteria);
         /*
          * group by
          */
         groupBy(sb, criteria);
 
-        StringBuilder countSql = count(sb, criteria);
         /*
          * sort
          */
@@ -183,18 +184,22 @@ public class SqlCriteriaParser implements CriteriaParser {
             List<String> list = resultMapped.getDistinct().getList();
             int size = list.size();
             int i = 0;
+            StringBuilder distinctColumn = new StringBuilder();
+            distinctColumn.append(column);
             for (String resultKey : list) {
 
                 String mapper = mapping(resultKey, criteria);
                 propertyMapping.put(resultKey, mapper);//REDUCE ALIAN NAME
+                distinctColumn.append(SqlScript.SPACE).append(mapper);
                 mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
                 column.append(SqlScript.SPACE).append(mapper);
                 i++;
                 if (i < size) {
                     column.append(SqlScript.COMMA);
+                    distinctColumn.append(SqlScript.COMMA);
                 }
             }
-            criteria.setCountDistinct("COUNT(" + column.toString() + ") count");
+            criteria.setCountDistinct("COUNT(" + distinctColumn.toString() + ") count");
             flag = true;
         }
 

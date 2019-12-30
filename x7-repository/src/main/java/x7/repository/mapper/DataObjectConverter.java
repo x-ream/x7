@@ -16,6 +16,8 @@
  */
 package x7.repository.mapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import x7.core.bean.*;
 import x7.core.config.ConfigAdapter;
 import x7.core.util.ExceptionUtil;
@@ -27,7 +29,10 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
+
 public class DataObjectConverter {
+
+    private static Logger logger = LoggerFactory.getLogger(DataObjectConverter.class);
 
     public static List<Map<String,Object>> dataToPropertyObjectMap(Class clz, List<Map<String,Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
         List<Map<String, Object>> propertyMapList = new ArrayList<>();
@@ -41,7 +46,7 @@ public class DataObjectConverter {
                 BeanElement be = null;
                 if (resultMapped == null){
                     Parsed parsed = Parser.get(clz);
-                    property = parsed.getProperty(mapper);
+                    property = parsed.getPropertyByLower(mapper);
                     be = parsed.getElement(property);
                 }else {
 
@@ -214,10 +219,14 @@ public class DataObjectConverter {
         }
 
         if (ConfigAdapter.isIsShowSql())
-            System.out.println("_queryMap: " + map);
+            logger.info("__queryValueMap: " + map);
 
         return map;
 
     }
 
+    public static void log(List<Object> valueList) {
+        if (ConfigAdapter.isIsShowSql())
+            logger.info("__queryValueList: " + valueList);
+    }
 }

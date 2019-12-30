@@ -35,7 +35,7 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 	private static final long serialVersionUID = 7088698915888081349L;
 
 	private Class<?> clz;
-	private boolean isScroll = true;
+	private boolean isScroll;
 	private int page;
 	private int rows;
 	private List<Sort> sortList;

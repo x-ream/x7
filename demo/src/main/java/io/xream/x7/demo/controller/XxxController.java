@@ -458,9 +458,9 @@ public class XxxController {
 	public ViewEntity list() {
 		Cat cat = new Cat();
 		cat.setType("NL");
-		List<Cat> list = catRepository.list(cat);
-		System.out.println(list);
-		return ViewEntity.ok(list);
+		cat  = catRepository.getOne(cat);
+		System.out.println(cat);
+		return ViewEntity.ok(cat);
 	}
 
 	@RequestMapping("/remove")

@@ -46,6 +46,7 @@ public class Parsed {
 	private Map<String, BeanElement> elementMap = new HashMap<String, BeanElement>();
 	private Map<String,String> propertyMapperMap = new HashMap<String,String>();
 	private Map<String,String> mapperPropertyMap = new HashMap<String,String>();
+	private Map<String,String> mapperPropertyMapLower = new HashMap<String,String>();
 	
 	private boolean isNoCache;
 	
@@ -170,12 +171,14 @@ public class Parsed {
 		this.propertyMapperMap.clear();
 		this.mapperPropertyMap.clear();
 		this.elementMap.clear();
+		this.mapperPropertyMapLower.clear();
 		for (BeanElement e : this.beanElementList){
 			String property = e.getProperty();
 			String mapper = e.getMapper();
 			this.elementMap.put(property, e);
 			this.propertyMapperMap.put(property, mapper);
 			this.mapperPropertyMap.put(mapper, property);
+			this.mapperPropertyMapLower.put(mapper.toLowerCase(),property);
 		}
 	}
 	
@@ -258,6 +261,10 @@ public class Parsed {
 
 	public String getMapper(String property) {
 		return propertyMapperMap.get(property);
+	}
+
+	public String getPropertyByLower(String mapper){
+		return mapperPropertyMapLower.get(mapper.toLowerCase());
 	}
 	
 	public String getProperty(String mapper){

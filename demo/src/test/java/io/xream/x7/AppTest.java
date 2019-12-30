@@ -30,7 +30,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.testNonPaged();
+//        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
 
@@ -38,8 +38,8 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-        xxxTest.testCriteria();
-//        xxxTest.testResultMapped();
+//        xxxTest.testCriteria();
+        xxxTest.testResultMapped();
 //        xxxTest.testDomain();
 
 //        xxxTest.testRefreshCondition();

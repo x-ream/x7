@@ -16,13 +16,16 @@
  */
 package x7.repository.dao;
 
+import org.omg.CORBA.OBJ_ADAPTER;
 import x7.core.bean.*;
 import x7.core.bean.condition.RefreshCondition;
+import x7.core.config.ConfigAdapter;
 import x7.core.util.*;
 import x7.repository.CriteriaParser;
 import x7.repository.SqlParsed;
 import x7.repository.exception.PersistenceException;
 import x7.repository.exception.SqlBuildException;
+import x7.repository.mapper.DataObjectConverter;
 import x7.repository.mapper.Dialect;
 import x7.repository.util.SqlParserUtil;
 
@@ -254,6 +257,8 @@ public class SqlUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(sql);
         sqlParsed.setSql(sb);
+        DataObjectConverter.log(criteria.getValueList());
+
         return sqlParsed;
     }
 

@@ -37,6 +37,7 @@ import x7.core.web.Page;
 import x7.repository.CriteriaParser;
 import x7.repository.KeyOne;
 import x7.repository.SqlParsed;
+import x7.repository.exception.PersistenceException;
 import x7.repository.exception.QueryException;
 import x7.repository.exception.RollbackException;
 import x7.repository.mapper.DataObjectConverter;
@@ -236,6 +237,8 @@ public class DaoImpl implements Dao {
      * @return
      */
     private long getCount(String sql, Collection<Object> list) {
+        if (ConfigAdapter.isIsShowSql())
+            logger.info(sql);
         Object obj = this.queryForMapList(sql, list, dialect, jdbcTemplate).get(0).get("count");
         return Long.valueOf(obj.toString());
     }
@@ -375,6 +378,7 @@ public class DaoImpl implements Dao {
                 tList.add(t);
             }
         } catch (Exception e) {
+            throw new PersistenceException(ExceptionUtil.getMessage(e));
         }
         return tList;
     }
