@@ -27,11 +27,13 @@ import x7.core.util.ExceptionUtil;
 import x7.core.util.StringUtil;
 import x7.core.web.Page;
 import x7.repository.*;
+import x7.repository.exception.CriteriaSyntaxException;
 import x7.repository.exception.PersistenceException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -174,7 +176,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
         }
 
         if (unSafe)
-            throw new PersistenceException("UnSafe Refresh, try to invoke DefaultRepository.refreshUnSafe(RefreshCondition<T> refreshCondition)");
+            throw new CriteriaSyntaxException("UnSafe Refresh, try to invoke DefaultRepository.refreshUnSafe(RefreshCondition<T> refreshCondition)");
 
         return repository.refresh(refreshCondition);
     }
@@ -283,8 +285,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
     public List<T> list(T conditionObj) {
 
         if (conditionObj instanceof Criteria.ResultMappedCriteria) {
-            throw new RuntimeException(
-                    "Exception supported, no page not to invoke repository.list(criteriaJoinalbe);");
+            throw new CriteriaSyntaxException(
+                    "Exception supported, no page not to invoke repository.list(resultMappedCriteria);");
         }
 
         return repository.list(conditionObj);
@@ -315,7 +317,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
     public Page<T> find(Criteria criteria) {
 
         if (criteria instanceof Criteria.ResultMappedCriteria)
-            throw new RuntimeException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
+            throw new CriteriaSyntaxException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
         return repository.find(criteria);
     }
 
@@ -337,9 +339,10 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
     public List<T> list(Criteria criteria) {
 
         if (criteria instanceof Criteria.ResultMappedCriteria)
-            throw new RuntimeException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
+            throw new CriteriaSyntaxException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
 
         return repository.list(criteria);
+
     }
 
 
@@ -347,7 +350,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
     public <WITH> List<DomainObject<T, WITH>> listDomainObject(Criteria.DomainObjectCriteria domainObjectCriteria) {
 
         if (StringUtil.isNullOrEmpty(domainObjectCriteria.getMainPropperty()))
-            throw new RuntimeException("DefaultRepository.listDomainObject(domainObjectCriteria), domainObjectCriteria.getMainPropperty()is null");
+            throw new CriteriaSyntaxException("DefaultRepository.listDomainObject(domainObjectCriteria), domainObjectCriteria.getMainPropperty()is null");
 
         if (domainObjectCriteria.getRelativeClz() == null){
 
