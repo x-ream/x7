@@ -20,6 +20,7 @@ import x7.core.async.CasualWorker;
 import x7.repository.IdGenerator;
 import x7.repository.ManuRepository;
 
+
 public class GlobalIdPersistencePolicy {
 
     public static void persist(long id, String clzName) {
