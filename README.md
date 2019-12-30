@@ -16,7 +16,7 @@
              @EnableReySupport                            and { private ReyTemplate reyTemplate }
              @EnableReyClient           @ReyClient
            
-          /reliable  (mq transaction api)
+          /reliable     (mq transaction api)
              @EnableReliabilityManagement     
                  @ReliableProducer
                  @ReliableOnConsumed
