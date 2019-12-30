@@ -16,10 +16,6 @@
  */
 package x7.repository;
 
-import x7.core.bean.SqlScript;
-
-import java.util.List;
-
 public class SqlParsed {
 
     private String countSql;

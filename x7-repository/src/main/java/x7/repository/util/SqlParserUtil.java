@@ -19,7 +19,6 @@ package x7.repository.util;
 import x7.core.bean.BeanElement;
 import x7.core.bean.DataPermission;
 import x7.core.bean.Parsed;
-import x7.core.config.ConfigAdapter;
 import x7.core.util.BeanUtil;
 import x7.core.util.JsonX;
 

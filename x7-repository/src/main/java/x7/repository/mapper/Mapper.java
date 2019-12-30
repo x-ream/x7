@@ -17,13 +17,9 @@
 package x7.repository.mapper;
 
 import x7.core.bean.BeanElement;
-import x7.core.bean.Criteria;
-import x7.repository.SqlParsed;
 
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.*;
+import java.util.Date;
 
 public interface Mapper {
 
