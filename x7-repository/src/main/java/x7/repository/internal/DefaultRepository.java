@@ -107,6 +107,9 @@ public abstract class DefaultRepository<T> implements BaseRepository<T>{
 
         final String clzName = this.clz.getName();
 
+        if (this.idGenerator == null) {
+            throw new RuntimeException("No implements of IdGenerator, like the project x7-repository/redis-integration");
+        }
         final long id = this.idGenerator.createId(clzName);
 
         if (id == 0)
