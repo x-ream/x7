@@ -38,6 +38,9 @@ public class DistributionLock {
 
     private static void lock(String key, int interval, int timeout) {
 
+        if (lockStorage == null)
+            throw new RuntimeException("No implements of LockStorage, like the project x7-repository/redis-integration");
+
         int i = 1;
         boolean locked = lockStorage.lock(key,timeout);
         int retryMax = timeout / interval ;

@@ -31,4 +31,5 @@ public interface L2CacheStoragePolicy {
     boolean set(String key, String toJson, int validSecond);
 
     List<String> multiGet(List<String> keyArr);
+
 }

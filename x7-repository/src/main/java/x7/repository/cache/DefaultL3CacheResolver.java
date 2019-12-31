@@ -23,6 +23,8 @@ public class DefaultL3CacheResolver implements L3CacheResolver {
 
     @Override
     public L3CacheStoragePolicy getStorage() {
+        if (storage == null)
+            throw new RuntimeException("No implements of L3CacheStoragePolicy, like the project x7-repository/redis-integration");
         return storage;
     }
 
