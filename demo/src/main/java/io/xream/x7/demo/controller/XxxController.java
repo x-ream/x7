@@ -415,7 +415,7 @@ public class XxxController {
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
 		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
-
+		builder.and().eq("type","NL");
 		builder.paged().page(1).rows(10).sort("id",Direction.DESC);
 
 		Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();

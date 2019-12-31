@@ -30,7 +30,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
 
@@ -38,7 +38,7 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
         xxxTest.testResultMapped();
 //        xxxTest.testDomain();
 
@@ -47,22 +47,22 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.distinct();
 
-//        xxxTest.test();
+        xxxTest.test();
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
-//        xxxTest.testList();
+        xxxTest.testList();
 //        xxxTest.testLock();
-//        xxxTest.in();
-//        xxxTest.get();
+        xxxTest.in();
+        xxxTest.get();
     }
 
 

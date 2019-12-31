@@ -104,14 +104,13 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         parseAlia(criteria);
 
-        StringBuilder sb = new StringBuilder();
-
         env(criteria);
 
         resultKey(criteria);
         /*
          * select column
          */
+        StringBuilder sb = new StringBuilder();
         select(sb, criteria);
         /*
          * from table
@@ -163,6 +162,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                 resultMapped.setPropertyMapping(propertyMapping);
             }
         }
+        criteria.getValueList().clear();
     }
 
     private void resultKey(Criteria criteria) {
