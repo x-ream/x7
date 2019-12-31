@@ -158,6 +158,9 @@ public class SqlUtil {
                     sb.append(SqlScript.EQ_PLACE_HOLDER);
 
                     BeanElement be = parsed.getElementMap().get(key);
+                    if (be == null) {
+                        throw new RuntimeException("can not find the property " + key + " of "+ parsed.getClzName());
+                    }
                     if (be.clz == Date.class ) {
                         if (x.getValue() instanceof Long) {
                             x.setValue(new Date(((Long) x.getValue()).longValue()));
