@@ -7,9 +7,9 @@ import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.Url;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import x7.core.bean.Criteria;
-import x7.core.bean.condition.RefreshCondition;
-import x7.core.web.ViewEntity;
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.web.ViewEntity;
 
 import java.util.List;
 

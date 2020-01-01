@@ -23,8 +23,8 @@ import io.xream.x7.reyc.api.HeaderInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import x7.core.bean.KV;
-import x7.core.util.HttpClientUtil;
+import io.xream.x7.common.bean.KV;
+import io.xream.x7.common.util.HttpClientUtil;
 
 import java.util.ArrayList;
 import java.util.List;

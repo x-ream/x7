@@ -63,7 +63,7 @@
 
     <modules>
         <module>x7-common</module>
-        <module>x7-repository</module>
+        <module>x7-repo</module>
         <module>x7-reyc</module>
         <module>x7-spring-boot-starter</module>
     </modules>

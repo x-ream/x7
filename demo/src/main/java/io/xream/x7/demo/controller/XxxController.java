@@ -1,21 +1,19 @@
 package io.xream.x7.demo.controller;
 
+import io.xream.x7.common.bean.*;
 import io.xream.x7.demo.*;
 import io.xream.x7.demo.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import x7.core.bean.*;
-import x7.core.bean.condition.InCondition;
-import x7.core.bean.condition.RefreshCondition;
-import x7.core.repository.CacheableL3;
-import x7.core.util.JsonX;
-import x7.core.web.Direction;
-import x7.core.web.Page;
-import x7.core.web.ViewEntity;
+import io.xream.x7.common.bean.condition.InCondition;
+import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.web.Direction;
+import io.xream.x7.common.web.Page;
+import io.xream.x7.common.web.ViewEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/xxx")
@@ -45,7 +43,10 @@ public class XxxController {
 	@RequestMapping("/get")
 //	@Transactional
 	public ViewEntity get(){
-		Cat cat = this.catRepository.get(0);
+//		Cat cat = this.catRepository.get(100);
+		Cat cat = new Cat();
+		cat.setId(0L);
+		cat = this.catRepository.getOne(cat);
 		System.out.println(cat);
 		return ViewEntity.ok(cat);
 	}

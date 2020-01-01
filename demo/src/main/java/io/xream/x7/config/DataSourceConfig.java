@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import x7.repository.config.datasource.DataSourceContextHolder;
-import x7.repository.config.datasource.DataSourceType;
+import io.xream.x7.repository.config.datasource.DataSourceContextHolder;
+import io.xream.x7.repository.config.datasource.DataSourceType;
 
 import javax.sql.DataSource;
 import java.util.HashMap;

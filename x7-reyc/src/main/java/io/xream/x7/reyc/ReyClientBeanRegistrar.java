@@ -26,7 +26,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
-import x7.core.util.ClassFileReader;
+import io.xream.x7.common.util.ClassFileReader;
 
 import java.util.ArrayList;
 import java.util.List;

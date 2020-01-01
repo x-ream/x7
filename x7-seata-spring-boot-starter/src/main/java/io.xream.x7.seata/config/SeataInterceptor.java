@@ -17,9 +17,10 @@
 package io.xream.x7.seata.config;
 
 import io.seata.core.context.RootContext;
+import io.xream.x7.common.bean.KV;
 import io.xream.x7.reyc.api.HeaderInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
-import x7.core.bean.KV;
+
 
 public class SeataInterceptor implements HeaderInterceptor {
     @Override

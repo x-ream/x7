@@ -38,6 +38,12 @@
             <groupId>io.xream.x7</groupId>
             <artifactId>x7-spring-boot-starter</artifactId>
             <version>${x7.version}</version>
+            <exclusions>
+                <!--<exclusion>-->
+                    <!--<groupId>io.xream.x7</groupId>-->
+                    <!--<artifactId>x7-redis-integration</artifactId>-->
+                <!--</exclusion>-->
+            </exclusions>
         </dependency>
 
         <!--<dependency>-->

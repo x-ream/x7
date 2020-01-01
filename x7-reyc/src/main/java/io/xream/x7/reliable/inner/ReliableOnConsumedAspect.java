@@ -27,9 +27,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import x7.core.util.ExceptionUtil;
-import x7.core.util.StringUtil;
-import x7.core.util.VerifyUtil;
+import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.common.util.VerifyUtil;
 
 
 @Aspect

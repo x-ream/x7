@@ -35,7 +35,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import x7.core.util.StringUtil;
+import io.xream.x7.common.util.StringUtil;
 
 @Import(TracingProperties.class)
 public class TracingConfig {

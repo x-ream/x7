@@ -17,7 +17,7 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.reyc.BackendService;
-import x7.core.util.ExceptionUtil;
+import io.xream.x7.common.util.ExceptionUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

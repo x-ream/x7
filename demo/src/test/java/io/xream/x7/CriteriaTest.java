@@ -1,7 +1,7 @@
 package io.xream.x7;
 
-import x7.core.bean.Criteria;
-import x7.core.util.JsonX;
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.util.JsonX;
 
 public class CriteriaTest {
     public static void main(String[] args) {

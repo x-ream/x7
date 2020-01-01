@@ -5,7 +5,7 @@
 [![maven](https://img.shields.io/maven-central/v/io.xream.x7/x7-parent.svg)](https://search.maven.org/search?q=io.xream)
 
        
-       x7-repository     (wrapped Spring JdbcTemplate, Distribution Lock, Cache and so on....)
+       x7-repo     (wrapped Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
           @EnableX7L3Caching            @CacheableL3
           @EnableDistributionLock       @Lock             or  

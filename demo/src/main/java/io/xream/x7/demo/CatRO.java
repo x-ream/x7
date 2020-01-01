@@ -1,7 +1,7 @@
 package io.xream.x7.demo;
 
-import x7.core.web.MapResult;
-import x7.core.web.TokenedAndPagedRo;
+import io.xream.x7.common.web.MapResult;
+import io.xream.x7.common.web.TokenedAndPagedRo;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -26,10 +26,10 @@ import io.xream.x7.reyc.BackendService;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import x7.core.exception.BusyException;
-import x7.core.exception.RemoteServiceException;
-import x7.core.exception.ReyConnectException;
-import x7.core.util.StringUtil;
+import io.xream.x7.common.exception.BusyException;
+import io.xream.x7.common.exception.RemoteServiceException;
+import io.xream.x7.common.exception.ReyConnectException;
+import io.xream.x7.common.util.StringUtil;
 
 import java.util.function.Supplier;
 

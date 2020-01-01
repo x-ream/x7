@@ -7,10 +7,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
-import x7.core.util.ExceptionUtil;
-import x7.core.util.TimeUtil;
-import x7.core.web.ViewEntity;
-import x7.repository.dao.Tx;
+import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.common.util.TimeUtil;
+import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.repository.dao.Tx;
 
 @Aspect
 @Configuration

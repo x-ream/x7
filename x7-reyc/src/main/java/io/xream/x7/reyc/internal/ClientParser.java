@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import x7.core.bean.KV;
-import x7.core.util.StringUtil;
+import io.xream.x7.common.bean.KV;
+import io.xream.x7.common.util.StringUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

@@ -1,7 +1,7 @@
 package io.xream.x7;
 
 import io.xream.x7.demo.bean.Cat;
-import x7.core.util.JsonX;
+import io.xream.x7.common.util.JsonX;
 
 public class JsonTest {
 

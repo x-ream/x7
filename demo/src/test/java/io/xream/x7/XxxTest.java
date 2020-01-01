@@ -2,6 +2,11 @@ package io.xream.x7;
 
 //import io.seata.spring.annotation.GlobalTransactional;
 
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.CriteriaBuilder;
+import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.web.Direction;
+import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
@@ -17,12 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import x7.core.bean.Criteria;
-import x7.core.bean.CriteriaBuilder;
-import x7.core.bean.condition.RefreshCondition;
-import x7.core.util.JsonX;
-import x7.core.web.Direction;
-import x7.core.web.ViewEntity;
 
 import java.util.List;
 
@@ -158,8 +157,7 @@ public class XxxTest {
 
     public ViewEntity get(){
         ViewEntity ve = this.controller.get();
-        Cat cat = JsonX.toObject(ve.getBody(),Cat.class);
-        System.out.println(cat);
+        System.out.println(ve.getBody());
         return ve;
     }
 

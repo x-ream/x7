@@ -2,7 +2,7 @@ package io.xream.x7;
 
 import io.xream.x7.demo.bean.Cat;
 import org.springframework.stereotype.Component;
-import x7.distributed.Lock;
+import io.xream.x7.lock.Lock;
 
 @Component
 public class DistributionLockTester {

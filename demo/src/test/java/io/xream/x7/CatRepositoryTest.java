@@ -4,7 +4,7 @@ import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.Cat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import x7.core.bean.condition.RefreshCondition;
+import io.xream.x7.common.bean.condition.RefreshCondition;
 
 @Service
 public class CatRepositoryTest {
