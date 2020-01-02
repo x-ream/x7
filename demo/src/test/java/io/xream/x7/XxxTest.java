@@ -245,8 +245,8 @@ public class XxxTest {
 
     public void testLock(){
         Cat cat = new Cat();
-        cat.setId(100L);
-        cat.setType("LOCK");
+        cat.setId(1000L);
+        cat.setType("LOCK--------sss");
         distributionLockTester.test(cat);
     }
 

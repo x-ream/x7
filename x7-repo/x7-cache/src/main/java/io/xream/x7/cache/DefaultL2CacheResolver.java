@@ -62,15 +62,15 @@ public class DefaultL2CacheResolver implements CacheResolver {
 		return  this.validSecond;
 	}
 
-	private L2CacheStoragePolicy cacheStoragePolicy;
-	public void setCacheStoragePolicy(L2CacheStoragePolicy cacheStoragePolicy){
-		this.cacheStoragePolicy = cacheStoragePolicy;
+	private L2CacheStorage cacheStorage;
+	public void setCachestorage(L2CacheStorage cacheStorage){
+		this.cacheStorage = cacheStorage;
 	}
 
-	protected L2CacheStoragePolicy getCacheStoragePolicy(){
-		if (this.cacheStoragePolicy == null)
-			throw new RuntimeException("No implements of L2CacheStoragePolicy, like the project jdbc-template-plus/redis-integration");
-		return this.cacheStoragePolicy;
+	protected L2CacheStorage getCachestorage(){
+		if (this.cacheStorage == null)
+			throw new RuntimeException("No implements of L2CacheStorage, like the project jdbc-template-plus/redis-integration");
+		return this.cacheStorage;
 	}
 	/**
 	 * 标记缓存要更新
@@ -82,7 +82,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 
 		String key = getNSKey(clz);
 		String time = String.valueOf(System.nanoTime());
-		boolean flag = getCacheStoragePolicy().set(key, time);
+		boolean flag = getCachestorage().set(key, time);
 		if (!flag)
 			throw new CacheException("markForRefresh failed");
 		return time;
@@ -95,7 +95,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	@SuppressWarnings("rawtypes")
 	public void remove(Class clz, String key){
 		key = getSimpleKey(clz, key);
-		boolean flag = getCacheStoragePolicy().delete(key);
+		boolean flag = getCachestorage().delete(key);
 		if (!flag)
 			throw new CacheException("remove failed");
 	}
@@ -104,10 +104,10 @@ public class DefaultL2CacheResolver implements CacheResolver {
 
 		String key = getSimpleKeyLike(clz);
 
-		Set<String> keySet = getCacheStoragePolicy().keys(key);
+		Set<String> keySet = getCachestorage().keys(key);
 
 		for (String k : keySet) {
-			boolean flag = getCacheStoragePolicy().delete(k);
+			boolean flag = getCachestorage().delete(k);
 			if (!flag)
 				throw new CacheException("remove failed");
 		}
@@ -121,7 +121,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	
 	@SuppressWarnings("unused")
 	private String getNS(String nsKey){
-		return getCacheStoragePolicy().get(nsKey);
+		return getCachestorage().get(nsKey);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -176,7 +176,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	@SuppressWarnings("rawtypes")
 	private String getPrefix(Class clz){
 		String key = getNSKey(clz);
-		String nsStr = getCacheStoragePolicy().get(key);
+		String nsStr = getCachestorage().get(key);
 		if (nsStr == null){
 			String str = markForRefresh(clz);
 			return "{"+clz.getName()+"}." + str;
@@ -192,7 +192,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	public void set(Class clz, String key, Object obj) {
 		key = getSimpleKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
-		getCacheStoragePolicy().set(key, JsonX.toJson(obj), validSecond);
+		getCachestorage().set(key, JsonX.toJson(obj), validSecond);
 	}
 
 
@@ -201,7 +201,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	public void setResultKeyList(Class clz, Object condition, List<String> keyList) {
 		String key = getKey(clz, condition);
 		try{
-			getCacheStoragePolicy().set(key, JsonX.toJson(keyList), validSecond);
+			getCachestorage().set(key, JsonX.toJson(keyList), validSecond);
 		}catch (Exception e) {
 			throw new CacheException(e.getMessage());
 		}
@@ -212,7 +212,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	public <T> void setResultKeyListPaginated(Class<T> clz, Object condition, Page<T> pagination) {
 		String key = getKey(clz, condition);
 		try{
-			getCacheStoragePolicy().set(key, JsonX.toJson(pagination), validSecond);
+			getCachestorage().set(key, JsonX.toJson(pagination), validSecond);
 		}catch (Exception e) {
 			throw new CacheException(e.getMessage());
 		}
@@ -222,7 +222,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	@Override
 	public List<String> getResultKeyList(Class clz, Object condition) {
 		String key = getKey(clz, condition);
-		String str = getCacheStoragePolicy().get(key);
+		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			return new ArrayList<String>();
 		
@@ -233,7 +233,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	@Override
 	public Page<String> getResultKeyListPaginated(Class clz, Object condition) {
 		String key = getKey(clz, condition);
-		String json = getCacheStoragePolicy().get(key);
+		String json = getCachestorage().get(key);
 		
 		if (StringUtil.isNullOrEmpty(json))
 			return null;
@@ -245,7 +245,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	public <T> List<T> list(Class<T> clz, List<String> keyList) {
 		List<String> keyArr = getKeyList(clz, keyList);//转换成缓存需要的keyList
 		
-		List<String> jsonList = getCacheStoragePolicy().multiGet(keyArr);
+		List<String> jsonList = getCachestorage().multiGet(keyArr);
 		
 		if (jsonList == null)
 			return new ArrayList<T>();
@@ -267,7 +267,7 @@ public class DefaultL2CacheResolver implements CacheResolver {
 	@Override
 	public <T> T get(Class<T> clz, String key) {
 		key = getSimpleKey(clz,key);
-		String str = getCacheStoragePolicy().get(key);
+		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			return null;
 		T obj = JsonX.toObject(str,clz);
@@ -279,13 +279,13 @@ public class DefaultL2CacheResolver implements CacheResolver {
 		key = getSimpleKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
 
-		getCacheStoragePolicy().set(key, JsonX.toJson(mapList), validSecond);
+		getCachestorage().set(key, JsonX.toJson(mapList), validSecond);
 	}
 
 	@Override
 	public List<Map<String, Object>> getMapList(Class clz, String key) {
 		key = getSimpleKey(clz,key);
-		String str = getCacheStoragePolicy().get(key);
+		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			return null;
 		List mapList = JsonX.toList(str,Map.class);

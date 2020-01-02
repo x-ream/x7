@@ -14,10 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.lock;
+package io.xream.x7.cache;
 
-public interface LockStorage {
+import java.util.List;
+import java.util.Set;
 
-    boolean lock(String key, int timeout);
-    void unLock(String key);
+public interface L2CacheStorage {
+    boolean set(String key, String time);
+
+    boolean delete(String key);
+
+    Set<String> keys(String key);
+
+    String get(String nsKey);
+
+    boolean set(String key, String toJson, int validSecond);
+
+    List<String> multiGet(List<String> keyArr);
+
 }

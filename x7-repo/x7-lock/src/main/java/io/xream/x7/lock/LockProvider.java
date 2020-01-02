@@ -14,15 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache;
+package io.xream.x7.lock;
 
-import java.util.concurrent.TimeUnit;
+public interface LockProvider {
 
-public interface L3CacheStoragePolicy {
-
-    String DEFAULT_VALUE = "NULL";
-
-    void set(String key, String value, long expireTime, TimeUnit timeUnit);
-
-    String get(String key, long expireTime, TimeUnit timeUnit);
+    boolean lock(String key, int timeout);
+    void unLock(String key);
 }

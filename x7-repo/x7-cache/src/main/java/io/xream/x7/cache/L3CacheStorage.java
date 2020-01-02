@@ -14,12 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache.customizer;
+package io.xream.x7.cache;
 
+import java.util.concurrent.TimeUnit;
 
-import io.xream.x7.cache.L3CacheStoragePolicy;
+public interface L3CacheStorage {
 
-public interface L3CacheStoragePolicyCustomizer {
+    String DEFAULT_VALUE = "NULL";
 
-    L3CacheStoragePolicy customize();
+    void set(String key, String value, long expireTime, TimeUnit timeUnit);
+
+    String get(String key, long expireTime, TimeUnit timeUnit);
 }

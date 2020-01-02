@@ -45,7 +45,7 @@ public class XxxController {
 	public ViewEntity get(){
 //		Cat cat = this.catRepository.get(100);
 		Cat cat = new Cat();
-		cat.setId(0L);
+		cat.setId(10L);
 		cat = this.catRepository.getOne(cat);
 		System.out.println(cat);
 		return ViewEntity.ok(cat);

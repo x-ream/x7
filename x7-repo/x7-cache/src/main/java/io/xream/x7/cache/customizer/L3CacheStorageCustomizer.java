@@ -17,9 +17,9 @@
 package io.xream.x7.cache.customizer;
 
 
-import io.xream.x7.cache.L2CacheStoragePolicy;
+import io.xream.x7.cache.L3CacheStorage;
 
-public interface L2CacheStoragePolicyCustomizer {
+public interface L3CacheStorageCustomizer {
 
-    L2CacheStoragePolicy customize();
+    L3CacheStorage customize();
 }

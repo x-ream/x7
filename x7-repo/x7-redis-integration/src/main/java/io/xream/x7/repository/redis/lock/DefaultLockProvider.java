@@ -17,7 +17,7 @@
 package io.xream.x7.repository.redis.lock;
 
 import io.xream.x7.lock.DistributionLock;
-import io.xream.x7.lock.LockStorage;
+import io.xream.x7.lock.LockProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class DefaultLockStorage implements LockStorage {
+public class DefaultLockProvider implements LockProvider {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

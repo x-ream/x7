@@ -31,23 +31,23 @@ public class DistributionLock {
     private static int INTERVAL = 1000;
     protected static int TIMEOUT = 10 * 1000;
 
-    private static LockStorage lockStorage;
-    public static void init(LockStorage ls) {
-        lockStorage = ls;
+    private static LockProvider lockService;
+    public static void init(LockProvider ls) {
+        lockService = ls;
     }
 
     private static void lock(String key, int interval, int timeout) {
 
-        if (lockStorage == null)
-            throw new RuntimeException("No implements of LockStorage, like the project jdbc-template-plus/redis-integration");
+        if (lockService == null)
+            throw new RuntimeException("No implements of LockProvider, like the project x7-repo/redis-integration");
 
         int i = 1;
-        boolean locked = lockStorage.lock(key,timeout);
+        boolean locked = lockService.lock(key,timeout);
         int retryMax = timeout / interval ;
         while (!locked) {
             try{
                 TimeUnit.MILLISECONDS.sleep(interval);
-                locked = lockStorage.lock(key,timeout);
+                locked = lockService.lock(key,timeout);
                 i++;
             }catch (Exception e) {
                 break;
@@ -62,7 +62,7 @@ public class DistributionLock {
     }
 
     private static void unLock( String key){
-        lockStorage.unLock(key);
+        lockService.unLock(key);
     }
 
     private static void unLockAsync( String key){

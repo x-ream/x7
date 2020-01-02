@@ -32,14 +32,14 @@ import java.util.concurrent.TimeUnit;
 
 public interface L3CacheResolver {
 
-    L3CacheStoragePolicy getStorage();
+    L3CacheStorage getStorage();
 
     default String resolve(String key, long expireTime, TimeUnit timeUnit, Callable caller) {
         try {
             String value = getStorage().get(key, expireTime, timeUnit); //从缓存里获取
             if (StringUtil.isNotNull(value)) {//如果有
                 PeriodCounter.reset(key);
-                if (L3CacheStoragePolicy.DEFAULT_VALUE.equals(value)) //防止缓存击穿
+                if (L3CacheStorage.DEFAULT_VALUE.equals(value)) //防止缓存击穿
                     return null;
                 return value;//就返回缓存结果
             }

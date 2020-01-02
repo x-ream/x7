@@ -60,9 +60,9 @@ public class AppTest {
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
 //        xxxTest.testList();
-//        xxxTest.testLock();
+        xxxTest.testLock();
 //        xxxTest.in();
-        xxxTest.get();
+//        xxxTest.get();
     }
 
 

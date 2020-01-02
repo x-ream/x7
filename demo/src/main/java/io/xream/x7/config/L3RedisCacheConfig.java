@@ -1,11 +1,11 @@
-package io.xream.x7.demo.config;
+package io.xream.x7.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.xream.x7.cache.L3CacheStoragePolicy;
-import io.xream.x7.cache.customizer.L3CacheStoragePolicyCustomizer;
-import io.xream.x7.repository.redis.cache.DefaultL3CacheStoragePolicy;
+import io.xream.x7.cache.L3CacheStorage;
+import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
+import io.xream.x7.repository.redis.cache.DefaultL3CacheStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ public class L3RedisCacheConfig {
 
 
     @Bean
-    public L3CacheStoragePolicyCustomizer l3CacheStoragePolicyCustomizer(){
+    public L3CacheStorageCustomizer l3CacheStorageCustomizer(){
 
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(hostName, port);
         config.setPassword(password);
@@ -41,8 +41,6 @@ public class L3RedisCacheConfig {
         LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(config);
         connectionFactory.afterPropertiesSet();
 
-        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
-        stringRedisTemplate.setConnectionFactory(connectionFactory);
 
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(
                 Object.class);
@@ -50,18 +48,21 @@ public class L3RedisCacheConfig {
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
-        stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
 
+        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
+        stringRedisTemplate.setConnectionFactory(connectionFactory);
+        stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
         stringRedisTemplate.setHashKeySerializer(new StringRedisSerializer());
+
         stringRedisTemplate.afterPropertiesSet();
 
         return () -> {
 
-            L3CacheStoragePolicy l3CacheStoragePolicy = new DefaultL3CacheStoragePolicy();
-            ((DefaultL3CacheStoragePolicy) l3CacheStoragePolicy).setStringRedisTemplate(stringRedisTemplate);
+            L3CacheStorage l3CacheStorage = new DefaultL3CacheStorage();
+            ((DefaultL3CacheStorage) l3CacheStorage).setStringRedisTemplate(stringRedisTemplate);
 
-            return l3CacheStoragePolicy;
+            return l3CacheStorage;
         };
     }
 

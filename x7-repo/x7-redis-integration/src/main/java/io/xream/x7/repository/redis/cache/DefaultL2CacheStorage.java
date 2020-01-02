@@ -16,7 +16,7 @@
  */
 package io.xream.x7.repository.redis.cache;
 
-import io.xream.x7.cache.L2CacheStoragePolicy;
+import io.xream.x7.cache.L2CacheStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class DefaultL2CacheStoragePolicy implements L2CacheStoragePolicy {
+public class DefaultL2CacheStorage implements L2CacheStorage {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

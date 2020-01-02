@@ -19,16 +19,16 @@ package io.xream.x7.cache;
 public class DefaultL3CacheResolver implements L3CacheResolver {
 
 
-   private L3CacheStoragePolicy storage;
+   private L3CacheStorage storage;
 
     @Override
-    public L3CacheStoragePolicy getStorage() {
+    public L3CacheStorage getStorage() {
         if (storage == null)
-            throw new RuntimeException("No implements of L3CacheStoragePolicy, like the project jdbc-template-plus/redis-integration");
+            throw new RuntimeException("No implements of L3CacheStorage, like the project jdbc-template-plus/redis-integration");
         return storage;
     }
 
-    public void setStorage(L3CacheStoragePolicy storage) {
+    public void setStorage(L3CacheStorage storage) {
         this.storage = storage;
     }
 }

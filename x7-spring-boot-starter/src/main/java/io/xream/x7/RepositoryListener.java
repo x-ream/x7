@@ -17,30 +17,33 @@
 package io.xream.x7;
 
 import io.xream.x7.cache.*;
-import io.xream.x7.cache.customizer.L2CacheStoragePolicyCustomizer;
+import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
 import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
-import io.xream.x7.cache.customizer.L3CacheStoragePolicyCustomizer;
-import io.xream.x7.repository.id.IdGeneratorPolicy;
-import io.xream.x7.repository.id.IdGeneratorService;
-import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
-import io.xream.x7.repository.schema.SchemaConfig;
-import io.xream.x7.repository.schema.SchemaTransformRepository;
-import io.xream.x7.repository.schema.customizer.SchemaTransformCustomizer;
-import io.xream.x7.repository.schema.customizer.SchemaTransformRepositoryBuilder;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
+import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.common.bean.BeanElement;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.TransformConfigurable;
 import io.xream.x7.common.repository.CacheResolver;
+import io.xream.x7.lock.DistributionLock;
+import io.xream.x7.lock.LockProvider;
+import io.xream.x7.lock.customizer.LockProviderCustomizer;
 import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.CacheableRepository;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
+import io.xream.x7.repository.id.IdGeneratorPolicy;
+import io.xream.x7.repository.id.IdGeneratorService;
+import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
 import io.xream.x7.repository.mapper.MapperFactory;
+import io.xream.x7.repository.schema.SchemaConfig;
+import io.xream.x7.repository.schema.SchemaTransformRepository;
+import io.xream.x7.repository.schema.customizer.SchemaTransformCustomizer;
+import io.xream.x7.repository.schema.customizer.SchemaTransformRepositoryBuilder;
 import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -57,14 +60,15 @@ public class RepositoryListener implements
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
 
+        customizeLockProvider(applicationStartedEvent);
 
         customizeL3CacheArgsToString(applicationStartedEvent);
-        customizeL3CacheStoragePolicy(applicationStartedEvent);
+        customizeL3CacheStorage(applicationStartedEvent);
 
         if (!X7Data.isEnabled)
             return;
 
-        customizeCacheStoragePolicy(applicationStartedEvent);
+        customizeCacheStorage(applicationStartedEvent);
 
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
@@ -75,7 +79,27 @@ public class RepositoryListener implements
         transform(applicationStartedEvent);
     }
 
-    private void customizeL3CacheStoragePolicy(ApplicationStartedEvent applicationStartedEvent) {
+    private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
+        LockProviderCustomizer customizer = null;
+        try {
+            customizer = applicationStartedEvent.getApplicationContext().getBean(LockProviderCustomizer.class);
+        } catch (Exception e) {
+        }
+
+        LockProvider lockProvider = null;
+        if (customizer != null && customizer.customize() != null) {
+            lockProvider = customizer.customize();
+        } else {
+            try {
+                lockProvider = applicationStartedEvent.getApplicationContext().getBean(LockProvider.class);
+            } catch (Exception e) {
+            }
+        }
+
+        DistributionLock.init(lockProvider);
+    }
+
+    private void customizeL3CacheStorage(ApplicationStartedEvent applicationStartedEvent) {
 
         L3CacheAspect bean = null;
         try {
@@ -85,21 +109,21 @@ public class RepositoryListener implements
         if (bean == null)
             return;
 
-        L3CacheStoragePolicyCustomizer customizer = null;
+        L3CacheStorageCustomizer customizer = null;
         try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(L3CacheStoragePolicyCustomizer.class);
+            customizer = applicationStartedEvent.getApplicationContext().getBean(L3CacheStorageCustomizer.class);
         } catch (Exception e) {
         }
 
         L3CacheResolver resolver;
 
         if (customizer != null && customizer.customize() != null) {
-            final L3CacheStoragePolicy storagePolicy = customizer.customize();
-            resolver = () -> storagePolicy;
+            final L3CacheStorage storage = customizer.customize();
+            resolver = () -> storage;
         } else {
             try {
-                final L3CacheStoragePolicy storagePolicy = applicationStartedEvent.getApplicationContext().getBean(L3CacheStoragePolicy.class);
-                resolver = () -> storagePolicy;
+                final L3CacheStorage storage = applicationStartedEvent.getApplicationContext().getBean(L3CacheStorage.class);
+                resolver = () -> storage;
             } catch (Exception e) {
                 resolver = () -> null;
             }
@@ -124,10 +148,10 @@ public class RepositoryListener implements
             }
 
             ArgsToString argsToString = null;
-            if (customizer == null) {
-                argsToString = new DefaultArgsToString();
-            } else {
+            if (customizer != null && customizer.customize() !=null) {
                 argsToString = customizer.customize();
+            } else {
+                argsToString = new DefaultArgsToString();
             }
             bean.setArgsToString(argsToString);
         } catch (Exception e) {
@@ -158,21 +182,21 @@ public class RepositoryListener implements
         ((CacheableRepository) repository).setDataTransform(dataTransform);
     }
 
-    private void customizeCacheStoragePolicy(ApplicationStartedEvent applicationStartedEvent) {
+    private void customizeCacheStorage(ApplicationStartedEvent applicationStartedEvent) {
 
-        L2CacheStoragePolicyCustomizer customizer = null;
+        L2CacheStorageCustomizer customizer = null;
         try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(L2CacheStoragePolicyCustomizer.class);
+            customizer = applicationStartedEvent.getApplicationContext().getBean(L2CacheStorageCustomizer.class);
         } catch (Exception e) {
 
         }
 
-        L2CacheStoragePolicy cacheStoragePolicy = null;
+        L2CacheStorage cacheStorage = null;
         if (customizer != null && customizer.customize() != null) {
-            cacheStoragePolicy = customizer.customize();
+            cacheStorage = customizer.customize();
         } else {
             try {
-                cacheStoragePolicy = applicationStartedEvent.getApplicationContext().getBean(L2CacheStoragePolicy.class);
+                cacheStorage = applicationStartedEvent.getApplicationContext().getBean(L2CacheStorage.class);
             } catch (Exception e) {
 
             }
@@ -181,7 +205,7 @@ public class RepositoryListener implements
         CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(CacheResolver.class);
         if (levelTwoCacheResolver == null)
             return;
-        ((DefaultL2CacheResolver) levelTwoCacheResolver).setCacheStoragePolicy(cacheStoragePolicy);
+        ((DefaultL2CacheResolver) levelTwoCacheResolver).setCachestorage(cacheStorage);
 
     }
 
