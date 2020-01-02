@@ -370,7 +370,7 @@ public class DaoImpl implements Dao {
             if (DataObjectConverter.filterGetOneWithLongKey(parsed, queryMap)) {
                 throw new IllegalArgumentException("API of getOne(T) can't accept object with keyOne = 0L: " + conditionObj);
             }
-            return null;
+            return null;//not throw EntityNotFoundException
         }
         return list.get(0);
     }
