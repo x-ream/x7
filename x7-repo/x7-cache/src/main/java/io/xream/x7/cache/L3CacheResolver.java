@@ -49,7 +49,7 @@ public interface L3CacheResolver {
         }
 
         try {
-            return DistributionLock.by(key + "~look").lock(t -> { //分布式锁，锁住资源
+            return DistributionLock.by(key).lock(t -> { //分布式锁，锁住资源
                 try {
                     Object obj = caller.call();//读数据库或远程调用
                     String str = JsonX.toJson(obj);//转成JSON字符串

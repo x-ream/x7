@@ -39,7 +39,7 @@ public class DistributionLock {
     private static void lock(String key, int interval, int timeout) {
 
         if (lockProvider == null)
-            throw new RuntimeException("No implements of LockProvider, like the project x7-repo/redis-integration");
+            throw new RuntimeException("No implements of LockProvider, like the project x7-repo/x7-redis-integration");
 
         int i = 1;
         boolean locked = lockProvider.lock(key,timeout);
@@ -70,7 +70,7 @@ public class DistributionLock {
 
     public static Lock by(String key){
         Lock ml = new Lock();
-        ml.setKey(key);
+        ml.setKey(key+"~LOCK");
         return ml;
     }
 
