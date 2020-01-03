@@ -50,6 +50,10 @@ public @interface ReliableProducer {
 
     int retryMax() default 0;
 
+    /**
+     * to avoid long tx waiting, <br>
+     * if async == false, not suggest to write data in db of the method  annotated by ReliableProducer <br>
+     */
     boolean async() default false;
 
     boolean underConstruction() default false;

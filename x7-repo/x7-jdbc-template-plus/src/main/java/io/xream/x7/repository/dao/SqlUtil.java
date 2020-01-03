@@ -268,7 +268,7 @@ public class SqlUtil {
     }
 
     protected static String filter(String sql) {
-        sql = sql.replace("drop", SqlScript.SPACE).replace("delete", SqlScript.SPACE).replace("insert", SqlScript.SPACE).replace(";", SqlScript.SPACE); // 手动拼接SQL,
+        sql = sql.replace("drop", SqlScript.SPACE).replace(";", SqlScript.SPACE); // 手动拼接SQL,
         return sql;
     }
 }
