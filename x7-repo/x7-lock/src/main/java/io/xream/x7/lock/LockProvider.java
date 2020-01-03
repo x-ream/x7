@@ -16,8 +16,13 @@
  */
 package io.xream.x7.lock;
 
+import javax.validation.constraints.NotNull;
+
 public interface LockProvider {
 
-    boolean lock(String key, int timeout);
-    void unLock(String key);
+    String VALUE = "~LOCK";
+    int DEFAULT_TIMEOUT = 100000;
+
+    boolean lock(String key, @NotNull Integer timeOut);
+    void unLock(DistributionLock.Lock lock);
 }

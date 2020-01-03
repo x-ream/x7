@@ -31,23 +31,23 @@ public class DistributionLock {
     private static int INTERVAL = 1000;
     protected static int TIMEOUT = 10 * 1000;
 
-    private static LockProvider lockService;
-    public static void init(LockProvider ls) {
-        lockService = ls;
+    private static LockProvider lockProvider;
+    public static void init(LockProvider lp) {
+        lockProvider = lp;
     }
 
     private static void lock(String key, int interval, int timeout) {
 
-        if (lockService == null)
+        if (lockProvider == null)
             throw new RuntimeException("No implements of LockProvider, like the project x7-repo/redis-integration");
 
         int i = 1;
-        boolean locked = lockService.lock(key,timeout);
+        boolean locked = lockProvider.lock(key,timeout);
         int retryMax = timeout / interval ;
         while (!locked) {
             try{
                 TimeUnit.MILLISECONDS.sleep(interval);
-                locked = lockService.lock(key,timeout);
+                locked = lockProvider.lock(key,timeout);
                 i++;
             }catch (Exception e) {
                 break;
@@ -61,8 +61,8 @@ public class DistributionLock {
         }
     }
 
-    private static void unLock( String key){
-        lockService.unLock(key);
+    private static void unLock( Lock lock){
+        lockProvider.unLock(lock);
     }
 
     private static void unLockAsync( String key){
@@ -77,8 +77,14 @@ public class DistributionLock {
     public static class Lock{
         private  String key;
 
+        private Lock(){}
+
         private void setKey(String key){
             this.key = key;
+        }
+
+        public String getKey(){
+            return this.key;
         }
 
         public <T> T lock(Task<T> obj){
@@ -95,14 +101,14 @@ public class DistributionLock {
             try {
                 o = obj.run(obj);
             }catch (Exception e) {
-                DistributionLock.unLock(key);
+                DistributionLock.unLock(this);
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
                 }else {
                     throw new RuntimeException(e.getMessage());
                 }
             }finally {
-                DistributionLock.unLock(key);
+                DistributionLock.unLock(this);
             }
             return o;
         }
@@ -113,7 +119,7 @@ public class DistributionLock {
             try {
                 o = obj.run(obj);
             }catch (Exception e) {
-                DistributionLock.unLock(key);
+                DistributionLock.unLock(this);
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
                 }else {

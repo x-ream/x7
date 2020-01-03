@@ -7,7 +7,7 @@ import io.xream.x7.lock.Lock;
 @Component
 public class DistributionLockTester {
 
-    @Lock(condition = "#cat.id + '_' + #cat.getType()",timeout = 10000)
+    @Lock(condition = "#cat.id + '_' + #cat.getType()",timeout = 1000000)
     public String test(Cat cat) {
 
         System.out.println(" LOCKED OK");

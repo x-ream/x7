@@ -22,10 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class DefaultLockProvider implements LockProvider {
+
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -35,22 +37,15 @@ public class DefaultLockProvider implements LockProvider {
         DistributionLock.init(this);
     }
 
-    public boolean lock(String key, int timeout){
-
-        boolean isLock;
-
-        final String value = "~LOCK";
-
-        isLock = this.stringRedisTemplate.opsForValue().setIfAbsent(key, value);
-        if (isLock) {
-            this.stringRedisTemplate.expire(key,timeout, TimeUnit.MILLISECONDS);
-        }
-
-        return isLock;
+    @Override
+    public boolean lock(String key, @NotNull Integer timeOut){
+        if (timeOut.intValue() == 0)
+            timeOut = DEFAULT_TIMEOUT;
+        return this.stringRedisTemplate.opsForValue().setIfAbsent(key, VALUE,timeOut,TimeUnit.MILLISECONDS);
     }
 
-
-    public void unLock(String key){
-        this.stringRedisTemplate.delete(key);
+    @Override
+    public void unLock(DistributionLock.Lock lock){
+        this.stringRedisTemplate.delete(lock.getKey());
     }
 }
