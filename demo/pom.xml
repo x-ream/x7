@@ -121,15 +121,21 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-
-<!--
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>12.2.0</version>
-            <scope>provided</scope>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+            <scope>compile</scope>
         </dependency>
--->
+
+        <!--
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>ojdbc8</artifactId>
+                    <version>12.2.0</version>
+                    <scope>provided</scope>
+                </dependency>
+        -->
 
 
     </dependencies>
