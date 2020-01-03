@@ -32,11 +32,6 @@ public class DefaultLockProvider implements LockProvider {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate){
-        this.stringRedisTemplate = stringRedisTemplate;
-        DistributionLock.init(this);
-    }
-
     @Override
     public boolean lock(String key, @NotNull Integer timeOut){
         if (timeOut.intValue() == 0)
