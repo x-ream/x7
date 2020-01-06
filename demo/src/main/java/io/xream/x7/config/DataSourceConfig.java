@@ -59,7 +59,6 @@ public class DataSourceConfig {
         return proxy;
     }
 
-
     @Bean
     public PlatformTransactionManagerCustomizer platformTransactionManagerCustomizer(AbstractRoutingDataSource abstractRoutingDataSource){
         return transactionManager -> {
