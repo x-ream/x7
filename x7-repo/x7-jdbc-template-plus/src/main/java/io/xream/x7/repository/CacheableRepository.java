@@ -20,7 +20,7 @@ package io.xream.x7.repository;
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.repository.CacheResolver;
+import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.web.Page;
@@ -50,9 +50,9 @@ public class CacheableRepository implements Repository {
         this.dataTransform = dataTransform;
     }
 
-    private CacheResolver cacheResolver;
+    private L2CacheResolver cacheResolver;
 
-    public void setCacheResolver(CacheResolver cacheResolver) {
+    public void setCacheResolver(L2CacheResolver cacheResolver) {
         this.cacheResolver = cacheResolver;
     }
 

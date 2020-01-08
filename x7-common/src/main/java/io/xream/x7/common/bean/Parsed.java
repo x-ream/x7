@@ -17,7 +17,6 @@
 package io.xream.x7.common.bean;
 
 import io.xream.x7.common.repository.X;
-import io.xream.x7.common.search.TagParsed;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.StringUtil;
 
@@ -53,8 +52,7 @@ public class Parsed {
 	private List<String> keywordsList = new ArrayList<String>();
 	
 	private boolean isSearchable;
-	
-	private Map<String, TagParsed> tagMap = new HashMap();
+
 
 	public Parsed getParsedTransformed() {
 		return parsedTransformed;
@@ -251,13 +249,7 @@ public class Parsed {
 		return keywordsArr;
 	}
 
-	public Map<String, TagParsed> getTagMap() {
-		return tagMap;
-	}
 
-	public void setTagMap(Map<String, TagParsed> tagMap) {
-		this.tagMap = tagMap;
-	}
 
 	public String getMapper(String property) {
 		return propertyMapperMap.get(property);
@@ -307,7 +299,6 @@ public class Parsed {
 				", isNoCache=" + isNoCache +
 				", keywordsList=" + keywordsList +
 				", isSearchable=" + isSearchable +
-				", tagMap=" + tagMap +
 				'}';
 	}
 }

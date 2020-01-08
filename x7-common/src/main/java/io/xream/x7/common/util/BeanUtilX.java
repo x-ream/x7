@@ -19,8 +19,6 @@ package io.xream.x7.common.util;
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.repository.SqlFieldType;
 import io.xream.x7.common.repository.X;
-import io.xream.x7.common.search.Search;
-import io.xream.x7.common.search.TagParsed;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -168,7 +166,7 @@ public class BeanUtilX extends BeanUtil {
 						element.length = 60;
 				} else if (ec == BigDecimal.class){
 					element.sqlType = SqlFieldType.DECIMAL;
-				} else if (ec.isEnum()){
+				} else if (BeanUtil.isEnum(ec)){
 					element.sqlType = SqlFieldType.VARCHAR;
 					if (element.length == 0)
 						element.length = 40;
@@ -291,94 +289,6 @@ public class BeanUtilX extends BeanUtil {
 		}
 	}
 
-
-	public static void parseSearch(Parsed parsed, Class clz) {
-
-		Search pClz = (Search) clz.getAnnotation(Search.class);
-		if (pClz == null)
-			return;
-		parsed.setSearchable(true);
-
-		for (Field f : clz.getDeclaredFields()) {
-
-			Search.keywords pp = (Search.keywords) f.getAnnotation(Search.keywords.class);
-			if (pp != null) {
-				parsed.getKeywordsList().add(f.getName());
-			} else {
-
-				Search pc = (Search) f.getAnnotation(Search.class);
-
-				if (pc != null) {
-					Class cl = f.getType();
-					String name = f.getName();
-					String prefix = name + ".";
-					parseSearch(prefix, parsed, cl);
-				} else {
-					Search.tag pt = (Search.tag) f.getAnnotation(Search.tag.class);
-					if (pt != null) {
-						Class cl = f.getType();
-						String name = f.getName();
-						String prefix = name + ".";
-						parseSearch(prefix, parsed, cl);
-
-						TagParsed tag = new TagParsed();
-						tag.setType(pt.type());
-						tag.setField(f);
-						String tagKey = pt.type().getSimpleName() + "Tag";
-						tagKey = getByFirstLower(tagKey);
-						tag.setTagKey(tagKey);// !!!important
-						f.setAccessible(true);
-
-						parsed.getTagMap().put(name, tag);//
-
-					}
-				}
-			}
-		}
-	}
-
-	private static void parseSearch(String prefix, Parsed parsed, Class clz) {
-		Search pClz = (Search) clz.getAnnotation(Search.class);
-		if (pClz == null)
-			return;
-
-		for (Field f : clz.getDeclaredFields()) {
-
-			Search.keywords pp = (Search.keywords) f.getAnnotation(Search.keywords.class);
-			if (pp != null) {
-				parsed.getKeywordsList().add(prefix + f.getName());
-			} else {
-				Search pc = (Search) f.getAnnotation(Search.class);
-				if (pc != null) {
-					Class cl = f.getType();
-					String name = f.getName();
-					prefix += name + ".";
-					parseSearch(prefix, parsed, cl);
-				} else {
-					Search.tag pt = (Search.tag) f.getAnnotation(Search.tag.class);
-					if (pt != null) {
-						Class cl = f.getType();
-						String name = f.getName();
-						prefix += name + ".";
-						parseSearch(prefix, parsed, cl);
-
-						TagParsed tag = new TagParsed();
-						tag.setType(pt.type());
-						tag.setField(f);
-						String tagKey = pt.type().getSimpleName() + "Tag";
-						tagKey = getByFirstLower(tagKey);
-						tag.setTagKey(tagKey);// !!!important
-						f.setAccessible(true);
-
-						parsed.getTagMap().put(name, tag);//
-
-						// parsed.getKeywordsList().add(prefix + name);
-					}
-				}
-			}
-		}
-	}
-	
 	
 	public static <T> void sort(Class<T> clz, List<T> list,String property, boolean isAsc) {
 		list.sort(

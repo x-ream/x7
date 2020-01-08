@@ -17,6 +17,7 @@
 package io.xream.x7.repository.mapper;
 
 import io.xream.x7.common.bean.BeanElement;
+import io.xream.x7.common.util.BeanUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -55,7 +56,7 @@ public interface Mapper {
             return Dialect.DATE;
         } else if (clz == String.class) {
             return Dialect.STRING;
-        } else if (clz.isEnum()) {
+        } else if (BeanUtil.isEnum(clz)) {
             return Dialect.STRING;
         } else if (clz == int.class || clz == Integer.class) {
             return Dialect.INT;

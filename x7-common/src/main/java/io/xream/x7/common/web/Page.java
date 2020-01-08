@@ -19,7 +19,6 @@ package io.xream.x7.common.web;
 
 import com.alibaba.fastjson.JSONObject;
 import io.xream.x7.common.bean.Sort;
-import io.xream.x7.common.search.Tag;
 import io.xream.x7.common.util.JsonX;
 
 import java.io.Serializable;
@@ -47,8 +46,7 @@ public class Page<T> implements Paged, Serializable{
 	private List<String> keyList = new ArrayList<String>();
 	private boolean isScroll;
 	private List<Sort> sortList;
-	
-	private Tag tag;
+
 
 	public Page(){
 	}
@@ -166,13 +164,6 @@ public class Page<T> implements Paged, Serializable{
 		this.isScroll = isScroll;
 	}
 
-	public Tag getTag() {
-		return tag;
-	}
-
-	public void setTag(Tag tag) {
-		this.tag = tag;
-	}
 
 	@Override
 	public List<Sort> getSortList() {
@@ -216,8 +207,7 @@ public class Page<T> implements Paged, Serializable{
 				"rows=" + rows + ", " +
 				"sortList=" + sortList + ", " +
 				"\n		list=" + list + ", " +
-				"\n		keyList=" + keyList  + ", " +
-				"\n		tag="+ tag + "\n]\n";
+				"\n		keyList=" + keyList ;
 	}
 
 }

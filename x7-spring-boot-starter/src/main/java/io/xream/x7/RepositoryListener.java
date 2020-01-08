@@ -24,7 +24,7 @@ import io.xream.x7.common.bean.BeanElement;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.TransformConfigurable;
-import io.xream.x7.common.repository.CacheResolver;
+import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
@@ -202,7 +202,7 @@ public class RepositoryListener implements
             }
         }
 
-        CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(CacheResolver.class);
+        L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
         if (levelTwoCacheResolver == null)
             return;
         ((DefaultL2CacheResolver) levelTwoCacheResolver).setCachestorage(cacheStorage);

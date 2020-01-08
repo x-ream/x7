@@ -17,11 +17,24 @@
 package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
+import io.xream.x7.common.cache.L2CacheResolver;
+import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.repository.CacheableRepository;
+import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.DbType;
+import io.xream.x7.repository.Repository;
+import io.xream.x7.repository.config.ConfigAdapter;
+import io.xream.x7.repository.dao.Dao;
+import io.xream.x7.repository.dao.DaoImpl;
+import io.xream.x7.repository.dao.SqlCriteriaParser;
 import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.internal.DomainObjectRepositoy;
 import io.xream.x7.repository.mapper.Dialect;
+import io.xream.x7.repository.mapper.MapperFactory;
+import io.xream.x7.repository.transform.DataTransform;
+import io.xream.x7.repository.transform.SqlDataTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,19 +42,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import io.xream.x7.common.config.ConfigAdapter;
-import io.xream.x7.common.repository.CacheResolver;
-import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.repository.CacheableRepository;
-import io.xream.x7.repository.CriteriaParser;
-import io.xream.x7.repository.DbType;
-import io.xream.x7.repository.Repository;
-import io.xream.x7.repository.dao.Dao;
-import io.xream.x7.repository.dao.DaoImpl;
-import io.xream.x7.repository.dao.SqlCriteriaParser;
-import io.xream.x7.repository.mapper.MapperFactory;
-import io.xream.x7.repository.transform.DataTransform;
-import io.xream.x7.repository.transform.SqlDataTransform;
 
 import java.util.Objects;
 
@@ -113,7 +113,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(5)
-    public CacheResolver cacheResolver(){
+    public L2CacheResolver cacheResolver(){
         return new DefaultL2CacheResolver();
     }
 
@@ -127,7 +127,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(7)
-    public Repository dataRepository(Dao dao, CacheResolver cacheResolver,Environment environment){
+    public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver,Environment environment){
 
         String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 

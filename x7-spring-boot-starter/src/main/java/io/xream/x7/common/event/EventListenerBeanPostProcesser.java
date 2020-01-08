@@ -86,15 +86,12 @@ public class EventListenerBeanPostProcesser implements BeanPostProcessor {
                     logger.info("@EventListener event: " + event.getType() + " " + event.getTag() );
 
                     String key = type + tag;
-                    EventDispatcher.addEventListener(key, new EventListener.Handler() {
-                        @Override
-                        public void handle(Event event) {
-                            try {
-                                method.invoke(bean, event);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                throw new RuntimeException("handle the event, got exception");
-                            }
+                    EventDispatcher.addEventListener(key, event1 -> {
+                        try {
+                            method.invoke(bean, event1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            throw new RuntimeException("handle the event, got exception");
                         }
                     });
                 }

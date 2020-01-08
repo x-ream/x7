@@ -8,10 +8,8 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRO;
-import io.xream.x7.demo.bean.Cat;
+import io.xream.x7.demo.bean.*;
 import io.xream.x7.demo.bean.CatTest;
-import io.xream.x7.demo.bean.Dark;
-import io.xream.x7.demo.bean.DogTest;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.reyc.api.ReyTemplate;
@@ -267,5 +265,17 @@ public class XxxTest {
         return this.controller.in();
     }
 
+
+    public ViewEntity testOneKey(){
+        return this.testServiceRemote.testOneKey(10L);
+    }
+
+    public void testEnum(){
+        System.out.println(TestBoo.BOO.getClass().toGenericString());
+        System.out.println(TestBoo.BOO.getClass().getSuperclass().toGenericString());
+        System.out.println("TRUE = " + TestBoo.BOO.getClass().getSuperclass().isEnum());
+        System.out.println("TestBoo.BOO.getView(): " + TestBoo.BOO);
+        System.out.println("TestBoo.BOO.name(): " + TestBoo.BOO.name());
+    }
 
 }

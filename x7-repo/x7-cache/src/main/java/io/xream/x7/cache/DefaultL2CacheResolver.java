@@ -16,8 +16,8 @@
  */
 package io.xream.x7.cache;
 
+import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.common.exception.CacheException;
-import io.xream.x7.common.repository.CacheResolver;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.util.VerifyUtil;
@@ -37,7 +37,7 @@ import java.util.Set;
  * @author sim
  *
  */
-public class DefaultL2CacheResolver implements CacheResolver {
+public class DefaultL2CacheResolver implements L2CacheResolver {
 
 	private final static Logger logger = LoggerFactory.getLogger(DefaultL2CacheResolver.class);
 	public final static String NANO_SECOND = ".ns.";

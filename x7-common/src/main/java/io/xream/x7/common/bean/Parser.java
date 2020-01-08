@@ -171,10 +171,7 @@ public class Parser {
 
         put(clz, parsed);
 
-        /*
-         * parse search
-         */
-        BeanUtilX.parseSearch(parsed, clz);
+
     }
 
     public static ReflectionCache getReflectionCache(Class clz) {

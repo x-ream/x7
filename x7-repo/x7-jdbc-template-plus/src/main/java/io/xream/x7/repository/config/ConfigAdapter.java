@@ -1,4 +1,4 @@
-package io.xream.x7.common.config;
+package io.xream.x7.repository.config;
 
 public class ConfigAdapter {
 

@@ -94,7 +94,7 @@ public class XxxController {
 
 		RefreshCondition<Cat> refreshCondition = new RefreshCondition();
 		refreshCondition.and().in("id",Arrays.asList(4,5));
-		refreshCondition.refresh("testBoo",TestBoo.BOO);
+		refreshCondition.refresh("testBoo",TestBoo.TEST);
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);
 		refreshCondition.refresh("test = test - 3");
@@ -254,7 +254,6 @@ public class XxxController {
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class);
 		builder.distinct("c.id").reduce(Reduce.ReduceType.COUNT,"c.id").groupBy("c.id");
 		builder.and().in("c.catFriendName", inList);
-		//按IN查询条件排序，有值，就过滤掉orderBy
 		builder.paged().orderIn("c.catFriendName",inList).sort("c.id",Direction.DESC);
 		String sourceScript = "catTest c LEFT JOIN dogTest d on c.dogId = d.id";
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
@@ -506,8 +505,10 @@ public class XxxController {
 //	@Transactional
     public ViewEntity in(){
 
-        InCondition inCondition = new InCondition("id",Arrays.asList(254,255));
+        InCondition inCondition = new InCondition("testBoo",Arrays.asList(TestBoo.BOO,TestBoo.TEST));
         List<Cat> catList = this.catRepository.in(inCondition);
+		System.out.println(catList);
+        catList.forEach(cat -> System.out.println(cat.getTestBoo()));
 
         return ViewEntity.ok(catList);
     }
@@ -517,5 +518,12 @@ public class XxxController {
 		Page<CatTest> page = this.repository.find(criteria);
 		System.out.println(page);
 		return ViewEntity.ok(page);
+	}
+
+	@RequestMapping("/oneKey")
+	public ViewEntity testOneKey(@RequestBody Long keyOne){
+
+		System.out.println(keyOne);
+		return ViewEntity.ok(keyOne);
 	}
 }

@@ -14,38 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.search;
+package io.xream.x7.common.cache;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
-public interface ITagable {
+/**
+ *  if read data only from cache, and if no data in cache then return <br>
+ *  use @CacheableL3 instead of @Cacheable <br>
+ *  <br>
+ *  for the interrupt of return, the client has to retry about 10 times, 300ms/time suggested <br>
+ *  <br>
+ *
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface CacheableL3 {
+    int expireTime() default  0;
+    TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
+    String condition() default "";
 
-	
-	public static String makeTag(List<Long> tagIdList){
-		if (tagIdList == null || tagIdList.isEmpty())
-			return "";
-		StringBuilder sb = new StringBuilder();
-		int size = tagIdList.size();
-		for (int i=0; i<size; i++){
-			Long id = tagIdList.get(i);
-			sb.append(id);
-			if (i < size -1){
-				sb.append("_");
-			}
-		}
-		return sb.toString();
-		
-	}
-	
-	public static List<Long> listTagId(String str){
-		List<Long> list = new ArrayList<Long>();
-		if (str == null)
-			return list;
-		String[] arr = str.split("_");
-		for (String ele : arr){
-			list.add(Long.parseLong(ele));
-		}
-		return list;
-	}
 }

@@ -106,7 +106,7 @@ public class SqlParserUtil {
                     if (value != null) {
                         map.put(property, value);
                     }
-                } else if (type.isEnum()){
+                } else if (BeanUtil.isEnum(type)){
                     if (value != null) {
                         map.put(property, ((Enum)value).name());
                     }

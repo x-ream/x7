@@ -17,10 +17,11 @@
 package io.xream.x7.repository.mapper;
 
 import io.xream.x7.common.bean.*;
-import io.xream.x7.common.config.ConfigAdapter;
 import io.xream.x7.common.repository.X;
+import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
+import io.xream.x7.repository.config.ConfigAdapter;
 import io.xream.x7.repository.exception.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +102,7 @@ public class DataObjectConverter {
             for (BeanElement ele : eles) {
                 Object value = ele.getMethod.invoke(obj);
                 if (value == null) {
-                    if (ele.clz.isEnum())
+                    if (BeanUtil.isEnum(ele.clz))
                         throw new PersistenceException(
                                 "ENUM CAN NOT NULL, property:" + obj.getClass().getName() + "." + ele.getProperty());
                     if (ele.clz == Boolean.class || ele.clz == Integer.class || ele.clz == Long.class
@@ -114,7 +115,7 @@ public class DataObjectConverter {
                     if (ele.isJson) {
                         String str = JsonX.toJson(value);
                         list.add(str);
-                    } else if (ele.clz.isEnum()) {
+                    } else if (BeanUtil.isEnum(ele.clz)) {
                         String str = ((Enum) value).name();
                         list.add(str);
                     } else {
@@ -164,7 +165,7 @@ public class DataObjectConverter {
                     if (value != null && !value.equals("")) {
                         map.put(property, value);
                     }
-                } else if (type.isEnum()) {
+                } else if (BeanUtil.isEnum(type)) {
                     if (value != null) {
                         map.put(property, ((Enum) value).name());
                     }

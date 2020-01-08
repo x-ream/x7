@@ -17,7 +17,7 @@
 package io.xream.x7.cache;
 
 import com.alibaba.fastjson.JSON;
-import io.xream.x7.common.repository.CacheableL3;
+import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
@@ -86,7 +86,7 @@ public class L3CacheAspect {
         this.resolver = resolver;
     }
 
-    @Pointcut("@annotation(io.xream.x7.common.repository.CacheableL3))")
+    @Pointcut("@annotation(io.xream.x7.common.cache.CacheableL3))")
     public void cut() {
 
     }

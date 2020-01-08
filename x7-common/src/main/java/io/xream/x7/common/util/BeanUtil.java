@@ -360,4 +360,9 @@ public class BeanUtil {
         return property;
     }
 
+    public static boolean isEnum(Class clz) {
+        Class superClzz = clz.getSuperclass();
+        return clz.isEnum() || (superClzz != null && superClzz.isEnum());
+    }
+
 }

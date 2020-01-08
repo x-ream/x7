@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.repository;
+package io.xream.x7.common.cache;
 
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Page;
@@ -29,7 +29,7 @@ import java.util.Objects;
  * @author sim
  *
  */
-public interface CacheResolver {
+public interface L2CacheResolver {
 
 	boolean isEnabled();
 	/**

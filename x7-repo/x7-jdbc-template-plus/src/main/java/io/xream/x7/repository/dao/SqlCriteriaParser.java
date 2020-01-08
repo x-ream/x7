@@ -499,7 +499,8 @@ public class SqlCriteriaParser implements CriteriaParser {
                 sb.append(SqlScript.PLACE_HOLDER);
             }
 
-            if (clz.getSuperclass().isEnum() || clz.isEnum()) {
+            //if (BeanUtil.isEnum(clz) || BeanUtil.isEnum(clz.getSuperclass())) {
+            if (BeanUtil.isEnum(clz)) {
                 try {
                     criteria.getValueList().add(((Enum) v).name());
                 } catch (Exception e) {

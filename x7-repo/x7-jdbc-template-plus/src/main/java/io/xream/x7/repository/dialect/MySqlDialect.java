@@ -19,6 +19,7 @@ package io.xream.x7.repository.dialect;
 import io.xream.x7.common.bean.BeanElement;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.SqlScript;
+import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.repository.mapper.Dialect;
@@ -82,7 +83,7 @@ public class MySqlDialect implements Dialect {
             return null;
         Class ec = element.clz;
 
-        if (ec.isEnum()) {
+        if (BeanUtil.isEnum(ec)) {
             return Enum.valueOf(ec, obj.toString());
         } else if (element.isJson) {
             if (ec == List.class) {
@@ -134,7 +135,7 @@ public class MySqlDialect implements Dialect {
             String str = (String) value;
             value = str.replace("<", "&lt").replace(">", "&gt");
         }
-        if (Objects.nonNull(value) && value.getClass().isEnum())
+        if (Objects.nonNull(value) && BeanUtil.isEnum(value.getClass()))
             return ((Enum)value).name();
 
         return value;

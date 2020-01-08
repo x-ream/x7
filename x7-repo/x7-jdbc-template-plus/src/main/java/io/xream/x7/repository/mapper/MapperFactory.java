@@ -19,11 +19,11 @@ package io.xream.x7.repository.mapper;
 import io.xream.x7.common.bean.BeanElement;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
-import io.xream.x7.common.config.ConfigAdapter;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.Mapped;
+import io.xream.x7.repository.config.ConfigAdapter;
 import io.xream.x7.repository.util.SqlParserUtil;
 
 import java.util.ArrayList;
@@ -364,7 +364,7 @@ public class MapperFactory implements Mapper {
 				} else if (sqlType.equals(Dialect.DATE)) {
 					sb.append(" NULL");
 
-				}else if (bet.clz.isEnum()) {
+				}else if (BeanUtil.isEnum(bet.clz)) {
 					sb.append("(").append(bet.length).append(") NOT NULL");
 				} else if (sqlType.equals(Dialect.STRING)) {
 					sb.append("(").append(bet.length).append(") NULL");
