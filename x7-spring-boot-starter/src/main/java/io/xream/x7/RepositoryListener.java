@@ -20,37 +20,20 @@ import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
 import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
 import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
-import io.xream.x7.common.bean.BeanElement;
-import io.xream.x7.common.bean.Parsed;
-import io.xream.x7.common.bean.Parser;
-import io.xream.x7.common.bean.TransformConfigurable;
 import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
-import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.CacheableRepository;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
-import io.xream.x7.repository.mapper.MapperFactory;
-import io.xream.x7.repository.schema.SchemaConfig;
-import io.xream.x7.repository.schema.SchemaTransformRepository;
-import io.xream.x7.repository.schema.customizer.SchemaTransformCustomizer;
-import io.xream.x7.repository.schema.customizer.SchemaTransformRepositoryBuilder;
 import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class RepositoryListener implements
@@ -76,7 +59,6 @@ public class RepositoryListener implements
 
         RepositoryBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
-        transform(applicationStartedEvent);
     }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
@@ -239,119 +221,5 @@ public class RepositoryListener implements
 
     }
 
-
-    private void transform(ApplicationStartedEvent applicationStartedEvent) {
-        List<Class<? extends BaseRepository>> clzzList = null;
-        if (SchemaConfig.isSchemaTransformEnabled) {
-            clzzList = customizeSchemaTransform(applicationStartedEvent);
-        }
-
-        if (clzzList != null) {
-
-            for (Class<? extends BaseRepository> clzz : clzzList) {
-
-                Repository depository = applicationStartedEvent.getApplicationContext().getBean(Repository.class);
-
-                List list = list(depository, clzz);//查出所有配置
-                if (!list.isEmpty()) {
-                    reparse(list);
-                }
-            }
-        }
-    }
-
-
-    private List<Class<? extends BaseRepository>> customizeSchemaTransform(ApplicationStartedEvent applicationStartedEvent) {
-
-
-        SchemaTransformCustomizer customizer = null;
-        try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(SchemaTransformCustomizer.class);
-        } catch (Exception e) {
-        }
-
-        if (customizer != null) {
-            SchemaTransformRepositoryBuilder builder = new SchemaTransformRepositoryBuilder();
-            return customizer.customize(builder);
-        }
-
-        SchemaTransformRepositoryBuilder.registry = null;
-
-        List<Class<? extends BaseRepository>> list = new ArrayList<>();
-        list.add(SchemaTransformRepository.class);
-        return list;
-    }
-
-
-    private void reparse(List list) {
-
-        //key: originTable
-        Map<String, List<TransformConfigurable>> map = new HashMap<>();
-
-        for (Object obj : list) {
-            if (obj instanceof TransformConfigurable) {
-
-                TransformConfigurable transformed = (TransformConfigurable) obj;
-                String originTable = transformed.getOriginTable();
-                List<TransformConfigurable> transformedList = map.get(originTable);
-                if (transformedList == null) {
-                    transformedList = new ArrayList<>();
-                    map.put(originTable, transformedList);
-                }
-                transformedList.add(transformed);
-            }
-        }
-
-        for (Map.Entry<String, List<TransformConfigurable>> entry : map.entrySet()) {
-            String originTable = entry.getKey();
-
-            Parsed parsed = Parser.getByTableName(originTable);
-            if (parsed == null)
-                continue;
-
-            List<TransformConfigurable> transformedList = entry.getValue();
-            for (TransformConfigurable transformed : transformedList) {
-                parsed.setTableName(transformed.getTargetTable());//FIXME 直接替换了原始的表
-                parsed.setTransforemedAlia(transformed.getAlia());
-
-                for (BeanElement be : parsed.getBeanElementList()) {
-                    if (be.getMapper().equals(transformed.getOriginColumn())) {
-                        be.mapper = transformed.getTargetColumn();//FIXME 直接替换了原始的列, 只需要目标对象的属性有值
-                        break;
-                    }
-                }
-            }
-
-            parsed.reset(parsed.getBeanElementList());
-            String tableName = parsed.getTableName();
-            Parsed parsedTransformed = Parser.getByTableName(tableName);
-            parsed.setParsedTransformed(parsedTransformed);
-
-            SchemaConfig.transformableSet.add(parsed.getClz());
-
-            Map<String, String> sqlMap = MapperFactory.getSqlMap(parsedTransformed.getClz());
-            MapperFactory.putSqlMap(parsed.getClz(), sqlMap);
-        }
-    }
-
-    private List list(Repository dataRepository, Class<? extends BaseRepository> clzz) {
-
-        Type[] types = clzz.getGenericInterfaces();
-
-        ParameterizedType parameterized = (ParameterizedType) types[0];
-        Class clazz = (Class) parameterized.getActualTypeArguments()[0];
-
-        Object obj = null;
-        try {
-            obj = clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        List list = dataRepository.list(obj);
-
-        return list;
-    }
 
 }

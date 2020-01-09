@@ -16,11 +16,10 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.repository.schema.SchemaConfig;
+import io.xream.x7.common.bean.Parser;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
-import io.xream.x7.common.bean.Parser;
 
 import java.util.Map;
 
@@ -39,8 +38,6 @@ public class ParserStarter implements ImportBeanDefinitionRegistrar {
 
 		Parser.mappingPrefix = prefix.toString();
 		Parser.mappingSpec = spec.toString();
-
-		SchemaConfig.isSchemaTransformEnabled = annotationMetadata.hasAnnotation(EnableSchemaTransform.class.getName());
 
 	}
 

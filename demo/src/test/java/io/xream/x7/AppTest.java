@@ -30,7 +30,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
 
@@ -38,8 +38,8 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
-//        xxxTest.testResultMapped();
+        xxxTest.testCriteria();
+        xxxTest.testResultMapped();
 //        xxxTest.testDomain();
 
 //        xxxTest.testRefreshCondition();
@@ -47,24 +47,24 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.distinct();
 
 //        xxxTest.test();
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
-//        xxxTest.refreshByCondition();
+        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
-//        xxxTest.testList();
-        xxxTest.testLock();
-//        xxxTest.in();
-//        xxxTest.get();
+        xxxTest.testList();
+//        xxxTest.testLock();
+        xxxTest.in();
+        xxxTest.get();
 //        xxxTest.testOneKey();
-//        xxxTest.list();
+        xxxTest.list();
 //        xxxTest.testEnum();
 
     }

@@ -16,18 +16,15 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.common.util.ClassFileReader;
+import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.internal.RepositoryProxy;
-import io.xream.x7.repository.schema.SchemaConfig;
-import io.xream.x7.repository.schema.SchemaTransformRepository;
-import io.xream.x7.repository.schema.customizer.SchemaTransformRepositoryBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.stereotype.Repository;
-import io.xream.x7.common.util.ClassFileReader;
-import io.xream.x7.repository.BaseRepository;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -74,11 +71,6 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
                 continue;
 
             list.add(clz);
-        }
-
-        if (SchemaConfig.isSchemaTransformEnabled){
-            list.add(SchemaTransformRepository.class);
-            SchemaTransformRepositoryBuilder.registry = registry;
         }
 
         for (Class clz : list) {
