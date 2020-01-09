@@ -21,10 +21,8 @@ import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
-import io.xream.x7.repository.config.ConfigAdapter;
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.repository.exception.PersistenceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -33,8 +31,6 @@ import java.util.*;
 
 
 public class DataObjectConverter {
-
-    private static Logger logger = LoggerFactory.getLogger(DataObjectConverter.class);
 
     public static List<Map<String, Object>> dataToPropertyObjectMap(Class clz, List<Map<String, Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
         List<Map<String, Object>> propertyMapList = new ArrayList<>();
@@ -219,8 +215,7 @@ public class DataObjectConverter {
             e.printStackTrace();
         }
 
-        if (ConfigAdapter.isIsShowSql())
-            logger.info("__queryValueMap: " + map);
+        LoggerProxy.debug(clz, map);
 
         return map;
 
@@ -241,8 +236,7 @@ public class DataObjectConverter {
         return false;
     }
 
-    public static void log(List<Object> valueList) {
-        if (ConfigAdapter.isIsShowSql())
-            logger.info("__queryValueList: " + valueList);
+    public static void log(Class clz, List<Object> valueList) {
+        LoggerProxy.debug(clz, valueList);
     }
 }

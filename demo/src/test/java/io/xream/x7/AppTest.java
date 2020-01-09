@@ -61,10 +61,10 @@ public class AppTest {
 //        xxxTest.testRestTemplate();
 //        xxxTest.testList();
 //        xxxTest.testLock();
-        xxxTest.in();
+//        xxxTest.in();
 //        xxxTest.get();
 //        xxxTest.testOneKey();
-
+//        xxxTest.list();
 //        xxxTest.testEnum();
 
     }

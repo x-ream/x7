@@ -16,6 +16,8 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.common.util.LoggerProxy;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
@@ -35,6 +37,7 @@ public class HttpClientProxy implements FactoryBean {
 
     public void setObjectType(Class<?> objectType){
         this.objectType = objectType;
+        LoggerProxy.put(objectType, LoggerFactory.getLogger(objectType));
     }
 
     @Override

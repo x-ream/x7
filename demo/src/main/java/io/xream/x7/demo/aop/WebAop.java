@@ -76,7 +76,7 @@ public class WebAop {
 				Tx.commit();
 				long endTime = TimeUtil.now();
 				long handledTimeMillis = endTime - startTime;
-				System.out.println("_______Transaction end, cost time: " + (handledTimeMillis) + "ms");
+				System.out.println("________Transaction end, cost time: " + (handledTimeMillis) + "ms");
 				if (obj instanceof ViewEntity){
 					ViewEntity ve = (ViewEntity)obj;
 					ve.setHandledTimeMillis(handledTimeMillis);

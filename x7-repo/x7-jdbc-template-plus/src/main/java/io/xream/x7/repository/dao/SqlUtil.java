@@ -262,7 +262,7 @@ public class SqlUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(sql);
         sqlParsed.setSql(sb);
-        DataObjectConverter.log(criteria.getValueList());
+        DataObjectConverter.log(criteria.getClz(), criteria.getValueList());
 
         return sqlParsed;
     }

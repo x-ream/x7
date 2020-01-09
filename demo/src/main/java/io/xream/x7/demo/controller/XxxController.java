@@ -84,7 +84,7 @@ public class XxxController {
 
 
 		List<String> testList = new ArrayList<>();
-		testList.add("1111");
+		testList.add("8989");
 		testList.add("2222");
 
 		Dark dark = new Dark();
@@ -456,11 +456,8 @@ public class XxxController {
 
 	@RequestMapping("/list")
 	public ViewEntity list() {
-		Cat cat = new Cat();
-		cat.setType("NL");
-		cat  = catRepository.getOne(cat);
-		System.out.println(cat);
-		return ViewEntity.ok(cat);
+		this.catRepository.list();
+		return ViewEntity.ok();
 	}
 
 	@RequestMapping("/remove")

@@ -16,6 +16,8 @@
  */
 package io.xream.x7.repository.internal;
 
+import io.xream.x7.common.util.LoggerProxy;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,7 +34,24 @@ public class RepositoryInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try{
-            return method.invoke(repository,args);
+            Class clz = repository.getClz();
+
+            LoggerProxy.debug(clz, () -> {
+                String argStr = (args != null && args.length > 0) ? args[0].getClass().getSimpleName() : "";
+                return method.getName() + "(" +  argStr + ")";
+            });
+
+            final long startTime = LoggerProxy.getTimeMills(clz);
+
+            Object obj =  method.invoke(repository,args);
+
+            final long endTime = LoggerProxy.getTimeMills(clz);
+
+            LoggerProxy.debug(clz, () ->
+                 obj +"\n________" + method.getName() + ", cost time: "+ (endTime - startTime) + "ms"
+            );
+
+            return obj;
         } catch (InvocationTargetException e){
             throw e.getCause();
         }

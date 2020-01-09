@@ -101,7 +101,7 @@ public class HttpClientResolver {
         return r;
     }
 
-    protected static String resolve(R r) {
+    protected static String resolve(R r, Class clz) {
 
         RequestMethod requestMethod = r.getRequestMethod();
         Object[] args = r.getArgs();
@@ -114,9 +114,9 @@ public class HttpClientResolver {
         if (requestMethod == RequestMethod.POST) {
 
             if (args != null && args.length > 0) {
-                 result = restTemplate.post(url,args[0],headerList);
+                 result = restTemplate.post(clz,url,args[0],headerList);
             } else {
-                result = restTemplate.post(url,null,headerList);
+                result = restTemplate.post(clz,url,null,headerList);
             }
         } else {
             List<String> regExList = StringUtil.listByRegEx(url, pattern);
@@ -124,7 +124,7 @@ public class HttpClientResolver {
             for (int i = 0; i < size; i++) {
                 url = url.replace(regExList.get(i), args[i].toString());
             }
-            result = restTemplate.get(url,headerList);
+            result = restTemplate.get(clz,url,headerList);
         }
 
         if (StringUtil.isNullOrEmpty(result))

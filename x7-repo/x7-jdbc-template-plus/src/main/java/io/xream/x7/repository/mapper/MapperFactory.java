@@ -21,9 +21,9 @@ import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtil;
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.Mapped;
-import io.xream.x7.repository.config.ConfigAdapter;
 import io.xream.x7.repository.util.SqlParserUtil;
 
 import java.util.ArrayList;
@@ -157,8 +157,7 @@ public class MapperFactory implements Mapper {
 
 			sqlsMap.get(clz).put(REFRESH, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -180,8 +179,7 @@ public class MapperFactory implements Mapper {
 
 			sqlsMap.get(clz).put(REMOVE, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -203,8 +201,7 @@ public class MapperFactory implements Mapper {
 
 			sqlsMap.get(clz).put(GET_ONE, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -235,8 +232,7 @@ public class MapperFactory implements Mapper {
 
 			sqlsMap.get(clz).put(QUERY, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -255,8 +251,7 @@ public class MapperFactory implements Mapper {
 
 			sqlsMap.get(clz).put(LOAD, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -306,8 +301,7 @@ public class MapperFactory implements Mapper {
 			sql = SqlParserUtil.mapper(sql, parsed);
 			sqlsMap.get(clz).put(CREATE, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 
@@ -395,8 +389,7 @@ public class MapperFactory implements Mapper {
 
 			sql = SqlParserUtil.mapper(sql, parsed);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			sqlsMap.get(clz).put(CREATE_TABLE, sql);
 
@@ -415,8 +408,7 @@ public class MapperFactory implements Mapper {
 			sql = SqlParserUtil.mapper(sql, parsed);
 			sqlsMap.get(clz).put(TAG, sql);
 
-			if (ConfigAdapter.isIsShowSql())
-				System.out.println(sql);
+			LoggerProxy.debug(clz, sb);
 
 			return sql;
 		}

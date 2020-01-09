@@ -18,12 +18,10 @@ package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.repository.CacheableRepository;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.Repository;
-import io.xream.x7.repository.config.ConfigAdapter;
 import io.xream.x7.repository.dao.Dao;
 import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.SqlCriteriaParser;
@@ -158,26 +156,7 @@ public class RepositoryStarter  {
     @ConditionalOnMissingBean(X7Data.class)
     @Bean
     @Order(10)
-    public X7Data enableData(Environment env){
-
-
-        {
-            String showSqlStr = env.getProperty("x7.repository.show-sql");
-            boolean showSql = false;
-            if (StringUtil.isNotNull(showSqlStr)){
-                try {
-                    showSql = Boolean.parseBoolean(showSqlStr);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            if (showSql) {
-                ConfigAdapter.setIsShowSql(true);
-            }else{
-                logger.info("X7 Repsository will not show SQL, for no config like one of: x7.repository.show-sql=true" );
-            }
-
-        }
+    public X7Data enableData(){
 
         return new X7Data();
     }

@@ -24,7 +24,6 @@ import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import io.xream.x7.common.bean.KV;
-import io.xream.x7.common.util.HttpClientUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,8 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         return new KV(key, value);
     }
 
-    public String post(String url, Object request, List<KV> headerList) {
+    @Override
+    public String post(Class clz, String url, Object request, List<KV> headerList) {
 
         CloseableHttpClient httpclient = null;
         if (requestInterceptor != null && responseInterceptor != null) {
@@ -91,13 +91,13 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         if (headerList!=null && !tempHeaderList.isEmpty()) {
             tempHeaderList.addAll(headerList);
         }
-        String result = HttpClientUtil.post(url,request,tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+        String result = HttpClientUtil.post(clz,url,request,tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
 
         return result;
     }
 
     @Override
-    public String get(String url, List<KV> headerList) {
+    public String get(Class clz, String url, List<KV> headerList) {
 
         CloseableHttpClient httpclient = null;
         if (requestInterceptor != null && responseInterceptor != null) {
@@ -114,7 +114,7 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         if (headerList!=null && !tempHeaderList.isEmpty()) {
             tempHeaderList.addAll(headerList);
         }
-        return HttpClientUtil.get(url, tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+        return HttpClientUtil.get(clz,url, tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
     }
 
 

@@ -16,8 +16,10 @@
  */
 package io.xream.x7.repository.internal;
 
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.id.IdGeneratorService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
@@ -38,6 +40,7 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public void setClz(Class<T> clz) {
         super.setClz(clz);
         super.hook();
+        LoggerProxy.put(clz, LoggerFactory.getLogger(objectType));
     }
 
     public RepositoryProxy(){

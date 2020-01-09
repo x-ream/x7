@@ -265,13 +265,17 @@ public class XxxTest {
         return this.controller.in();
     }
 
+    public ViewEntity list(){
+        return this.controller.list();
+    }
+
 
     public ViewEntity testOneKey(){
         return this.testServiceRemote.testOneKey(10L);
     }
 
     public void testEnum(){
-        System.out.println(TestBoo.BOO.getClass().toGenericString());
+        System.out.println(TestBoo.BOO.getClass());
         System.out.println(TestBoo.BOO.getClass().getSuperclass().toGenericString());
         System.out.println("TRUE = " + TestBoo.BOO.getClass().getSuperclass().isEnum());
         System.out.println("TestBoo.BOO.getView(): " + TestBoo.BOO);

@@ -16,6 +16,7 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.reyc.BackendService;
 import io.xream.x7.common.util.ExceptionUtil;
 
@@ -31,27 +32,30 @@ public class HttpClientInvocationHandler implements InvocationHandler {
     }
     
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args)  {
+        Class clzz = httpClientProxy.getObjectType();
+        long startTime = System.currentTimeMillis();
+        final String methodName = method.getName();
         try{
 
-            final String methodName = method.getName();
+            LoggerProxy.debug(clzz,methodName +"(..) start....");
 
-            R r = HttpClientResolver.r(httpClientProxy.getObjectType().getName(),methodName,args);
+            R r = HttpClientResolver.r(clzz.getName(),methodName,args);
 
             if (httpClientProxy.getBackend() == null) {
-                String result = HttpClientResolver.resolve(r);
+                String result = HttpClientResolver.resolve(r,clzz);
                 return HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result);
             }
 
             String result = HttpClientResolver.wrap(httpClientProxy, new BackendService() {
                 @Override
                 public String handle() {
-                    return HttpClientResolver.resolve(r);
+                    return HttpClientResolver.resolve(r,clzz);
                 }
 
                 @Override
                 public Object fallback() {
-                    return HttpClientResolver.fallback(httpClientProxy.getObjectType().getName(),methodName,args);
+                    return HttpClientResolver.fallback(clzz.getName(),methodName,args);
                 }
             });
 
@@ -61,6 +65,9 @@ public class HttpClientInvocationHandler implements InvocationHandler {
             throw re;
         } catch (Exception e){
             throw new RuntimeException(ExceptionUtil.getMessage(e));
+        }finally {
+            long endTime = System.currentTimeMillis();
+            LoggerProxy.debug(clzz,methodName + "(..) end, cost time: " + (endTime - startTime) + "ms");
         }
     }
 }

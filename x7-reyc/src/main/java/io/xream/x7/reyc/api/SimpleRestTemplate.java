@@ -27,7 +27,7 @@ public interface SimpleRestTemplate {
 
     KV header(String key, String value);
 
-    String post(String url, Object request, List<KV> headerList);
+    String post(Class clz, String url, Object request, List<KV> headerList);
 
-    String get(String url, List<KV> headerList);
+    String get(Class clz, String url, List<KV> headerList);
 }

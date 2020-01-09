@@ -201,7 +201,7 @@ public class Page<T> implements Paged, Serializable{
 	
 	@Override
 	public String toString() {
-		return "\nPage [isScroll=" + isScroll + ", " +
+		return "Page [isScroll=" + isScroll + ", " +
 				"totalRows=" + totalRows + ", " +
 				"page=" + page + ", " +
 				"rows=" + rows + ", " +
