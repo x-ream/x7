@@ -57,10 +57,10 @@ public class AppTest {
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
-        xxxTest.refreshByCondition();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testRestTemplate();
 //        xxxTest.testList();
-//        xxxTest.testLock();
+        xxxTest.testLock();
 //        xxxTest.in();
 //        xxxTest.get();
 //        xxxTest.testOneKey();

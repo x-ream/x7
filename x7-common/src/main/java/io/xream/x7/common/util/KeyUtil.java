@@ -16,45 +16,34 @@
  */
 package io.xream.x7.common.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 public class KeyUtil {
 
-	public static List<String> getKeyList(String str) {
+    public static String makeKey(String prefix, String suffix, String condition, Object[] args) {
 
-		List<String> list = null;
-		if (str.contains(".")) {
-			String[] arr = str.split("\\.");
-			list = Arrays.asList(arr);
+        if (args != null && args.length > 0 && condition.contains("#") && condition.contains(".")) {
 
-		} else if (str.contains("/")) {
-			if (str.startsWith("/")) {
-				str = str.substring(1);
-			}
-			String[] arr = str.split("\\/");
-			list = Arrays.asList(arr);
-		} else {
-			list = new ArrayList<String>();
-			list.add(str);
-		}
+            Object obj = args[0];
+            if (obj != null) {
+                int start = condition.indexOf("#") + 1;
+                int end = condition.indexOf(".");
+                String objName = condition.substring(start, end);
 
-		return list;
-	}
 
-	/**
-	 * 仅仅用于JAVA类名做为KEY时的转换
-	 * @param clz
-	 * @return
-	 */
-	public static String getKey(Class clz) {
+                ExpressionParser parser = new SpelExpressionParser();
+                EvaluationContext ctx = new StandardEvaluationContext();
+                ctx.setVariable(objName, obj);
 
-		String key = clz.getName();
-		if (key.contains(".")) {
-			key = key.replace(".", "_");
-		}
+                condition = parser.parseExpression(condition).getValue(ctx, String.class);
+            }
+        }
 
-		return key;
-	}
+        String key = VerifyUtil.toMD5(prefix + condition) + suffix;
+
+        return key;
+    }
 }
