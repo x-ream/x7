@@ -20,11 +20,13 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.util.Assert;
 
 public class KeyUtil {
 
     public static String makeKey(String prefix, String suffix, String condition, Object[] args) {
 
+        Assert.notNull(condition, "condition can not null");
         if (args != null && args.length > 0 && condition.contains("#") && condition.contains(".")) {
 
             Object obj = args[0];
