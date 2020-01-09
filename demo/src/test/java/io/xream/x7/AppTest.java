@@ -52,7 +52,7 @@ public class AppTest {
 
 //        xxxTest.test();
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
