@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
  * 1. 在创建场景时，初始化场景的数据<br>
  * 2. 在倒计时的时间段里，<br>
  * 
- * @author wangyan
+ * @author Sim
  *
  */
 public final class CasualWorker {
@@ -41,29 +41,24 @@ public final class CasualWorker {
 	
 	static {
 		
-		service.execute(new Runnable(){
+		service.execute(() -> {
 
-			@Override
-			public void run() {
-
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			while (true) {
 				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+					tasks.take().execute();
+				} catch (NullPointerException npe){
+					npe.printStackTrace();
+				}catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (Exception e){
 					e.printStackTrace();
 				}
-				while (true) {
-					try {
-						tasks.take().execute();
-					} catch (NullPointerException npe){
-						npe.printStackTrace();
-					}catch (InterruptedException e) {
-						e.printStackTrace();
-					} catch (Exception e){
-						e.printStackTrace();
-					}
-				}
 			}
-			
 		});
 
 	}

@@ -17,11 +17,11 @@
 package io.xream.x7.cache;
 
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.exception.CacheException;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.util.VerifyUtil;
 import io.xream.x7.common.web.Page;
+import io.xream.x7.exception.L2CacheException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +84,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		String time = String.valueOf(System.nanoTime());
 		boolean flag = getCachestorage().set(key, time);
 		if (!flag)
-			throw new CacheException("markForRefresh failed");
+			throw new L2CacheException("markForRefresh failed");
 		return time;
 	}
 	
@@ -97,7 +97,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		key = getSimpleKey(clz, key);
 		boolean flag = getCachestorage().delete(key);
 		if (!flag)
-			throw new CacheException("remove failed");
+			throw new L2CacheException("remove failed");
 	}
 
 	public void remove(Class clz) {
@@ -109,7 +109,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		for (String k : keySet) {
 			boolean flag = getCachestorage().delete(k);
 			if (!flag)
-				throw new CacheException("remove failed");
+				throw new L2CacheException("remove failed");
 		}
 
 	}
@@ -203,7 +203,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		try{
 			getCachestorage().set(key, JsonX.toJson(keyList), validSecond);
 		}catch (Exception e) {
-			throw new CacheException(e.getMessage());
+			throw new L2CacheException(e.getMessage());
 		}
 	}
 
@@ -214,7 +214,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		try{
 			getCachestorage().set(key, JsonX.toJson(pagination), validSecond);
 		}catch (Exception e) {
-			throw new CacheException(e.getMessage());
+			throw new L2CacheException(e.getMessage());
 		}
 	}
 

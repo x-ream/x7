@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * 心跳循环器<br>
  * 实现了IHeartBeat接口的service需要注册到此心跳循环器
  * HeartBeator.add(this);
- * @author wyan
+ * @author Sim
  * 
  */
 public class HeartBeator {

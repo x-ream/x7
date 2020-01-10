@@ -23,7 +23,7 @@ import java.util.List;
 
 public class VerifyUtil {
 	
-
+	private VerifyUtil(){}
 	
 	public static String getSign(List<String> list){
 		StringBuffer sb = new StringBuffer("");

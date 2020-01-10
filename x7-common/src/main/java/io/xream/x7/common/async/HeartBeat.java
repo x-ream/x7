@@ -20,7 +20,7 @@ package io.xream.x7.common.async;
  * <li>心跳接口</li>
  * 必需异步实现tick方法，实现此接口的service，需要在构造或初始化时：<br>
  * HeartBeator.add(this);
- * @author wyan
+ * @author Sim
  *
  */
 public interface HeartBeat {

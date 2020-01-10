@@ -26,7 +26,7 @@ package io.xream.x7.common.async;
  * 
  * 直接在使用时创建匿名实例<br>
  * 
- * @author wangyan
+ * @author Sim
  *
  */
 public interface IAsyncTask{

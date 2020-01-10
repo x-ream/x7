@@ -24,16 +24,12 @@ import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanMapUtil;
-import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.SqlParsed;
-import io.xream.x7.repository.exception.PersistenceException;
-import io.xream.x7.repository.exception.QueryException;
-import io.xream.x7.repository.exception.RollbackException;
 import io.xream.x7.repository.mapper.DataObjectConverter;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.mapper.Mapper;
@@ -89,8 +85,7 @@ public class DaoImpl implements Dao {
             });
 
         } catch (Exception e) {
-            logger.error("Dao#createBatch : " + obj + ", Exception: " + ExceptionUtil.getMessage(e));
-            throw new RollbackException(ExceptionUtil.getMessage(e) + ", while create " + obj);
+            throw DaoExceptionTranslator.onRollback(obj,e,logger);
         }
 
         return true;
@@ -153,8 +148,7 @@ public class DaoImpl implements Dao {
             }
 
         } catch (Exception e) {
-            logger.error("Dao#create : " + obj + ", Exception: " + ExceptionUtil.getMessage(e));
-            throw new RollbackException(ExceptionUtil.getMessage(e) + ", while create " + obj);
+            throw DaoExceptionTranslator.onRollback(obj,e,logger);
         }
 
     }
@@ -214,7 +208,9 @@ public class DaoImpl implements Dao {
         LoggerProxy.debug(clz,sql);
 
         List<Object> valueList = criteria.getValueList();
-        return queryForList(sql, clz, valueList, this.dialect, jdbcTemplate);
+        List<T> list =  queryForList(sql, clz, valueList, this.dialect, jdbcTemplate);
+        ResultSortUtil.sort(list, criteria, Parser.get(clz));
+        return list;
     }
 
     @Override
@@ -361,9 +357,8 @@ public class DaoImpl implements Dao {
         List<T> list = queryForList(sql, clz, queryMap.values(), this.dialect, jdbcTemplate);
 
         if (list.isEmpty()) {
-            if (DataObjectConverter.filterGetOneWithLongKey(parsed, queryMap)) {
+            if (DataObjectConverter.filterGetOneWithLongKey(parsed, queryMap))
                 throw new IllegalArgumentException("API of getOne(T) can't accept object with keyOne = 0L: " + conditionObj);
-            }
             return null;//not throw EntityNotFoundException
         }
         return list.get(0);
@@ -377,9 +372,7 @@ public class DaoImpl implements Dao {
                 return jdbcTemplate.update(sql) > 0;
             return jdbcTemplate.update(sql, arr) > 0;
         } catch (Exception e) {
-            String str = ExceptionUtil.getMessage(e);
-            logger.error(str);
-            throw new QueryException(str);
+            throw DaoExceptionTranslator.onRollback(null, e, logger);
         }
     }
 
@@ -404,9 +397,7 @@ public class DaoImpl implements Dao {
                 tList.add(t);
             }
         } catch (Exception e) {
-            String str = ExceptionUtil.getMessage(e);
-            logger.error(str);
-            throw new PersistenceException(str);
+            throw DaoExceptionTranslator.onQuery(e, logger);
         }
         return tList;
     }
@@ -418,12 +409,10 @@ public class DaoImpl implements Dao {
         List<Map<String, Object>> dataMapList = queryForMapList(sql, list, dialect, jdbcTemplate);
         List<Map<String, Object>> propertyMapList = DataObjectConverter.dataToPropertyObjectMap(resultMapped.getClz(), dataMapList, resultMapped, dialect);
 
-        if (!propertyMapList.isEmpty()) {
+        if (!propertyMapList.isEmpty())
             return BeanMapUtil.toJsonableMapList(propertyMapList);
-        }
 
         return propertyMapList;
     }
-
 
 }

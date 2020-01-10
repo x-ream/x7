@@ -28,6 +28,8 @@ import java.util.Map.Entry;
  *
  */
 public class BeanMapUtil {
+
+	private BeanMapUtil(){}
 	
 	public static <T> T toObject(Class<T> clz, Map<String,Object> map) {
 

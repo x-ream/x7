@@ -1,14 +1,14 @@
 package io.xream.x7.exception;
 
-public class CacheException extends RuntimeException{
+public class L2CacheException extends RuntimeException{
 
     private String message;
 
-    public CacheException(){
+    public L2CacheException(){
 
     }
 
-    public CacheException(String message){
+    public L2CacheException(String message){
         this.message = message;
     }
 

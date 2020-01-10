@@ -28,7 +28,7 @@ public class AppTest {
     private Executor executor = Executors.newFixedThreadPool(11);
 
     @Test
-    public void testAll(){
+    public void  testAll(){
 
 //        xxxTest.testNonPaged();
 //        xxxTest.domain();
@@ -61,7 +61,7 @@ public class AppTest {
 //        xxxTest.testRestTemplate();
 //        xxxTest.testList();
 //        xxxTest.testLock();
-//        xxxTest.in();
+        xxxTest.in();
 //        xxxTest.get();
 //        xxxTest.testOneKey();
 //        xxxTest.list();

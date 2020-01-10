@@ -374,24 +374,24 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 	
 	public static class X {
 		private static final long serialVersionUID = 7088698915888083256L;
-		private Conjunction conjunction;
-		private Predicate predicate;
+		private ConjunctionAndOtherScript conjunction;
+		private PredicateAndOtherScript predicate;
 		private String key;
 		private Object value;
 		private List<X> subList;
 		private X parent;
 		private transient String script;
 		public X(){}
-		public Conjunction getConjunction() {
+		public ConjunctionAndOtherScript getConjunction() {
 			return conjunction;
 		}
-		public void setConjunction(Conjunction conjunction) {
+		public void setConjunction(ConjunctionAndOtherScript conjunction) {
 			this.conjunction = conjunction;
 		}
-		public Predicate getPredicate() {
+		public PredicateAndOtherScript getPredicate() {
 			return predicate;
 		}
-		public void setPredicate(Predicate predicate) {
+		public void setPredicate(PredicateAndOtherScript predicate) {
 			this.predicate = predicate;
 		}
 		public String getKey() {

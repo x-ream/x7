@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class LoggerProxy {
 
+    private LoggerProxy(){}
+
     private final static Map<Class, Logger> loggerMap = new HashMap<>();
 
     public static void put(Class clzz, Logger logger) {

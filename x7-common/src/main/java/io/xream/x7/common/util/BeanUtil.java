@@ -28,6 +28,8 @@ import java.util.Set;
 
 public class BeanUtil {
 
+    protected BeanUtil(){}
+
     public static String getSetter(Class<?> type, String property) {
 
         if (type != Boolean.class) {

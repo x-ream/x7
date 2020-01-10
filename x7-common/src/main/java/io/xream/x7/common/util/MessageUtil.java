@@ -24,10 +24,12 @@ import java.util.Map;
 
 /**
  * 
- * @author wyan
+ * @author Sim
  * 
  */
 public class MessageUtil {
+
+	private MessageUtil(){}
 	
 	public static Date readDate(ByteBuffer buffer)  {
 		long time = buffer.getLong();

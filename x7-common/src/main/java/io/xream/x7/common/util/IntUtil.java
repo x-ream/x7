@@ -21,6 +21,8 @@ import java.io.ByteArrayOutputStream;
 
 public class IntUtil
 {
+
+	private IntUtil(){}
 	/**
 	 * 进制数
 	 */

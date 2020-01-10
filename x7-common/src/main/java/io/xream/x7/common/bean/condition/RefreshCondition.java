@@ -19,7 +19,7 @@ package io.xream.x7.common.bean.condition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
-import io.xream.x7.common.bean.Predicate;
+import io.xream.x7.common.bean.PredicateAndOtherScript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class RefreshCondition<T> {
             return this;
 
         Criteria.X x = new Criteria.X();
-        x.setPredicate(Predicate.X);
+        x.setPredicate(PredicateAndOtherScript.X);
         x.setKey(sqlX);
         this.refreshList.add(x);
 
@@ -118,7 +118,7 @@ public class RefreshCondition<T> {
             return this;
 
         Criteria.X x = new Criteria.X();
-        x.setPredicate(Predicate.EQ);
+        x.setPredicate(PredicateAndOtherScript.EQ);
         x.setKey(property);
         x.setValue(value);
         this.refreshList.add(x);

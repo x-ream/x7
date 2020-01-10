@@ -17,10 +17,10 @@
 package io.xream.x7.cache;
 
 
-import io.xream.x7.common.exception.DistributionLockException;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.exception.DistributionLockException;
 import io.xream.x7.exception.L3CacheException;
 import io.xream.x7.lock.DistributionLock;
 

@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
+	private StringUtil(){}
+
 	public static String toUTF8(String strISO88591){
 		try {
 			return new String(strISO88591.getBytes("ISO8859-1"), "UTF-8");

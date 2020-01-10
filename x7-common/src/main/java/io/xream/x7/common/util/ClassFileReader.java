@@ -30,6 +30,8 @@ import java.util.jar.JarFile;
 
 public class ClassFileReader {
 
+	private ClassFileReader(){}
+
 	public static Set<Class<?>> getClasses(String pack) {
 
 		Set<Class<?>> classes = new LinkedHashSet<Class<?>>();

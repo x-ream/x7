@@ -78,7 +78,7 @@ public class SqlUtil {
 
             String mapper = parsed.getMapper(key);
             if (flag) {
-                sb.append(Conjunction.AND.sql()).append(mapper).append(SqlScript.EQ_PLACE_HOLDER);
+                sb.append(ConjunctionAndOtherScript.AND.sql()).append(mapper).append(SqlScript.EQ_PLACE_HOLDER);
             } else {
                 sb.append(SqlScript.WHERE).append(mapper).append(SqlScript.EQ_PLACE_HOLDER);
                 flag = true;
@@ -112,7 +112,7 @@ public class SqlUtil {
         for (Criteria.X x : refreshList) {
 
 
-            if (x.getPredicate() == Predicate.X) {
+            if (x.getPredicate() == PredicateAndOtherScript.X) {
 
                 if (isNotFirst) {
                     sb.append(SqlScript.COMMA).append(SqlScript.SPACE);
@@ -214,38 +214,58 @@ public class SqlUtil {
 
         StringBuilder sb = new StringBuilder();
         sb.append(sql).append(SqlScript.WHERE);
-        sb.append(mapper).append(SqlScript.IN).append(SqlScript.LEFT_PARENTTHESIS);//" IN ("
+        sb.append(mapper).append(SqlScript.IN);//" IN "
 
         Class<?> keyType = be.getMethod.getReturnType();
-        boolean isNumber = (keyType == long.class || keyType == int.class || keyType == Long.class
-                || keyType == Integer.class);
 
-        int size = inList.size();
-        if (isNumber) {
-            for (int i = 0; i < size; i++) {
-                Object id = inList.get(i);
-                if (id == null)
+        buildIn(sb,keyType,inList);
+
+        return sb.toString();
+    }
+
+    protected static void buildIn(StringBuilder sb, Class clz,List<? extends Object> inList ){
+
+        sb.append(SqlScript.LEFT_PARENTTHESIS).append(SqlScript.SPACE);//"( "
+
+        int length = inList.size();
+        if (clz == String.class) {
+
+            for (int j = 0; j < length; j++) {
+                Object value = inList.get(j);
+                if (value == null || StringUtil.isNullOrEmpty(value.toString()))
                     continue;
-                sb.append(id);
-                if (i < size - 1) {
+                value = SqlUtil.filter(value.toString());
+                sb.append(SqlScript.SINGLE_QUOTES).append(value).append(SqlScript.SINGLE_QUOTES);//'string'
+                if (j < length - 1) {
                     sb.append(SqlScript.COMMA);
                 }
             }
-        } else {
-            for (int i = 0; i < size; i++) {
-                Object id = inList.get(i);
-                if (id == null || StringUtil.isNullOrEmpty(id.toString()))
+
+        }else if (BeanUtil.isEnum(clz)) {
+            for (int j = 0; j < length; j++) {
+                Object value = inList.get(j);
+                if (value == null )
                     continue;
-                sb.append(SqlScript.SINGLE_QUOTES).append(id).append(SqlScript.SINGLE_QUOTES);
-                if (i < size - 1) {
+                String ev = ((Enum) value).name();
+                sb.append(SqlScript.SINGLE_QUOTES).append(ev).append(SqlScript.SINGLE_QUOTES);//'string'
+                if (j < length - 1) {
+                    sb.append(SqlScript.COMMA);
+                }
+            }
+        }else {
+            for (int j = 0; j < length; j++) {
+                Object value = inList.get(j);
+                if (value == null)
+                    continue;
+                sb.append(value);
+                if (j < length - 1) {
                     sb.append(SqlScript.COMMA);
                 }
             }
         }
 
-        sb.append(SqlScript.RIGHT_PARENTTHESIS);
+        sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);
 
-        return sb.toString();
     }
 
     protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser, Dialect dialect) {
@@ -268,7 +288,10 @@ public class SqlUtil {
     }
 
     protected static String filter(String sql) {
-        sql = sql.replace("drop", SqlScript.SPACE).replace(";", SqlScript.SPACE); // 手动拼接SQL,
+        sql = sql.replace("drop", SqlScript.SPACE)
+                .replace(";", SqlScript.SPACE)
+                .replace("<","&le")
+                .replace(">","$gt"); // 手动拼接SQL,
         return sql;
     }
 }

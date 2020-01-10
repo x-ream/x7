@@ -51,8 +51,8 @@ public class CriteriaBuilder {
     public ConditionBuilder and() {
 
         X x = new X();
-        x.setConjunction(Conjunction.AND);
-        x.setValue(Conjunction.AND);
+        x.setConjunction(ConjunctionAndOtherScript.AND);
+        x.setValue(ConjunctionAndOtherScript.AND);
 
         X current = conditionBuilder.getX();
         if (current != null) {
@@ -78,8 +78,8 @@ public class CriteriaBuilder {
     public ConditionBuilder or() {
 
         X x = new X();
-        x.setConjunction(Conjunction.OR);
-        x.setValue(Conjunction.OR);
+        x.setConjunction(ConjunctionAndOtherScript.OR);
+        x.setValue(ConjunctionAndOtherScript.OR);
 
         X current = conditionBuilder.getX();
         if (current != null) {
@@ -105,8 +105,8 @@ public class CriteriaBuilder {
     public CriteriaBuilder endSub() {
 
         X x = new X();
-        x.setPredicate(Predicate.SUB_END);
-        x.setValue(Predicate.SUB_END);
+        x.setPredicate(PredicateAndOtherScript.SUB_END);
+        x.setValue(PredicateAndOtherScript.SUB_END);
 
         X current = conditionBuilder.getX();
         X parent = current.getParent();
@@ -207,7 +207,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.EQ);
+            x.setPredicate(PredicateAndOtherScript.EQ);
             x.setKey(property);
             x.setValue(value);
 
@@ -226,7 +226,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.LT);
+            x.setPredicate(PredicateAndOtherScript.LT);
             x.setKey(property);
             x.setValue(value);
 
@@ -245,7 +245,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.LTE);
+            x.setPredicate(PredicateAndOtherScript.LTE);
             x.setKey(property);
             x.setValue(value);
 
@@ -264,7 +264,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.GT);
+            x.setPredicate(PredicateAndOtherScript.GT);
             x.setKey(property);
             x.setValue(value);
 
@@ -283,7 +283,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.GTE);
+            x.setPredicate(PredicateAndOtherScript.GTE);
             x.setKey(property);
             x.setValue(value);
 
@@ -302,7 +302,7 @@ public class CriteriaBuilder {
             if (isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.NE);
+            x.setPredicate(PredicateAndOtherScript.NE);
             x.setKey(property);
             x.setValue(value);
 
@@ -315,7 +315,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.LIKE);
+            x.setPredicate(PredicateAndOtherScript.LIKE);
             x.setKey(property);
             x.setValue(SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER);
 
@@ -328,7 +328,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.LIKE);
+            x.setPredicate(PredicateAndOtherScript.LIKE);
             x.setKey(property);
             x.setValue(value + SqlScript.LIKE_HOLDER);
 
@@ -341,7 +341,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(Predicate.NOT_LIKE);
+            x.setPredicate(PredicateAndOtherScript.NOT_LIKE);
             x.setKey(property);
             x.setValue(SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER);
 
@@ -366,7 +366,7 @@ public class CriteriaBuilder {
             minMax.setMin(min);
             minMax.setMax(max);
 
-            x.setPredicate(Predicate.BETWEEN);
+            x.setPredicate(PredicateAndOtherScript.BETWEEN);
             x.setKey(property);
             x.setValue(minMax);
 
@@ -399,7 +399,7 @@ public class CriteriaBuilder {
                 return eq(property, tempList.get(0));
             }
 
-            x.setPredicate(Predicate.IN);
+            x.setPredicate(PredicateAndOtherScript.IN);
             x.setKey(property);
             x.setValue(tempList);
 
@@ -432,7 +432,7 @@ public class CriteriaBuilder {
                 return ne(property, tempList.get(0));
             }
 
-            x.setPredicate(Predicate.NOT_IN);
+            x.setPredicate(PredicateAndOtherScript.NOT_IN);
             x.setKey(property);
             x.setValue(tempList);
 
@@ -445,7 +445,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(property))
                 return instance;
 
-            x.setPredicate(Predicate.IS_NOT_NULL);
+            x.setPredicate(PredicateAndOtherScript.IS_NOT_NULL);
             x.setValue(property);
 
             return instance;
@@ -457,7 +457,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(property))
                 return instance;
 
-            x.setPredicate(Predicate.IS_NULL);
+            x.setPredicate(PredicateAndOtherScript.IS_NULL);
             x.setValue(property);
 
             return instance;
@@ -471,7 +471,7 @@ public class CriteriaBuilder {
 
             sql = BeanUtilX.normalizeSql(sql);
 
-            x.setPredicate(Predicate.X);
+            x.setPredicate(PredicateAndOtherScript.X);
             x.setKey(sql);
             x.setValue(null);
 
@@ -486,7 +486,7 @@ public class CriteriaBuilder {
 
             sql = BeanUtilX.normalizeSql(sql);
 
-            x.setPredicate(Predicate.X);
+            x.setPredicate(PredicateAndOtherScript.X);
             x.setKey(sql);
             x.setValue(valueList);
 
@@ -496,15 +496,15 @@ public class CriteriaBuilder {
         @Override
         public ConditionBuilder beginSub() {
 
-            x.setKey(Predicate.SUB.sql());// special treat FIXME
-            x.setValue(Predicate.SUB);
+            x.setKey(PredicateAndOtherScript.SUB.sql());// special treat FIXME
+            x.setValue(PredicateAndOtherScript.SUB);
 
             List<X> subList = new ArrayList<>();
             x.setSubList(subList);
 
             X from = new X();
-            from.setPredicate(Predicate.SUB_BEGIN);
-            from.setValue(Predicate.SUB_BEGIN);
+            from.setPredicate(PredicateAndOtherScript.SUB_BEGIN);
+            from.setValue(PredicateAndOtherScript.SUB_BEGIN);
 
             subList.add(from);
 

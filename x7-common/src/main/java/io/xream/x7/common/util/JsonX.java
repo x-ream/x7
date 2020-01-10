@@ -29,6 +29,8 @@ import java.util.*;
  */
 public class JsonX {
 
+	private JsonX(){}
+
 	public static String toJson(List list){
 		if (list == null)
 			return null;

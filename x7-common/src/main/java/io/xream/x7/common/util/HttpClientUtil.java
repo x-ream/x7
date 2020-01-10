@@ -43,6 +43,8 @@ import java.util.Map;
 
 public class HttpClientUtil {
 
+    private HttpClientUtil(){}
+
     private final static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     public static String post(String url, Object param) {

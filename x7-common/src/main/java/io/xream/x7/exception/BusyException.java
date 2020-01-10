@@ -1,4 +1,4 @@
-package io.xream.x7.common.exception;
+package io.xream.x7.exception;
 
 public class BusyException extends RuntimeException {
 

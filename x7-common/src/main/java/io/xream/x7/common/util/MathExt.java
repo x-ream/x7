@@ -20,6 +20,8 @@ import java.util.Random;
 
 public class MathExt {
 
+	private MathExt(){}
+
 	private final static Random random = new Random();
 
 	/**

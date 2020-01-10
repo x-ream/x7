@@ -14,23 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.exception;
+package io.xream.x7.common.bean;
 
-public class ShardingException extends RuntimeException{
+public enum PredicateAndOtherScript implements SqlScript{
 
-	private static final long serialVersionUID = -2001043435246535808L;
-	private String message;
-	
-	public ShardingException(){
+	EQ(" = "),
+	LT(" < "),
+	GT(" > "),
+	LTE(" <= "),
+	GTE(" >= "),
+	NE(" <> "),
+	LIKE(" LIKE "),
+	NOT_LIKE(" NOT LIKE "),
+	IN(" IN "),
+	NOT_IN(" NOT IN "),
+	IS_NOT_NULL(" IS NOT NULL "),
+	IS_NULL(" IS NULL "),
+	BETWEEN(" BETWEEN "),
+	SUB_BEGIN("( "),
+	SUB_END(" )"),
+	SUB(" SUB "),
+	X("X");
 
+	private String sqlOper;
+	private PredicateAndOtherScript(String sqlOper){
+		this.sqlOper = sqlOper;
 	}
-	
-	public ShardingException(String message){
-		this.message = message;
+	@Override
+	public String sql(){
+		return this.sqlOper;
 	}
-
-	public String getMessage() {
-		return message;
-	}
-	
 }

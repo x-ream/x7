@@ -32,6 +32,9 @@ public class BeanUtilX extends BeanUtil {
 
 	public final static String SQL_KEYWORD_MARK = "`";
 
+	private BeanUtilX(){
+		super();
+	}
 	@SuppressWarnings("rawtypes")
 	public static List<BeanElement> getElementList(Class clz) {
 

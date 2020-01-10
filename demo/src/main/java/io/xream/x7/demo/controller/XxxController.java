@@ -441,10 +441,8 @@ public class XxxController {
 		CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-		List<Object> inList = new ArrayList<>();
-		inList.add("BL");
-		inList.add("NL");
-		builder.and().in("type",inList);
+		List<Object> inList = Arrays.asList("NL","BL");
+		builder.and().in("type",inList).and().in("id",Arrays.asList(1,2));
 		builder.paged().orderIn("type",inList);
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();

@@ -14,21 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.exception;
+package io.xream.x7.exception;
 
-public class L3CacheException extends RuntimeException{
+public class ReyConnectException extends RuntimeException {
 
-    private String message;
-
-    public L3CacheException(){
-
+    public ReyConnectException(String message){
+        super(message);
     }
 
-    public L3CacheException(String message){
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
+    @Override
+    public String getMessage(){
+        return super.getMessage();
     }
 }

@@ -266,7 +266,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             if (StringUtil.isNullOrEmpty(groupByS))
                 return;
 
-            sb.append(Conjunction.GROUP_BY.sql());
+            sb.append(ConjunctionAndOtherScript.GROUP_BY.sql());
 
             String[] arr = groupByS.split(SqlScript.COMMA);
 
@@ -326,7 +326,7 @@ public class SqlCriteriaParser implements CriteriaParser {
         List<Sort> sortList = criteria.getSortList();
         if (sortList != null && !sortList.isEmpty()) {
 
-            sb.append(Conjunction.ORDER_BY.sql());
+            sb.append(ConjunctionAndOtherScript.ORDER_BY.sql());
             int size = sortList.size();
             int i = 0;
             for (Sort sort : sortList) {
@@ -351,7 +351,7 @@ public class SqlCriteriaParser implements CriteriaParser {
     private void x(StringBuilder sb, List<Criteria.X> xList, CriteriaCondition criteria, boolean isWhere) {
         for (Criteria.X x : xList) {
 
-            if (x.getPredicate() == Predicate.X) {
+            if (x.getPredicate() == PredicateAndOtherScript.X) {
                 appendConjunction(sb, x, criteria, isWhere);
                 sb.append(x.getKey());
                 Object valueObject = x.getValue();
@@ -381,27 +381,27 @@ public class SqlCriteriaParser implements CriteriaParser {
 
                     String script = xSb.toString();
                     if (StringUtil.isNotNull(script)) {
-                        final String and = Conjunction.AND.sql();
-                        final String or = Conjunction.OR.sql();
+                        final String and = ConjunctionAndOtherScript.AND.sql();
+                        final String or = ConjunctionAndOtherScript.OR.sql();
                         if (script.startsWith(and)) {
                             script = script.replaceFirst(and, SqlScript.NONE);
                         } else if (script.startsWith(or)) {
                             script = script.replaceFirst(or, SqlScript.NONE);
                         }
-                        x.setScript(Predicate.SUB_BEGIN.sql() + script + Predicate.SUB_END.sql());
+                        x.setScript(PredicateAndOtherScript.SUB_BEGIN.sql() + script + PredicateAndOtherScript.SUB_END.sql());
                     }
                 }
 
             }
 
-            if (Predicate.SUB_BEGIN == x.getPredicate()) {
+            if (PredicateAndOtherScript.SUB_BEGIN == x.getPredicate()) {
                 continue;
-            } else if (Predicate.SUB_END == x.getPredicate()) {
+            } else if (PredicateAndOtherScript.SUB_END == x.getPredicate()) {
                 continue;
             }
 
             if (StringUtil.isNotNull(x.getKey())) {
-                if (x.getKey().equals(Predicate.SUB.sql())) {
+                if (x.getKey().equals(PredicateAndOtherScript.SUB.sql())) {
                     if (Objects.nonNull(x.getScript())) {
 
                         appendConjunction(sb, x, criteria, isWhere);
@@ -438,7 +438,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             Criteria criteria = (Criteria) criteriaBuilder;
             if (isWhere && criteria.isWhere()) {
                 criteria.setWhere(false);
-                sb.append(Conjunction.WHERE.sql());
+                sb.append(ConjunctionAndOtherScript.WHERE.sql());
             } else {
                 sb.append(x.getConjunction().sql());
             }
@@ -450,17 +450,17 @@ public class SqlCriteriaParser implements CriteriaParser {
     private void x(Criteria.X x, CriteriaCondition criteria, boolean isWhere) {
 
         StringBuilder sb = new StringBuilder();
-        Predicate p = x.getPredicate();
+        PredicateAndOtherScript p = x.getPredicate();
         Object v = x.getValue();
 
-        if (p == Predicate.IN || p == Predicate.NOT_IN) {
+        if (p == PredicateAndOtherScript.IN || p == PredicateAndOtherScript.NOT_IN) {
 
             appendConjunction(sb, x, criteria, isWhere);
 
             sb.append(x.getKey()).append(p.sql());
             List<Object> inList = (List<Object>) v;
             in(sb, inList);
-        } else if (p == Predicate.BETWEEN) {
+        } else if (p == PredicateAndOtherScript.BETWEEN) {
 
             appendConjunction(sb, x, criteria, isWhere);
 
@@ -472,7 +472,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             valueList.add(minMax.getMin());
             valueList.add(minMax.getMax());
 
-        } else if (p == Predicate.IS_NOT_NULL || p == Predicate.IS_NULL) {
+        } else if (p == PredicateAndOtherScript.IS_NOT_NULL || p == PredicateAndOtherScript.IS_NULL) {
 
             appendConjunction(sb, x, criteria, isWhere);
 
@@ -515,7 +515,7 @@ public class SqlCriteriaParser implements CriteriaParser {
 
     private void between(StringBuilder sb) {
 
-        sb.append(SqlScript.PLACE_HOLDER).append(Conjunction.AND.sql()).append(SqlScript.PLACE_HOLDER);
+        sb.append(SqlScript.PLACE_HOLDER).append(ConjunctionAndOtherScript.AND.sql()).append(SqlScript.PLACE_HOLDER);
 
     }
 
@@ -528,34 +528,7 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         Class<?> vType = v.getClass();
 
-        boolean isNumber = (vType == long.class || vType == int.class || vType == Long.class || vType == Integer.class);
-
-        sb.append(SqlScript.LEFT_PARENTTHESIS).append(SqlScript.SPACE);//"( "
-
-        int length = inList.size();
-        if (isNumber) {
-            for (int j = 0; j < length; j++) {
-                Object value = inList.get(j);
-                if (value == null)
-                    continue;
-                sb.append(value);
-                if (j < length - 1) {
-                    sb.append(SqlScript.COMMA);
-                }
-            }
-        } else {
-            for (int j = 0; j < length; j++) {
-                Object value = inList.get(j);
-                if (value == null || StringUtil.isNullOrEmpty(value.toString()))
-                    continue;
-                sb.append(SqlScript.SINGLE_QUOTES).append(value).append(SqlScript.SINGLE_QUOTES);//'string'
-                if (j < length - 1) {
-                    sb.append(SqlScript.COMMA);
-                }
-            }
-        }
-
-        sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);//"  )"
+        SqlUtil.buildIn(sb,vType,inList);
 
     }
 

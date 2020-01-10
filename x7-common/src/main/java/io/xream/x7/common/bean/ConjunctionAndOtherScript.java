@@ -14,23 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.exception;
+package io.xream.x7.common.bean;
 
-public class SqlTypeException extends RuntimeException{
+public enum ConjunctionAndOtherScript implements SqlScript{
 
-	private static final long serialVersionUID = 5749142995897236081L;
-	private String message;
-
-	public SqlTypeException(){
-
+	AND(" AND "),
+	OR(" OR "),
+	ORDER_BY(" ORDER BY "),
+	GROUP_BY(" GROUP BY "),
+	HAVING(" HAVING "),
+	WHERE(" WHERE "),
+	;
+	
+	private String sqlOper;
+	private ConjunctionAndOtherScript(String sqlOper){
+		this.sqlOper = sqlOper;
 	}
-
-	public SqlTypeException(String message){
-		this.message = message;
+	@Override
+	public String sql() {
+		return this.sqlOper;
 	}
-
-	public String getMessage() {
-		return message;
-	}
-
+	
 }

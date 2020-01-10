@@ -24,6 +24,8 @@ import org.springframework.util.Assert;
 
 public class KeyUtil {
 
+    private KeyUtil(){}
+
     public static String makeKey(String prefix, String suffix, String condition, Object[] args) {
 
         Assert.notNull(condition, "condition can not null");

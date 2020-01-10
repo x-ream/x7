@@ -1,17 +1,17 @@
-package io.xream.x7.common.exception;
+package io.xream.x7.exception;
 
 /**
  * Created by Sim on 2018/6/22.
  */
-public class BizException extends RuntimeException {
+public class RemoteServiceException extends RuntimeException {
 
     private String message;
 
-    public BizException(){
+    public RemoteServiceException(){
 
     }
 
-    public BizException(String message){
+    public RemoteServiceException(String message){
         this.message = message;
     }
 
