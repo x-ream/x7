@@ -37,14 +37,6 @@ public class MapperFactory implements Mapper {
 
 	public static Dialect Dialect;
 
-	public static Map<String, String> getSqlMap(Class clzz) {
-		return sqlsMap.get(clzz);
-	}
-
-	public static void putSqlMap(Class clzz, Map<String, String> map) {
-		sqlsMap.put(clzz, map);
-	}
-
 	/**
 	 * 返回SQL
 	 * 
@@ -308,8 +300,6 @@ public class MapperFactory implements Mapper {
 		}
 
 		public String getTableSql(Class clz) {
-
-			String dbType = DbType.value;
 
 			List<BeanElement> temp = Parser.get(clz).getBeanElementList();
 			Map<String, BeanElement> map = new HashMap<String, BeanElement>();
