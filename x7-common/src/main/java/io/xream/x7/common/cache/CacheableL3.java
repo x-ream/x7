@@ -19,14 +19,7 @@ package io.xream.x7.common.cache;
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- *  if read data only from cache, and if no data in cache then return <br>
- *  use @CacheableL3 instead of @Cacheable <br>
- *  <br>
- *  for the interrupt of return, the client has to retry about 10 times, 300ms/time suggested <br>
- *  <br>
- *
- */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented

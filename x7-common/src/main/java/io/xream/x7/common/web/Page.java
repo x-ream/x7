@@ -50,9 +50,7 @@ public class Page<T> implements Paged, Serializable{
 
 	public Page(){
 	}
-	
 
-	
 	public Page(Paged paged){
 		setScroll(paged.isScroll());
 		if (paged.getPage() > 0)

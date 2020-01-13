@@ -58,7 +58,7 @@ public class X7Env implements ApplicationContextAware {
         try {
             object = applicationContext.getBean(beanName);
         } catch (Exception e) {
-            System.out.println("_________" + ExceptionUtil.getMessage(e));
+            logger.error("_________" + ExceptionUtil.getMessage(e));
         }
         return object;
     }

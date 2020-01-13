@@ -77,9 +77,7 @@ public interface BaseRepository<T> extends Typed<T> {
      * 3. get user  by name <br>
      * <br>
      * Notes:  <br>
-     * do not use getOne(obj) instead of get(keyOne), get(keyOne) is under findOne(ID) of JPA  <br>
-     * anyway, getOne(obj) is like getOne(ID) of JPA <br>
-     * is is not under findOne(ID)  <br>
+     * do not use getOne(obj) instead of get(keyOne), get(keyOne) <br>
      */
     T getOne(T conditionObj);
 
@@ -99,7 +97,6 @@ public interface BaseRepository<T> extends Typed<T> {
     Page<T> find(Criteria criteria);
 
     /**
-     * Standard query pageable API, FETCH supported
      *
      * @param criteria
      */

@@ -195,116 +195,59 @@ public class CriteriaBuilder {
             this.x = x;
         }
 
-        @Override
-        public CriteriaBuilder eq(String property, Object value) {
 
+        private CriteriaBuilder doGle(PredicateAndOtherScript p, String property, Object value, Parsed parsed) {
             if (value == null)
                 return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
+            if (Objects.nonNull(parsed)) {
+                if (BeanUtilX.isBaseType_0(property, value,parsed))
                     return instance;
             }
-            if (isNullOrEmpty(value))
+            if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(PredicateAndOtherScript.EQ);
+            x.setPredicate(p);
             x.setKey(property);
             x.setValue(value);
 
             return instance;
+        }
+
+        @Override
+        public CriteriaBuilder eq(String property, Object value) {
+            return doGle(PredicateAndOtherScript.EQ,property,value,criteria.getParsed());
         }
 
         @Override
         public CriteriaBuilder lt(String property, Object value) {
-
-            if (value == null)
-                return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                    return instance;
-            }
-            if (isNullOrEmpty(value))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.LT);
-            x.setKey(property);
-            x.setValue(value);
-
-            return instance;
+            return doGle(PredicateAndOtherScript.LT,property,value,criteria.getParsed());
         }
 
         @Override
         public CriteriaBuilder lte(String property, Object value) {
-
-            if (value == null)
-                return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                    return instance;
-            }
-            if (isNullOrEmpty(value))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.LTE);
-            x.setKey(property);
-            x.setValue(value);
-
-            return instance;
+            return doGle(PredicateAndOtherScript.LTE,property,value,criteria.getParsed());
         }
 
         @Override
         public CriteriaBuilder gt(String property, Object value) {
-
-            if (value == null)
-                return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                    return instance;
-            }
-            if (isNullOrEmpty(value))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.GT);
-            x.setKey(property);
-            x.setValue(value);
-
-            return instance;
+            return doGle(PredicateAndOtherScript.GT,property,value,criteria.getParsed());
         }
 
         @Override
         public CriteriaBuilder gte(String property, Object value) {
-
-            if (value == null)
-                return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                    return instance;
-            }
-            if (isNullOrEmpty(value))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.GTE);
-            x.setKey(property);
-            x.setValue(value);
-
-            return instance;
+            return doGle(PredicateAndOtherScript.GTE,property,value,criteria.getParsed());
         }
 
         @Override
         public CriteriaBuilder ne(String property, Object value) {
+            return doGle(PredicateAndOtherScript.NE,property,value,criteria.getParsed());
+        }
 
-            if (value == null)
-                return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, value,criteria.getParsed()))
-                    return instance;
-            }
-            if (isNullOrEmpty(value))
-                return instance;
+        private CriteriaBuilder doLike(PredicateAndOtherScript p,String property, String likeWalue){
 
-            x.setPredicate(PredicateAndOtherScript.NE);
+            x.setPredicate(p);
             x.setKey(property);
-            x.setValue(value);
+            x.setValue(likeWalue);
 
             return instance;
         }
@@ -315,11 +258,8 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(PredicateAndOtherScript.LIKE);
-            x.setKey(property);
-            x.setValue(SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER);
-
-            return instance;
+            String likeValue = SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER;
+            return doLike(PredicateAndOtherScript.LIKE,property,likeValue);
         }
 
         @Override
@@ -328,11 +268,8 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(PredicateAndOtherScript.LIKE);
-            x.setKey(property);
-            x.setValue(value + SqlScript.LIKE_HOLDER);
-
-            return instance;
+            String likeValue = value + SqlScript.LIKE_HOLDER;
+            return doLike(PredicateAndOtherScript.LIKE,property,likeValue);
         }
 
         @Override
@@ -341,11 +278,8 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(value))
                 return instance;
 
-            x.setPredicate(PredicateAndOtherScript.NOT_LIKE);
-            x.setKey(property);
-            x.setValue(SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER);
-
-            return instance;
+            String likeValue = SqlScript.LIKE_HOLDER + value + SqlScript.LIKE_HOLDER;
+            return doLike(PredicateAndOtherScript.NOT_LIKE,property,likeValue);
         }
 
         @Override
@@ -357,9 +291,9 @@ public class CriteriaBuilder {
                 if (BeanUtilX.isBaseType_0(property, max,criteria.getParsed()))
                     return instance;
             }
-            if (isNullOrEmpty(max))
+            if (StringUtil.isNullOrEmpty(max))
                 return instance;
-            if (isNullOrEmpty(min))
+            if (StringUtil.isNullOrEmpty(min))
                 return instance;
 
             MinMax minMax = new MinMax();
@@ -373,8 +307,7 @@ public class CriteriaBuilder {
             return instance;
         }
 
-        @Override
-        public CriteriaBuilder in(String property, List<? extends Object> list) {
+        private CriteriaBuilder doIn(PredicateAndOtherScript p, String property,List<? extends Object> list, Parsed parsed ){
 
             if (list == null || list.isEmpty())
                 return instance;
@@ -383,8 +316,8 @@ public class CriteriaBuilder {
             for (Object obj : list) {
                 if (Objects.isNull(obj))
                     continue;
-                if (Objects.nonNull(criteria.getParsed())) {
-                    if (BeanUtilX.isBaseType_0(property, obj,criteria.getParsed()))
+                if (Objects.nonNull(parsed)) {
+                    if (BeanUtilX.isBaseType_0(property, obj,parsed))
                         continue;
                 }
                 if (!tempList.contains(obj)) {
@@ -399,7 +332,7 @@ public class CriteriaBuilder {
                 return eq(property, tempList.get(0));
             }
 
-            x.setPredicate(PredicateAndOtherScript.IN);
+            x.setPredicate(p);
             x.setKey(property);
             x.setValue(tempList);
 
@@ -407,75 +340,38 @@ public class CriteriaBuilder {
         }
 
         @Override
+        public CriteriaBuilder in(String property, List<? extends Object> list) {
+            return doIn(PredicateAndOtherScript.IN, property, list,criteria.getParsed());
+        }
+
+        @Override
         public CriteriaBuilder nin(String property, List<Object> list) {
+            return doIn(PredicateAndOtherScript.NOT_IN, property, list,criteria.getParsed());
+        }
 
-            if (list == null || list.isEmpty())
+        private CriteriaBuilder doNull(PredicateAndOtherScript p, String property){
+            if (StringUtil.isNullOrEmpty(property))
                 return instance;
 
-            List<Object> tempList = new ArrayList<Object>();
-            for (Object obj : list) {
-                if (Objects.isNull(obj))
-                    continue;
-                if (Objects.nonNull(criteria.getParsed())) {
-                    if (BeanUtilX.isBaseType_0(property, obj,criteria.getParsed()))
-                        continue;
-                }
-                if (!tempList.contains(obj)) {
-                    tempList.add(obj);
-                }
-            }
-
-            if (tempList.isEmpty())
-                return instance;
-
-            if (tempList.size() == 1) {
-                return ne(property, tempList.get(0));
-            }
-
-            x.setPredicate(PredicateAndOtherScript.NOT_IN);
-            x.setKey(property);
-            x.setValue(tempList);
+            x.setPredicate(p);
+            x.setValue(property);
 
             return instance;
         }
 
         @Override
         public CriteriaBuilder nonNull(String property) {
-
-            if (StringUtil.isNullOrEmpty(property))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.IS_NOT_NULL);
-            x.setValue(property);
-
-            return instance;
+            return doNull(PredicateAndOtherScript.IS_NOT_NULL, property);
         }
 
         @Override
         public CriteriaBuilder isNull(String property) {
-
-            if (StringUtil.isNullOrEmpty(property))
-                return instance;
-
-            x.setPredicate(PredicateAndOtherScript.IS_NULL);
-            x.setValue(property);
-
-            return instance;
+            return doNull(PredicateAndOtherScript.IS_NULL, property);
         }
 
         @Override
         public CriteriaBuilder x(String sql) {
-
-            if (StringUtil.isNullOrEmpty(sql))
-                return instance;
-
-            sql = BeanUtilX.normalizeSql(sql);
-
-            x.setPredicate(PredicateAndOtherScript.X);
-            x.setKey(sql);
-            x.setValue(null);
-
-            return instance;
+            return x(sql,null);
         }
 
         @Override
@@ -569,13 +465,10 @@ public class CriteriaBuilder {
         ResultMappedBuilder builder = b.new ResultMappedBuilder(clz);
 
         if (ro != null) {
-
             builder.xAddResultKey(ro);
-
             if (ro instanceof Paged) {
                 builder.paged((Paged) ro);
             }
-
         }
 
         return builder;
@@ -617,18 +510,7 @@ public class CriteriaBuilder {
     public Class<?> getClz() {
         return this.criteria.getClz();
     }
-
-
-    protected static boolean isNullOrEmpty(Object v) {
-
-        Class<?> vType = v.getClass();
-
-        if (vType == String.class) {
-            return StringUtil.isNullOrEmpty(v.toString());
-        }
-
-        return false;
-    }
+    
 
 
     public interface ConditionBuilder {
@@ -806,7 +688,6 @@ public class CriteriaBuilder {
 
         private void init() {
             super.instance = this;
-//            Criteria c = new Criteria();
             Criteria.DomainObjectCriteria domainObjectCriteria = new Criteria.DomainObjectCriteria();
             super.criteria = domainObjectCriteria;
         }

@@ -43,6 +43,17 @@ public class StringUtil {
 	public static boolean isNullOrEmpty(String str){
 		return str == null || str.equals("") || str.equals("null") || str.equals("NaN") || str.equals("undefined");
 	}
+
+	public static boolean isNullOrEmpty(Object obj) {
+
+		if (obj == null)
+			return true;
+		Class<?> clz = obj.getClass();
+		if (clz == String.class) {
+			return isNullOrEmpty(obj.toString());
+		}
+		return false;
+	}
 	
 	public static boolean isMobile(String mobile){
 		String pMobile = "^(1(([34578][0-9])))\\d{8}$";

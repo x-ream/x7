@@ -48,6 +48,6 @@ public class TokenedRo implements Tokened{
 	}
 	@Override
 	public String toString() {
-		return "BaseRo [passportId=" + passportId + ", token=" + token + ", passportType=" + passportType + "]";
+		return "TokenedRo [passportId=" + passportId + ", token=" + token + ", passportType=" + passportType + "]";
 	}
 }
