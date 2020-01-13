@@ -45,7 +45,7 @@ public class CacheableRepository implements Repository {
     private DataTransform dataTransform;
     public void setDataTransform(DataTransform dataTransform) {
 
-        logger.info("X7 Repository on starting....");
+        logger.info("x7-repo/x7-jdbc-template-plus on starting....");
 
         this.dataTransform = dataTransform;
     }
