@@ -72,7 +72,7 @@ public class HealthChecker {
                 String createSql = MapperFactory.tryToCreate(clz);
                 String test = MapperFactory.getSql(clz, Mapper.CREATE);
                 if (StringUtil.isNullOrEmpty(test)) {
-                    logger.info("FAILED TO START jdbc-template-plus, check Bean: " + clz);
+                    logger.info("FAILED TO START x7-jdbc-template-plus, check Bean: " + clz);
                     System.exit(1);
                 }
 
@@ -102,7 +102,7 @@ public class HealthChecker {
             }
         }
 
-        logger.info("X7 Repository " + (flag ? "still " : "") + "started" + (flag ? " OK, wtih some problem" : ""));
+        logger.info("x7-jdbc-template-plus " + (flag ? "still " : "") + "started" + (flag ? " OK, wtih some problem" : ""));
 
     }
 }
