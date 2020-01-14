@@ -86,8 +86,6 @@ public class CacheableRepository implements Repository {
         for (String key : keyList) {
             if (!keySet.contains(key)) {
 
-                T obj = null;
-
                 Field f = parsed.getKeyField(X.KEY_ONE);
 
                 T condition = null;
@@ -98,7 +96,7 @@ public class CacheableRepository implements Repository {
                     e.printStackTrace();
                 }
 
-                obj = dataTransform.get(new KeyOne<T>() {
+                T obj = dataTransform.get(new KeyOne<T>() {
                     @Override
                     public Object get() {
                         return key;
@@ -109,8 +107,6 @@ public class CacheableRepository implements Repository {
                         return clz;
                     }
                 });
-
-
                 /*
                  * 更新或重置缓存
                  */
@@ -160,8 +156,6 @@ public class CacheableRepository implements Repository {
     @Override
     public <T> boolean refresh(RefreshCondition<T> refreshCondition) {
 
-        boolean flag = false;
-
         CriteriaCondition condition = refreshCondition.getCondition();
         Class clz = refreshCondition.getClz();
         if (condition instanceof Criteria) {
@@ -170,7 +164,7 @@ public class CacheableRepository implements Repository {
         }
         Parsed parsed = Parser.get(clz);
 
-        flag = dataTransform.refresh(refreshCondition);
+        boolean flag = dataTransform.refresh(refreshCondition);
 
         if (!isNoCache() && !parsed.isNoCache()) {
 
