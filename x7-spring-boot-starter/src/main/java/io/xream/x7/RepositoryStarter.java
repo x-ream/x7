@@ -25,7 +25,6 @@ import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.dao.Dao;
 import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.SqlCriteriaParser;
-import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.internal.DomainObjectRepositoy;
@@ -39,7 +38,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import java.util.Objects;
 
@@ -47,7 +45,6 @@ import java.util.Objects;
 public class RepositoryStarter  {
 
     private Logger logger = LoggerFactory.getLogger(RepositoryStarter.class);
-
 
     @Bean
     @Order(2)
@@ -146,7 +143,7 @@ public class RepositoryStarter  {
 
 
     @Bean
-    @Order(9)
+    @Order(8)
     public DomainObjectRepositoy domainObjectRepositoy(Repository repository) {
         DomainObjectRepositoy domainObjectRepositoy = new DomainObjectRepositoy();
         domainObjectRepositoy.setRepository(repository);
@@ -155,17 +152,9 @@ public class RepositoryStarter  {
 
     @ConditionalOnMissingBean(X7Data.class)
     @Bean
-    @Order(10)
+    @Order(9)
     public X7Data enableData(){
-
         return new X7Data();
-    }
-
-    @ConditionalOnMissingBean(TxConfig.class)
-    @Bean
-    @Order(11)
-    public TxConfig txConfig(DataSourceTransactionManager dstm){
-        return new TxConfig(dstm);
     }
 
 

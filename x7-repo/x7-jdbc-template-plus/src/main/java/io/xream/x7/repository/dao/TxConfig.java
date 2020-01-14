@@ -16,11 +16,11 @@
  */
 package io.xream.x7.repository.dao;
 
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 public class TxConfig {
 
-    public TxConfig(DataSourceTransactionManager dstm) {
-        Tx.init(dstm);
+    public TxConfig(PlatformTransactionManager platformTransactionManager) {
+        Tx.init(platformTransactionManager);
     }
 }

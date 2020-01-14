@@ -16,7 +16,6 @@
  */
 package io.xream.x7.repository.dao;
 
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -42,8 +41,8 @@ public class Tx {
 	private static Map<String, TransactionStatus> map = new ConcurrentHashMap<>();
 
 	private static PlatformTransactionManager tm;
-	protected static void init(DataSourceTransactionManager dstm){
-		tm = dstm;
+	protected static void init(PlatformTransactionManager ptm){
+		tm = ptm;
 	}
 
 	public static String getKey(){

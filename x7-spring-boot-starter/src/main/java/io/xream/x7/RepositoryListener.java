@@ -27,6 +27,7 @@ import io.xream.x7.lock.customizer.LockProviderCustomizer;
 import io.xream.x7.repository.CacheableRepository;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
+import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
@@ -34,6 +35,7 @@ import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.transaction.PlatformTransactionManager;
 
 
 public class RepositoryListener implements
@@ -56,6 +58,8 @@ public class RepositoryListener implements
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
         customizeDataTransform(applicationStartedEvent);
+
+        txConfig(applicationStartedEvent);
 
         RepositoryBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
@@ -221,5 +225,14 @@ public class RepositoryListener implements
 
     }
 
+    private void txConfig(ApplicationStartedEvent event){
+        try {
+            PlatformTransactionManager platformTransactionManager = event.getApplicationContext().getBean(PlatformTransactionManager.class);
+            if (platformTransactionManager == null)
+                return;
+            new TxConfig(platformTransactionManager);
+        }catch (Exception e){
 
+        }
+    }
 }
