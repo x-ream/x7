@@ -48,11 +48,12 @@ public class CriteriaBuilder {
         DataPermission.Chain.onBuild(criteria, paged);
     }
 
-    public ConditionBuilder and() {
+
+    private ConditionBuilder andOr(ConjunctionAndOtherScript c) {
 
         X x = new X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setValue(ConjunctionAndOtherScript.AND);
+        x.setConjunction(c);
+        x.setValue(c);
 
         X current = conditionBuilder.getX();
         if (current != null) {
@@ -75,31 +76,12 @@ public class CriteriaBuilder {
         return conditionBuilder;
     }
 
+    public ConditionBuilder and() {
+        return andOr(ConjunctionAndOtherScript.AND);
+    }
+
     public ConditionBuilder or() {
-
-        X x = new X();
-        x.setConjunction(ConjunctionAndOtherScript.OR);
-        x.setValue(ConjunctionAndOtherScript.OR);
-
-        X current = conditionBuilder.getX();
-        if (current != null) {
-            X parent = current.getParent();
-            if (parent != null) {
-                List<X> subList = parent.getSubList();
-                if (subList != null) {
-                    subList.add(x);
-                    x.setParent(parent);
-                }
-            } else {
-                this.criteria.add(x);
-            }
-        } else {
-            this.criteria.add(x);
-        }
-
-        conditionBuilder.under(x);
-
-        return conditionBuilder;
+        return andOr(ConjunctionAndOtherScript.OR);
     }
 
     public CriteriaBuilder endSub() {

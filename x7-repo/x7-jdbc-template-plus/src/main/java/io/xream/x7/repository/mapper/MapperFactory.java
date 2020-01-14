@@ -374,13 +374,8 @@ public class MapperFactory implements Mapper {
 			sb.append(") ").append(Dialect.ENGINE).append(";");
 
 			String sql = sb.toString();
-
 			sql = Dialect.match(sql, CREATE_TABLE);
-
 			sql = SqlParserUtil.mapper(sql, parsed);
-
-			LoggerProxy.debug(clz, sb);
-
 			sqlsMap.get(clz).put(CREATE_TABLE, sql);
 
 			return sql;

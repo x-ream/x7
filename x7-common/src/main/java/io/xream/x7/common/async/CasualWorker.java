@@ -22,13 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 
- * 任何复杂的计算，但计算结果不影响后面的计算的情况下，可以创建临时任务, 交给此类处理<br>
- * 在改变数据时不能用，如果要用，在取那个数据时，也必需用
- * CasualWorker.accept(new ICasualTask(){execute(){}});<br>
- * 适应举例：<br>
- * 1. 在创建场景时，初始化场景的数据<br>
- * 2. 在倒计时的时间段里，<br>
+ *
  * 
  * @author Sim
  *
@@ -37,7 +31,7 @@ public final class CasualWorker {
 	
 	private final static ExecutorService service = Executors.newFixedThreadPool(1);
 	
-	private final static BlockingQueue<IAsyncTask> tasks = new ArrayBlockingQueue<IAsyncTask>(4096);
+	private final static BlockingQueue<Runnable> tasks = new ArrayBlockingQueue<>(4096);
 	
 	static {
 		
@@ -50,7 +44,7 @@ public final class CasualWorker {
 			}
 			while (true) {
 				try {
-					tasks.take().execute();
+					tasks.take().run();
 				} catch (NullPointerException npe){
 					npe.printStackTrace();
 				}catch (InterruptedException e) {
@@ -67,7 +61,7 @@ public final class CasualWorker {
 	 * @param task
 	 * @throws InterruptedException
 	 */
-	public static void accept(IAsyncTask task) {
+	public static void accept(Runnable task) {
 		try {
 			tasks.put(task);
 		} catch (InterruptedException e) {
