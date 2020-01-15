@@ -39,6 +39,10 @@
                  }
                  public String replaceValue(Object obj) {
                       // See the demo: CatServiceGroupRouterForK8S.java
+                      // Anyway, coding to ensure all the data only in the dbs connected by the target services
+                      // each set of services connect diffent db and cache, one set include: storage, db, cache, 
+                      // and your program 
+                      // all in docker, all in k8s, set/k8s namespace
                  }
             }
             @ReyClient(groupRouter = FooRouter.class)
