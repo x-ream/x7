@@ -45,7 +45,7 @@
                       // all in docker, all in k8s, set/k8s namespace
                  }
             }
-            @ReyClient(groupRouter = FooRouter.class)
+            @ReyClient(value = "http://${service.demo}/xxx" groupRouter = FooRouter.class)
             
             config:
             # when write/read db, sharding db can't support more TPS
