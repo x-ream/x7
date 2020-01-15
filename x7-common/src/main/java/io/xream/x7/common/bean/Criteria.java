@@ -30,7 +30,7 @@ import java.util.*;
  * @author sim
  *
  */
-public class Criteria implements CriteriaCondition, Paged, Serializable {
+public class Criteria implements CriteriaCondition, Paged, Routeable,Serializable {
 
 	private static final long serialVersionUID = 7088698915888081349L;
 
@@ -38,6 +38,7 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 	private boolean isScroll;
 	private int page;
 	private int rows;
+	private Object routeKey;
 	private List<Sort> sortList;
 	private List<KV> fixedSortList = new ArrayList<>();
 	private List<X> listX = new ArrayList<>();
@@ -159,6 +160,15 @@ public class Criteria implements CriteriaCondition, Paged, Serializable {
 
 	public void setRows(int rows) {
 		this.rows = rows;
+	}
+
+	@Override
+	public Object getRouteKey() {
+		return routeKey;
+	}
+
+	public void setRouteKey(Object routeKey) {
+		this.routeKey = routeKey;
 	}
 
 	@Override

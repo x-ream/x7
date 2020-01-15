@@ -16,6 +16,8 @@
  */
 package io.xream.x7.reyc;
 
+import io.xream.x7.reyc.api.GroupRouter;
+
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -44,4 +46,8 @@ public @interface ReyClient {
      */
     Class<?> fallback() default void.class;
 
+    /**
+     * route to service grouped, like k8s namespace with suffix of sharding key
+     */
+    Class<? extends GroupRouter> groupRouter() default GroupRouter.class;
 }

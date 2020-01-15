@@ -33,9 +33,12 @@ public class HttpClientInvocationHandler implements InvocationHandler {
     
     @Override
     public Object invoke(Object proxy, Method method, Object[] args)  {
+        final String methodName = method.getName();
+        if (methodName.equals("toString"))
+            return null;
+
         Class clzz = httpClientProxy.getObjectType();
         long startTime = System.currentTimeMillis();
-        final String methodName = method.getName();
         try{
 
             LoggerProxy.debug(clzz,methodName +"(..) start....");

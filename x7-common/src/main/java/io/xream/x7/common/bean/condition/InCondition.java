@@ -17,15 +17,17 @@
 package io.xream.x7.common.bean.condition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.xream.x7.common.bean.Routeable;
 
 import java.util.List;
 
 
-public class InCondition {
+public class InCondition implements Routeable {
 
     private String property;
     private List<? extends Object> inList;
 
+    private Object routeKey;
 
     @JsonIgnore
     private transient Class clz;
@@ -54,6 +56,14 @@ public class InCondition {
         this.clz = clz;
     }
 
+    @Override
+    public Object getRouteKey() {
+        return routeKey;
+    }
+
+    public void setRouteKey(Object routeKey) {
+        this.routeKey = routeKey;
+    }
 
     public InCondition(){
     }

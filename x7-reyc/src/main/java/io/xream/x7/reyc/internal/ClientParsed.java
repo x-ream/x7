@@ -16,6 +16,8 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.reyc.api.GroupRouter;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,7 @@ public class ClientParsed {
     private Map<String,MethodParsed> map = new HashMap<>();
     private Map<String, Method> fallbackMethodMap = new HashMap<>();
     private Object fallback;
+    private GroupRouter groupRouter;
 
     public Class<?> getObjectType() {
         return objectType;
@@ -68,6 +71,14 @@ public class ClientParsed {
         this.fallback = fallback;
     }
 
+    public GroupRouter getGroupRouter() {
+        return groupRouter;
+    }
+
+    public void setGroupRouter(GroupRouter groupRouter) {
+        this.groupRouter = groupRouter;
+    }
+
     @Override
     public String toString() {
         return "ClientParsed{" +
@@ -76,6 +87,7 @@ public class ClientParsed {
                 ", map=" + map +
                 ", fallbackMethodMap=" + fallbackMethodMap +
                 ", fallback=" + fallback +
+                ", groupRouter=" + groupRouter +
                 '}';
     }
 }

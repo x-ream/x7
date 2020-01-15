@@ -7,19 +7,15 @@ import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.reyc.ReyClient;
-import io.xream.x7.reyc.Url;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
 
-@ReyClient(value = "http://${web.demo}/xxx", circuitBreaker = "", retry = true, fallback = TestFallback.class)
+@ReyClient(value = "http://${web.demo}/xxx", circuitBreaker = "", retry = true, fallback = TestFallback.class, groupRouter = CatServiceGroupRouterForK8S.class)
 public interface TestServiceRemote {
 
-
-    @RequestMapping(value = "/reyc/test")
-    Boolean test(CatRO ro, Url url);
 
     @RequestMapping(value = "/reyc/test")
     List<Cat> testFallBack(CatRO ro);

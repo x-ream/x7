@@ -34,6 +34,11 @@ public class RepositoryInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try{
+
+            String methodName = method.getName();
+            if (methodName.equals("toString"))
+                return null;
+
             Class clz = repository.getClz();
 
             LoggerProxy.debug(clz, () -> {

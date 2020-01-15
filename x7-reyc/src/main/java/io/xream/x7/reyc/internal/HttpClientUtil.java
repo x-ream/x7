@@ -32,6 +32,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 
@@ -86,9 +87,10 @@ public class HttpClientUtil {
             cte.printStackTrace();
             String str = "org.apache.http.conn.ConnectTimeoutException: Connect to " + url + " failed: Connection timeout: connect";
             throw new RuntimeException(str);
-        } catch(IOException ioe){
-            ioe.printStackTrace();
-            throw new RuntimeException(ExceptionUtil.getMessage(ioe));
+        } catch (UnknownHostException uhe){
+            throw new RuntimeException(UnknownHostException.class.getName() + ": "+ExceptionUtil.getMessage(uhe));
+        }catch(IOException ioe){
+            throw new RuntimeException(IOException.class.getName() + ": "+ExceptionUtil.getMessage(ioe));
         } catch (Exception e) {
             throw e;
         } finally {

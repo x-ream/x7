@@ -3,6 +3,7 @@ package io.xream.x7.demo;
 import io.xream.x7.common.web.MapResult;
 import io.xream.x7.common.web.TokenedAndPagedRo;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,5 +37,14 @@ public class CatRO extends TokenedAndPagedRo implements MapResult {
 
 	public void setResultKeys(String[] arr){
 		this.resultKeys = arr;
+	}
+
+	@Override
+	public String toString() {
+		return "CatRO{" +
+				"catFriendName='" + catFriendName + '\'' +
+				", resultKeyMap=" + resultKeyMap +
+				", resultKeys=" + Arrays.toString(resultKeys) +
+				'}';
 	}
 }

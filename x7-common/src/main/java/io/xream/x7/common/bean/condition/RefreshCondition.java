@@ -20,18 +20,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.PredicateAndOtherScript;
+import io.xream.x7.common.bean.Routeable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 
-public class RefreshCondition<T> {
+public class RefreshCondition<T> implements Routeable {
 
     private Criteria condition;
     private List<Criteria.X> refreshList = new ArrayList<>();
-    private String sourceStript;//FIXME fetch
+    private String sourceStript;//FIXME
 
+    private Object routeKey;
     @JsonIgnore
     private transient Class clz;
     @JsonIgnore
@@ -60,7 +62,14 @@ public class RefreshCondition<T> {
     public void setSourceStript(String sourceStript) {
         this.sourceStript = sourceStript;
     }
+    @Override
+    public Object getRouteKey() {
+        return routeKey;
+    }
 
+    public void setRouteKey(Object routeKey) {
+        this.routeKey = routeKey;
+    }
     public Criteria getCondition() {
 
         if (this.condition == null) {

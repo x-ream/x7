@@ -16,6 +16,7 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.reyc.api.GroupRouter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import io.xream.x7.common.bean.KV;
 
@@ -29,6 +30,7 @@ public class R {
     private Object[] args;
     private RequestMethod requestMethod;
     private List<KV> headerList;
+    private GroupRouter router;
 
     public String getUrl() {
         return url;
@@ -76,6 +78,14 @@ public class R {
 
     public void setHeaderList(List<KV> headerList) {
         this.headerList = headerList;
+    }
+
+    public GroupRouter getRouter() {
+        return router;
+    }
+
+    public void setRouter(GroupRouter router) {
+        this.router = router;
     }
 
     @Override

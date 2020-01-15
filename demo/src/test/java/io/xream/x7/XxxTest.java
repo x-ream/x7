@@ -140,7 +140,9 @@ public class XxxTest {
 //            }
 //        });
 
-        List<Cat> list = testServiceRemote.testFallBack(new CatRO());
+        CatRO catRO = new CatRO();
+        catRO.setCatFriendName("DOG");
+        List<Cat> list = testServiceRemote.testFallBack(catRO);
 
 //        testServiceRemote.test(new CatRO(),null);
 

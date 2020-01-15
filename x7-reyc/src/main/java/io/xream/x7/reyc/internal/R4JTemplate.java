@@ -22,9 +22,9 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.vavr.control.Try;
+import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.exception.BusyException;
 import io.xream.x7.exception.RemoteServiceException;
-import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.exception.ReyConnectException;
 import io.xream.x7.reyc.BackendService;
 import io.xream.x7.reyc.api.ReyTemplate;
@@ -93,10 +93,11 @@ public class R4JTemplate implements ReyTemplate {
 
     private String hanleException(Throwable e, String tag, BackendService backendService) {
 
+        if (logger.isErrorEnabled()) {
+            logger.error(tag + ": " + e.getMessage());
+        }
+
         if (e instanceof CircuitBreakerOpenException) {
-            if (logger.isErrorEnabled()) {
-                logger.error(tag + ": " + e.getMessage());
-            }
             Object obj = backendService.fallback();
             throw new BusyException(obj == null ? null : obj.toString());
         }
@@ -105,18 +106,11 @@ public class R4JTemplate implements ReyTemplate {
         if (str.contains("HttpHostConnectException")
                 || str.contains("ConnectTimeoutException")
                 || str.contains("ConnectException")
+                || str.contains("UnknownHostException")
+                || str.contains("IOException")
         ) {
-            if (logger.isErrorEnabled()) {
-                logger.error(tag + " : " + e.getMessage());
-            }
             Object obj = backendService.fallback();
             throw new ReyConnectException(tag + " : " + e.getMessage() + (obj == null ? "" : (" : " + obj.toString())));
-        }
-
-        if (e instanceof RuntimeException) {
-            if (logger.isErrorEnabled()) {
-                logger.error(tag + " : " + e.getMessage());
-            }
         }
 
         throw new RuntimeException(tag + " : " + e.getMessage());

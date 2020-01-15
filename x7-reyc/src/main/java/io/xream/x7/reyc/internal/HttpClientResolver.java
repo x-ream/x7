@@ -19,6 +19,7 @@ package io.xream.x7.reyc.internal;
 import io.xream.x7.reyc.BackendService;
 import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.Url;
+import io.xream.x7.reyc.api.GroupRouter;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.slf4j.Logger;
@@ -98,6 +99,7 @@ public class HttpClientResolver {
         r.setGeneType(methodParsed.getGeneType());
         r.setUrl(url);
         r.setHeaderList(methodParsed.getHeaderList());
+        r.setRouter(parsed.getGroupRouter());
         return r;
     }
 
@@ -108,7 +110,14 @@ public class HttpClientResolver {
         String url = r.getUrl();
         List<KV> headerList = r.getHeaderList();
 
-
+        GroupRouter router = r.getRouter();
+        if (router != null){
+            Object arg = null;
+            if (args != null && args.length > 0) {
+                arg = args[0];
+            }
+            url = url.replace(router.replaceHolder(),router.replaceValue(arg));
+        }
 
         String result = null;
         if (requestMethod == RequestMethod.POST) {

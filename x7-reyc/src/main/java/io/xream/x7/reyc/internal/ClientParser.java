@@ -17,6 +17,7 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.reyc.ReyClient;
+import io.xream.x7.reyc.api.GroupRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -68,7 +69,6 @@ public class ClientParser {
                         String value = environment.getProperty(key);
 
                         if (value == null) {
-                            logger.info("ReyClient Fatal Error, Can't find the config of key: '" + key +"', App will shutdown");
                             logger.error("ReyClient Fatal Error, Can't find the config of key: '" + key +"', App will shutdown");
                             System.exit(0);
                         }
@@ -103,6 +103,18 @@ public class ClientParser {
             }
         }
 
+        /*
+         * groupRouter
+         */
+        Class<? extends GroupRouter> groupRouterClz = reyClient.groupRouter();
+        if (groupRouterClz != GroupRouter.class) {
+            try{
+                parsed.setGroupRouter(groupRouterClz.newInstance());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         Method[] arr = clz.getDeclaredMethods();
 
         for (Method method : arr) {
@@ -112,14 +124,12 @@ public class ClientParser {
 
             Annotation mappingAnno = method.getAnnotation(RequestMapping.class);
             if (mappingAnno == null) {
-                logger.info(clz.getName() + "." + methodName + ", Not Found Annotation: " + RequestMapping.class.getName());
                 logger.error(clz.getName() + "." + methodName + ", Not Found Annotation: " + RequestMapping.class.getName());
                 System.exit(0);
             }
 
             RequestMapping requestMapping = (RequestMapping) mappingAnno;
             if (requestMapping.value() == null || requestMapping.value().length ==0) {
-                logger.info(clz.getName() + "." + methodName + " RequestMapping, no mapping value");
                 logger.error(clz.getName() + "." + methodName + " RequestMapping, no mapping value");
                 System.exit(0);
             }
@@ -162,8 +172,6 @@ public class ClientParser {
                 ParameterizedType pt = (ParameterizedType)gt;
                 Type t = pt.getActualTypeArguments()[0];
                 if (t instanceof ParameterizedType) {
-                    logger.info("ReyClient not support complex genericReturnType, like List<List<?>>, or" +
-                            "List<Map>，while parsing " + method);
                     logger.error("ReyClient not support complex genericReturnType, like List<List<?>>, or" +
                             "List<Map>，while parsing " + method);
                     System.exit(0);
