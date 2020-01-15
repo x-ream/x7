@@ -46,6 +46,6 @@
             config:
             # we set the k8s namespace: prod_0, prod_1, prod_2 ....
             # k8s ingress to front service(no connection to DB), front service call service-demo
-            # by the way, one set of services' TPS is 10000, deploy 10 sets, TPS become almost 100000
+            # by this way, one set of services' TPS is 10000, deploy 10 sets, TPS become almost 100000
             service.demo=service-demo.prod#xxx#
             
