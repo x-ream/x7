@@ -165,9 +165,7 @@ public class DaoImpl implements Dao {
             LoggerProxy.debug(clz, sql);
 
             Parsed parsed = Parser.get(clz);
-
             List<Object> valueList = DataObjectConverter.objectToListForCreate(obj, parsed.getBeanElementList(), dialect);
-
 
             this.jdbcTemplate.update(connection -> {
                 PreparedStatement pstmt = connection.prepareStatement(sql);

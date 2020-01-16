@@ -267,10 +267,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     @Override
     public List<T> list(T conditionObj) {
 
-        if (conditionObj instanceof Criteria.ResultMappedCriteria) {
-            throw new CriteriaSyntaxException(
-                    "Exception supported, no page not to invoke repository.list(resultMappedCriteria);");
-        }
+        if (conditionObj instanceof CriteriaBuilder || conditionObj instanceof Criteria)
+            throw new IllegalArgumentException("list(obj), obj: " + conditionObj);
 
         return repository.list(conditionObj);
     }

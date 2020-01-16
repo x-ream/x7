@@ -14,7 +14,7 @@ public class Cat implements Serializable, IdView {
 	private static final long serialVersionUID = 5708147778966785698L;
 
 	@X.Key
-	private Long id;
+	private long id;
 	@X.Mapping("cat_type")
 	private String type;
 	private String taxType;
@@ -37,11 +37,11 @@ public class Cat implements Serializable, IdView {
 
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

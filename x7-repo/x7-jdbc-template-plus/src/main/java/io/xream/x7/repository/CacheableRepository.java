@@ -25,6 +25,7 @@ import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.transform.DataTransform;
 import org.slf4j.Logger;
@@ -159,10 +160,27 @@ public class CacheableRepository implements Repository {
 
         Class clz = obj.getClass();
         Parsed parsed = Parser.get(clz);
+        Field f = parsed.getKeyField(X.KEY_ONE);
+        Object id = null;
+        try {
+            id = f.get(obj);
+        }catch (Exception e){
+
+        }
+        if (id == null)
+            throw new IllegalArgumentException("refreshOrCreate(obj),  obj keyOne = " + id);
+        String idStr = String.valueOf(id);
+        if (StringUtil.isNullOrEmpty(idStr) || idStr.equals("0"))
+            throw new IllegalArgumentException("refreshOrCreate(obj),  obj keyOne = " + id);
+
         boolean flag = dataTransform.refreshOrCreate(obj);
 
-        if (isCacheEnabled(parsed))
+        if (!flag) return flag;
+
+        if (isCacheEnabled(parsed)) {
+            cacheResolver.remove(clz, String.valueOf(id));
             cacheResolver.markForRefresh(clz);
+        }
         return flag;
     }
 
@@ -181,10 +199,9 @@ public class CacheableRepository implements Repository {
 
         boolean flag = dataTransform.refresh(refreshCondition);
 
-        if (isCacheEnabled(parsed)) {
+        if (! flag) return flag;
 
-            cacheResolver.remove(clz);
-            cacheResolver.markForRefresh(clz);
+        if (isCacheEnabled(parsed)) {
 
             String keyOne = parsed.getKey(X.KEY_ONE);
             Object pk = null;
@@ -195,8 +212,12 @@ public class CacheableRepository implements Repository {
                 }
             }
 
+            // TODO: consistency not good, maybe tolerant
             if (pk != null)
                 cacheResolver.remove(clz, String.valueOf(pk));
+            else
+                cacheResolver.remove(clz);
+            cacheResolver.markForRefresh(clz);
 
         }
         return flag;
@@ -219,12 +240,13 @@ public class CacheableRepository implements Repository {
 
         Class clz = keyOne.getClzz();
         Parsed parsed = Parser.get(clz);
-        String key = String.valueOf(keyOne.get());
         boolean flag = dataTransform.remove(keyOne);
 
+        if (!flag) return flag;
+
         if (isCacheEnabled(parsed)) {
-            if (key != null)
-                cacheResolver.remove(clz, key);
+            String key = String.valueOf(keyOne.get());
+            cacheResolver.remove(clz, key);
             cacheResolver.markForRefresh(clz);
         }
         return flag;
@@ -234,15 +256,11 @@ public class CacheableRepository implements Repository {
     @Override
     public <T> List<T> list(Object conditionObj) {
 
-        if (conditionObj instanceof CriteriaBuilder || conditionObj instanceof Criteria)
-            throw new RuntimeException("Notes: parameter is not Criteria");
-
         Class clz = conditionObj.getClass();
         Parsed parsed = Parser.get(clz);
 
-        if (!isCacheEnabled(parsed)) {
+        if (!isCacheEnabled(parsed))
             return dataTransform.list(conditionObj);
-        }
 
         List<String> keyList = cacheResolver.getResultKeyList(clz, conditionObj);
 
