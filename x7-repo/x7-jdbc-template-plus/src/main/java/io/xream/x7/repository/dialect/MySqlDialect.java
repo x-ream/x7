@@ -104,7 +104,7 @@ public class MySqlDialect implements Dialect {
     }
 
     @Override
-    public String refreshOrCreateSql(String sql) {
+    public String createOrReplaceSql(String sql) {
         return sql.replaceFirst("INSERT","REPLACE");
     }
 

@@ -58,10 +58,10 @@ public class XxxController {
         return ViewEntity.ok();
     }
 
-    @RequestMapping("/refreshOrCreate")
+    @RequestMapping("/createOrReplace")
 //	@Transactional
     public ViewEntity refreshOrCreat(@RequestBody Cat cat){
-        boolean flag = this.catRepository.refreshOrCreate(cat);
+        boolean flag = this.catRepository.createOrReplace(cat);
         return ViewEntity.ok(flag);
     }
 

@@ -265,11 +265,11 @@ public class XxxTest {
         this.controller.createCat(cat);
     }
 
-    public void testRefreshOrCreate(){
+    public void testCreateOrReplace(){
 
         Cat cat = new Cat();
         cat.setId(251L);
-        cat.setTest(255442L);
+//        cat.setTest(255442L);
         cat.setType("BL");
         cat.setTestBoo(TestBoo.TEST);
 

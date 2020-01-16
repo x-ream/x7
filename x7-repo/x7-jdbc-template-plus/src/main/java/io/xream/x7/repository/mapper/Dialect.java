@@ -51,5 +51,5 @@ public interface Dialect {
 
     Object mappingToObject( Object obj, BeanElement element);
 
-    String refreshOrCreateSql(String sql);
+    String createOrReplaceSql(String sql);
 }

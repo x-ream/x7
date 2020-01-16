@@ -126,8 +126,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     }
 
     @Override
-    public boolean refreshOrCreate(T obj) {
-        return repository.refreshOrCreate(obj);
+    public boolean createOrReplace(T obj) {
+        return repository.createOrReplace(obj);
     }
 
 

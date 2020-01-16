@@ -48,9 +48,9 @@ public class SqlDataTransform implements DataTransform {
     }
 
     @Override
-    public boolean refreshOrCreate(Object obj) {
+    public boolean createOrReplace(Object obj) {
 
-        return this.dao.refreshOrCreate(obj);
+        return this.dao.createOrReplace(obj);
 
     }
 

@@ -156,7 +156,7 @@ public class CacheableRepository implements Repository {
     }
 
     @Override
-    public boolean refreshOrCreate(Object obj) {
+    public boolean createOrReplace(Object obj) {
 
         Class clz = obj.getClass();
         Parsed parsed = Parser.get(clz);
@@ -168,12 +168,12 @@ public class CacheableRepository implements Repository {
 
         }
         if (id == null)
-            throw new IllegalArgumentException("refreshOrCreate(obj),  obj keyOne = " + id);
+            throw new IllegalArgumentException("createOrReplace(obj),  obj keyOne = " + id);
         String idStr = String.valueOf(id);
         if (StringUtil.isNullOrEmpty(idStr) || idStr.equals("0"))
-            throw new IllegalArgumentException("refreshOrCreate(obj),  obj keyOne = " + id);
+            throw new IllegalArgumentException("createOrReplace(obj),  obj keyOne = " + id);
 
-        boolean flag = dataTransform.refreshOrCreate(obj);
+        boolean flag = dataTransform.createOrReplace(obj);
 
         if (!flag) return flag;
 

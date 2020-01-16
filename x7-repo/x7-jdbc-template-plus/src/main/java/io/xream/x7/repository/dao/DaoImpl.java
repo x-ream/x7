@@ -97,6 +97,7 @@ public class DaoImpl implements Dao {
         Class clz = keyOne.getClzz();
         String sql = MapperFactory.getSql(clz, Mapper.REMOVE);
 
+        LoggerProxy.debug(clz, keyOne.get());
         LoggerProxy.debug(clz, sql);
 
         return this.jdbcTemplate.update(sql, keyOne.get()) > 0;
@@ -110,14 +111,16 @@ public class DaoImpl implements Dao {
         try {
             String sql = MapperFactory.getSql(clz, Mapper.CREATE);
 
-            LoggerProxy.debug(clz, sql);
-
             Parsed parsed = Parser.get(clz);
 
             Long keyOneValue = parsed.tryToGetLongKey(obj);
             boolean isAutoIncreaseId = parsed.isAutoIncreaseId(keyOneValue);
 
             List<Object> valueList = DataObjectConverter.objectToListForCreate(obj, parsed.getBeanElementList(), dialect);
+
+            LoggerProxy.debug(clz, valueList);
+            LoggerProxy.debug(clz, sql);
+
             KeyHolder keyHolder = new GeneratedKeyHolder();
             if (isAutoIncreaseId) {
 
@@ -154,18 +157,19 @@ public class DaoImpl implements Dao {
     }
 
     @Override
-    public boolean refreshOrCreate(Object obj) {
+    public boolean createOrReplace(Object obj) {
 
         Class clz = obj.getClass();
 
         try {
             String createSql = MapperFactory.getSql(clz, Mapper.CREATE);
-            final String sql = this.dialect.refreshOrCreateSql(createSql);
-
-            LoggerProxy.debug(clz, sql);
+            final String sql = this.dialect.createOrReplaceSql(createSql);
 
             Parsed parsed = Parser.get(clz);
             List<Object> valueList = DataObjectConverter.objectToListForCreate(obj, parsed.getBeanElementList(), dialect);
+
+            LoggerProxy.debug(clz, valueList);
+            LoggerProxy.debug(clz, sql);
 
             this.jdbcTemplate.update(connection -> {
                 PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -308,10 +312,12 @@ public class DaoImpl implements Dao {
         Class clz = refreshCondition.getClz();
         Parsed parsed = Parser.get(clz);
         String sql = SqlUtil.buildRefresh(parsed, refreshCondition, this.criteriaParser);
+        List<Object> valueList = refreshCondition.getCondition().getValueList();
 
+        LoggerProxy.debug(clz, valueList);
         LoggerProxy.debug(clz, sql);
 
-        return update(sql, refreshCondition.getCondition().getValueList(), dialect, jdbcTemplate);
+        return update(sql, valueList, dialect, jdbcTemplate);
     }
 
 

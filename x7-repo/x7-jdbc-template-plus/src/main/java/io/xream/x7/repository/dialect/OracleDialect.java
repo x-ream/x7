@@ -177,8 +177,8 @@ public class OracleDialect implements Dialect {
     }
 
     @Override
-    public String refreshOrCreateSql(String sql) {
-        throw new NotSupportedException("x7/x7-repor/x7-jdbc-template-plus not support refreshOrCreate() for Oracle");
+    public String createOrReplaceSql(String sql) {
+        throw new NotSupportedException("x7/x7-repor/x7-jdbc-template-plus not support createOrReplace() for Oracle");
     }
 
     @Override
