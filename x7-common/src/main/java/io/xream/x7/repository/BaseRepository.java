@@ -20,6 +20,7 @@ import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.DomainObject;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
 import io.xream.x7.common.web.Page;
 
 import java.util.List;
@@ -60,6 +61,12 @@ public interface BaseRepository<T> extends Typed<T> {
 
     boolean remove(long keyOne);
 
+    /**
+     *
+     * caution:  sometimes, should not use the api </>
+     *
+     */
+    boolean removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T> wrapper);
     /**
      * @param keyOne
      */

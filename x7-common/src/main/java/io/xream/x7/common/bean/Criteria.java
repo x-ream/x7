@@ -180,6 +180,10 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		this.listX.add(x);
 	}
 
+	public void reset(List<X> xList){
+		this.listX = xList;
+	}
+
 	public DataPermission getDataPermission() {
 		return dataPermission;
 	}

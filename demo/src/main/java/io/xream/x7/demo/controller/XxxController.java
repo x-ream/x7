@@ -462,6 +462,11 @@ public class XxxController {
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
 		Criteria criteria = builder.get();
+
+		String str = JsonX.toJson(criteria);
+		criteria = JsonX.toObject(str,Criteria.class);
+		System.out.println(criteria);
+
 		List<Cat> list = catRepository.list(criteria);
 
 		return ViewEntity.ok(list);
