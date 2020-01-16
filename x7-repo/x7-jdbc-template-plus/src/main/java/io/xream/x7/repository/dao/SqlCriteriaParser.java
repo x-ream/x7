@@ -23,6 +23,7 @@ import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.SqlParsed;
+import io.xream.x7.repository.exception.CriteriaSyntaxException;
 import io.xream.x7.repository.mapper.Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -128,6 +129,7 @@ public class SqlCriteriaParser implements CriteriaParser {
          */
         groupBy(sb, criteria);
 
+        having(sb, criteria);
         /*
          * sort
          */
@@ -225,6 +227,14 @@ public class SqlCriteriaParser implements CriteriaParser {
                         .append(SqlScript.RIGHT_PARENTTHESIS).append(SqlScript.SPACE)//" ) "
                         .append(SqlScript.AS).append(SqlScript.SPACE).append(alianName);
 
+                Criteria.X x = reduce.getHaving();
+                if (x != null) {
+                    x.setKey(alianName);
+                    if (!criteria.isScroll()){
+                        throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().scroll(true)");
+                    }
+                }
+
                 flag = true;
             }
         }
@@ -282,6 +292,23 @@ public class SqlCriteriaParser implements CriteriaParser {
                     }
                 }
             }
+        }
+    }
+
+    private void having(StringBuilder sb, Criteria criteria) {
+        if (!(criteria instanceof Criteria.ResultMappedCriteria))
+            return;
+
+        Criteria.ResultMappedCriteria resultMapped = (Criteria.ResultMappedCriteria)criteria;
+        List<Reduce> reduceList = resultMapped.getReduceList();
+
+        if (reduceList.isEmpty())
+            return;
+        for (Reduce reduce : reduceList) {
+            Criteria.X x = reduce.getHaving();
+            if (x == null)
+                continue;
+            sb.append(x.getConjunction().sql()).append(x.getKey()).append(x.getPredicate().sql()).append(x.getValue());
         }
     }
 

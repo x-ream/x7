@@ -111,12 +111,13 @@ public class XxxController {
 	public ViewEntity distinct(@RequestBody CatRO ro) {
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class,ro);
-		builder.distinct("catTest.dogId").distinct("catTest.catFriendName")
+		builder.distinct("catTest.dogId")
+				.distinct("catTest.catFriendName")
 				.reduce(Reduce.ReduceType.COUNT,"catTest.id")
-				.reduce(Reduce.ReduceType.SUM, "catTest.id")
+				.reduce(Reduce.ReduceType.SUM, "catTest.dogId", new Having(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
-		.paged().page(1).rows(2).sort("catTest.dogId",Direction.DESC);
+		.paged().scroll(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);
 		String sourceScript = "catTest ";
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 		resultMapped.setSourceScript(sourceScript);

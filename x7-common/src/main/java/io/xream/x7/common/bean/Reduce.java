@@ -21,17 +21,30 @@ public class Reduce {
     private ReduceType type;
     private String property;
 
+    private Criteria.X having;
+
     public ReduceType getType() {
         return type;
     }
+
     public void setType(ReduceType type) {
         this.type = type;
     }
+
     public String getProperty() {
         return property;
     }
+
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    public Criteria.X getHaving() {
+        return having;
+    }
+
+    public void setHaving(Criteria.X having) {
+        this.having = having;
     }
 
     @Override
@@ -39,6 +52,7 @@ public class Reduce {
         return "Reduce{" +
                 "type=" + type +
                 ", property='" + property + '\'' +
+                ", having=" + having +
                 '}';
     }
 
@@ -50,4 +64,5 @@ public class Reduce {
         MIN,
         AVG
     }
+
 }

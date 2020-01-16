@@ -16,11 +16,11 @@
  */
 package io.xream.x7.common.bean;
 
+import io.xream.x7.common.bean.Criteria.ResultMappedCriteria;
+import io.xream.x7.common.bean.Criteria.X;
 import io.xream.x7.common.util.BeanMapUtil;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.common.bean.Criteria.ResultMappedCriteria;
-import io.xream.x7.common.bean.Criteria.X;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.Fetched;
 import io.xream.x7.common.web.MapResult;
@@ -654,6 +654,21 @@ public class CriteriaBuilder {
             Reduce reduce = new Reduce();
             reduce.setType(type);
             reduce.setProperty(property);
+            get().getReduceList().add(reduce);
+            return this;
+        }
+
+        /**
+         *
+         * @param type
+         * @param property
+         * @param having   paged().scroll(true), if isScroll == false，will throw Exception
+         */
+        public ResultMappedBuilder reduce(Reduce.ReduceType type, String property, Having having) {
+            Reduce reduce = new Reduce();
+            reduce.setType(type);
+            reduce.setProperty(property);
+            reduce.setHaving(having.x());
             get().getReduceList().add(reduce);
             return this;
         }
