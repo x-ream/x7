@@ -64,6 +64,8 @@ public class AppTest {
         xxxTest.testListCriteria();
         xxxTest.testCreate();
         xxxTest.testListCriteria();
+        xxxTest.testRefreshOrCreate();
+        xxxTest.testListCriteria();
         xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();

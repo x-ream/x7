@@ -259,8 +259,20 @@ public class XxxTest {
         Cat cat = new Cat();
         cat.setId(251L);
         cat.setTest(255442L);
+        cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);
 
         this.controller.createCat(cat);
+    }
+
+    public void testRefreshOrCreate(){
+
+        Cat cat = new Cat();
+        cat.setId(251L);
+        cat.setTest(255442L);
+        cat.setType("BL");
+        cat.setTestBoo(TestBoo.TEST);
+
+        this.controller.refreshOrCreat(cat);
     }
 }

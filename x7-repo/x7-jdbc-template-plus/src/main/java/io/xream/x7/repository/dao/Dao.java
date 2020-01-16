@@ -35,6 +35,8 @@ public interface Dao {
 
 	long create(Object obj);
 
+	boolean refreshOrCreate(Object obj);
+
 	boolean createBatch(List<? extends Object> objList);
 
 	<T> boolean remove(KeyOne<T> keyOne);
@@ -62,4 +64,5 @@ public interface Dao {
 	<T>boolean execute(T obj, String sql);
 
 	<T> T getOne(T conditionObj);
+
 }

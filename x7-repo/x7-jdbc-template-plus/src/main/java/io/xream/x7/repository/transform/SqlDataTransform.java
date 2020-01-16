@@ -48,6 +48,13 @@ public class SqlDataTransform implements DataTransform {
     }
 
     @Override
+    public boolean refreshOrCreate(Object obj) {
+
+        return this.dao.refreshOrCreate(obj);
+
+    }
+
+    @Override
     public boolean createBatch(List<?> objList) {
 
         return this.dao.createBatch(objList);

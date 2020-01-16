@@ -126,15 +126,12 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
     @Override
     public long create(T obj) {
-        /*
-         * FIXME
-         */
-        logger.info("BaesRepository.create: " + obj);
+        return repository.create(obj);
+    }
 
-        long id = repository.create(obj);
-
-        return id;
-
+    @Override
+    public boolean refreshOrCreate(T obj) {
+        return repository.refreshOrCreate(obj);
     }
 
 

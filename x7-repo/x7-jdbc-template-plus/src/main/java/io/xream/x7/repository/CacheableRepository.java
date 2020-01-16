@@ -154,6 +154,19 @@ public class CacheableRepository implements Repository {
         return id;
     }
 
+    @Override
+    public boolean refreshOrCreate(Object obj) {
+
+        Class clz = obj.getClass();
+        Parsed parsed = Parser.get(clz);
+        boolean flag = dataTransform.refreshOrCreate(obj);
+
+        if (isCacheEnabled(parsed))
+            cacheResolver.markForRefresh(clz);
+        return flag;
+    }
+
+
 
     @Override
     public <T> boolean refresh(RefreshCondition<T> refreshCondition) {

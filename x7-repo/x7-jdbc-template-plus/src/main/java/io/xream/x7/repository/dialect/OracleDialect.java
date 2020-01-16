@@ -23,6 +23,7 @@ import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.repository.exception.NotSupportedException;
 import io.xream.x7.repository.mapper.Dialect;
 
 import java.io.Reader;
@@ -173,6 +174,11 @@ public class OracleDialect implements Dialect {
 
         return obj;
 
+    }
+
+    @Override
+    public String refreshOrCreateSql(String sql) {
+        throw new NotSupportedException("x7/x7-repor/x7-jdbc-template-plus not support refreshOrCreate() for Oracle");
     }
 
     @Override

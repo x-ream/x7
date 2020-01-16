@@ -104,6 +104,11 @@ public class MySqlDialect implements Dialect {
     }
 
     @Override
+    public String refreshOrCreateSql(String sql) {
+        return sql.replaceFirst("INSERT","REPLACE");
+    }
+
+    @Override
     public String transformAlia(String mapper,Map<String, String> aliaMap,  Map<String, String> resultKeyAliaMap) {
 
         if (!resultKeyAliaMap.isEmpty()) {

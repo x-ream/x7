@@ -41,6 +41,8 @@ public interface BaseRepository<T> extends Typed<T> {
 
     long create(T obj);
 
+    boolean refreshOrCreate(T obj);
+
     boolean refresh(RefreshCondition<T> refreshCondition);
 
     boolean refreshUnSafe(RefreshCondition<T> refreshCondition);

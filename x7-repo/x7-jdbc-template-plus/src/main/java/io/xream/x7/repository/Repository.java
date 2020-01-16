@@ -45,6 +45,7 @@ public interface Repository {
 	 * @return
 	 */
 	long create(Object obj);
+	boolean refreshOrCreate(Object obj);
 	/**
 	 * 带条件支持局部更新
 	 * @param refreshCondition

@@ -70,7 +70,7 @@ public class DaoImpl implements Dao {
         Class clz = obj.getClass();
         String sql = MapperFactory.getSql(clz, Mapper.CREATE);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         Parsed parsed = Parser.get(clz);
         final int batchSize = 500;
@@ -85,7 +85,7 @@ public class DaoImpl implements Dao {
             });
 
         } catch (Exception e) {
-            throw DaoExceptionTranslator.onRollback(obj,e,logger);
+            throw DaoExceptionTranslator.onRollback(obj, e, logger);
         }
 
         return true;
@@ -97,7 +97,7 @@ public class DaoImpl implements Dao {
         Class clz = keyOne.getClzz();
         String sql = MapperFactory.getSql(clz, Mapper.REMOVE);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         return this.jdbcTemplate.update(sql, keyOne.get()) > 0;
     }
@@ -110,7 +110,7 @@ public class DaoImpl implements Dao {
         try {
             String sql = MapperFactory.getSql(clz, Mapper.CREATE);
 
-            LoggerProxy.debug(clz,sql);
+            LoggerProxy.debug(clz, sql);
 
             Parsed parsed = Parser.get(clz);
 
@@ -148,9 +148,41 @@ public class DaoImpl implements Dao {
             }
 
         } catch (Exception e) {
-            throw DaoExceptionTranslator.onRollback(obj,e,logger);
+            throw DaoExceptionTranslator.onRollback(obj, e, logger);
         }
 
+    }
+
+    @Override
+    public boolean refreshOrCreate(Object obj) {
+
+        Class clz = obj.getClass();
+
+        try {
+            String createSql = MapperFactory.getSql(clz, Mapper.CREATE);
+            final String sql = this.dialect.refreshOrCreateSql(createSql);
+
+            LoggerProxy.debug(clz, sql);
+
+            Parsed parsed = Parser.get(clz);
+
+            List<Object> valueList = DataObjectConverter.objectToListForCreate(obj, parsed.getBeanElementList(), dialect);
+
+
+            this.jdbcTemplate.update(connection -> {
+                PreparedStatement pstmt = connection.prepareStatement(sql);
+                int i = 1;
+                for (Object value : valueList) {
+                    pstmt.setObject(i++, value);
+                }
+                return pstmt;
+            });
+
+            return true;
+
+        } catch (Exception e) {
+            throw DaoExceptionTranslator.onRollback(obj, e, logger);
+        }
     }
 
 
@@ -161,7 +193,7 @@ public class DaoImpl implements Dao {
         Parsed parsed = Parser.get(clz);
         sql = SqlParserUtil.mapperForManu(sql, parsed);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         return queryForList(sql, clz, conditionList, this.dialect, jdbcTemplate);
     }
@@ -173,9 +205,9 @@ public class DaoImpl implements Dao {
         Class clz = keyOne.getClzz();
         String sql = MapperFactory.getSql(clz, Mapper.GET_ONE);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
-        List<T> list = this.queryForList(sql, keyOne.getClzz(),Arrays.asList(keyOne.get()),this.dialect,this.jdbcTemplate);
+        List<T> list = this.queryForList(sql, keyOne.getClzz(), Arrays.asList(keyOne.get()), this.dialect, this.jdbcTemplate);
 
         if (list.isEmpty())
             return null;
@@ -193,7 +225,7 @@ public class DaoImpl implements Dao {
 
         Map<String, Object> queryMap = DataObjectConverter.objectToMapForQuery(parsed, conditionObj);
         sql = SqlUtil.concat(parsed, sql, queryMap);
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         return queryForList(sql, clz, queryMap.values(), this.dialect, jdbcTemplate);
 
@@ -205,10 +237,10 @@ public class DaoImpl implements Dao {
         Class clz = criteria.getClz();
         SqlParsed sqlParsed = SqlUtil.fromCriteria(criteria, criteriaParser, dialect);
         String sql = sqlParsed.getSql().toString();
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         List<Object> valueList = criteria.getValueList();
-        List<T> list =  queryForList(sql, clz, valueList, this.dialect, jdbcTemplate);
+        List<T> list = queryForList(sql, clz, valueList, this.dialect, jdbcTemplate);
         ResultSortUtil.sort(list, criteria, Parser.get(clz));
         return list;
     }
@@ -220,14 +252,14 @@ public class DaoImpl implements Dao {
         SqlParsed sqlParsed = SqlUtil.fromCriteria(criteria, criteriaParser, dialect);
         String sql = sqlParsed.getSql().toString();
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         List<Object> valueList = criteria.getValueList();
         List<T> list = queryForList(sql, clz, valueList, this.dialect, jdbcTemplate);
         Parsed parsed = Parser.get(clz);
         ResultSortUtil.sort(list, criteria, parsed);
 
-        Page<T> pagination = PageBuilder.build(criteria, list, () -> getCount(clz,sqlParsed.getCountSql(), valueList));
+        Page<T> pagination = PageBuilder.build(criteria, list, () -> getCount(clz, sqlParsed.getCountSql(), valueList));
 
         return pagination;
     }
@@ -241,7 +273,7 @@ public class DaoImpl implements Dao {
      * @return
      */
     private long getCount(Class clz, String sql, Collection<Object> list) {
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         Object obj = this.queryForMapList(sql, list, dialect, jdbcTemplate).get(0).get("count");
         return Long.valueOf(obj.toString());
@@ -264,7 +296,7 @@ public class DaoImpl implements Dao {
         sql = SqlUtil.filter(sql);
         sql = SqlParserUtil.mapperForManu(sql, parsed);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         this.jdbcTemplate.execute(sql);
 
@@ -304,7 +336,7 @@ public class DaoImpl implements Dao {
 
         sql = SqlUtil.buildIn(sql, mapper, be, inList);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         return queryForList(sql, clz, null, this.dialect, jdbcTemplate);
     }
@@ -316,11 +348,11 @@ public class DaoImpl implements Dao {
         SqlParsed sqlParsed = SqlUtil.fromCriteria(resultMapped, criteriaParser, dialect);
         String sql = sqlParsed.getSql().toString();
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         List<Map<String, Object>> list = queryForMapList(sql, resultMapped, this.dialect, jdbcTemplate);
 
-        Page<Map<String, Object>> pagination = PageBuilder.build(resultMapped, list, () -> getCount(clz,sqlParsed.getCountSql(), resultMapped.getValueList()));
+        Page<Map<String, Object>> pagination = PageBuilder.build(resultMapped, list, () -> getCount(clz, sqlParsed.getCountSql(), resultMapped.getValueList()));
 
         return pagination;
     }
@@ -332,7 +364,7 @@ public class DaoImpl implements Dao {
         SqlParsed sqlParsed = SqlUtil.fromCriteria(resultMapped, criteriaParser, dialect);
         String sql = sqlParsed.getSql().toString();
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         return queryForMapList(sql, resultMapped, this.dialect, jdbcTemplate);
     }
@@ -347,9 +379,9 @@ public class DaoImpl implements Dao {
 
         Map<String, Object> queryMap = DataObjectConverter.objectToMapForQuery(parsed, conditionObj);
         sql = SqlUtil.concat(parsed, sql, queryMap);
-        sql = SqlUtil.paged(sql,1,1,this.dialect);
+        sql = SqlUtil.paged(sql, 1, 1, this.dialect);
 
-        LoggerProxy.debug(clz,sql);
+        LoggerProxy.debug(clz, sql);
 
         if (queryMap.isEmpty())
             throw new IllegalArgumentException("API of getOne(T) can't accept blank object: " + conditionObj);

@@ -53,10 +53,17 @@ public class XxxController {
 
 	@RequestMapping("/create/cat")
 //	@Transactional
-	public ViewEntity createCat(@RequestBody Cat cat){
-		this.catRepository.create(cat);
-		return ViewEntity.ok();
-	}
+    public ViewEntity createCat(@RequestBody Cat cat){
+        this.catRepository.create(cat);
+        return ViewEntity.ok();
+    }
+
+    @RequestMapping("/refreshOrCreate")
+//	@Transactional
+    public ViewEntity refreshOrCreat(@RequestBody Cat cat){
+        boolean flag = this.catRepository.refreshOrCreate(cat);
+        return ViewEntity.ok(flag);
+    }
 
 	@RequestMapping("/create")
 //	@Transactional
@@ -450,7 +457,7 @@ public class XxxController {
 
 //		builder.resultKey("id").resultKey("type");
 		List<Object> inList = Arrays.asList("NL","BL");
-		builder.and().in("type",inList).and().in("id",Arrays.asList(1,2));
+		builder.and().in("type",inList).and().in("id",Arrays.asList(1,251));
 		builder.paged().orderIn("type",inList);
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
