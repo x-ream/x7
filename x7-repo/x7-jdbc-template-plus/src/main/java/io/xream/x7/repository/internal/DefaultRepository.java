@@ -27,8 +27,6 @@ import io.xream.x7.repository.*;
 import io.xream.x7.repository.exception.CriteriaSyntaxException;
 import io.xream.x7.repository.exception.PersistenceException;
 import io.xream.x7.repository.id.IdGeneratorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -44,8 +42,6 @@ import java.util.Objects;
  * @author Sim
  */
 public abstract class DefaultRepository<T> implements BaseRepository<T> {
-
-    private final static Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 
     private Class<T> clz;
 
