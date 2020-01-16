@@ -54,7 +54,6 @@ public class XxxController {
 	@RequestMapping("/create/cat")
 //	@Transactional
 	public ViewEntity createCat(@RequestBody Cat cat){
-
 		this.catRepository.create(cat);
 		return ViewEntity.ok();
 	}
