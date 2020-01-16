@@ -23,6 +23,7 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.transform.DataTransform;
 import org.slf4j.Logger;
@@ -202,11 +203,10 @@ public class CacheableRepository implements Repository {
     @Override
     public <T> boolean remove(KeyOne<T> keyOne) {
 
-        boolean flag = false;
         Class clz = keyOne.getClzz();
         Parsed parsed = Parser.get(clz);
         String key = String.valueOf(keyOne.get());
-        flag = dataTransform.remove(keyOne);
+        boolean flag = dataTransform.remove(keyOne);
 
         if (!isNoCache() && !parsed.isNoCache()) {
             if (key != null)
@@ -230,12 +230,10 @@ public class CacheableRepository implements Repository {
             return dataTransform.list(conditionObj);
         }
 
-        List<T> list = null;
-
         List<String> keyList = cacheResolver.getResultKeyList(clz, conditionObj);
 
         if (keyList == null || keyList.isEmpty()) {
-            list = dataTransform.list(conditionObj);
+            List<T> list = dataTransform.list(conditionObj);
 
             keyList = new ArrayList<String>();
 
@@ -249,7 +247,7 @@ public class CacheableRepository implements Repository {
             return list;
         }
 
-        list = cacheResolver.list(clz, keyList);
+        List<T> list = cacheResolver.list(clz, keyList);
 
         if (keyList.size() == list.size())
             return list;
@@ -267,24 +265,41 @@ public class CacheableRepository implements Repository {
         Class clz = criteria.getClz();
         Parsed parsed = Parser.get(clz);
 
-
         if (isNoCache()) {
             return dataTransform.find(criteria);
         }
 
-        List<T> list = null;
-
         Page<T> p = cacheResolver.getResultKeyListPaginated(clz, criteria);// FIXME
 
         if (p == null) {
-            dataTransform.find(criteria);
 
-            list = p.getList(); // 结果
+            final String totalRowsString = getTotalRowsString(criteria);
+
+            if (!criteria.isScroll()) {
+                // totalRows from cache
+                long totalRows = this.cacheResolver.getTotalRows(clz, totalRowsString);
+                if (totalRows == 0) {
+                    p = dataTransform.find(criteria);
+                    if (p.getTotalRows() > 0) {
+                        cacheResolver.setTotalRows(clz, totalRowsString, p.getTotalRows());
+                    }
+                } else {
+                    List<T> list = dataTransform.list(criteria);
+                    p = new Page<>();
+                    p.setTotalRows(totalRows);
+                    p.setPage(criteria.getPage());
+                    p.setRows(criteria.getRows());
+                    p.reSetList(list);
+                }
+            }else {
+                p = dataTransform.find(criteria);
+            }
+
+            List<T> list = p.getList(); // 结果
 
             List<String> keyList = p.getKeyList();
 
             for (T t : list) {
-
                 String key = getCacheKey(t, parsed);
                 keyList.add(key);
             }
@@ -305,7 +320,7 @@ public class CacheableRepository implements Repository {
             return p;
         }
 
-        list = cacheResolver.list(clz, keyList);
+        List<T> list = cacheResolver.list(clz, keyList);
 
         if (keyList.size() == list.size()) {
             p.reSetList(list);
@@ -321,6 +336,14 @@ public class CacheableRepository implements Repository {
         return p;
     }
 
+    private String getTotalRowsString(Criteria criteria) {
+        int page = criteria.getPage();
+        criteria.setPage(0);
+        String str = JsonX.toJson(criteria);
+        criteria.setPage(page);
+        return str;
+    }
+
     @Override
     public <T> List<T> list(Criteria criteria) {
 
@@ -331,12 +354,10 @@ public class CacheableRepository implements Repository {
             return dataTransform.list(criteria);
         }
 
-        List<T> list = null;
-
         List<String> keyList = cacheResolver.getResultKeyList(clz, criteria);
 
         if (keyList == null || keyList.isEmpty()) {
-            list = dataTransform.list(criteria);
+            List<T> list = dataTransform.list(criteria);
 
             keyList = new ArrayList<>();
 
@@ -350,7 +371,8 @@ public class CacheableRepository implements Repository {
             return list;
         }
 
-        list = cacheResolver.list(clz, keyList);
+
+        List<T> list = cacheResolver.list(clz, keyList);
 
         if (keyList.size() == list.size())
             return list;
@@ -405,11 +427,9 @@ public class CacheableRepository implements Repository {
 
         List<String> keyList = cacheResolver.getResultKeyList(clz, condition);
 
-        List<T> list = null;
-
         if (keyList == null || keyList.isEmpty()) {
 
-            list = dataTransform.in(inCondition);
+            List<T> list = dataTransform.in(inCondition);
 
             keyList = new ArrayList<String>();
 
@@ -423,7 +443,7 @@ public class CacheableRepository implements Repository {
             return list;
         }
 
-        list = cacheResolver.list(clz, keyList);// FIXME 可能要先转Object
+        List<T> list = cacheResolver.list(clz, keyList);// FIXME 可能要先转Object
 
         if (keyList.size() == list.size())
             return list;
@@ -492,7 +512,6 @@ public class CacheableRepository implements Repository {
 
     @Override
     public List<Map<String, Object>> list(Criteria.ResultMappedCriteria resultMapped) {
-
         return dataTransform.list(resultMapped);
     }
 

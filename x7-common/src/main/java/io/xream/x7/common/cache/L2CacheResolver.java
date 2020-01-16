@@ -60,6 +60,8 @@ public interface L2CacheResolver {
 	 * @param key
 	 */
 	<T> T get(Class<T> clz, String key);
+	void setTotalRows(Class clz, String key, long obj);
+	<T> long getTotalRows(Class<T> clz, String key);
 	/**
 	 * 高效的缓存Key列表
 	 * @param clz

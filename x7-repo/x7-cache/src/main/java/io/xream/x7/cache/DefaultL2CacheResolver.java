@@ -150,6 +150,11 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		return "{"+clz.getName()+"}." + condition;
 	}
 
+	private String getTotalRowsKey(Class clz, String condition){
+		condition = VerifyUtil.toMD5(condition) + "~TR";
+		return getSimpleKey(clz, condition);
+	}
+
 	private String getSimpleKeyLike(Class clz){
 		return "{"+clz.getName()+"}.*" ;
 	}
@@ -193,6 +198,13 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		key = getSimpleKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
 		getCachestorage().set(key, JsonX.toJson(obj), validSecond);
+	}
+
+	@Override
+	public void setTotalRows(Class clz, String key, long obj) {
+		key = getTotalRowsKey(clz, key);
+		int validSecond =  getValidSecondAdjusted();
+		getCachestorage().set(key, String.valueOf(obj), validSecond);
 	}
 
 
@@ -272,6 +284,15 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 			return null;
 		T obj = JsonX.toObject(str,clz);
 		return obj;
+	}
+
+	@Override
+	public <T> long getTotalRows(Class<T> clz, String key) {
+		key = getTotalRowsKey(clz,key);
+		String str = getCachestorage().get(key);
+		if (StringUtil.isNullOrEmpty(str))
+			return 0;
+		return Long.valueOf(str);
 	}
 
 	@Override
