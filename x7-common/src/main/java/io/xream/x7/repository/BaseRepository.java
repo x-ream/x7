@@ -50,6 +50,10 @@ public interface BaseRepository<T> extends Typed<T> {
 
     boolean refresh(RefreshCondition<T> refreshCondition);
 
+    /**
+     *
+     *  refreshCondition without keyOne
+     */
     boolean refreshUnSafe(RefreshCondition<T> refreshCondition);
 
     boolean remove(String keyOne);
