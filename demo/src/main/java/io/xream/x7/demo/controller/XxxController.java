@@ -51,6 +51,14 @@ public class XxxController {
 		return ViewEntity.ok(cat);
 	}
 
+	@RequestMapping("/create/cat")
+//	@Transactional
+	public ViewEntity createCat(@RequestBody Cat cat){
+
+		this.catRepository.create(cat);
+		return ViewEntity.ok();
+	}
+
 	@RequestMapping("/create")
 //	@Transactional
 	public ViewEntity create(){
@@ -80,7 +88,7 @@ public class XxxController {
 	}
 
 	@RequestMapping("/refreshByCondition")
-	public ViewEntity refreshByCondition(@RequestBody Cat cat){
+	public ViewEntity refreshByCondition(){
 
 
 		List<String> testList = new ArrayList<>();
@@ -512,7 +520,6 @@ public class XxxController {
     @RequestMapping("/criteria/test")
     public ViewEntity testCriteria(@RequestBody Criteria criteria) {
 		Page<CatTest> page = this.repository.find(criteria);
-		System.out.println(page);
 		return ViewEntity.ok(page);
 	}
 

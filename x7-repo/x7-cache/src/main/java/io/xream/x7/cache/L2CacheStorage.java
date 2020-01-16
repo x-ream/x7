@@ -18,6 +18,7 @@ package io.xream.x7.cache;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public interface L2CacheStorage {
     boolean set(String key, String time);
@@ -28,7 +29,7 @@ public interface L2CacheStorage {
 
     String get(String nsKey);
 
-    boolean set(String key, String toJson, int validSecond);
+    boolean set(String key, String toJson, int validSecond, TimeUnit timeUnit);
 
     List<String> multiGet(List<String> keyArr);
 

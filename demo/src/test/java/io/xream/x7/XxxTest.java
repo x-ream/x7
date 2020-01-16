@@ -40,37 +40,8 @@ public class XxxTest {
 
     public  void refreshByCondition() {
 
-        Dark dark = new Dark();
-        dark.setTest("REFRESHED");
-        dark.setId("666");
+        controller.refreshByCondition();
 
-        Cat cat = new Cat();
-
-        cat.setDogId(2323);
-        cat.setId(4L);
-        cat.setTestObj(dark);
-
-        ViewEntity ve = controller.refreshByCondition(cat);
-
-//        Executor executor = Executors.newFixedThreadPool(3);
-//
-//        for (int i=0; i<3; i++) {
-//
-//            executor.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ViewEntity ve = testServiceRemote.refreshByCondition(cat);
-//                    System.out.println("--------------- "+ve);
-//                }
-//            });
-//
-//        }
-//
-//        try {
-//            Thread.sleep(10000000);
-//        }catch (Exception e){
-//
-//        }
     }
 
     public  void test() {
@@ -218,7 +189,6 @@ public class XxxTest {
 
     public ViewEntity testListCriteria(){
         ViewEntity ve = this.controller.listCriteria();
-        System.out.println(ve);
         return ve;
     }
 
@@ -284,4 +254,13 @@ public class XxxTest {
         System.out.println("TestBoo.BOO.name(): " + TestBoo.BOO.name());
     }
 
+    public void testCreate() {
+
+        Cat cat = new Cat();
+        cat.setId(251L);
+        cat.setTest(255442L);
+        cat.setTestBoo(TestBoo.BOO);
+
+        this.controller.createCat(cat);
+    }
 }

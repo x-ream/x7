@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -163,13 +164,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	@SuppressWarnings("rawtypes")
 	private String getKey(Class clz, Object conditionObj){
 		String condition = JsonX.toJson(conditionObj);
-		long startTime = System.currentTimeMillis();
-		String key =  getPrefix(clz) +"."+VerifyUtil.toMD5(condition);
-		long endTime = System.currentTimeMillis();
-		if (logger.isDebugEnabled()){
-			logger.debug("DefaultL2CacheResolver.getKey() cost time = " + (endTime - startTime) + "s");
-		}
-		return key;
+		return  getPrefix(clz) +"."+VerifyUtil.toMD5(condition);
 	}
 
 	
@@ -197,14 +192,14 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	public void set(Class clz, String key, Object obj) {
 		key = getSimpleKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
-		getCachestorage().set(key, JsonX.toJson(obj), validSecond);
+		getCachestorage().set(key, JsonX.toJson(obj), validSecond,TimeUnit.SECONDS);
 	}
 
 	@Override
 	public void setTotalRows(Class clz, String key, long obj) {
 		key = getTotalRowsKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
-		getCachestorage().set(key, String.valueOf(obj), validSecond);
+		getCachestorage().set(key, String.valueOf(obj), validSecond,TimeUnit.SECONDS);
 	}
 
 
@@ -213,7 +208,8 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	public void setResultKeyList(Class clz, Object condition, List<String> keyList) {
 		String key = getKey(clz, condition);
 		try{
-			getCachestorage().set(key, JsonX.toJson(keyList), validSecond);
+			int validSecond = getValidSecondAdjusted();
+			getCachestorage().set(key, JsonX.toJson(keyList), validSecond,TimeUnit.SECONDS);
 		}catch (Exception e) {
 			throw new L2CacheException(e.getMessage());
 		}
@@ -224,7 +220,8 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	public <T> void setResultKeyListPaginated(Class<T> clz, Object condition, Page<T> pagination) {
 		String key = getKey(clz, condition);
 		try{
-			getCachestorage().set(key, JsonX.toJson(pagination), validSecond);
+			int validSecond = getValidSecondAdjusted();
+			getCachestorage().set(key, JsonX.toJson(pagination), validSecond, TimeUnit.SECONDS);
 		}catch (Exception e) {
 			throw new L2CacheException(e.getMessage());
 		}
@@ -300,7 +297,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		key = getSimpleKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
 
-		getCachestorage().set(key, JsonX.toJson(mapList), validSecond);
+		getCachestorage().set(key, JsonX.toJson(mapList), validSecond,TimeUnit.SECONDS);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class DefaultL2CacheStorage implements L2CacheStorage {
@@ -42,10 +43,10 @@ public class DefaultL2CacheStorage implements L2CacheStorage {
 	}
 
 
-	public boolean set(String key, String value,int validSeconds){
+	public boolean set(String key, String value, int validSeconds, TimeUnit timeUnit){
 		if (key == null || key.equals("") )
 			return false;
-		this.stringRedisTemplate.opsForValue().set(key, value,validSeconds);
+		this.stringRedisTemplate.opsForValue().set(key, value,validSeconds,timeUnit);
 		return true;
 	}
 

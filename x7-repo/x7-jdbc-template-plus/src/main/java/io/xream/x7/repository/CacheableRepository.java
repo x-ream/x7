@@ -24,6 +24,7 @@ import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.transform.DataTransform;
 import org.slf4j.Logger;
@@ -45,9 +46,7 @@ public class CacheableRepository implements Repository {
 
     private DataTransform dataTransform;
     public void setDataTransform(DataTransform dataTransform) {
-
         logger.info("x7-repo/x7-jdbc-template-plus on starting....");
-
         this.dataTransform = dataTransform;
     }
 
@@ -57,8 +56,9 @@ public class CacheableRepository implements Repository {
         this.cacheResolver = cacheResolver;
     }
 
-    private boolean isNoCache() {
-        return !cacheResolver.isEnabled();
+    private boolean isCacheEnabled(Parsed parsed) {
+        LoggerProxy.debug(parsed.getClz(),"L2Cache enabled");
+        return cacheResolver.isEnabled() && !parsed.isNoCache();
     }
 
     private String getCacheKey(Object obj, Parsed parsed) {
@@ -84,42 +84,43 @@ public class CacheableRepository implements Repository {
             keySet.add(key);
         }
 
+        Field f = parsed.getKeyField(X.KEY_ONE);
+        Class keyClz = f.getType();
+        List<Object> idList = new ArrayList<>();
         for (String key : keyList) {
             if (!keySet.contains(key)) {
-
-                Field f = parsed.getKeyField(X.KEY_ONE);
-
-                T condition = null;
                 try {
-                    condition = clz.newInstance();
-                    f.set(condition, key);
+                    if (keyClz == String.class) {
+                        idList.add(key);
+                    }else if (keyClz == long.class || keyClz == Long.class){
+                        idList.add(Long.valueOf(key));
+                    }else if (keyClz == int.class || keyClz == Integer.class){
+                        idList.add(Integer.valueOf(key));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                T obj = dataTransform.get(new KeyOne<T>() {
-                    @Override
-                    public Object get() {
-                        return key;
-                    }
-
-                    @Override
-                    public Class<T> getClzz() {
-                        return clz;
-                    }
-                });
-                /*
-                 * 更新或重置缓存
-                 */
-                if (obj == null) {
-                    if (!isNoCache() && !parsed.isNoCache())
-                        cacheResolver.markForRefresh(clz);
-                } else {
-                    list.add(obj);
-                    if (!isNoCache() && !parsed.isNoCache())
-                        cacheResolver.set(clz, key, obj);
-                }
             }
+        }
+        String key = parsed.getKey(X.KEY_ONE);
+        InCondition inCondition = new InCondition(key,idList);
+        inCondition.setClz(clz);
+        List<T> objList = this.dataTransform.in(inCondition);
+
+        if (objList.isEmpty()) {
+            cacheResolver.markForRefresh(clz);
+            return;
+        }
+
+        try {
+            for (T obj : objList) {
+                list.add(obj);
+                Object id = f.get(obj);
+                cacheResolver.set(clz, String.valueOf(id), obj);
+            }
+        }catch (Exception e){
+
         }
 
     }
@@ -148,7 +149,7 @@ public class CacheableRepository implements Repository {
         Parsed parsed = Parser.get(clz);
         long id = dataTransform.create(obj);
 
-        if (!isNoCache() && !parsed.isNoCache())
+        if (isCacheEnabled(parsed))
             cacheResolver.markForRefresh(clz);
         return id;
     }
@@ -167,7 +168,7 @@ public class CacheableRepository implements Repository {
 
         boolean flag = dataTransform.refresh(refreshCondition);
 
-        if (!isNoCache() && !parsed.isNoCache()) {
+        if (isCacheEnabled(parsed)) {
 
             cacheResolver.remove(clz);
             cacheResolver.markForRefresh(clz);
@@ -195,7 +196,7 @@ public class CacheableRepository implements Repository {
      */
     public <T> void refreshCache(Class<T> clz) {
         Parsed parsed = Parser.get(clz);
-        if (!isNoCache() && !parsed.isNoCache()) {
+        if (isCacheEnabled(parsed)) {
             cacheResolver.markForRefresh(clz);
         }
     }
@@ -208,7 +209,7 @@ public class CacheableRepository implements Repository {
         String key = String.valueOf(keyOne.get());
         boolean flag = dataTransform.remove(keyOne);
 
-        if (!isNoCache() && !parsed.isNoCache()) {
+        if (isCacheEnabled(parsed)) {
             if (key != null)
                 cacheResolver.remove(clz, key);
             cacheResolver.markForRefresh(clz);
@@ -226,7 +227,7 @@ public class CacheableRepository implements Repository {
         Class clz = conditionObj.getClass();
         Parsed parsed = Parser.get(clz);
 
-        if (isNoCache() || parsed.isNoCache()) {
+        if (!isCacheEnabled(parsed)) {
             return dataTransform.list(conditionObj);
         }
 
@@ -265,9 +266,8 @@ public class CacheableRepository implements Repository {
         Class clz = criteria.getClz();
         Parsed parsed = Parser.get(clz);
 
-        if (isNoCache()) {
+        if (!isCacheEnabled(parsed))
             return dataTransform.find(criteria);
-        }
 
         Page<T> p = cacheResolver.getResultKeyListPaginated(clz, criteria);// FIXME
 
@@ -350,9 +350,8 @@ public class CacheableRepository implements Repository {
         Class clz = criteria.getClz();
         Parsed parsed = Parser.get(clz);
 
-        if (isNoCache()) {
+        if (!isCacheEnabled(parsed))
             return dataTransform.list(criteria);
-        }
 
         List<String> keyList = cacheResolver.getResultKeyList(clz, criteria);
 
@@ -393,7 +392,7 @@ public class CacheableRepository implements Repository {
         b = dataTransform.execute(obj, sql);
 
         if (b) {
-            if (!isNoCache() && !parsed.isNoCache()) {
+            if (isCacheEnabled(parsed)) {
                 String key = getCacheKey(obj, parsed);
                 if (key != null) {
                     cacheResolver.remove(obj.getClass(), key);
@@ -414,9 +413,8 @@ public class CacheableRepository implements Repository {
 
         List<? extends Object> inList = inCondition.getInList();
 
-        if (isNoCache() || parsed.isNoCache()) {
+        if (!isCacheEnabled(parsed))
             return dataTransform.in(inCondition);
-        }
 
         StringBuilder sb = new StringBuilder();
         sb.append(inProperty).append(":");
@@ -523,7 +521,7 @@ public class CacheableRepository implements Repository {
         Class clz = objList.get(0).getClass();
         Parsed parsed = Parser.get(clz);
         boolean flag = this.dataTransform.createBatch(objList);
-        if (!isNoCache() && !parsed.isNoCache())
+        if (isCacheEnabled(parsed))
             cacheResolver.markForRefresh(clz);
 
         return flag;
@@ -533,9 +531,8 @@ public class CacheableRepository implements Repository {
     protected List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionList) {
 
         Parsed parsed = Parser.get(clz);
-        if (isNoCache() || parsed.isNoCache()) {
+        if (!isCacheEnabled(parsed))
             return dataTransform.list(clz, sql, conditionList);
-        }
 
         String condition = sql + conditionList.toString();
 
@@ -560,7 +557,7 @@ public class CacheableRepository implements Repository {
         Class<T> clz = keyOne.getClzz();
         Parsed parsed = Parser.get(clz);
 
-        if (isNoCache() || parsed.isNoCache()) {
+        if (!isCacheEnabled(parsed)) {
             T t = dataTransform.get(keyOne);
             return t;
         }
@@ -583,7 +580,7 @@ public class CacheableRepository implements Repository {
         Class<T> clz = (Class<T>) conditionObj.getClass();
         Parsed parsed = Parser.get(clz);
 
-        if (isNoCache() || parsed.isNoCache()) {
+        if (!isCacheEnabled(parsed)) {
             T t = dataTransform.getOne(conditionObj);
             return t;
         }
