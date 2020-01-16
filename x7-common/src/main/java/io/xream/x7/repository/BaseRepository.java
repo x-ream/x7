@@ -41,6 +41,11 @@ public interface BaseRepository<T> extends Typed<T> {
 
     long create(T obj);
 
+    /**
+     * replace: clear all the value of the row, and insert the new value </>
+     * is not refreshOrCreate </>
+     * x7 will not support refreshOrCreate, coding: query at first, then refresh of create <br>
+     */
     boolean createOrReplace(T obj);
 
     boolean refresh(RefreshCondition<T> refreshCondition);
@@ -99,7 +104,6 @@ public interface BaseRepository<T> extends Typed<T> {
     Page<T> find(Criteria criteria);
 
     /**
-     *
      * @param criteria
      */
     Page<Map<String, Object>> find(Criteria.ResultMappedCriteria criteria);
