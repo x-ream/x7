@@ -17,14 +17,8 @@
 package io.xream.x7.common.bean.condition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.xream.x7.common.bean.ConjunctionAndOtherScript;
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.PredicateAndOtherScript;
 import io.xream.x7.common.bean.Routeable;
-import io.xream.x7.common.util.StringUtil;
-import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,11 +29,21 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
     private transient Class clz;
 
     private List<T> list;
-    private List<Criteria.X> conditionList = new ArrayList<>();
+    private Object[] ins;
 
     public RemoveOrRrefreshOrCreate(){}
-    public RemoveOrRrefreshOrCreate(List<T> list){
-        this.list = list;
+    public static <T> RemoveOrRrefreshOrCreate wrap(List<T> list, Object[] ins){
+        return wrap(null,list,ins);
+    }
+
+    public static <T> RemoveOrRrefreshOrCreate wrap(Object routeKey,List<T> list, Object[] ins){
+        RemoveOrRrefreshOrCreate rrc =  new RemoveOrRrefreshOrCreate();
+        rrc.routeKey = routeKey;
+        rrc.list = list;
+        if (ins != null) {
+            rrc.ins = ins;
+        }
+        return rrc;
     }
 
     @Override
@@ -67,32 +71,20 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
         this.list = list;
     }
 
-    public List<Criteria.X> getConditionList() {
-        return conditionList;
+    public Object[] getIns() {
+        return ins;
     }
 
-    public void setConditionList(List<Criteria.X> conditionList) {
-        this.conditionList = conditionList;
+    public void setIns(Object[] ins) {
+        this.ins = ins;
     }
 
-    public RemoveOrRrefreshOrCreate eq(String property, Object value) {
-        Assert.notNull(property, " RemoveOrRrefreshOrCreate.eq(property,vlaue), preperty can not null");
-        Assert.notNull(property, " RemoveOrRrefreshOrCreate.eq(property,vlaue), value can not null");
-        String str = String.valueOf(value);
-        if (StringUtil.isNullOrEmpty(str) || str.equals("0"))
-            throw new IllegalArgumentException("RemoveOrRrefreshOrCreate.eq(property,vlaue), value = " + value);
-
-        Criteria.X x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setPredicate(PredicateAndOtherScript.EQ);
-        x.setKey(property);
-        x.setValue(value);
-        this.conditionList.add(x);
-        return this;
-    }
-
-    public RemoveOrRrefreshOrCreate wrap(List<T> list){
-        this.list = list;
-        return this;
+    @Override
+    public String toString() {
+        return "RemoveOrRrefreshOrCreate{" +
+                "routeKey=" + routeKey +
+                ", list=" + list +
+                ", ins=" + ins +
+                '}';
     }
 }

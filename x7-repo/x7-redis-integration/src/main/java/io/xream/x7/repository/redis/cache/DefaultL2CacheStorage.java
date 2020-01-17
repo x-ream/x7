@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class DefaultL2CacheStorage implements L2CacheStorage {
+public final class DefaultL2CacheStorage implements L2CacheStorage {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

@@ -65,4 +65,5 @@ public interface Dao {
 
 	<T> T getOne(T conditionObj);
 
+    <T> boolean refresh(T t);
 }

@@ -20,8 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 public interface L3CacheStorage {
 
-    String DEFAULT_VALUE = "NULL";
-
     void set(String key, String value, long expireTime, TimeUnit timeUnit);
 
     String get(String key, long expireTime, TimeUnit timeUnit);

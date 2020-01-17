@@ -24,7 +24,7 @@ import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
-import io.xream.x7.repository.CacheableRepository;
+import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
 import io.xream.x7.repository.dao.TxConfig;

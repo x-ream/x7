@@ -18,10 +18,11 @@ package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.repository.CacheableRepository;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.DbType;
+import io.xream.x7.repository.ManuRepositoryStarter;
 import io.xream.x7.repository.Repository;
+import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.Dao;
 import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.SqlCriteriaParser;
@@ -137,6 +138,8 @@ public class RepositoryStarter  {
         CacheableRepository repository = new CacheableRepository();
         repository.setDataTransform(dataTransform);
         repository.setCacheResolver(cacheResolver);
+
+        ManuRepositoryStarter.init(repository);
 
         return repository;
     }

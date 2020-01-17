@@ -17,10 +17,8 @@
 package io.xream.x7.common.bean.condition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.CriteriaBuilder;
-import io.xream.x7.common.bean.PredicateAndOtherScript;
-import io.xream.x7.common.bean.Routeable;
+import io.xream.x7.common.bean.*;
+import io.xream.x7.common.repository.X;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +131,18 @@ public class RefreshCondition<T> implements Routeable {
         this.refreshList.add(x);
 
         return this;
+    }
+
+    public KV getKeyOne() {
+        Parsed parsed = Parser.get(clz);
+        String keyOne = parsed.getKey(X.KEY_ONE);
+        for (Criteria.X x : getCondition().getListX()) {
+            String key = x.getKey();
+            if (key != null && key.equals(keyOne)) {
+                return new KV(key,x.getValue());
+            }
+        }
+        return null;
     }
 
 

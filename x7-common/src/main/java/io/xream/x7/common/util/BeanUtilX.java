@@ -680,5 +680,29 @@ public class BeanUtilX extends BeanUtil {
 		return false;
 	}
 
+	public static <T> Object tryToGetId(T t, Parsed parsed) {
+
+		Field f = parsed.getKeyField(X.KEY_ONE);
+		Object id = null;
+		try {
+			id = f.get(t);
+		} catch (Exception e) {
+
+		}
+		if (id == null)
+			throw new IllegalArgumentException("obj keyOne = " + id + ", " + t);
+		return id;
+	}
+
+	public static String getCacheKey(Object obj, Parsed parsed) {
+		try {
+			Object keyOneObj = tryToGetId(obj,parsed);
+			if (keyOneObj != null)
+				return keyOneObj.toString();
+
+		} catch (Exception e) {
+		}
+		return null;
+	}
 
 }

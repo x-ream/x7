@@ -18,8 +18,10 @@ package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.*;
 import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.SqlParsed;
 import io.xream.x7.repository.exception.PersistenceException;
 import io.xream.x7.repository.exception.SqlBuildException;
@@ -27,13 +29,12 @@ import io.xream.x7.repository.mapper.DataObjectConverter;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.util.SqlParserUtil;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class SqlUtil {
@@ -96,6 +97,38 @@ public class SqlUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(parsed.getTableName()).append(SqlScript.SPACE);
         return concatRefresh(sb, parsed, refreshCondition, criteriaParser);
+    }
+
+    protected static String concatRefresh(StringBuilder sb, Parsed parsed, Map<String, Object> refreshMap) {
+
+        sb.append(SqlScript.SET);
+        int size = refreshMap.size();
+        int i = 0;
+        for (String key : refreshMap.keySet()) {
+
+            BeanElement element = parsed.getElement(key);
+            if (element.isJson && DbType.ORACLE.equals(DbType.value)){
+                Object obj = refreshMap.get(key);
+                Reader reader = new StringReader(obj.toString());
+                refreshMap.put(key,reader);
+            }
+
+            String mapper = parsed.getMapper(key);
+            sb.append(mapper);
+            sb.append(SqlScript.EQ_PLACE_HOLDER);
+            if (i < size - 1) {
+                sb.append(SqlScript.COMMA);
+            }
+            i++;
+        }
+
+        String keyOne = parsed.getKey(X.KEY_ONE);
+
+        sb.append(SqlScript.WHERE);
+        String mapper = parsed.getMapper(keyOne);
+        sb.append(mapper).append(SqlScript.EQ_PLACE_HOLDER);
+
+        return sb.toString();
     }
 
 
@@ -293,5 +326,27 @@ public class SqlUtil {
                 .replace("<","&le")
                 .replace(">","$gt"); // 手动拼接SQL,
         return sql;
+    }
+
+    public static <T> Object[] refresh(T t, Class<T> clz) {
+
+        Parsed parsed = Parser.get(clz);
+        String tableName = parsed.getTableName();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(tableName).append(SqlScript.SPACE);
+
+        Map<String, Object> refreshMap = SqlParserUtil.getRefreshMap(parsed, t);
+
+        String keyOne = parsed.getKey(X.KEY_ONE);
+        Object keyOneValue = refreshMap.remove(keyOne);
+
+        String sql = concatRefresh(sb, parsed, refreshMap);
+
+        List<Object> valueList = new ArrayList<>();
+        valueList.addAll(refreshMap.values());
+        valueList.add(keyOneValue);
+
+        return new Object[]{sql,valueList};
     }
 }

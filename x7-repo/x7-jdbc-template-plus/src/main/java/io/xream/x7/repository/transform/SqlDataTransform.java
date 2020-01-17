@@ -67,6 +67,11 @@ public class SqlDataTransform implements DataTransform {
     }
 
     @Override
+    public <T> boolean refresh(T t) {
+        return this.dao.refresh(t);
+    }
+
+    @Override
     public <T> boolean refresh(RefreshCondition<T> refreshCondition) {
 
         return this.dao.refreshByCondition(refreshCondition);

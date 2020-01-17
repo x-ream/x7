@@ -17,6 +17,7 @@
 package io.xream.x7.repository.redis.cache;
 
 import io.xream.x7.cache.L3CacheStorage;
+import io.xream.x7.common.cache.Protection;
 import io.xream.x7.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 @Component
-public class DefaultL3CacheStorage implements L3CacheStorage {
+public final class DefaultL3CacheStorage implements L3CacheStorage {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -38,7 +39,7 @@ public class DefaultL3CacheStorage implements L3CacheStorage {
     @Override
     public void set(String key, String value, long expireTime, TimeUnit timeUnit) {
         
-        value = (value == null ? DEFAULT_VALUE : value);
+        value = (value == null ? Protection.DEFAULT_VALUE : value);
 
         PluginL1.putBeforeL3(key,value,expireTime,timeUnit);
 

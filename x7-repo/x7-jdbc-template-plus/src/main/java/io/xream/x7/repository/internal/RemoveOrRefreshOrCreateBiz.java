@@ -16,21 +16,19 @@
  */
 package io.xream.x7.repository.internal;
 
-import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.Repository;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RemoveOrRefreshOrCreateBiz {
 
@@ -38,49 +36,54 @@ public class RemoveOrRefreshOrCreateBiz {
 
         Assert.notNull(wrapper, "removeOrRefreshOrCreate(wrapper),wrapper is null");
 
-        List<T> list = wrapper.getList();
-        if (list == null || list.isEmpty())
+        if (wrapper.getList() == null || wrapper.getList().isEmpty())
             return false;
+        List<T> list = null;
+        Object obj = wrapper.getList().get(0);
+        if (obj.getClass() != clz){
+            list = new ArrayList<>();
+            for (Object o : wrapper.getList()){
+                T t = JsonX.toObject(o,clz);
+                list.add(t);
+            }
+        }else{
+            list = wrapper.getList();
+        }
 
-        List<Criteria.X> conditionList = wrapper.getConditionList();
-        if (conditionList == null || conditionList.isEmpty())
-            throw new IllegalArgumentException("removeOrRefreshOrCreate(wrapper),wrapper.conditionList is null");
+        Object[] ins = wrapper.getIns();
 
-        Criteria criteria = new Criteria();
-        criteria.setClz(clz);
-        criteria.reset(conditionList);
-
-        List<T> existList = repository.list(criteria);
+        List<String> inList = new ArrayList<>();
+        if (ins != null ) {
+            for (Object in : ins){
+                if (in == null)
+                    continue;
+                String strId = String.valueOf(in);
+                if (StringUtil.isNullOrEmpty(strId))
+                    continue;
+                inList.add(strId);
+            }
+        }
 
         final Parsed parsed = Parser.get(clz);
         Field f = parsed.getKeyField(X.KEY_ONE);
-        Map<Object,Object> newMap = new HashMap<>();
+        Map<String,T> map = new HashMap<>();
         try {
             for (T t : list) {
                 Object id = f.get(t);
-                newMap.put(id, t);
+                map.put(String.valueOf(id), t);
             }
         }catch (Exception e){
             throw new RuntimeException(ExceptionUtil.getMessage(e));
         }
 
-        Map<Object,Object> existMap = new HashMap<>();
-        try {
-            for (T t : existList) {
-                Object id = f.get(t);
-                existMap.put(id, t);
-            }
-        }catch (Exception e){
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
-        }
 
         /*
          * remove
          */
-        Iterator<Object> existIte = existMap.keySet().iterator();
+        Iterator<String> existIte = inList.iterator();
         while (existIte.hasNext()) {
             Object id = existIte.next();
-            if (newMap.containsKey(id))
+            if (map.containsKey(id))
                 continue;
             existIte.remove();
             repository.remove(new KeyOne<Object>() {
@@ -96,15 +99,19 @@ public class RemoveOrRefreshOrCreateBiz {
             });
         }
 
-        TODO:
         /*
-         * refresh
+         * refreshOrCreate
          */
+        for (Map.Entry<String,T> entry : map.entrySet()) {
+            String id = entry.getKey();
+            T t = entry.getValue();
+            if (inList.contains(id)) {
+                repository.refresh(t);
+            }else {
+                repository.create(t);
+            }
 
-        /*
-         * create
-         */
-
+        }
 
         return true;
     }

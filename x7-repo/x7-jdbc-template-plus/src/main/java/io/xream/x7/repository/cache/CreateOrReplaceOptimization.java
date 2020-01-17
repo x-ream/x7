@@ -14,21 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache;
+package io.xream.x7.repository.cache;
 
-public final class DefaultL3CacheResolver implements L3CacheResolver {
+import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.StringUtil;
 
+public interface CreateOrReplaceOptimization {
 
-   private L3CacheStorage storage;
-
-    @Override
-    public L3CacheStorage getStorage() {
-        if (storage == null)
-            throw new RuntimeException("No implements of L3CacheStorage, like the project jdbc-template-plus/redis-integration");
-        return storage;
-    }
-
-    public void setStorage(L3CacheStorage storage) {
-        this.storage = storage;
+    static Object tryToGetId(Object obj,Parsed parsed){
+        Object id = BeanUtilX.tryToGetId(obj, parsed);
+        String idStr = String.valueOf(id);
+        if (StringUtil.isNullOrEmpty(idStr) || idStr.equals("0"))
+            throw new IllegalArgumentException("createOrReplace(obj),  obj keyOne = " + id);
+        return id;
     }
 }

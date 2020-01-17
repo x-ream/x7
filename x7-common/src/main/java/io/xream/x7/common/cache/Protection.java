@@ -14,21 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache;
+package io.xream.x7.common.cache;
 
-public final class DefaultL3CacheResolver implements L3CacheResolver {
-
-
-   private L3CacheStorage storage;
-
-    @Override
-    public L3CacheStorage getStorage() {
-        if (storage == null)
-            throw new RuntimeException("No implements of L3CacheStorage, like the project jdbc-template-plus/redis-integration");
-        return storage;
-    }
-
-    public void setStorage(L3CacheStorage storage) {
-        this.storage = storage;
-    }
+public interface Protection {
+    String DEFAULT_VALUE = "NULL";
+    int DEFAULT_NUM = Integer.MIN_VALUE;
 }

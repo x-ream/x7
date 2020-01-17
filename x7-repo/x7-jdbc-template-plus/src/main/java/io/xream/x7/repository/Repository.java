@@ -17,7 +17,6 @@
 package io.xream.x7.repository;
 
 import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.Page;
 
@@ -31,9 +30,8 @@ import java.util.Map;
  * @author Sim
  *
  */
-public interface Repository {
+public interface Repository extends QueryForCache{
 
-	int IN_MAX = 500;
 	/**
 	 * 更新缓存
 	 * @param clz
@@ -74,11 +72,7 @@ public interface Repository {
 	 *  @param criteria
 	 */
 	<T> Page<T> find(Criteria criteria);
-	/**
-	 * 支持单一的指定property的in查询, 包括主键
-	 * @param inCondition
-	 */
-	<T> List<T> in(InCondition inCondition);
+
 	/**
 	 * 连表查询，标准化拼接
 	 * 尽量避免在互联网业务系统中使用<br>
@@ -100,5 +94,7 @@ public interface Repository {
 	boolean createBatch(List<? extends Object> objList);
 
 	<T> T getOne(T condition);
+
+    <T> boolean refresh(T t);
 
 }

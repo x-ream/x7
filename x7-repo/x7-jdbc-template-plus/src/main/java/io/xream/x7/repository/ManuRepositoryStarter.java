@@ -14,21 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache;
+package io.xream.x7.repository;
 
-public final class DefaultL3CacheResolver implements L3CacheResolver {
+public class ManuRepositoryStarter {
 
-
-   private L3CacheStorage storage;
-
-    @Override
-    public L3CacheStorage getStorage() {
-        if (storage == null)
-            throw new RuntimeException("No implements of L3CacheStorage, like the project jdbc-template-plus/redis-integration");
-        return storage;
-    }
-
-    public void setStorage(L3CacheStorage storage) {
-        this.storage = storage;
+    public static void init(Manuable repository) {
+        ManuRepository.init(repository);;
     }
 }

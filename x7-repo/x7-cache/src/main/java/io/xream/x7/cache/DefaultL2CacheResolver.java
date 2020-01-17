@@ -16,19 +16,24 @@
  */
 package io.xream.x7.cache;
 
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.bean.Parser;
+import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.common.util.VerifyUtil;
+import io.xream.x7.common.repository.X;
+import io.xream.x7.common.util.*;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.exception.L2CacheException;
+import io.xream.x7.exception.NoResultUnderProtectionException;
+import io.xream.x7.exception.NotQueryUnderProtectionException;
+import io.xream.x7.repository.QueryForCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 
@@ -38,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  * @author sim
  *
  */
-public class DefaultL2CacheResolver implements L2CacheResolver {
+public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	private final static Logger logger = LoggerFactory.getLogger(DefaultL2CacheResolver.class);
 	public final static String NANO_SECOND = ".ns.";
@@ -55,9 +60,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 	public static void setValidSecond(int vs){
 		validSecond = vs;
-		System.out.println("\n");
 		logger.info("L2 Cache try to starting.... cache time = " + validSecond + "s");
-		System.out.println("\n");
 	}
 	private int getValidSecondAdjusted(){
 		return  this.validSecond;
@@ -70,7 +73,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 
 	protected L2CacheStorage getCachestorage(){
 		if (this.cacheStorage == null)
-			throw new RuntimeException("No implements of L2CacheStorage, like the project jdbc-template-plus/redis-integration");
+			throw new RuntimeException("No implements of L2CacheStorage, like the project x7-repo/x7-redis-integration");
 		return this.cacheStorage;
 	}
 	/**
@@ -88,7 +91,23 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 			throw new L2CacheException("markForRefresh failed");
 		return time;
 	}
-	
+
+	@Override
+	public boolean refresh(Class clz, String key) {
+		if (key == null){
+			remove(clz);
+		}else{
+			remove(clz, key);
+		}
+		markForRefresh(clz);
+		return true;
+	}
+
+	@Override
+	public boolean refresh(Class clz) {
+		return refresh(clz, null);
+	}
+
 	/**
 	 * 
 	 * FIXME {hash tag}
@@ -163,7 +182,12 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	
 	@SuppressWarnings("rawtypes")
 	private String getKey(Class clz, Object conditionObj){
-		String condition = JsonX.toJson(conditionObj);
+		String condition;
+		if (conditionObj == null){
+			condition = DEFAULT_VALUE;
+		}else {
+			condition = JsonX.toJson(conditionObj);
+		}
 		return  getPrefix(clz) +"."+VerifyUtil.toMD5(condition);
 	}
 
@@ -184,28 +208,17 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		return "{"+clz.getName()+"}."  + nsStr;
 	}
 
-	/**
-	 * FIXME {hash tag}
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void set(Class clz, String key, Object obj) {
-		key = getSimpleKey(clz, key);
-		int validSecond =  getValidSecondAdjusted();
-		getCachestorage().set(key, JsonX.toJson(obj), validSecond,TimeUnit.SECONDS);
-	}
 
-	@Override
-	public void setTotalRows(Class clz, String key, long obj) {
+
+	private void setTotalRows(Class clz, String key, long obj) {
 		key = getTotalRowsKey(clz, key);
 		int validSecond =  getValidSecondAdjusted();
 		getCachestorage().set(key, String.valueOf(obj), validSecond,TimeUnit.SECONDS);
 	}
 
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void setResultKeyList(Class clz, Object condition, List<String> keyList) {
+
+	private void setResultKeyList(Class clz, Object condition, List<String> keyList) {
 		String key = getKey(clz, condition);
 		try{
 			int validSecond = getValidSecondAdjusted();
@@ -216,8 +229,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	
-	@Override
-	public <T> void setResultKeyListPaginated(Class<T> clz, Object condition, Page<T> pagination) {
+	private  <T> void setResultKeyListPaginated(Class<T> clz, Object condition, Page<T> pagination) {
 		String key = getKey(clz, condition);
 		try{
 			int validSecond = getValidSecondAdjusted();
@@ -227,20 +239,16 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public List<String> getResultKeyList(Class clz, Object condition) {
+	private List<String> getResultKeyList(Class clz, Object condition) throws NotQueryUnderProtectionException{
 		String key = getKey(clz, condition);
 		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
-			return new ArrayList<String>();
+			throw new NotQueryUnderProtectionException();
 		
 		return JsonX.toList(str, String.class);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Page<String> getResultKeyListPaginated(Class clz, Object condition) {
+	private Page<String> getResultKeyListPaginated(Class clz, Object condition) {
 		String key = getKey(clz, condition);
 		String json = getCachestorage().get(key);
 		
@@ -250,8 +258,7 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 		return ObjectUtil.toPagination(json);
 	}
 
-	@Override
-	public <T> List<T> list(Class<T> clz, List<String> keyList) {
+	private  <T> List<T> list(Class<T> clz, List<String> keyList) {
 		List<String> keyArr = getKeyList(clz, keyList);//转换成缓存需要的keyList
 		
 		List<String> jsonList = getCachestorage().multiGet(keyArr);
@@ -273,42 +280,286 @@ public class DefaultL2CacheResolver implements L2CacheResolver {
 	/**
 	 * FIXME {hash tag}
 	 */
-	@Override
-	public <T> T get(Class<T> clz, String key) {
+	private void set(Class clz, String key, Object obj) {
+		key = getSimpleKey(clz, key);
+		doSet(key,obj);
+	}
+
+	/**
+	 * FIXME {hash tag}
+	 */
+	private void set(Class clz, Object objKey, Object obj) {
+		String key = getKey(clz, objKey);
+		doSet(key,obj);
+	}
+
+	private void doSet(String key, Object obj) {
+
+		int validSecond =  getValidSecondAdjusted();
+		String value;
+		if (obj == null){
+			value = DEFAULT_VALUE;
+		}else {
+			value = JsonX.toJson(obj);
+		}
+		getCachestorage().set(key, value, validSecond,TimeUnit.SECONDS);
+	}
+
+	/**
+	 * FIXME {hash tag}
+	 */
+	private  <T> T get(Class<T> clz, String key) throws NoResultUnderProtectionException{
 		key = getSimpleKey(clz,key);
+		return doGet(clz,key);
+	}
+
+	private  <T> T get(Class<T> clz, Object objKey) throws NoResultUnderProtectionException{
+		String key = getKey(clz,objKey);
+		return doGet(clz,key);
+	}
+
+	private <T> T doGet(Class<T> clz, String key) throws NoResultUnderProtectionException{
 		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			return null;
+		if (str.trim().equals(DEFAULT_VALUE))
+			throw new NoResultUnderProtectionException();
 		T obj = JsonX.toObject(str,clz);
 		return obj;
 	}
 
-	@Override
-	public <T> long getTotalRows(Class<T> clz, String key) {
+	private  <T> long getTotalRows(Class<T> clz, String key) {
 		key = getTotalRowsKey(clz,key);
 		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
-			return 0;
+			return DEFAULT_NUM;
 		return Long.valueOf(str);
 	}
 
-	@Override
-	public void setMapList(Class clz, String key, List<Map<String, Object>> mapList) {
-		key = getSimpleKey(clz, key);
-		int validSecond =  getValidSecondAdjusted();
 
-		getCachestorage().set(key, JsonX.toJson(mapList), validSecond,TimeUnit.SECONDS);
+	@Override
+	public <T> List<T> listUnderProtection(Class<T> clz, Object conditionObj, QueryForCache queryForCache, Callable<List<T>> callable) {
+
+		Parsed parsed = Parser.get(clz);
+		List<String> keyList = null;
+		try {
+			keyList = getResultKeyList(clz, conditionObj);
+		}catch (NotQueryUnderProtectionException upe) {
+
+		}
+		if (keyList == null) {
+
+			List<T> list = null;
+			try {
+				list = callable.call();
+			} catch (Exception e) {
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
+			}
+
+			keyList = new ArrayList<String>();
+
+			for (T t : list) {
+				String key = BeanUtilX.getCacheKey(t, parsed);
+				keyList.add(key);
+			}
+
+			setResultKeyList(clz, conditionObj, keyList);
+
+			return list;
+		}
+
+		if (keyList.isEmpty())
+			return new ArrayList<>();
+
+		List<T> list = list(clz, keyList);
+
+		if (keyList.size() == list.size())
+			return list;
+
+		replenishAndRefreshCache(keyList, list, clz, parsed,queryForCache);
+
+		List<T> sortedList = sort(keyList, list, parsed);
+
+		return sortedList;
 	}
 
 	@Override
-	public List<Map<String, Object>> getMapList(Class clz, String key) {
-		key = getSimpleKey(clz,key);
-		String str = getCachestorage().get(key);
-		if (StringUtil.isNullOrEmpty(str))
+	public <T> T getUnderProtection(Class<T> clz, Object conditionObj, Callable<T> callable) {
+
+		T obj;
+		try{
+			obj = get(clz,conditionObj);
+		}catch (NoResultUnderProtectionException e){
 			return null;
-		List mapList = JsonX.toList(str,Map.class);
-		return mapList;
+		}
+
+		if (obj == null) {
+			try {
+				obj = callable.call();
+			}catch (Exception e){
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
+			}
+			set(clz, conditionObj, obj);
+		}
+
+		return obj;
 	}
 
+	@Override
+	public <T> Page<T> findUnderProtection(Criteria criteria,QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable){
+		Class clz = criteria.getClz();
+		Parsed parsed = Parser.get(clz);
+		Page p = getResultKeyListPaginated(clz, criteria);// FIXME
+
+		if (p == null) {
+
+			final String totalRowsString = getTotalRowsString(criteria);
+
+			if (!criteria.isScroll()) {
+				// totalRows from cache
+				long totalRows = getTotalRows(clz, totalRowsString);
+				if (totalRows == DEFAULT_NUM) {
+					try {
+						p = findCallable.call();
+					}catch (Exception e){
+						throw new RuntimeException(ExceptionUtil.getMessage(e));
+					}
+
+					setTotalRows(clz, totalRowsString, p.getTotalRows());
+
+				} else {
+					List<T> list = null;
+					try {
+						list = listCallable.call();
+					} catch (Exception e) {
+						throw new RuntimeException(ExceptionUtil.getMessage(e));
+					}
+					p = new Page<>();
+					p.setTotalRows(totalRows);
+					p.setPage(criteria.getPage());
+					p.setRows(criteria.getRows());
+					p.reSetList(list);
+				}
+			} else {
+				try {
+					p = findCallable.call();
+				}catch (Exception e){
+					throw new RuntimeException(ExceptionUtil.getMessage(e));
+				}
+			}
+
+			List<T> list = p.getList(); // 结果
+
+			List<String> keyList = p.getKeyList();
+
+			for (T t : list) {
+				String key = BeanUtilX.getCacheKey(t, parsed);
+				keyList.add(key);
+			}
+
+			p.reSetList(null);
+
+			setResultKeyListPaginated(clz, criteria, p);
+
+			p.setKeyList(null);
+			p.reSetList(list);
+
+			return p;
+		}
+
+		List<String> keyList = p.getKeyList();
+
+		if (keyList == null || keyList.isEmpty()) {
+			return p;
+		}
+
+		List<T> list = list(clz, keyList);
+
+		if (keyList.size() == list.size()) {
+			p.reSetList(list);
+			return p;
+		}
+
+		replenishAndRefreshCache(keyList, list, clz, parsed, queryForCache);
+
+		List<T> sortedList = sort(keyList, list, parsed);
+
+		p.reSetList(sortedList);
+
+		return p;
+	}
+
+	private  <T> void replenishAndRefreshCache(List<String> keyList, List<T> list, Class<T> clz, Parsed parsed, QueryForCache queryForCache) {
+
+		Set<String> keySet = new HashSet<String>();
+		for (T t : list) {
+			String key = BeanUtilX.getCacheKey(t, parsed);
+			keySet.add(key);
+		}
+
+		Field f = parsed.getKeyField(X.KEY_ONE);
+		Class keyClz = f.getType();
+		List<Object> idList = new ArrayList<>();
+		for (String key : keyList) {
+			if (!keySet.contains(key)) {
+				try {
+					if (keyClz == String.class) {
+						idList.add(key);
+					} else if (keyClz == long.class || keyClz == Long.class) {
+						idList.add(Long.valueOf(key));
+					} else if (keyClz == int.class || keyClz == Integer.class) {
+						idList.add(Integer.valueOf(key));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		String key = parsed.getKey(X.KEY_ONE);
+		InCondition inCondition = new InCondition(key, idList);
+		inCondition.setClz(clz);
+		List<T> objList = queryForCache.in(inCondition);
+
+		if (objList.isEmpty()) {
+			markForRefresh(clz);
+			return;
+		}
+
+		try {
+			for (T obj : objList) {
+				list.add(obj);
+				Object id = f.get(obj);
+				set(clz, String.valueOf(id), obj);
+			}
+		} catch (Exception e) {
+
+		}
+
+	}
+
+	private  <T> List<T> sort(List<String> keyList, List<T> list, Parsed parsed) {
+		List<T> sortedList = new ArrayList<T>();
+		for (String key : keyList) {
+			Iterator<T> ite = list.iterator();
+			while (ite.hasNext()) {
+				T t = ite.next();
+				if (key.equals(BeanUtilX.getCacheKey(t, parsed))) {
+					ite.remove();
+					sortedList.add(t);
+					break;
+				}
+			}
+		}
+		return sortedList;
+	}
+
+	private String getTotalRowsString(Criteria criteria) {
+		int page = criteria.getPage();
+		criteria.setPage(0);
+		String str = JsonX.toJson(criteria);
+		criteria.setPage(page);
+		return str;
+	}
 
 }

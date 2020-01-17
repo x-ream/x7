@@ -1,6 +1,7 @@
 package io.xream.x7.demo.controller;
 
 import io.xream.x7.common.bean.*;
+import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
 import io.xream.x7.demo.*;
 import io.xream.x7.demo.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -539,5 +540,31 @@ public class XxxController {
 
 		System.out.println(keyOne);
 		return ViewEntity.ok(keyOne);
+	}
+
+	@RequestMapping("/rrc")
+	public ViewEntity removeOrRefreshOrCreate(){
+
+		Cat cat1 = new Cat();
+		cat1.setId(466);
+		cat1.setType("XL");
+		cat1.setTestBoo(TestBoo.BOO);
+
+		Cat cat2 = new Cat();
+		cat2.setId(251);
+		cat2.setType("BL");
+		cat2.setTestBoo(TestBoo.BOO);
+
+		List<Cat> list = Arrays.asList(cat1, cat2);
+
+		RemoveOrRrefreshOrCreate<Cat> wrapper = RemoveOrRrefreshOrCreate.wrap(list, new Object[]{1,251});
+
+		String str = JsonX.toJson(wrapper);
+		wrapper = JsonX.toObject(str,RemoveOrRrefreshOrCreate.class);
+		System.out.println(wrapper);
+
+		this.catRepository.removeOrRefreshOrCreate(wrapper);
+
+		return ViewEntity.ok();
 	}
 }

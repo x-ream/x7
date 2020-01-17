@@ -16,10 +16,7 @@
  */
 package io.xream.x7.repository.dao;
 
-import io.xream.x7.common.bean.BeanElement;
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.Parsed;
-import io.xream.x7.common.bean.Parser;
+import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.repository.X;
@@ -318,6 +315,20 @@ public class DaoImpl implements Dao {
         LoggerProxy.debug(clz, sql);
 
         return update(sql, valueList, dialect, jdbcTemplate);
+    }
+
+    @Override
+    public <T> boolean refresh(T t) {
+
+        Class clz = t.getClass();
+        Object[] arr = SqlUtil.refresh(t,clz);
+
+        String sql = (String)arr[0];
+        Collection<Object> valueList = (Collection<Object>)arr[1];
+        LoggerProxy.debug(clz, valueList);
+        LoggerProxy.debug(clz, sql);
+
+        return update(sql,valueList,dialect,jdbcTemplate);
     }
 
 

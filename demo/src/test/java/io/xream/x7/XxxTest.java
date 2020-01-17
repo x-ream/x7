@@ -275,4 +275,8 @@ public class XxxTest {
 
         this.controller.refreshOrCreat(cat);
     }
+
+    public void removeOrRefreshOrCreate(){
+        this.controller.removeOrRefreshOrCreate();
+    }
 }

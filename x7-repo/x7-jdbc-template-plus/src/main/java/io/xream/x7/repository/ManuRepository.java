@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ManuRepository {
+public final class ManuRepository {
 
-	private static CacheableRepository cacheableRepository;
+	private static Manuable cacheableRepository;
 
-	protected static void init(CacheableRepository repository){
+	protected static void init(Manuable repository){
 		cacheableRepository =repository;
 	}
 

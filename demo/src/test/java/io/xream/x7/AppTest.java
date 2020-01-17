@@ -86,6 +86,7 @@ public class AppTest {
 //        xxxTest.list();
 //        xxxTest.testEnum();
 
+        xxxTest.removeOrRefreshOrCreate();
 
     }
 

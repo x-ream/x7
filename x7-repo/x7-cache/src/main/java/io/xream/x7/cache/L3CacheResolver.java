@@ -17,6 +17,7 @@
 package io.xream.x7.cache;
 
 
+import io.xream.x7.common.cache.Protection;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
@@ -30,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-public interface L3CacheResolver {
+public interface L3CacheResolver extends Protection {
 
     L3CacheStorage getStorage();
 
@@ -39,7 +40,7 @@ public interface L3CacheResolver {
             String value = getStorage().get(key, expireTime, timeUnit); //从缓存里获取
             if (StringUtil.isNotNull(value)) {//如果有
                 PeriodCounter.reset(key);
-                if (L3CacheStorage.DEFAULT_VALUE.equals(value)) //防止缓存击穿
+                if (DEFAULT_VALUE.equals(value)) //防止缓存击穿
                     return null;
                 return value;//就返回缓存结果
             }
