@@ -107,7 +107,7 @@ public class XxxController {
 		dark.setId("666");
 
 
-		RefreshCondition<Cat> refreshCondition = new RefreshCondition();
+		RefreshCondition<Cat> refreshCondition = RefreshCondition.build();
 		refreshCondition.and().in("id",Arrays.asList(4,5));
 		refreshCondition.refresh("testBoo",TestBoo.TEST);
 		refreshCondition.refresh("testList",testList);
@@ -208,9 +208,7 @@ public class XxxController {
 //		List<Long> idList = new ArrayList<>();
 //		idList.add(109L);
 //		idList.add(110L);
-//		InCondition inCondition = new InCondition("id",idList);
-//		List<Cat> catList = this.catRepository.in(inCondition);
-
+//		List<Cat> catList = this.catRepository.in(InCondition.wrap("id",inList));
 //		System.out.println("____catList: " + catList);
 
 		return ViewEntity.ok(page);

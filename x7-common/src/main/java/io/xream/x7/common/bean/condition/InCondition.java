@@ -73,6 +73,10 @@ public class InCondition implements Routeable {
         this.inList = inList;
     }
 
+    public static InCondition wrap(String property,List<? extends Object> inList ){
+        return new InCondition(property,inList);
+    }
+
     @Override
     public String toString() {
         return "InCondition{" +

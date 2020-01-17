@@ -40,9 +40,7 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
         RemoveOrRrefreshOrCreate rrc =  new RemoveOrRrefreshOrCreate();
         rrc.routeKey = routeKey;
         rrc.list = list;
-        if (ins != null) {
-            rrc.ins = ins;
-        }
+        rrc.ins = ins;
         return rrc;
     }
 

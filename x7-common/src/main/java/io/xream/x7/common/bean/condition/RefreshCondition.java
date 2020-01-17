@@ -87,6 +87,11 @@ public class RefreshCondition<T> implements Routeable {
     public RefreshCondition(){
     }
 
+    public static RefreshCondition build(){
+        RefreshCondition rc = new RefreshCondition();
+        return rc;
+    }
+
     private CriteriaBuilder getBuilder(){
         if (this.builder == null) {
             CriteriaBuilder builder = CriteriaBuilder.buildCondition();
