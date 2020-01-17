@@ -38,6 +38,10 @@ public class CriteriaBuilder {
     private Criteria criteria;
     private CriteriaBuilder instance;
 
+    public CriteriaBuilder routeKey(Object routeKey) {
+        this.criteria.setRouteKey(routeKey);
+        return this;
+    }
 
     public PageBuilder paged() {
         return this.pageBuilder;

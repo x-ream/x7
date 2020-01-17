@@ -40,7 +40,10 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+
 
         xxxTest.testResultMapped();
         xxxTest.testResultMapped();
@@ -83,10 +86,11 @@ public class AppTest {
         xxxTest.get();
         xxxTest.get();
 //        xxxTest.testOneKey();
-//        xxxTest.list();
 //        xxxTest.testEnum();
 
-        xxxTest.removeOrRefreshOrCreate();
+//        xxxTest.removeOrRefreshOrCreate();
+
+        xxxTest.testCacheGet();
 
     }
 

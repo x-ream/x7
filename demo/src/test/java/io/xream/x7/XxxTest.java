@@ -279,4 +279,8 @@ public class XxxTest {
     public void removeOrRefreshOrCreate(){
         this.controller.removeOrRefreshOrCreate();
     }
+
+    public  void testCacheGet(){
+        this.controller.testCacheGet();
+    }
 }

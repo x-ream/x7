@@ -565,4 +565,43 @@ public class XxxController {
 
 		return ViewEntity.ok();
 	}
+
+	@RequestMapping("/test/cache/get")
+//	@Transactional
+	public ViewEntity testCacheGet(){
+//		Cat cat = this.catRepository.get(100);
+		Cat cat = new Cat();
+		cat.setId(10L);
+		cat.setTestBoo(TestBoo.BOO);
+		cat.setType("MX");
+		this.catRepository.getOne(cat);
+
+		this.catRepository.remove(10L);
+		this.catRepository.getOne(cat);
+		this.catRepository.getOne(cat);
+		this.catRepository.get(10L);
+		this.catRepository.get(10L);
+
+		this.catRepository.createBatch(Arrays.asList(cat));
+		this.catRepository.getOne(cat);
+		this.catRepository.getOne(cat);
+		this.catRepository.getOne(cat);
+		this.catRepository.get(10L);
+		this.catRepository.get(10L);
+		this.catRepository.get(10L);
+
+		RefreshCondition refreshCondition = new RefreshCondition();
+		this.catRepository.refresh(
+				 RefreshCondition.build().refresh("type","XXXX").eq("id",10L)
+		);
+
+		this.catRepository.getOne(cat);
+		this.catRepository.getOne(cat);
+		this.catRepository.getOne(cat);
+		this.catRepository.get(10L);
+		this.catRepository.get(10L);
+		this.catRepository.get(10L);
+
+		return ViewEntity.ok(cat);
+	}
 }

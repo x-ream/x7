@@ -86,10 +86,16 @@ public class RefreshCondition<T> implements Routeable {
 
     public RefreshCondition(){
     }
+//    private RefreshCondition(Class<T> clzz){
+//        this.clz = clzz;
+//    }
+//
+//    public static <T> RefreshCondition build(Class<T> clzz){
+//        return new RefreshCondition(clzz);
+//    }
 
     public static RefreshCondition build(){
-        RefreshCondition rc = new RefreshCondition();
-        return rc;
+        return new RefreshCondition();
     }
 
     private CriteriaBuilder getBuilder(){
@@ -100,7 +106,7 @@ public class RefreshCondition<T> implements Routeable {
         return this.builder;
     }
 
-
+    @Deprecated
     public CriteriaBuilder.ConditionBuilder  and(){
 
         return this.getBuilder().and();
@@ -150,5 +156,104 @@ public class RefreshCondition<T> implements Routeable {
         return null;
     }
 
+    
+    public RefreshCondition eq(String property, Object value) {
+        this.getBuilder().and().eq(property,value);
+        return this;
+    }
 
+
+    public RefreshCondition lt(String property, Object value) {
+        this.getBuilder().and().lt(property,value);
+        return this;
+    }
+
+  
+    public RefreshCondition lte(String property, Object value) {
+        this.getBuilder().and().lte(property,value);
+        return this;
+    }
+
+
+    public RefreshCondition gt(String property, Object value) {
+        this.getBuilder().and().gt(property,value);
+        return this;
+    }
+
+
+    public RefreshCondition gte(String property, Object value) {
+        this.getBuilder().and().gte(property,value);
+        return this;
+    }
+
+
+    public RefreshCondition ne(String property, Object value) {
+        this.getBuilder().and().ne(property,value);
+        return this;
+    }
+
+ 
+    public RefreshCondition like(String property, String value) {
+        this.getBuilder().and().like(property,value);
+        return this;
+    }
+
+
+    public RefreshCondition likeRight(String property, String value) {
+        this.getBuilder().and().likeRight(property,value);
+        return this;
+    }
+
+ 
+    public RefreshCondition notLike(String property, String value) {
+        this.getBuilder().and().notLike(property,value);
+        return this;
+    }
+
+
+    public RefreshCondition between(String property, Object min, Object max) {
+        this.getBuilder().and().between(property,min,max);
+        return this;
+    }
+
+ 
+    public RefreshCondition in(String property, List<?> list) {
+        this.getBuilder().and().in(property,list);
+        return this;
+    }
+
+
+    public RefreshCondition nin(String property, List<Object> list) {
+        this.getBuilder().and().nin(property,list);
+        return this;
+    }
+
+  
+    public RefreshCondition nonNull(String property) {
+        this.getBuilder().and().nonNull(property);
+        return this;
+    }
+
+    
+    public RefreshCondition isNull(String property) {
+        this.getBuilder().and().isNull(property);
+        return this;
+    }
+
+    
+    public RefreshCondition x(String sql) {
+        this.getBuilder().and().x(sql);
+        return this;
+    }
+
+   
+    public RefreshCondition x(String sql, List<Object> valueList) {
+        this.getBuilder().and().x(sql,valueList);
+        return this;
+    }
+
+    public RefreshCondition routeKey(Object routeKey) {
+        this.routeKey = routeKey;
+        return this;
+    }
 }
