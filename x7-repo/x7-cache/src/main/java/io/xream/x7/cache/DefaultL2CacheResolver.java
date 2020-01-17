@@ -20,7 +20,9 @@ import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.condition.InCondition;
+import io.xream.x7.common.cache.L2CacheConsistency;
 import io.xream.x7.common.cache.L2CacheResolver;
+import io.xream.x7.common.cache.L2CacheStorage;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.*;
 import io.xream.x7.common.web.Page;
@@ -48,9 +50,15 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	private final static Logger logger = LoggerFactory.getLogger(DefaultL2CacheResolver.class);
 	public final static String NANO_SECOND = ".ns.";
 
-
 	private static int validSecond;
 	private static boolean isEnabled;
+
+    private L2CacheConsistency l2CacheConsistency;
+    @Override
+    public void setL2CacheConsistency(L2CacheConsistency l2CacheConsistency){
+        this.l2CacheConsistency = l2CacheConsistency;
+    }
+
 	public static void enabled(){
 		isEnabled = true;
 	}
@@ -84,11 +92,14 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	@SuppressWarnings("rawtypes")
 	public String markForRefresh(Class clz){
 
+        if (this.l2CacheConsistency != null){
+            this.l2CacheConsistency.markForRefresh(clz);
+        }
+
 		String key = getNSKey(clz);
 		String time = String.valueOf(System.nanoTime());
-		boolean flag = getCachestorage().set(key, time);
-		if (!flag)
-			throw new L2CacheException("markForRefresh failed");
+		getCachestorage().set(key, time);
+
 		return time;
 	}
 
@@ -114,22 +125,27 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void remove(Class clz, String key){
+
+        if (this.l2CacheConsistency != null){
+            this.l2CacheConsistency.remove(clz,key);
+        }
+
 		key = getSimpleKey(clz, key);
-		boolean flag = getCachestorage().delete(key);
-		if (!flag)
-			throw new L2CacheException("remove failed");
+		getCachestorage().delete(key);
 	}
 
 	public void remove(Class clz) {
+
+        if (this.l2CacheConsistency != null){
+            this.l2CacheConsistency.remove(clz);
+        }
 
 		String key = getSimpleKeyLike(clz);
 
 		Set<String> keySet = getCachestorage().keys(key);
 
 		for (String k : keySet) {
-			boolean flag = getCachestorage().delete(k);
-			if (!flag)
-				throw new L2CacheException("remove failed");
+			getCachestorage().delete(k);
 		}
 
 	}

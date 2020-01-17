@@ -17,16 +17,18 @@
 package io.xream.x7;
 
 import io.xream.x7.cache.*;
+import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
 import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
 import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
 import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.common.cache.L2CacheResolver;
+import io.xream.x7.common.cache.L2CacheStorage;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
-import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
+import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
@@ -55,6 +57,8 @@ public class RepositoryListener implements
 
         customizeCacheStorage(applicationStartedEvent);
 
+        customizeL2CacheConsistency(applicationStartedEvent);
+
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
         customizeDataTransform(applicationStartedEvent);
@@ -64,6 +68,7 @@ public class RepositoryListener implements
         RepositoryBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
     }
+
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
         LockProviderCustomizer customizer = null;
@@ -191,8 +196,25 @@ public class RepositoryListener implements
         L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
         if (levelTwoCacheResolver == null)
             return;
-        ((DefaultL2CacheResolver) levelTwoCacheResolver).setCachestorage(cacheStorage);
+        levelTwoCacheResolver.setCachestorage(cacheStorage);
 
+    }
+
+    private void customizeL2CacheConsistency(ApplicationStartedEvent applicationStartedEvent) {
+        L2CacheConsistencyCustomizer customizer = null;
+        try {
+            customizer = applicationStartedEvent.getApplicationContext().getBean(L2CacheConsistencyCustomizer.class);
+        } catch (Exception e) {
+
+        }
+
+        if (customizer == null || customizer.customize() == null)
+            return;
+
+        L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
+        if (levelTwoCacheResolver == null)
+            return;
+        levelTwoCacheResolver.setL2CacheConsistency(customizer.customize());
     }
 
 

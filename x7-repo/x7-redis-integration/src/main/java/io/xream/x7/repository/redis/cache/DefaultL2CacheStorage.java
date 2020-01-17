@@ -16,7 +16,8 @@
  */
 package io.xream.x7.repository.redis.cache;
 
-import io.xream.x7.cache.L2CacheStorage;
+
+import io.xream.x7.common.cache.L2CacheStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

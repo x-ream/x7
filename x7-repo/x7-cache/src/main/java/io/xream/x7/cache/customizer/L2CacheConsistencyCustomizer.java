@@ -14,23 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache;
+package io.xream.x7.cache.customizer;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import io.xream.x7.common.cache.L2CacheConsistency;
 
-public interface L2CacheStorage {
-    boolean set(String key, String time);
+public interface L2CacheConsistencyCustomizer {
 
-    boolean delete(String key);
-
-    Set<String> keys(String key);
-
-    String get(String nsKey);
-
-    boolean set(String key, String toJson, int validSecond, TimeUnit timeUnit);
-
-    List<String> multiGet(List<String> keyArr);
-
+    L2CacheConsistency customize();
 }

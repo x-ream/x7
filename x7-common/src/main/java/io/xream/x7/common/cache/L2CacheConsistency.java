@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.cache.customizer;
+package io.xream.x7.common.cache;
 
+/**
+ *  Suggest send message to MQ to refresh again <br>
+ */
+public interface L2CacheConsistency {
 
-import io.xream.x7.common.cache.L2CacheStorage;
-
-public interface L2CacheStorageCustomizer {
-
-    L2CacheStorage customize();
+    boolean markForRefresh(Class clz);
+    boolean remove(Class clz, String key);
+    boolean remove(Class clz);
 }
