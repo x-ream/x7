@@ -196,7 +196,7 @@ public class RepositoryListener implements
         L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
         if (levelTwoCacheResolver == null)
             return;
-        levelTwoCacheResolver.setCachestorage(cacheStorage);
+        levelTwoCacheResolver.setCacheStorage(cacheStorage);
 
     }
 

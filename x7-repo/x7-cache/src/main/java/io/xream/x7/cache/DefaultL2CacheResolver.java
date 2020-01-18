@@ -75,7 +75,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	private L2CacheStorage cacheStorage;
-	public void setCachestorage(L2CacheStorage cacheStorage){
+	public void setCacheStorage(L2CacheStorage cacheStorage){
 		this.cacheStorage = cacheStorage;
 	}
 

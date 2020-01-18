@@ -32,7 +32,7 @@ import java.util.concurrent.Callable;
 public interface L2CacheResolver extends Protection{
 
 	void setL2CacheConsistency(L2CacheConsistency l2CacheConsistency);
-	void setCachestorage(L2CacheStorage cacheStorage);
+	void setCacheStorage(L2CacheStorage cacheStorage);
 
 	boolean isEnabled();
 	/**
