@@ -223,12 +223,23 @@ public class SqlUtil {
         }
 
 
-        CriteriaCondition condition = refreshCondition.getCondition();
         if (!refreshValueList.isEmpty()) {
-            condition.getValueList().addAll(0, refreshValueList);
+            refreshCondition.getValueList().addAll(0, refreshValueList);
         }
 
-        String conditionSql = criteriaParser.parseCondition(condition);
+        Iterator<Criteria.X> ite = refreshCondition.getListX().iterator();
+        while(ite.hasNext()){
+            Criteria.X x = ite.next();
+
+            if (BeanUtilX.isBaseType_0(x.getKey(), x.getValue(), parsed)){
+                ite.remove();
+            }
+        }
+
+        String conditionSql = criteriaParser.parseCondition(refreshCondition);
+        if (conditionSql.startsWith(" AND")|| conditionSql.startsWith("AND")) {
+            conditionSql = conditionSql.replaceFirst("AND", "WHERE");
+        }
 
         conditionSql = SqlParserUtil.mapper(conditionSql, parsed);
 

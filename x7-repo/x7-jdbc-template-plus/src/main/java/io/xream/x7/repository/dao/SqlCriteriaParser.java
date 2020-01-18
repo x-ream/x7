@@ -259,7 +259,7 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         String script = column.toString();
         if (StringUtil.isNullOrEmpty(script)) {
-            throw new RuntimeException("Suggest API: find(Criteria criteria), no any resultKey for ResultMappedCriteria");
+            throw new CriteriaSyntaxException("Suggest API: find(Criteria criteria), no any resultKey for ResultMappedCriteria");
         }
         criteria.setCustomedResultKey(column.toString());
     }

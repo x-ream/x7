@@ -18,6 +18,7 @@ package io.xream.x7.common.bean;
 
 public interface SqlScript {
 
+
 	String SELECT = "SELECT";
 	String DISTINCT = "DISTINCT";
 	String WHERE = " WHERE ";

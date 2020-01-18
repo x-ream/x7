@@ -129,7 +129,7 @@ public class XxxController {
 		builder.distinct("catTest.dogId")
 				.distinct("catTest.catFriendName")
 				.reduce(Reduce.ReduceType.COUNT,"catTest.id")
-				.reduce(Reduce.ReduceType.SUM, "catTest.dogId", new Having(PredicateAndOtherScript.GT, 2))
+				.reduce(Reduce.ReduceType.SUM, "catTest.dogId", Having.build(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
 		.paged().scroll(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);
@@ -144,7 +144,7 @@ public class XxxController {
 
 //	@CacheableL3(expireTime = 3, timeUnit = TimeUnit.MINUTES)
 	@RequestMapping("/test")
-	public ViewEntity test(@RequestBody CatRO ro) {
+	public ViewEntity testFindByResultMapped(@RequestBody CatRO ro) {
 
 		{// sample, send the json by ajax from web page
 			Map<String, Object> catMap = new HashMap<>();
@@ -332,6 +332,7 @@ public class XxxController {
 		List<Object> inList = new ArrayList<>();
 		inList.add("BL");
 		inList.add("NL");
+		builder.and().eq("taxType",null);
 		builder.and().in("type",inList);
 		builder.paged().orderIn("type",inList);
 
@@ -423,6 +424,14 @@ public class XxxController {
 		return 10;
 	}
 
+	@RequestMapping("/remote/resultmapped/test")
+	ViewEntity testResultMappedRemote(@RequestBody Criteria.ResultMappedCriteria criteria){
+
+		System.out.println(criteria);
+		Page<Map<String,Object>> page = this.catRepository.find(criteria);
+
+		return ViewEntity.ok(page);
+	}
 
 	@RequestMapping("/resultmap/test")
 	public ViewEntity testResultMap(){
@@ -443,8 +452,8 @@ public class XxxController {
 		return ViewEntity.ok(criteria);
 	}
 
-	@RequestMapping("/refreshCondition/test")
-	public ViewEntity testRefreshConditionn(@RequestBody RefreshCondition<CatTest> refreshCondition){
+	@RequestMapping("/remote/refreshCondition/test")
+	public ViewEntity testRefreshConditionnRemote(@RequestBody RefreshCondition<CatTest> refreshCondition){
 		this.repository.refresh(refreshCondition);
 		return ViewEntity.ok(refreshCondition);
 	}
@@ -527,7 +536,7 @@ public class XxxController {
         return ViewEntity.ok(catList);
     }
 
-    @RequestMapping("/criteria/test")
+    @RequestMapping("/remote/criteria/test")
     public ViewEntity testCriteria(@RequestBody Criteria criteria) {
 		Page<CatTest> page = this.repository.find(criteria);
 		return ViewEntity.ok(page);

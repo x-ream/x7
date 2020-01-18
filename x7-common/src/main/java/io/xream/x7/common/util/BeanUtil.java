@@ -16,9 +16,9 @@
  */
 package io.xream.x7.common.util;
 
-import io.xream.x7.common.repository.ReflectionCache;
 import io.xream.x7.common.bean.FieldAndMethod;
 import io.xream.x7.common.bean.Parser;
+import io.xream.x7.common.repository.ReflectionCache;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

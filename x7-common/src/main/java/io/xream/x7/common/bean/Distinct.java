@@ -31,10 +31,6 @@ public class Distinct implements Serializable {
         return list;
     }
 
-    public void setList(List<String> list){
-        this.list = list;
-    }
-
     public void add(String resultKey){
         this.list.add(resultKey);
     }

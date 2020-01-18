@@ -62,11 +62,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		return valueList;
 	}
 
-	public void setValueList(List<Object> valueList) {
-		this.valueList = valueList;
-	}
-
-
 	public Class<?> getClz() {
 		return clz;
 	}
@@ -134,10 +129,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		return fixedSortList;
 	}
 
-	public void setFixedSortList(List<KV> fixedSortList) {
-		this.fixedSortList = fixedSortList;
-	}
-
 	public boolean isScroll() {
 		return isScroll;
 	}
@@ -178,10 +169,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	
 	protected void add(X x) {
 		this.listX.add(x);
-	}
-
-	public void setListX(List<X> xList){
-		this.listX = xList;
 	}
 
 	public DataPermission getDataPermission() {
@@ -231,8 +218,8 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		private static final long serialVersionUID = -2365612538012282380L;
 		private List<String> resultKeyList = new ArrayList<String>();
 		private String sourceScript;
-		private Distinct distinct;
 		private String groupBy;
+		private Distinct distinct;
 		private List<Reduce> reduceList = new ArrayList<>();
 		@JsonIgnore
 		private transient PropertyMapping propertyMapping;
@@ -270,10 +257,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			this.groupBy = this.groupBy + ", " + groupBy;
 		}
 
-		public void setReduceList(List<Reduce> reduceList) {
-			this.reduceList = reduceList;
-		}
-
 		public void setDistinct(Distinct distinct) {
 			this.distinct = distinct;
 		}
@@ -298,28 +281,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			this.aliaMap = aliaMap;
 		}
 
-		public void setResultKeyAliaMap(Map<String, String> aliaMap) {
-			this.resultKeyAliaMap = aliaMap;
-		}
-
-		public String getResultScript() {
-			if (resultKeyList.isEmpty()){
-				return SqlScript.STAR;
-			}else{
-				StringBuilder sb = new StringBuilder();
-				int i = 0;
-				int size = resultKeyList.size() - 1;
-				for (String str : resultKeyList){
-					String mapper = getPropertyMapping().mapper(str);
-					sb.append(mapper);
-					if (i < size){
-						sb.append(SqlScript.COMMA);
-					}
-					i++;
-				}
-				return sb.toString();
-			}
-		}
 
 		public void setSourceScript(String sourceScript) {
 			sourceScript = BeanUtilX.normalizeSql(sourceScript);
@@ -331,9 +292,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			return resultKeyList;
 		}
 
-		public void setResultKeyList(List<String> columnList) {
-			this.resultKeyList = columnList;
-		}
 
 		@Override
 		public Class<?> getClz() {
@@ -373,21 +331,24 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		}
 
-
 		@Override
 		public String toString() {
-			return "ResultMapped{" +
+			return "ResultMappedCriteria{" +
 					"resultKeyList=" + resultKeyList +
 					", sourceScript='" + sourceScript + '\'' +
-					", criteria='" + super.toString() + '\'' +
+					", distinct=" + distinct +
+					", groupBy='" + groupBy + '\'' +
+					", reduceList=" + reduceList +
+					", propertyMapping=" + propertyMapping +
+					", aliaMap=" + aliaMap +
+					", resultKeyAliaMap=" + resultKeyAliaMap +
 					'}';
 		}
-
 	}
 
 	
 	public static class X {
-		private static final long serialVersionUID = 7088698915888083256L;
+
 		private ConjunctionAndOtherScript conjunction;
 		private PredicateAndOtherScript predicate;
 		private String key;

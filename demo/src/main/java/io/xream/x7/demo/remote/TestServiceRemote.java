@@ -26,16 +26,19 @@ public interface TestServiceRemote {
     @RequestMapping(value = "/reyc/base", method = RequestMethod.GET)
     int getBase();
 
-    @RequestMapping("/criteria/test")
-    ViewEntity testCriteria(Criteria criteria);
+    @RequestMapping("/remote/criteria/test")
+    ViewEntity testCriteriaRemote(Criteria criteria);
+
+    @RequestMapping("/remote/resultmapped/test")
+    ViewEntity testResultMappedRemote(Criteria.ResultMappedCriteria criteria);
 
 
     @RequestMapping("/domain/test")
     ViewEntity testDomain(Criteria.DomainObjectCriteria criteria);
 
 
-    @RequestMapping("/refreshCondition/test")
-    ViewEntity testRefreshConditionn( RefreshCondition refreshCondition);
+    @RequestMapping("/remote/refreshCondition/test")
+    ViewEntity testRefreshConditionnRemote( RefreshCondition refreshCondition);
 
     @RequestMapping("/refresh")
     ViewEntity refreshByCondition(Cat cat);

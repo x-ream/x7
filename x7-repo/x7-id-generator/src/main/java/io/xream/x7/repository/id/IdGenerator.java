@@ -2,6 +2,7 @@ package io.xream.x7.repository.id;
 
 import io.xream.x7.common.repository.X;
 
+@X.NoCache
 public class IdGenerator {
 
     private static final long serialVersionUID = -4482390783954339652L;

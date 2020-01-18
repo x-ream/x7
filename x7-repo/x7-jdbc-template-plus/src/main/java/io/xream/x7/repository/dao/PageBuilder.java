@@ -40,6 +40,8 @@ public class PageBuilder {
 
                 }
             }
+        }else{
+            count = -1;
         }
 
         Page<T> pagination = new Page<>();

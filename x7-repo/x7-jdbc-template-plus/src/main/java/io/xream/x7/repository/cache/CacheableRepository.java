@@ -17,7 +17,10 @@
 package io.xream.x7.repository.cache;
 
 
-import io.xream.x7.common.bean.*;
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.KV;
+import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.cache.L2CacheResolver;
@@ -111,21 +114,15 @@ public final class CacheableRepository implements Repository, Manuable {
     @Override
     public <T> boolean refresh(RefreshCondition<T> refreshCondition) {
 
-        CriteriaCondition condition = refreshCondition.getCondition();
-        Class clz = refreshCondition.getClz();
-        if (condition instanceof Criteria) {
-            Criteria criteria = (Criteria) condition;
-            criteria.setClz(refreshCondition.getClz());
-        }
-
         boolean flag = dataTransform.refresh(refreshCondition);
 
         if (!flag) return flag;
 
+        Class clz = refreshCondition.getClz();
         Parsed parsed = Parser.get(clz);
         if (isCacheEnabled(parsed)) {
 
-            KV keyOne = refreshCondition.getKeyOne();
+            KV keyOne = refreshCondition.tryToGetKeyOne();
 
             String key = null;
             if (keyOne != null && Objects.nonNull(keyOne.getV())) {

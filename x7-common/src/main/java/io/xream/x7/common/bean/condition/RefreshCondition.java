@@ -19,23 +19,27 @@ package io.xream.x7.common.bean.condition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.repository.X;
+import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
-public class RefreshCondition<T> implements Routeable {
+public class RefreshCondition<T> implements CriteriaCondition, Routeable {
 
-    private Criteria condition;
     private List<Criteria.X> refreshList = new ArrayList<>();
+    private List<Criteria.X> listX = new ArrayList<>();
     private String sourceStript;//FIXME
 
     private Object routeKey;
     @JsonIgnore
     private transient Class clz;
     @JsonIgnore
-    private transient  CriteriaBuilder builder;
+    private transient List<Object> valueList = new ArrayList<>();
+
 
     public Class getClz() {
         return clz;
@@ -49,9 +53,6 @@ public class RefreshCondition<T> implements Routeable {
         return refreshList;
     }
 
-    public void setRefreshList(List<Criteria.X> refreshList) {
-        this.refreshList = refreshList;
-    }
 
     public String getSourceStript() {
         return sourceStript;
@@ -60,6 +61,24 @@ public class RefreshCondition<T> implements Routeable {
     public void setSourceStript(String sourceStript) {
         this.sourceStript = sourceStript;
     }
+
+    @Override
+    public List<Criteria.X> getListX() {
+        return listX;
+    }
+
+    @Override
+    public List<Object> getValueList() {
+        return this.valueList;
+    }
+
+
+    @Override
+    public Map<String, String> getAliaMap() {
+        return null;
+    }
+
+
     @Override
     public Object getRouteKey() {
         return routeKey;
@@ -68,48 +87,20 @@ public class RefreshCondition<T> implements Routeable {
     public void setRouteKey(Object routeKey) {
         this.routeKey = routeKey;
     }
-    public Criteria getCondition() {
 
-        if (this.condition == null) {
-
-            if (Objects.nonNull(this.builder)) {
-                this.condition = builder.get();
-            }
-        }
-
-        return this.condition;
-    }
-
-    public void setCondition(Criteria condition) {
-        this.condition = condition;
-    }
 
     public RefreshCondition(){
     }
-//    private RefreshCondition(Class<T> clzz){
-//        this.clz = clzz;
-//    }
-//
-//    public static <T> RefreshCondition build(Class<T> clzz){
-//        return new RefreshCondition(clzz);
-//    }
+
 
     public static RefreshCondition build(){
         return new RefreshCondition();
     }
 
-    private CriteriaBuilder getBuilder(){
-        if (this.builder == null) {
-            CriteriaBuilder builder = CriteriaBuilder.buildCondition();
-            this.builder = builder;
-        }
-        return this.builder;
-    }
 
     @Deprecated
-    public CriteriaBuilder.ConditionBuilder  and(){
-
-        return this.getBuilder().and();
+    public RefreshCondition  and(){
+        return this;
     }
 
     /**
@@ -144,10 +135,12 @@ public class RefreshCondition<T> implements Routeable {
         return this;
     }
 
-    public KV getKeyOne() {
+    public KV tryToGetKeyOne() {
+        if (clz == null)
+            return null;
         Parsed parsed = Parser.get(clz);
         String keyOne = parsed.getKey(X.KEY_ONE);
-        for (Criteria.X x : getCondition().getListX()) {
+        for (Criteria.X x : listX) {
             String key = x.getKey();
             if (key != null && key.equals(keyOne)) {
                 return new KV(key,x.getValue());
@@ -156,99 +149,136 @@ public class RefreshCondition<T> implements Routeable {
         return null;
     }
 
+    private RefreshCondition doGle(PredicateAndOtherScript p, String property, Object value) {
+        if (value == null)
+            return this;
+//        if (Objects.nonNull(parsed)) {
+//            if (BeanUtilX.isBaseType_0(property, value,parsed))
+//                return this;
+//        }
+        if (StringUtil.isNullOrEmpty(value))
+            return this;
+
+        Criteria.X x = new Criteria.X();
+        x.setConjunction(ConjunctionAndOtherScript.AND);
+        x.setPredicate(p);
+        x.setKey(property);
+        x.setValue(value);
+        this.listX.add(x);
+        return this;
+    }
+
+    private RefreshCondition doIn(PredicateAndOtherScript p, String property,List<? extends Object> list ){
+
+        if (list == null || list.isEmpty())
+            return this;
+
+        List<Object> tempList = new ArrayList<Object>();
+        for (Object obj : list) {
+            if (Objects.isNull(obj))
+                continue;
+
+            if (!tempList.contains(obj)) {
+                tempList.add(obj);
+            }
+        }
+
+        if (tempList.isEmpty())
+            return this;
+
+        if (tempList.size() == 1) {
+            return eq(property, tempList.get(0));
+        }
+
+        Criteria.X x = new Criteria.X();
+        x.setConjunction(ConjunctionAndOtherScript.AND);
+        x.setPredicate(p);
+        x.setKey(property);
+        x.setValue(tempList);
+
+        this.listX.add(x);
+        return this;
+    }
+
+    private RefreshCondition doNull(PredicateAndOtherScript p, String property){
+        if (StringUtil.isNullOrEmpty(property))
+            return this;
+
+        Criteria.X x = new Criteria.X();
+        x.setConjunction(ConjunctionAndOtherScript.AND);
+        x.setPredicate(p);
+        x.setValue(property);
+        this.listX.add(x);
+        return this;
+    }
     
     public RefreshCondition eq(String property, Object value) {
-        this.getBuilder().and().eq(property,value);
-        return this;
+        return this.doGle(PredicateAndOtherScript.EQ,property,value);
     }
 
 
     public RefreshCondition lt(String property, Object value) {
-        this.getBuilder().and().lt(property,value);
-        return this;
+        return this.doGle(PredicateAndOtherScript.LT,property,value);
     }
 
   
     public RefreshCondition lte(String property, Object value) {
-        this.getBuilder().and().lte(property,value);
-        return this;
+        return this.doGle(PredicateAndOtherScript.LTE,property,value);
     }
 
 
     public RefreshCondition gt(String property, Object value) {
-        this.getBuilder().and().gt(property,value);
-        return this;
+        return this.doGle(PredicateAndOtherScript.GT,property,value);
     }
 
 
     public RefreshCondition gte(String property, Object value) {
-        this.getBuilder().and().gte(property,value);
-        return this;
+        return this.doGle(PredicateAndOtherScript.GTE,property,value);
     }
 
 
     public RefreshCondition ne(String property, Object value) {
-        this.getBuilder().and().ne(property,value);
-        return this;
-    }
-
- 
-    public RefreshCondition like(String property, String value) {
-        this.getBuilder().and().like(property,value);
-        return this;
-    }
-
-
-    public RefreshCondition likeRight(String property, String value) {
-        this.getBuilder().and().likeRight(property,value);
-        return this;
-    }
-
- 
-    public RefreshCondition notLike(String property, String value) {
-        this.getBuilder().and().notLike(property,value);
-        return this;
-    }
-
-
-    public RefreshCondition between(String property, Object min, Object max) {
-        this.getBuilder().and().between(property,min,max);
-        return this;
+        return this.doGle(PredicateAndOtherScript.NE,property,value);
     }
 
  
     public RefreshCondition in(String property, List<?> list) {
-        this.getBuilder().and().in(property,list);
-        return this;
+        return this.doIn(PredicateAndOtherScript.IN,property,list);
     }
 
-
     public RefreshCondition nin(String property, List<Object> list) {
-        this.getBuilder().and().nin(property,list);
-        return this;
+        return this.doIn(PredicateAndOtherScript.NOT_IN,property,list);
     }
 
   
     public RefreshCondition nonNull(String property) {
-        this.getBuilder().and().nonNull(property);
-        return this;
+        return doNull(PredicateAndOtherScript.IS_NOT_NULL, property);
     }
 
     
     public RefreshCondition isNull(String property) {
-        this.getBuilder().and().isNull(property);
-        return this;
+        return doNull(PredicateAndOtherScript.IS_NULL, property);
     }
 
     
     public RefreshCondition x(String sql) {
-        this.getBuilder().and().x(sql);
-        return this;
+        return x(sql, null);
     }
 
    
     public RefreshCondition x(String sql, List<Object> valueList) {
-        this.getBuilder().and().x(sql,valueList);
+        if (StringUtil.isNullOrEmpty(sql))
+            return this;
+
+        sql = BeanUtilX.normalizeSql(sql);
+
+        Criteria.X x = new Criteria.X();
+        x.setConjunction(ConjunctionAndOtherScript.AND);
+        x.setPredicate(PredicateAndOtherScript.X);
+        x.setKey(sql);
+        x.setValue(valueList);
+        this.listX.add(x);
+
         return this;
     }
 

@@ -20,11 +20,16 @@ public  class Having {
 
     private Criteria.X x;
 
-    public Having(PredicateAndOtherScript script, Object value) {
-        x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.HAVING);
-        x.setPredicate(script);
-        x.setValue(value);
+    private Having() {
+    }
+
+    public static Having build(PredicateAndOtherScript script, Object value){
+        Having having = new Having();
+        having.x = new Criteria.X();
+        having.x.setConjunction(ConjunctionAndOtherScript.HAVING);
+        having.x.setPredicate(script);
+        having.x.setValue(value);
+        return having;
     }
 
     protected Criteria.X x() {

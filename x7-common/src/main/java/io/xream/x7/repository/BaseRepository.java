@@ -49,13 +49,13 @@ public interface BaseRepository<T> extends Typed<T> {
      */
     boolean createOrReplace(T obj);
 
-    boolean refresh(RefreshCondition<T> refreshCondition);
+    boolean refresh(RefreshCondition<T> RefreshCondition_build);
 
     /**
      *
      *  refreshCondition without keyOne
      */
-    boolean refreshUnSafe(RefreshCondition<T> refreshCondition);
+    boolean refreshUnSafe(RefreshCondition<T> RefreshCondition_build);
 
     boolean remove(String keyOne);
 
@@ -66,7 +66,7 @@ public interface BaseRepository<T> extends Typed<T> {
      * caution:  sometimes, should not use the api </>
      *
      */
-    boolean removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T> wrapper);
+    boolean removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T> RemoveOrRrefreshOrCreate_wrap);
     /**
      * @param keyOne
      */
@@ -102,25 +102,23 @@ public interface BaseRepository<T> extends Typed<T> {
     /**
      * in API
      *
-     * @param inCondition
-     * @return
      */
-    List<T> in(InCondition inCondition);
+    List<T> in(InCondition InCondition_wrap);
 
     /**
      * Standard query pageable API
      *
-     * @param criteria
+     * @param CriteriaBuilder_build
      */
-    Page<T> find(Criteria criteria);
+    Page<T> find(Criteria CriteriaBuilder_build);
 
     /**
-     * @param criteria
+     * @
      */
-    Page<Map<String, Object>> find(Criteria.ResultMappedCriteria criteria);
+    Page<Map<String, Object>> find(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
 
-    List<Map<String, Object>> list(Criteria.ResultMappedCriteria resultMapped);
+    List<Map<String, Object>> list(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
     List<T> list(Criteria criteria);
 

@@ -45,20 +45,33 @@ public class AppTest {
         xxxTest.testCriteria();
 
 
-        xxxTest.testResultMapped();
-        xxxTest.testResultMapped();
-        xxxTest.testResultMapped();
 //        xxxTest.testDomain();
 
-//        xxxTest.testRefreshCondition();
+        xxxTest.testRefreshConditionRemote();
+        xxxTest.testCriteriaRemote();
+        xxxTest.testCriteriaRemote();
+        xxxTest.testCriteriaRemote();
+
+
+        xxxTest.testResultMappedRemote();
+        xxxTest.testResultMappedRemote();
+        xxxTest.testResultMappedRemote();
+        xxxTest.testResultMappedRemote();
+
+        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
 
 //        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.distinct();
+        xxxTest.distinct();
 
-//        xxxTest.test();
+        xxxTest.testFindByResultMapped();
+        xxxTest.testFindByResultMapped();
+        xxxTest.testFindByResultMapped();
 //        xxxTest.testOne();
         xxxTest.testListCriteria();
         xxxTest.refreshByCondition();

@@ -16,7 +16,10 @@
  */
 package io.xream.x7.repository.dao;
 
-import io.xream.x7.common.bean.*;
+import io.xream.x7.common.bean.BeanElement;
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.repository.X;
@@ -309,7 +312,7 @@ public class DaoImpl implements Dao {
         Class clz = refreshCondition.getClz();
         Parsed parsed = Parser.get(clz);
         String sql = SqlUtil.buildRefresh(parsed, refreshCondition, this.criteriaParser);
-        List<Object> valueList = refreshCondition.getCondition().getValueList();
+        List<Object> valueList = refreshCondition.getValueList();
 
         LoggerProxy.debug(clz, valueList);
         LoggerProxy.debug(clz, sql);

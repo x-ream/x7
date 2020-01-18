@@ -141,13 +141,12 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
         if (Objects.isNull(keyField))
             throw new CriteriaSyntaxException("No PrimaryKey, UnSafe Refresh, try to invoke DefaultRepository.refreshUnSafe(RefreshCondition<T> refreshCondition)");
 
-        CriteriaCondition criteriaCondition = refreshCondition.getCondition();
-
         boolean unSafe = true;//Safe
 
         if (unSafe) {
             String key = parsed.getKey(X.KEY_ONE);
-            for (Criteria.X x : criteriaCondition.getListX()) {
+            List<Criteria.X> listX = refreshCondition.getListX();
+            for (Criteria.X x : listX) {
                 if (key.equals(x.getKey())) {
                     Object value = x.getValue();
                     if (Objects.nonNull(value) && !value.toString().equals("0")) {

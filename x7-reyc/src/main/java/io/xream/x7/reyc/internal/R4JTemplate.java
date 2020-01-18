@@ -22,6 +22,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.vavr.control.Try;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.exception.BusyException;
 import io.xream.x7.exception.RemoteServiceException;
@@ -113,7 +114,7 @@ public class R4JTemplate implements ReyTemplate {
             throw new ReyConnectException(tag + " : " + e.getMessage() + (obj == null ? "" : (" : " + obj.toString())));
         }
 
-        throw new RuntimeException(tag + " : " + e.getMessage());
+        throw new RuntimeException(tag + " : " + ExceptionUtil.getMessage(e));
     }
 
 

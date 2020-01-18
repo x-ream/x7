@@ -5,11 +5,14 @@ package io.xream.x7;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRO;
+import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
-import io.xream.x7.demo.bean.*;
+import io.xream.x7.demo.bean.DogTest;
+import io.xream.x7.demo.bean.TestBoo;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.reyc.api.ReyTemplate;
@@ -21,6 +24,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,11 +48,11 @@ public class XxxTest {
 
     }
 
-    public  void test() {
+    public  void testFindByResultMapped() {
 
         CatRO cat = new CatRO();
 
-        ViewEntity ve = this.controller.test(cat);
+        ViewEntity ve = this.controller.testFindByResultMapped(cat);
 
         System.out.println("\n______Result: " + ve);
 
@@ -161,28 +165,11 @@ public class XxxTest {
         return testServiceRemote.testDomain(criteria);
     }
 
-    public ViewEntity testRefreshCondition(){
-        RefreshCondition<CatTest> refreshCondition = new RefreshCondition<>();
-//        refreshCondition.and().eq("id",0);
-        refreshCondition.refresh("isCat",true).and().eq("id",5);
+    public ViewEntity testRefreshConditionRemote(){
 
-
-//        String str =this.reyTemplate.support(null, false,
-//                new BackendService() {
-//                    @Override
-//                    public String handle() {
-//                        return HttpClientUtil.post("http://127.0.0.1:8868/xxx/refreshCondition/test",refreshCondition);
-//                    }
-//
-//                    @Override
-//                    public Object fallback() {
-//                        System.out.println("FALL BACK TEST");
-//                        return null;
-//                    }
-//                });
-//
-//        return ViewEntity.ok(str);
-        return testServiceRemote.testRefreshConditionn(refreshCondition);
+        return testServiceRemote.testRefreshConditionnRemote(
+                RefreshCondition.build().refresh("isCat",true).eq("id",5)
+        );
     }
 
 
@@ -282,5 +269,44 @@ public class XxxTest {
 
     public  void testCacheGet(){
         this.controller.testCacheGet();
+    }
+
+    public void testCriteriaRemote(){
+
+        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+
+//		builder.resultKey("id").resultKey("type");
+        List<Object> inList = new ArrayList<>();
+        inList.add("BL");
+        inList.add("NL");
+        builder.and().eq("taxType",null);
+        builder.and().in("type",inList);
+        builder.paged().orderIn("type",inList);
+
+//		Criteria.ResultMappedCriteria criteria = builder.get();
+        Criteria criteria = builder.get();
+
+        this.testServiceRemote.testCriteriaRemote(criteria);
+    }
+
+    public void testResultMappedRemote(){
+
+        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
+//        builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+        builder.resultKey("id").resultKey("dogId");
+        builder.and().eq("type","NL");
+        builder.paged().page(1).rows(10).sort("id",Direction.DESC);
+
+        Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
+
+        String json = JsonX.toJson(resultMappedCriteria);
+        System.out.println(json);
+        System.out.println(resultMappedCriteria.getDistinct());
+        resultMappedCriteria = JsonX.toObject(json, Criteria.ResultMappedCriteria.class);
+        System.out.println(resultMappedCriteria);
+        System.out.println(resultMappedCriteria.getDistinct());
+
+        this.testServiceRemote.testResultMappedRemote(resultMappedCriteria);
+
     }
 }
