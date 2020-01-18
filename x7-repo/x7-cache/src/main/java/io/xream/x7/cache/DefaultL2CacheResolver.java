@@ -68,7 +68,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 	public static void setValidSecond(int vs){
 		validSecond = vs;
-		logger.info("L2 Cache try to starting.... cache time = " + validSecond + "s");
+		logger.info("L2 Cache try to starting.... cache time = {}s",validSecond);
 	}
 	private int getValidSecondAdjusted(){
 		return  this.validSecond;
