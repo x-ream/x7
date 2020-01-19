@@ -88,7 +88,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         this.routeKey = routeKey;
     }
 
-
+    @Deprecated
     public RefreshCondition(){
     }
 
@@ -152,10 +152,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
     private RefreshCondition doGle(PredicateAndOtherScript p, String property, Object value) {
         if (value == null)
             return this;
-//        if (Objects.nonNull(parsed)) {
-//            if (BeanUtilX.isBaseType_0(property, value,parsed))
-//                return this;
-//        }
+
         if (StringUtil.isNullOrEmpty(value))
             return this;
 
