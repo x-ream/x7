@@ -16,8 +16,8 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerOpenException;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -34,6 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Supplier;
 
+/**
+ *
+ *  wrapped resilience4j: Retry,CircuitBreaker</br>
+ *  Retry>CircuitBreaker>RateLimiter>Bulkhead  </br>
+ *  but connection problem will retry immediately
+ */
 public class R4JTemplate implements ReyTemplate {
 
     private static Logger logger = LoggerFactory.getLogger(ReyTemplate.class);
@@ -98,7 +104,7 @@ public class R4JTemplate implements ReyTemplate {
             logger.error(tag + ": " + e.getMessage());
         }
 
-        if (e instanceof CircuitBreakerOpenException) {
+        if (e instanceof CallNotPermittedException) {
             Object obj = backendService.fallback();
             throw new BusyException(obj == null ? null : obj.toString());
         }

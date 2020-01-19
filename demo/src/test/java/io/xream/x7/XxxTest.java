@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -157,7 +158,7 @@ public class XxxTest {
     public ViewEntity testRefreshConditionRemote(){
 
         return testServiceRemote.testRefreshConditionnRemote(
-                RefreshCondition.build().refresh("isCat",true).eq("id",5)
+                RefreshCondition.build().refresh("createAt",new Date()).eq("id",100)
         );
     }
 

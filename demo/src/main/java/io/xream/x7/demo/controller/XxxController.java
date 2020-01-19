@@ -421,8 +421,8 @@ public class XxxController {
 
 
 	@RequestMapping("/remote/refreshCondition/test")
-	public ViewEntity testRefreshConditionnRemote(@RequestBody RefreshCondition<CatTest> refreshCondition){
-		this.repository.refresh(refreshCondition);
+	public ViewEntity testRefreshConditionnRemote(@RequestBody RefreshCondition<Cat> refreshCondition){
+		this.catRepository.refresh(refreshCondition);
 		return ViewEntity.ok(refreshCondition);
 	}
 
@@ -520,10 +520,12 @@ public class XxxController {
 	@RequestMapping("/rrc")
 	public ViewEntity removeOrRefreshOrCreate(){
 
+		Date date = new Date();
 		Cat cat1 = new Cat();
 		cat1.setId(466);
 		cat1.setType("XL");
 		cat1.setTestBoo(TestBoo.BOO);
+		cat1.setCreateAt(date);
 
 		Cat cat2 = new Cat();
 		cat2.setId(251);
@@ -539,6 +541,11 @@ public class XxxController {
 		System.out.println(wrapper);
 
 		this.catRepository.removeOrRefreshOrCreate(wrapper);
+
+		Cat cat = this.catRepository.get(466);
+		System.out.println("date: " + date.getTime());
+		System.out.println("createAt: " + cat.getCreateAt().getTime());
+		System.out.println("————————————————>>>> " + cat.getCreateAt() + ",  ? " + (date.getTime() == cat.getCreateAt().getTime()));
 
 		return ViewEntity.ok();
 	}
