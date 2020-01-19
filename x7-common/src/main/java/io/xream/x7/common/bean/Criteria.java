@@ -194,11 +194,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 				", page=" + page +
 				", rows=" + rows +
 				", sortList='" + sortList + '\'' +
-				", valueList=" + valueList +
 				", listX=" + listX +
-				", isWhere=" + isWhere +
-				", countDistinct='" + countDistinct + '\'' +
-				", customedResultKey='" + customedResultKey + '\'' +
 				", clz=" + clz +
 				'}';
 	}
@@ -329,9 +325,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 					", distinct=" + distinct +
 					", groupBy='" + groupBy + '\'' +
 					", reduceList=" + reduceList +
-					", propertyMapping=" + propertyMapping +
 					", aliaMap=" + aliaMap +
-					", resultKeyAliaMap=" + resultKeyAliaMap +
 					'}';
 		}
 	}
