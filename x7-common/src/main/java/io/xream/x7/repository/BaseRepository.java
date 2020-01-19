@@ -17,7 +17,6 @@
 package io.xream.x7.repository;
 
 import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.DomainObject;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
@@ -121,7 +120,5 @@ public interface BaseRepository<T> extends Typed<T> {
     List<Map<String, Object>> list(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
     List<T> list(Criteria criteria);
-
-    <WITH> List<DomainObject<T, WITH>> listDomainObject(Criteria.DomainObjectCriteria domainObjectCriteria);
 
 }

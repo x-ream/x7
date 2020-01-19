@@ -66,10 +66,6 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
         this.repository =repository;
     }
 
-    private DomainObjectRepositoy domainObjectRepositoy;
-    public void setDomainObjectRepositoy(DomainObjectRepositoy domainObjectRepositoy){
-        this.domainObjectRepositoy = domainObjectRepositoy;
-    }
 
     public DefaultRepository(){
         parse();
@@ -322,31 +318,6 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
             throw new CriteriaSyntaxException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
 
         return repository.list(criteria);
-
-    }
-
-
-    @Override
-    public <WITH> List<DomainObject<T, WITH>> listDomainObject(Criteria.DomainObjectCriteria domainObjectCriteria) {
-
-        if (StringUtil.isNullOrEmpty(domainObjectCriteria.getMainPropperty()))
-            throw new CriteriaSyntaxException("DefaultRepository.listDomainObject(domainObjectCriteria), domainObjectCriteria.getMainPropperty()is null");
-
-        if (domainObjectCriteria.getRelativeClz() == null){
-
-            if (domainObjectCriteria.getKnownMainIdList() == null || domainObjectCriteria.getKnownMainIdList().isEmpty()){
-                return domainObjectRepositoy.listDomainObject_NonRelative(domainObjectCriteria);
-            }else{
-                return domainObjectRepositoy.listDomainObject_Known_NonRelative(domainObjectCriteria);
-            }
-
-        }else{
-            if (domainObjectCriteria.getKnownMainIdList() == null || domainObjectCriteria.getKnownMainIdList().isEmpty()){
-                return domainObjectRepositoy.listDomainObject_HasRelative(domainObjectCriteria);
-            }else{
-                return domainObjectRepositoy.listDomainObject_Known_HasRelative(domainObjectCriteria);
-            }
-        }
 
     }
 

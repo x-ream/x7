@@ -32,11 +32,6 @@ public interface TestServiceRemote {
     @RequestMapping("/remote/resultmapped/test")
     ViewEntity testResultMappedRemote(Criteria.ResultMappedCriteria criteria);
 
-
-    @RequestMapping("/domain/test")
-    ViewEntity testDomain(Criteria.DomainObjectCriteria criteria);
-
-
     @RequestMapping("/remote/refreshCondition/test")
     ViewEntity testRefreshConditionnRemote( RefreshCondition refreshCondition);
 

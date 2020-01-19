@@ -343,35 +343,6 @@ public class XxxController {
 		return ViewEntity.ok(p);
 	}
 
-
-	@RequestMapping("/domain")
-    public ViewEntity domain() {
-
-		List<Long> catIdList = new ArrayList<>();
-		catIdList.add(2L);
-		catIdList.add(3L);
-
-	    CriteriaBuilder.DomainObjectBuilder builder = CriteriaBuilder.buildDomainObject(Cat.class, Mouse.class);
-		//根据各种条件，例如ID，查出主对象
-	    builder.and().in("id",catIdList);
-	    //查出多对多关系的对象
-	    builder.domain().relative(CatMouse.class).on("catId").with("mouseId");
-	    //已知主对象，根据主对象查出多对多关系的对象
-//		builder.domain().known(catIdList).relative(CatMouse.class).on("catId").with("mouseId");
-	    Criteria.DomainObjectCriteria criteria = builder.get();
-
-	    //多对多关系查询，仅限于同一域下的对象, 必须遵守面向领域的设计
-	    List<DomainObject<Cat,Mouse>> list = this.catRepository.listDomainObject(criteria);
-
-	    String str = JsonX.toJson(list);//测试序列化
-		List<DomainObject> test = JsonX.toList(str,DomainObject.class);//测试反序列化
-	    System.out.println(test);
-
-	    return ViewEntity.ok(list);
-    }
-
-
-
 	@RequestMapping(value = "/reyc/test")
 	public List<Cat> testRecClient() {
 
@@ -447,10 +418,7 @@ public class XxxController {
 		return ViewEntity.ok(page);
 	}
 
-	@RequestMapping("/domain/test")
-	public ViewEntity testDomain(@RequestBody Criteria.DomainObjectCriteria criteria){
-		return ViewEntity.ok(criteria);
-	}
+
 
 	@RequestMapping("/remote/refreshCondition/test")
 	public ViewEntity testRefreshConditionnRemote(@RequestBody RefreshCondition<CatTest> refreshCondition){

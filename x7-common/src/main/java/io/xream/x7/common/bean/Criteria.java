@@ -42,7 +42,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	private List<Sort> sortList;
 	private List<KV> fixedSortList = new ArrayList<>();
 	private List<X> listX = new ArrayList<>();
-	private DataPermission dataPermission;//String,Or List<String>   LikeRight | In
 
 	@JsonIgnore
 	private transient Parsed parsed;
@@ -171,14 +170,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		this.listX.add(x);
 	}
 
-	public DataPermission getDataPermission() {
-		return dataPermission;
-	}
-
-	public void setDataPermission(DataPermission dataPermission) {
-		this.dataPermission = dataPermission;
-	}
-
 	public boolean isFixedSort() {
 		return !this.fixedSortList.isEmpty();
 	}
@@ -205,7 +196,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 				", sortList='" + sortList + '\'' +
 				", valueList=" + valueList +
 				", listX=" + listX +
-				", dataPermission=" + dataPermission +
 				", isWhere=" + isWhere +
 				", countDistinct='" + countDistinct + '\'' +
 				", customedResultKey='" + customedResultKey + '\'' +
@@ -409,79 +399,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 					", value=" + value +
 					", subList=" + subList +
 					", script=" + script +
-					'}';
-		}
-	}
-
-
-	/**
-	 *
-	 * 查询条件仅仅来自主表, 但要返回同一个域里的相关表结果<br>
-	 * 不需要Fetched查询<br>
-	 * 支持L2Cache<br>
-	 */
-	public static class DomainObjectCriteria<T,WITH> extends Criteria implements Serializable {
-
-		private static final long serialVersionUID = -886967622448599208L;
-		private Class withClz;
-		private Class relativeClz;
-		private String mainPropperty;
-		private String withProperty;
-		private List<? extends  Object> knownMainIdList;
-
-
-		public DomainObjectCriteria(){
-			super();
-		}
-
-		public Class getWithClz() {
-			return withClz;
-		}
-
-		public void setWithClz(Class withClz) {
-			this.withClz = withClz;
-		}
-
-		public Class getRelativeClz() {
-			return relativeClz;
-		}
-
-		public void setRelativeClz(Class relativeClz) {
-			this.relativeClz = relativeClz;
-		}
-
-		public String getMainPropperty() {
-			return mainPropperty;
-		}
-
-		public void setMainPropperty(String mainPropperty) {
-			this.mainPropperty = mainPropperty;
-		}
-
-		public String getWithProperty() {
-			return withProperty;
-		}
-
-		public void setWithProperty(String withProperty) {
-			this.withProperty = withProperty;
-		}
-
-		public List<? extends  Object> getKnownMainIdList() {
-			return knownMainIdList;
-		}
-
-		public void setKnownMainIdList(List<? extends  Object> knownMainIdList) {
-			this.knownMainIdList = knownMainIdList;
-		}
-
-		@Override
-		public String toString() {
-			return "DomainObjectCriteria{" +
-					"withClz=" + withClz +
-					", relativeClz=" + relativeClz +
-					", mainPropperty='" + mainPropperty + '\'' +
-					", withProperty='" + withProperty + '\'' +
-					", knownMainIdList=" + knownMainIdList +
 					'}';
 		}
 	}

@@ -54,11 +54,6 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public void setRepository(Repository dataRepository){
         super.setRepository(dataRepository);
     }
-    @Override
-    public void setDomainObjectRepositoy(DomainObjectRepositoy domainObjectRepositoy){
-        super.setDomainObjectRepositoy(domainObjectRepositoy);
-    }
-
 
     private Class<?> objectType;
     public void setObjectType(Class<?> objectType) {

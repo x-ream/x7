@@ -49,7 +49,6 @@ public class CriteriaBuilder {
 
     public void paged(Paged paged) {
         criteria.paged(paged);
-        DataPermission.Chain.onBuild(criteria, paged);
     }
 
 
@@ -484,20 +483,9 @@ public class CriteriaBuilder {
         return builder;
     }
 
-
-    public static DomainObjectBuilder buildDomainObject(Class<?> mainClz, Class<?> withClz) {
-        CriteriaBuilder b = new CriteriaBuilder();
-        DomainObjectBuilder builder = b.new DomainObjectBuilder(mainClz, withClz);
-
-        return builder;
-    }
-
-
     public Class<?> getClz() {
         return this.criteria.getClz();
     }
-    
-
 
     public interface ConditionBuilder {
 
@@ -542,7 +530,6 @@ public class CriteriaBuilder {
     }
 
     public Criteria get() {
-        DataPermission.Chain.befroeGetCriteria(this, this.criteria);
         Iterator<X> ite = this.criteria.getListX().iterator();
         while (ite.hasNext()) {
             X x = ite.next();
@@ -613,7 +600,6 @@ public class CriteriaBuilder {
         @Override
         public void paged(Paged paged) {
             super.criteria.paged(paged);
-            DataPermission.Chain.onBuild(super.criteria, paged);
         }
 
         public ResultMappedBuilder distinct(Object... objs) {
@@ -679,64 +665,5 @@ public class CriteriaBuilder {
 
     }
 
-
-    public class DomainObjectBuilder extends CriteriaBuilder {
-
-        @Override
-        public Criteria.DomainObjectCriteria get() {
-            return (Criteria.DomainObjectCriteria) super.get();
-        }
-
-        private void init() {
-            super.instance = this;
-            Criteria.DomainObjectCriteria domainObjectCriteria = new Criteria.DomainObjectCriteria();
-            super.criteria = domainObjectCriteria;
-        }
-
-        private void init(Class<?> mainClz, Class<?> withClz) {
-            Criteria.DomainObjectCriteria doc = (Criteria.DomainObjectCriteria) super.criteria;
-            doc.setClz(mainClz);
-            doc.setWithClz(withClz);
-            Parsed parsed = Parser.get(mainClz);
-            doc.setParsed(parsed);
-        }
-
-
-        public DomainObjectBuilder(Class mainClz, Class withClz) {
-            init();
-            init(mainClz, withClz);
-        }
-
-        public DomainBuilder domain() {
-            return this.domainBuilder;
-        }
-
-        private DomainBuilder domainBuilder = new DomainBuilder() {
-            @Override
-            public DomainBuilder known(List<? extends Object> mainIdList) {
-                get().setKnownMainIdList(mainIdList);
-                return this;
-            }
-
-            @Override
-            public DomainBuilder relative(Class relativeClz) {
-                get().setRelativeClz(relativeClz);
-                return this;
-            }
-
-            @Override
-            public DomainBuilder on(String mainProperty) {
-                get().setMainPropperty(mainProperty);
-                return this;
-            }
-
-            @Override
-            public CriteriaBuilder with(String withProperty) {
-                get().setWithProperty(withProperty);
-                return instance;
-            }
-        };
-
-    }
 
 }

@@ -25,33 +25,6 @@ public class WebAop {
 	@Around("cut()")
 	public Object around(ProceedingJoinPoint proceedingJoinPoint) {
 
-		Object[] argArr = proceedingJoinPoint.getArgs();
-//		Passport passport = null;
-//		{
-//			/*
-//			 * isSignIn, FIXME 移到网关
-//			 */
-//			if (argArr != null) {
-//				for (Object arg : argArr) {
-//					if (arg instanceof Tokened) {
-//						try {
-//							passport = PassportUtilX.getPassport((Tokened) arg);
-//							/*
-//							 * 数据权限
-//							 */
-//							if (arg instanceof DataPermission) {
-//								DataPermission.Chain.beforeHandle((DataPermission)arg, passport.getDataPermissionValue());
-//							}
-//							break;
-//						} catch (Passport.PassportException e) {
-//							Passport.PassportException pe = (Passport.PassportException) e;
-//							return pe.getViewEntity();
-//						}
-//					}
-//				}
-//			}
-//		}
-
 		org.aspectj.lang.Signature signature = proceedingJoinPoint.getSignature();
 		MethodSignature ms = ((MethodSignature) signature);
 

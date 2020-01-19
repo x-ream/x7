@@ -17,7 +17,6 @@
 package io.xream.x7.repository.util;
 
 import io.xream.x7.common.bean.BeanElement;
-import io.xream.x7.common.bean.DataPermission;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.JsonX;
@@ -49,11 +48,6 @@ public class SqlParserUtil {
             return map;
 
         Class clz = obj.getClass();
-
-        if (obj instanceof DataPermission){
-            DataPermission dp = (DataPermission)obj;
-            dp.setDataPermissionValue(null);
-        }
 
         try {
             for (BeanElement element : parsed.getBeanElementList()) {

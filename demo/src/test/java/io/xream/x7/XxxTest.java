@@ -4,6 +4,7 @@ package io.xream.x7;
 
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
+import io.xream.x7.common.bean.Reduce;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
@@ -11,7 +12,6 @@ import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
-import io.xream.x7.demo.bean.DogTest;
 import io.xream.x7.demo.bean.TestBoo;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
@@ -95,10 +95,6 @@ public class XxxTest {
         this.controller.create();
     }
 
-    public void domain(){
-        this.controller.domain();
-    }
-
     public void distinct(){
 
         ViewEntity ve = this.controller.distinct(null);
@@ -157,13 +153,6 @@ public class XxxTest {
         return ve;
     }
 
-    public ViewEntity testDomain(){
-
-        CriteriaBuilder.DomainObjectBuilder builder = CriteriaBuilder.buildDomainObject(CatTest.class, DogTest.class);
-//        builder.paged().sort("catTest.id", Direction.DESC).page(1).rows(10);
-        Criteria.DomainObjectCriteria criteria = builder.get();
-        return testServiceRemote.testDomain(criteria);
-    }
 
     public ViewEntity testRefreshConditionRemote(){
 
@@ -292,8 +281,8 @@ public class XxxTest {
     public void testResultMappedRemote(){
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
-//        builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
-        builder.resultKey("id").resultKey("dogId");
+        builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+//        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
         builder.paged().page(1).rows(10).sort("id",Direction.DESC);
 

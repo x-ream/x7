@@ -28,7 +28,6 @@ import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.SqlCriteriaParser;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
-import io.xream.x7.repository.internal.DomainObjectRepositoy;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.mapper.MapperFactory;
 import io.xream.x7.repository.transform.DataTransform;
@@ -40,8 +39,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
-import java.util.Objects;
-
 
 public class RepositoryStarter  {
 
@@ -52,14 +49,7 @@ public class RepositoryStarter  {
     public Dialect dialect(Environment environment){
         String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
-        String driver = null;
-        if (Objects.isNull(driverClassName)) {
-            driver = environment.getProperty("x7.db.driver");
-        } else {
-            driver = driverClassName;
-        }
-
-        driver = driver.toLowerCase();
+        String driver = driverClassName.toLowerCase();
         Dialect dialect = null;
         try {
             if (driver.contains(DbType.MYSQL)) {
@@ -145,17 +135,9 @@ public class RepositoryStarter  {
     }
 
 
-    @Bean
-    @Order(8)
-    public DomainObjectRepositoy domainObjectRepositoy(Repository repository) {
-        DomainObjectRepositoy domainObjectRepositoy = new DomainObjectRepositoy();
-        domainObjectRepositoy.setRepository(repository);
-        return domainObjectRepositoy;
-    }
-
     @ConditionalOnMissingBean(X7Data.class)
     @Bean
-    @Order(9)
+    @Order(8)
     public X7Data enableData(){
         return new X7Data();
     }
