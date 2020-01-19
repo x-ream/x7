@@ -65,9 +65,11 @@ public class InCondition implements Routeable {
         this.routeKey = routeKey;
     }
 
+    @Deprecated
     public InCondition(){
     }
 
+    @Deprecated
     public InCondition(String property,List<? extends Object> inList ){
         this.property = property;
         this.inList = inList;

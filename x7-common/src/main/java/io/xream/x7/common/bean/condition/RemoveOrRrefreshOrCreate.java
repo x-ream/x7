@@ -31,6 +31,7 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
     private List<T> list;
     private Object[] ins;
 
+    @Deprecated
     public RemoveOrRrefreshOrCreate(){}
     public static <T> RemoveOrRrefreshOrCreate wrap(List<T> list, Object[] ins){
         return wrap(null,list,ins);
