@@ -87,6 +87,13 @@ public class CriteriaBuilder {
         return andOr(ConjunctionAndOtherScript.OR);
     }
 
+    public CriteriaBuilder forceIndex(String indexName) {
+        if (StringUtil.isNullOrEmpty(indexName))
+            return instance;
+        this.criteria.setForceIndex(indexName);
+        return instance;
+    }
+
     public CriteriaBuilder endSub() {
 
         X x = new X();

@@ -43,6 +43,7 @@ public class XxxTest {
     @Autowired
     private DistributionLockTester distributionLockTester;
 
+
     public  void refreshByCondition() {
 
         controller.refreshByCondition();

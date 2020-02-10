@@ -42,6 +42,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	private List<Sort> sortList;
 	private List<KV> fixedSortList = new ArrayList<>();
 	private List<X> listX = new ArrayList<>();
+	private String forceIndex;
 
 	@JsonIgnore
 	private transient Parsed parsed;
@@ -152,6 +153,14 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		this.rows = rows;
 	}
 
+	public String getForceIndex() {
+		return forceIndex;
+	}
+
+	public void setForceIndex(String forceIndex) {
+		this.forceIndex = forceIndex;
+	}
+
 	@Override
 	public Object getRouteKey() {
 		return routeKey;
@@ -195,6 +204,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 				", rows=" + rows +
 				", sortList='" + sortList + '\'' +
 				", listX=" + listX +
+				", forceIndex=" + forceIndex +
 				", clz=" + clz +
 				'}';
 	}

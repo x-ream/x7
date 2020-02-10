@@ -117,7 +117,10 @@ public class SqlCriteriaParser implements CriteriaParser {
          * from table
          */
         sourceScript(sb, criteria);
-
+        /*
+         * force index
+         */
+        forceIndex(sb, criteria);
         /*
          * StringList
          */
@@ -334,6 +337,12 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         mapping(script, criteria, sb);
 
+    }
+
+    private void forceIndex(StringBuilder sb, Criteria criteria) {
+        if (StringUtil.isNullOrEmpty(criteria.getForceIndex()))
+            return;
+        sb.append("FORCE INDEX(" + criteria.getForceIndex() + ")");
     }
 
     private StringBuilder count(StringBuilder sb, Criteria criteria) {

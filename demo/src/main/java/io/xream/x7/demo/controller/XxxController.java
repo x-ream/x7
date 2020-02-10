@@ -435,6 +435,7 @@ public class XxxController {
 		List<Object> inList = Arrays.asList("NL","BL");
 		builder.and().in("type",inList).and().in("id",Arrays.asList(1,251));
 		builder.paged().orderIn("type",inList);
+		builder.forceIndex("IDX_CAT_DOG_ID");
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
 		Criteria criteria = builder.get();

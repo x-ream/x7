@@ -47,10 +47,10 @@ public class AppTest {
 
 //        xxxTest.testDomain();
 
-        xxxTest.testRefreshConditionRemote();
-        xxxTest.testCriteriaRemote();
-        xxxTest.testCriteriaRemote();
-        xxxTest.testCriteriaRemote();
+//        xxxTest.testRefreshConditionRemote();
+//        xxxTest.testCriteriaRemote();
+//        xxxTest.testCriteriaRemote();
+//        xxxTest.testCriteriaRemote();
 
 
 //        xxxTest.testResultMappedRemote();
@@ -73,7 +73,7 @@ public class AppTest {
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
