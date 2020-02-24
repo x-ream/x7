@@ -1,10 +1,12 @@
 package io.xream.x7.demo.bean;
 
-import org.apache.commons.collections.MapUtils;
+import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.web.IdView;
+import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,16 @@ public class Cat implements Serializable, IdView {
 	private TestBoo testBoo;
 	private List<String> testList;
 	private Dark testObj;
+
+	private List<Criteria.X> listX = new ArrayList();
+
+	public List<Criteria.X> getListX() {
+		return listX;
+	}
+
+	public void setListX(List<Criteria.X> listX) {
+		this.listX = listX;
+	}
 
 	private transient Map<Object,Object> viewMap;
 	@Override

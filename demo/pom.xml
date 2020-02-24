@@ -122,7 +122,6 @@
             <version>${fastjson.version}</version>
         </dependency>
 
-
         <!--
                 <dependency>
                     <groupId>com.oracle</groupId>

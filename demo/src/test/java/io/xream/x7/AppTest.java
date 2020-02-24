@@ -73,7 +73,7 @@ public class AppTest {
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testOne();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
@@ -91,7 +91,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-//        xxxTest.testLock();
+        xxxTest.testLock();
 //        xxxTest.in();
 //        xxxTest.in();
 //        xxxTest.in();

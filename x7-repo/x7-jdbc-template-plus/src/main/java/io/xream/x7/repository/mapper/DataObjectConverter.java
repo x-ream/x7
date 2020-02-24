@@ -65,6 +65,7 @@ public class DataObjectConverter {
                     }
                 }
                 Object value = entry.getValue();
+                value = filter(value);
                 if (be != null) {
                     value = dialect.mappingToObject(value, be);
                 }
@@ -85,6 +86,7 @@ public class DataObjectConverter {
 
             Object value = map.get(property);
             if (value != null) {
+                value = filter(value);
                 method.invoke(obj, value);
             }
         }
@@ -239,4 +241,15 @@ public class DataObjectConverter {
     public static void log(Class clz, List<Object> valueList) {
         LoggerProxy.debug(clz, valueList);
     }
+
+    private static Object filter(Object value) {
+        if (value == null)
+            return null;
+        if (value instanceof String) {
+            String str = (String) value;
+            value = str.replace("<","&le").replace(">","$gt");
+        }
+        return value;
+    }
+
 }

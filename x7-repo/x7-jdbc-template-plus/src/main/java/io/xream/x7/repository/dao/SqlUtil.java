@@ -333,11 +333,10 @@ public class SqlUtil {
 
     protected static String filter(String sql) {
         sql = sql.replace("drop", SqlScript.SPACE)
-                .replace(";", SqlScript.SPACE)
-                .replace("<","&le")
-                .replace(">","$gt"); // 手动拼接SQL,
+                .replace(";", SqlScript.SPACE);// 手动拼接SQL,
         return sql;
     }
+
 
     public static <T> Object[] refresh(T t, Class<T> clz) {
 

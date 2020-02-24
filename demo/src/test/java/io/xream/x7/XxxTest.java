@@ -195,6 +195,8 @@ public class XxxTest {
         Cat cat = new Cat();
         cat.setId(1000L);
         cat.setType("LOCK--------sss");
+        Criteria.X x = new Criteria.X();
+//        cat.getListX().add(x);
         distributionLockTester.test(cat);
     }
 
