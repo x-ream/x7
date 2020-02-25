@@ -4,7 +4,7 @@ package io.xream.x7;
 
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
-import io.xream.x7.common.bean.Reduce;
+import io.xream.x7.common.bean.ReduceType;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
@@ -285,7 +285,7 @@ public class XxxTest {
     public void testResultMappedRemote(){
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
-        builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+        builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 //        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
         builder.paged().page(1).rows(10).sort("id",Direction.DESC);

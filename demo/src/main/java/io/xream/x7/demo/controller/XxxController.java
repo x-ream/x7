@@ -128,8 +128,8 @@ public class XxxController {
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class,ro);
 		builder.distinct("catTest.dogId")
 				.distinct("catTest.catFriendName")
-				.reduce(Reduce.ReduceType.COUNT,"catTest.id")
-				.reduce(Reduce.ReduceType.SUM, "catTest.dogId", Having.build(PredicateAndOtherScript.GT, 2))
+				.reduce(ReduceType.COUNT,"catTest.id")
+				.reduce(ReduceType.SUM, "catTest.dogId", Having.build(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
 		.paged().scroll(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);
@@ -193,7 +193,7 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class,ro);
-		//builder.distinct("catTest.id").reduce(Reduce.ReduceType.COUNT,"catTest.id").groupBy("catTest.id");
+		//builder.distinct("catTest.id").reduce(ReduceType.COUNT,"catTest.id").groupBy("catTest.id");
 		builder.and().in("catTest.catFriendName", inList);
 //		builder.paged().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 		String sourceScript = "    catTest     LEFT JOIN        dogTest  on catTest.dogId =         dogTest.id";
@@ -266,7 +266,7 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class);
-		builder.distinct("c.dogId").reduce(Reduce.ReduceType.GROUP_CONCAT_DISTINCT,"c.type").groupBy("c.dogId");
+		builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT,"c.type").groupBy("c.dogId");
 		builder.and().in("c.catFriendName", inList);
 		builder.paged().orderIn("c.catFriendName",inList).sort("c.id",Direction.DESC);
 		String sourceScript = "catTest c LEFT JOIN dogTest d on c.dogId = d.id";
@@ -305,7 +305,7 @@ public class XxxController {
 		inList.add("BLACK");
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class,ro);
-//		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+//		builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 		builder.and().in("type", inList);
 		builder.paged().orderIn("type",inList);
 
@@ -404,7 +404,7 @@ public class XxxController {
 	public ViewEntity testResultMap(){
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
-		builder.distinct("id").reduce(Reduce.ReduceType.COUNT,"dogId").groupBy("id");
+		builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 		builder.and().eq("type","NL");
 		builder.paged().page(1).rows(10).sort("id",Direction.DESC);
 

@@ -224,9 +224,9 @@ public class SqlCriteriaParser implements CriteriaParser {
 
                 String value = mapping(reduce.getProperty(), criteria);
 
-                Reduce.ReduceType reduceType = reduce.getType();
-                if (reduceType == Reduce.ReduceType.GROUP_CONCAT_DISTINCT){
-                    reduceType = Reduce.ReduceType.GROUP_CONCAT;
+                ReduceType reduceType = reduce.getType();
+                if (reduceType == ReduceType.GROUP_CONCAT_DISTINCT){
+                    reduceType = ReduceType.GROUP_CONCAT;
                     value = "DISTINCT " + value;
                 }
 

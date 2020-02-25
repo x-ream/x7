@@ -647,7 +647,7 @@ public class CriteriaBuilder {
             return this;
         }
 
-        public ResultMappedBuilder reduce(Reduce.ReduceType type, String property) {
+        public ResultMappedBuilder reduce(ReduceType type, String property) {
             Reduce reduce = new Reduce();
             reduce.setType(type);
             reduce.setProperty(property);
@@ -661,7 +661,7 @@ public class CriteriaBuilder {
          * @param property
          * @param having   paged().scroll(true), if isScroll == false，will throw Exception
          */
-        public ResultMappedBuilder reduce(Reduce.ReduceType type, String property, Having having) {
+        public ResultMappedBuilder reduce(ReduceType type, String property, Having having) {
             Reduce reduce = new Reduce();
             reduce.setType(type);
             reduce.setProperty(property);
