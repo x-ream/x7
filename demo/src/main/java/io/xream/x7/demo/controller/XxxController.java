@@ -129,7 +129,7 @@ public class XxxController {
 		builder.distinct("catTest.dogId")
 				.distinct("catTest.catFriendName")
 				.reduce(ReduceType.COUNT,"catTest.id")
-				.reduce(ReduceType.SUM, "catTest.dogId", Having.build(PredicateAndOtherScript.GT, 2))
+				.reduce(ReduceType.SUM, "catTest.dogId", Having.wrap(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
 		.paged().scroll(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);

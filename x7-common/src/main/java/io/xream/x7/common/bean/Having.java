@@ -23,7 +23,7 @@ public  class Having {
     private Having() {
     }
 
-    public static Having build(PredicateAndOtherScript script, Object value){
+    public static Having wrap(PredicateAndOtherScript script, Object value){
         Having having = new Having();
         having.x = new Criteria.X();
         having.x.setConjunction(ConjunctionAndOtherScript.HAVING);
