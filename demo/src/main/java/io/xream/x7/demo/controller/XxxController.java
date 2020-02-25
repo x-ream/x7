@@ -266,7 +266,7 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class);
-		builder.distinct("c.id").reduce(Reduce.ReduceType.COUNT,"c.id").groupBy("c.id");
+		builder.distinct("c.dogId").reduce(Reduce.ReduceType.GROUP_CONCAT_DISTINCT,"c.type").groupBy("c.dogId");
 		builder.and().in("c.catFriendName", inList);
 		builder.paged().orderIn("c.catFriendName",inList).sort("c.id",Direction.DESC);
 		String sourceScript = "catTest c LEFT JOIN dogTest d on c.dogId = d.id";
@@ -274,17 +274,13 @@ public class XxxController {
 		resultMapped.setSourceScript(sourceScript);
 		Page<Map<String,Object>> page = repository.find(resultMapped);
 
-//		Cat cat = this.catRepository.get(110);
-//
-//		System.out.println("____cat: " + cat);
-//
-//		List<Long> idList = new ArrayList<>();
-//		idList.add(109L);
-//		idList.add(110L);
-//		InCondition inCondition = new InCondition("id",idList);
-//		List<Cat> catList = this.catRepository.in(inCondition);
+		Cat cat = this.catRepository.get(110);
 
-//		System.out.println("____catList: " + catList);
+		System.out.println("____cat: " + cat);
+
+		List<Cat> catList = this.catRepository.in(InCondition.wrap("id",Arrays.asList(109,110)));
+
+		System.out.println("____catList: " + catList);
 
 		return ViewEntity.ok(page);
 
