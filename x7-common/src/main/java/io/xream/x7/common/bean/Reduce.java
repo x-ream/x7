@@ -62,7 +62,9 @@ public class Reduce {
         COUNT,
         MAX,
         MIN,
-        AVG
+        AVG,
+        GROUP_CONCAT,
+        GROUP_CONCAT_DISTINCT
     }
 
 }

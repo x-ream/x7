@@ -223,8 +223,15 @@ public class SqlCriteriaParser implements CriteriaParser {
                 resultMapped.getResultKeyAliaMap().put(alianName, alianProperty);
 
                 String value = mapping(reduce.getProperty(), criteria);
+
+                Reduce.ReduceType reduceType = reduce.getType();
+                if (reduceType == Reduce.ReduceType.GROUP_CONCAT_DISTINCT){
+                    reduceType = Reduce.ReduceType.GROUP_CONCAT;
+                    value = "DISTINCT " + value;
+                }
+
                 column.append(SqlScript.SPACE)
-                        .append(reduce.getType())
+                        .append(reduceType)
                         .append(SqlScript.LEFT_PARENTTHESIS)//" ( "
                         .append(value)
                         .append(SqlScript.RIGHT_PARENTTHESIS).append(SqlScript.SPACE)//" ) "
