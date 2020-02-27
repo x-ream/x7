@@ -46,10 +46,12 @@ public class LockAspect {
         String key = KeyUtil.makeKey(prefix,suffix,condition,args);
         int interval = lock.interval();
         int timeout = lock.timeout();
+        boolean abortingIfNoLock = lock.abortingIfNoLock();
 
         return DistributionLock.by(key).lock(
                 interval,
                 timeout,
+                abortingIfNoLock,
                 task -> {
             Class returnType = ms.getReturnType();
             try {

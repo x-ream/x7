@@ -36,7 +36,7 @@ public class DistributionLock {
         lockProvider = lp;
     }
 
-    private static void lock(String key, int interval, int timeout) {
+    private static void lock(String key, int interval, int timeout, boolean abortingIfNoLock) {
 
         if (lockProvider == null)
             throw new RuntimeException("No implements of LockProvider, like the project x7-repo/x7-redis-integration");
@@ -44,15 +44,17 @@ public class DistributionLock {
         int i = 1;
         boolean locked = lockProvider.lock(key,timeout);
         int retryMax = timeout / interval ;
-        while (!locked) {
-            try{
-                TimeUnit.MILLISECONDS.sleep(interval);
-                locked = lockProvider.lock(key,timeout);
-                i++;
-            }catch (Exception e) {
-                break;
+        if (!abortingIfNoLock) {
+            while (!locked) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(interval);
+                    locked = lockProvider.lock(key, timeout);
+                    i++;
+                } catch (Exception e) {
+                    break;
+                }
+                if (i >= retryMax) break;
             }
-            if (i >= retryMax) break;
         }
 
         if (!locked) {
@@ -88,15 +90,16 @@ public class DistributionLock {
         }
 
         public <T> T lock(Task<T> obj){
-            return lock(INTERVAL,TIMEOUT,obj);
+            return lock(INTERVAL,TIMEOUT,false,obj);
         }
 
         public <T> T lock(
                 int intervalMS,
                 int timeoutMS,
+                boolean abortingIfNoLock,
                 Task<T> obj){
 
-            DistributionLock.lock(key,intervalMS,timeoutMS);
+            DistributionLock.lock(key,intervalMS,timeoutMS,abortingIfNoLock);
             T o = null;
             try {
                 o = obj.run(obj);
@@ -114,7 +117,7 @@ public class DistributionLock {
         }
 
         public <T> T lockAsync(Task<T> obj){
-            DistributionLock.lock(key,INTERVAL,TIMEOUT);
+            DistributionLock.lock(key,INTERVAL,TIMEOUT,false);
             T o = null;
             try {
                 o = obj.run(obj);

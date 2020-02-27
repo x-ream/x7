@@ -65,7 +65,7 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-        xxxTest.testAlia();
+//        xxxTest.testAlia();
 //        xxxTest.distinct();
 //        xxxTest.distinct();
 
@@ -91,7 +91,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-        xxxTest.testLock();
+//        xxxTest.testLock();
 //        xxxTest.in();
 //        xxxTest.in();
 //        xxxTest.in();

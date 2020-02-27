@@ -1,17 +1,18 @@
 package io.xream.x7.demo.controller;
 
 import io.xream.x7.common.bean.*;
-import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
-import io.xream.x7.demo.*;
-import io.xream.x7.demo.bean.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.demo.*;
+import io.xream.x7.demo.bean.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -67,11 +68,11 @@ public class XxxController {
     }
 
 	@RequestMapping("/create")
-//	@Transactional
+	@Transactional
 	public ViewEntity create(){
 
 		Cat cat = new Cat();
-		cat.setId(252L);
+		cat.setId(352L);
 		cat.setDogId(2);
 		cat.setCreateAt(new Date());
 		cat.setTestBoo(TestBoo.TEST);
@@ -81,7 +82,7 @@ public class XxxController {
 		this.catRepository.create(cat);
 
 		cat = new Cat();
-		cat.setId(253L);
+		cat.setId(353L);
 		cat.setDogId(2);
 		cat.setCreateAt(new Date());
 		cat.setTestBoo(TestBoo.TEST);
@@ -193,7 +194,7 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(CatTest.class,ro);
-		//builder.distinct("catTest.id").reduce(ReduceType.COUNT,"catTest.id").groupBy("catTest.id");
+		builder.resultKey("catTest");
 		builder.and().in("catTest.catFriendName", inList);
 //		builder.paged().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 		String sourceScript = "    catTest     LEFT JOIN        dogTest  on catTest.dogId =         dogTest.id";

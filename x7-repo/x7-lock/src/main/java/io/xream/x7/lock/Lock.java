@@ -25,4 +25,5 @@ public @interface Lock {
     int interval() default 1000;
     int timeout() default 100000;
     String condition() default "";
+    boolean abortingIfNoLock() default false;
 }

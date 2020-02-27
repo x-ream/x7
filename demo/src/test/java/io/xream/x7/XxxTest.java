@@ -2,6 +2,7 @@ package io.xream.x7;
 
 //import io.seata.spring.annotation.GlobalTransactional;
 
+import io.xream.x7.common.async.CasualWorker;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.ReduceType;
@@ -197,6 +198,12 @@ public class XxxTest {
         cat.setType("LOCK--------sss");
         Criteria.X x = new Criteria.X();
 //        cat.getListX().add(x);
+        CasualWorker.accept(new Runnable() {
+            @Override
+            public void run() {
+                distributionLockTester.test(cat);
+            }
+        });
         distributionLockTester.test(cat);
     }
 
