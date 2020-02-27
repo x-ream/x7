@@ -60,8 +60,13 @@ public final class CacheableRepository implements Repository, Manuable {
     }
 
     private boolean isCacheEnabled(Parsed parsed) {
-        LoggerProxy.debug(parsed.getClz(), "L2Cache effected");
-        return cacheResolver.isEnabled() && !parsed.isNoCache();
+        boolean b = cacheResolver.isEnabled() && !parsed.isNoCache();
+        if (b){
+            LoggerProxy.debug(parsed.getClz(), "L2Cache effected");
+        }else{
+            LoggerProxy.debug(parsed.getClz(), "L2Cache not effected");
+        }
+        return b;
     }
 
 

@@ -78,7 +78,7 @@ public class AppTest {
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
-//        xxxTest.testCreate();
+        xxxTest.testCreate();
 //        xxxTest.testListCriteria();
 //        xxxTest.testCreateOrReplace();
 //        xxxTest.testListCriteria();

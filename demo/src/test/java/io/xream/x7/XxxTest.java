@@ -233,18 +233,12 @@ public class XxxTest {
         return this.testServiceRemote.testOneKey(10L);
     }
 
-    public void testEnum(){
-        System.out.println(TestBoo.BOO.getClass());
-        System.out.println(TestBoo.BOO.getClass().getSuperclass().toGenericString());
-        System.out.println("TRUE = " + TestBoo.BOO.getClass().getSuperclass().isEnum());
-        System.out.println("TestBoo.BOO.getView(): " + TestBoo.BOO);
-        System.out.println("TestBoo.BOO.name(): " + TestBoo.BOO.name());
-    }
+
 
     public void testCreate() {
 
         Cat cat = new Cat();
-        cat.setId(251L);
+        cat.setId(451L);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);
