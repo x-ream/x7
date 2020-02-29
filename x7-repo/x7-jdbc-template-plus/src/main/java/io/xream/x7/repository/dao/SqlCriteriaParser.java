@@ -17,19 +17,22 @@
 package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
+import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.SqlParsed;
 import io.xream.x7.repository.exception.CriteriaSyntaxException;
+import io.xream.x7.repository.exception.SqlBuildException;
 import io.xream.x7.repository.mapper.Dialect;
+import io.xream.x7.repository.util.SqlParserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class SqlCriteriaParser implements CriteriaParser {
 
@@ -141,6 +144,138 @@ public class SqlCriteriaParser implements CriteriaParser {
         SqlParsed sqlParsed = sqlArr(sb, criteria, countSql);
 
         return sqlParsed;
+    }
+
+    @Override
+    public String parseRefresh(Parsed parsed, RefreshCondition refreshCondition) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(parsed.getTableName()).append(SqlScript.SPACE);
+
+        concatRefresh(sb, parsed, refreshCondition);
+
+        filterCondition(parsed, refreshCondition.getListX());
+
+        String conditionSql = parseCondition(refreshCondition);
+
+        if (conditionSql.startsWith(" AND")|| conditionSql.startsWith("AND")) {
+            conditionSql = conditionSql.replaceFirst("AND", "WHERE");
+        }
+
+        conditionSql = SqlParserUtil.mapper(conditionSql, parsed);
+
+        sb.append(conditionSql);
+
+        String sql = sb.toString();
+
+        if (sql.contains("SET  WHERE"))
+            throw new SqlBuildException(sql);
+
+        return sql;
+    }
+
+    private void filterCondition(Parsed parsed,List<Criteria.X> listX){
+        Iterator<Criteria.X> ite = listX.iterator();
+        while(ite.hasNext()){
+            Criteria.X x = ite.next();
+            if (BeanUtilX.isBaseType_0(x.getKey(), x.getValue(), parsed)){
+                ite.remove();
+            }
+        }
+
+    }
+
+
+    private void concatRefresh(StringBuilder sb, Parsed parsed, RefreshCondition refreshCondition) {
+
+        sb.append(SqlScript.SET);
+
+        List<Criteria.X> refreshList = refreshCondition.getRefreshList();
+
+        List<Object> refreshValueList = new ArrayList<>();
+
+        boolean isNotFirst = false;
+        for (Criteria.X x : refreshList) {
+
+
+            if (x.getPredicate() == PredicateAndOtherScript.X) {
+
+                if (isNotFirst) {
+                    sb.append(SqlScript.COMMA).append(SqlScript.SPACE);
+                }
+
+                isNotFirst = true;
+
+                Object key = x.getKey();
+
+                String str = key.toString();
+
+                String sql = BeanUtilX.normalizeSql(str);
+
+                sql = SqlParserUtil.mapper(sql, parsed);
+
+                sb.append(sql);
+
+            } else {
+                String key = x.getKey();
+                if (key.contains("?")) {
+
+                    if (isNotFirst) {
+                        sb.append(SqlScript.COMMA).append(SqlScript.SPACE);
+                    }
+
+                    isNotFirst = true;
+
+                    String sql = BeanUtilX.normalizeSql(key);
+                    sql = SqlParserUtil.mapper(sql, parsed);
+                    sb.append(sql);
+                } else {
+
+                    if (StringUtil.isNullOrEmpty(x.getValue().toString()) || BeanUtilX.isBaseType_0(key, x.getValue(), parsed)) {
+                        continue;
+                    }
+
+                    if (isNotFirst) {
+                        sb.append(SqlScript.COMMA).append(SqlScript.SPACE);
+                    }
+
+                    isNotFirst = true;
+
+                    String mapper = parsed.getMapper(key);
+                    sb.append(mapper);
+                    sb.append(SqlScript.EQ_PLACE_HOLDER);
+
+                    BeanElement be = parsed.getElementMap().get(key);
+                    if (be == null) {
+                        throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
+                    }
+                    if (be.clz == Date.class) {
+                        if (x.getValue() instanceof Long) {
+                            x.setValue(new Date(((Long) x.getValue()).longValue()));
+                        }
+                    } else if (be.clz == Timestamp.class) {
+                        if (x.getValue() instanceof Long) {
+                            x.setValue(new Timestamp(((Long) x.getValue()).longValue()));
+                        }
+                    } else if (be.isJson) {
+                        Object v = x.getValue();
+                        if (v != null) {
+                            String str = JsonX.toJson(v);
+                            x.setValue(str);
+                        }
+                    }
+
+                }
+
+                refreshValueList.add(x.getValue());
+            }
+
+        }
+
+
+        if (!refreshValueList.isEmpty()) {
+            refreshCondition.getValueList().addAll(0, refreshValueList);
+        }
     }
 
     private SqlParsed sqlArr(StringBuilder sb, Criteria criteria, StringBuilder countSql) {

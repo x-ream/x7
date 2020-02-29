@@ -18,6 +18,8 @@ package io.xream.x7.repository;
 
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaCondition;
+import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.repository.mapper.Dialect;
 
 public interface CriteriaParser {
@@ -27,4 +29,6 @@ public interface CriteriaParser {
     String parseCondition(CriteriaCondition criteriaCondition) ;
 
     SqlParsed parse(Criteria criteria) ;
+
+    String parseRefresh(Parsed parsed, RefreshCondition refreshCondition);
 }
