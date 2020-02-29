@@ -190,7 +190,6 @@ public class SqlUtil {
         }
 
         sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);
-
     }
 
     protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser, Dialect dialect) {
