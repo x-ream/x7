@@ -109,12 +109,12 @@ public class XxxController {
 
 
 		RefreshCondition<Cat> refreshCondition = RefreshCondition.build();
-		refreshCondition.and().in("id",Arrays.asList(4,5));
-		refreshCondition.refresh("testBoo",TestBoo.TEST);
+		refreshCondition.refresh("testBoo",TestBoo.BOO);
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);
 		refreshCondition.refresh("test = test - 3");
 		refreshCondition.refresh("createAt = null");
+		refreshCondition.in("id",Arrays.asList(247,248));
 
 		boolean flag = this.catRepository.refresh(refreshCondition);//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新

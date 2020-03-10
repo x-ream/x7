@@ -24,21 +24,29 @@ import org.springframework.util.Assert;
 
 public class KeyUtil {
 
-    private KeyUtil(){}
+    private KeyUtil() {
+    }
 
     public static String makeKey(String prefix, String suffix, String condition, Object[] args) {
 
         Assert.notNull(condition, "condition can not null");
-        if (args != null && args.length > 0 && condition.contains("#") && condition.contains(".")) {
+        if (args != null && args.length > 0 && condition.contains("#")) {
 
             Object obj = args[0];
+
             if (obj != null) {
-                int start = condition.indexOf("#") + 1;
-                int end = condition.indexOf(".");
-                String objName = condition.substring(start, end);
-
-
                 ExpressionParser parser = new SpelExpressionParser();
+
+                int start = condition.indexOf("#") + 1;
+                int end = 0;
+                if (condition.contains(".")) {
+                    end = condition.indexOf(".");
+                } else {
+                    end = condition.indexOf(" ");
+                }
+
+                String objName = condition.substring(start, end).trim();
+
                 EvaluationContext ctx = new StandardEvaluationContext();
                 ctx.setVariable(objName, obj);
 

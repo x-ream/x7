@@ -78,7 +78,7 @@ public class AppTest {
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
-        xxxTest.testCreate();
+//        xxxTest.testCreate();
 //        xxxTest.testListCriteria();
 //        xxxTest.testCreateOrReplace();
 //        xxxTest.testListCriteria();
@@ -91,7 +91,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-//        xxxTest.testLock();
+        xxxTest.testLock();
 //        xxxTest.in();
 //        xxxTest.in();
 //        xxxTest.in();

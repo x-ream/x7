@@ -201,10 +201,10 @@ public class XxxTest {
         CasualWorker.accept(new Runnable() {
             @Override
             public void run() {
-                distributionLockTester.test(cat);
+                distributionLockTester.test("_test_cat_");
             }
         });
-        distributionLockTester.test(cat);
+        distributionLockTester.test("_test_cat_");
     }
 
 
