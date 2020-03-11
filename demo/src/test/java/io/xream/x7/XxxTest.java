@@ -16,6 +16,7 @@ import io.xream.x7.demo.bean.CatTest;
 import io.xream.x7.demo.bean.TestBoo;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
+import io.xream.x7.fallback.FallbackOnly;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -303,4 +304,18 @@ public class XxxTest {
         this.testServiceRemote.testResultMappedRemote(resultMappedCriteria);
 
     }
+
+    @FallbackOnly(exceptions = {RuntimeException.class}, fallback = FallbackOnlyTest.class)
+    public void testFallbackOnly(String test) {
+
+        System.out.println("testFallbackOnly");
+
+        boolean b = true;
+        if (b){
+            throw new RuntimeException("testFallbackOnly");
+        }
+    }
+
+
+
 }

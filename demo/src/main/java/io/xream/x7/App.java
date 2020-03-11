@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableDateToLongForJackson
 //@EnableX7L3Caching
 @EnableDistributionLock
+@EnableFallbackOnly
 public class App {
 
     public static void main( String[] args )

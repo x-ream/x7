@@ -91,7 +91,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-        xxxTest.testLock();
+//        xxxTest.testLock();
 //        xxxTest.in();
 //        xxxTest.in();
 //        xxxTest.in();
@@ -104,6 +104,8 @@ public class AppTest {
 //        xxxTest.removeOrRefreshOrCreate();
 //
 //        xxxTest.testCacheGet();
+
+        xxxTest.testFallbackOnly("test");
 
     }
 
