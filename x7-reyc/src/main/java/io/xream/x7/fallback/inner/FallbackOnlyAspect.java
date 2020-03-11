@@ -72,6 +72,8 @@ public class FallbackOnlyAspect {
             for (Class<? extends Throwable> clzz : clzzArr) {
                 if (e.getClass() == clzz || e.getClass().isAssignableFrom(clzz)) {
                     Class fallbackClzz = fallbackOnly.fallback();
+                    if (fallbackClzz == void.class)
+                        break;
                     try {
                         Object obj = fallbackClzz.newInstance();
                         String methodName = signature.getName();
