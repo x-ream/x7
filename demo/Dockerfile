@@ -5,6 +5,7 @@ LABEL version="2.3.4.RELEASE"
 MAINTAINER Sim Wang <8966188@qq.com>
 
 ENV ACTIVE test
+ENV JAVA_OPTS -Xms1024m -Xmx1024m -Xmn320m
 
 ADD target/x7-demo-2.3.4.RELEASE.jar /data/deploy/demo/app.jar
 

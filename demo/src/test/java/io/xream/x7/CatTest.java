@@ -80,7 +80,7 @@ public class CatTest {
     public List<Cat> in(){
         List<Long> inList = new ArrayList<>();
         inList.add(3L);
-        InCondition inCondition = new InCondition("dogId", inList);
+        InCondition inCondition = InCondition.wrap("dogId", inList);
         List<Cat> list = this.repository.in(inCondition);
         System.out.println(list);
         return list;

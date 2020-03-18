@@ -66,7 +66,7 @@ public interface InOptimization {
             int toIndex = fromIndex + segSize;
             List<? extends Object> segInList = inList.subList(fromIndex, toIndex);
 
-            InCondition ic = new InCondition(inCondition.getProperty(), segInList);
+            InCondition ic = InCondition.wrap(inCondition.getProperty(), segInList);
             ic.setClz(inCondition.getClz());
             List<T> segList = repository.in0(ic);
             list.addAll(segList);

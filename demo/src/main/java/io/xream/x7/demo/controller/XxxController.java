@@ -494,7 +494,7 @@ public class XxxController {
 //	@Transactional
     public ViewEntity in(){
 
-        InCondition inCondition = new InCondition("testBoo",Arrays.asList(TestBoo.BOO,TestBoo.TEST));
+        InCondition inCondition = InCondition.wrap("testBoo",Arrays.asList(TestBoo.BOO,TestBoo.TEST));
         List<Cat> catList = this.catRepository.in(inCondition);
 		System.out.println(catList);
         catList.forEach(cat -> System.out.println(cat.getTestBoo()));

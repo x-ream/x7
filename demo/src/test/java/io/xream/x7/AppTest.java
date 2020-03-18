@@ -105,7 +105,7 @@ public class AppTest {
 //
 //        xxxTest.testCacheGet();
 
-        xxxTest.testFallbackOnly("test");
+//        xxxTest.testFallbackOnly("test");
 
     }
 

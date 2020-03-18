@@ -533,7 +533,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			}
 		}
 		String key = parsed.getKey(X.KEY_ONE);
-		InCondition inCondition = new InCondition(key, idList);
+		InCondition inCondition = InCondition.wrap(key, idList);
 		inCondition.setClz(clz);
 		List<T> objList = queryForCache.in(inCondition);
 
