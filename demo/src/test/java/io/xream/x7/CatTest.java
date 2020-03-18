@@ -39,10 +39,10 @@ public class CatTest {
 
     public void refreshByCondition(){
 
-        RefreshCondition refreshCondition = new RefreshCondition();
+        RefreshCondition refreshCondition = RefreshCondition.build();
         refreshCondition.refresh("type","TEST_X");
 //        refreshCondition.and().eq("id",1213);
-        refreshCondition.and().eq("test",433);
+        refreshCondition.eq("test",433);
 
         this.repository.refreshUnSafe(refreshCondition);
 

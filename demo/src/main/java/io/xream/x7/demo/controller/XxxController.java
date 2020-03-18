@@ -572,7 +572,6 @@ public class XxxController {
 		this.catRepository.get(10L);
 		this.catRepository.get(10L);
 
-		RefreshCondition refreshCondition = new RefreshCondition();
 		this.catRepository.refresh(
 				 RefreshCondition.build().refresh("type","XXXX").eq("id",10L)
 		);

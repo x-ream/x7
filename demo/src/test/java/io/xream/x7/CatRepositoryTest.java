@@ -27,11 +27,11 @@ public class CatRepositoryTest {
 
 
     public boolean refresh(){
-        RefreshCondition<Cat> refreshCondition = new RefreshCondition<>();
+        RefreshCondition<Cat> refreshCondition = RefreshCondition.build();
         refreshCondition.refresh("dogId = (dogId *?)+1", 1);
         refreshCondition.refresh("type = 'XXXX'").refresh("taxType","MOON1");
-        refreshCondition.and().eq("id",10);
-        refreshCondition.and().x("taxType='RT' AND taxType in('RT','YU')");
+        refreshCondition.eq("id",10);
+        refreshCondition.x("taxType='RT' AND taxType in('RT','YU')");
         boolean flag = this.repository.refresh(refreshCondition);
         return flag;
     }
