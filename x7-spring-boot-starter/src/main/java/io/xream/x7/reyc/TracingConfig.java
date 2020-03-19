@@ -25,8 +25,7 @@ import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.HttpSpanCollector;
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import io.xream.x7.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -35,7 +34,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import io.xream.x7.common.util.StringUtil;
 
 @Import(TracingProperties.class)
 public class TracingConfig {
@@ -98,11 +96,4 @@ public class TracingConfig {
     }
 
 
-    public static CloseableHttpClient httpClient(BraveHttpRequestInterceptor requestInterceptor,
-                                                 BraveHttpResponseInterceptor responseInterceptor) {
-        CloseableHttpClient httpclient = HttpClients.custom()
-                .addInterceptorFirst(requestInterceptor)
-                .addInterceptorFirst(responseInterceptor).build();
-        return httpclient;
-    }
 }

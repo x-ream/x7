@@ -67,7 +67,7 @@ public class HttpClientUtil {
             entity = new ByteArrayEntity(json.getBytes("UTF-8"));
             httpPost.setHeader("Content-type", "application/json;charset=UTF-8");
             httpPost.setEntity(entity);
-            LoggerProxy.info(clz,"Request: " + httpPost.getURI() + "  " +json);
+            LoggerProxy.info(clz,"Request: " + httpPost.getURI() + " -H Content-type:application/json -d " +json);
             CloseableHttpResponse response = httpclient.execute(httpPost);
             try {
                 entity = response.getEntity();

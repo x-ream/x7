@@ -16,6 +16,7 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.reyc.TracingConfig;
 import io.xream.x7.reyc.TracingServletRegistrary;
 import org.springframework.context.annotation.Import;
 
@@ -24,7 +25,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({TracingServletRegistrary.class})
+@Import({TracingConfig.class,TracingServletRegistrary.class})
 public @interface EnableTracingServlet {
 
 }

@@ -16,7 +16,6 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.reyc.ReyClientBeanRegistrar;
 import io.xream.x7.reyc.ReyClientConfig;
 import io.xream.x7.reyc.ReyTemplateConfig;
 import io.xream.x7.reyc.TracingConfig;

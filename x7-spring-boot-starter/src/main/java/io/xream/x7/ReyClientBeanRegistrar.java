@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc;
+package io.xream.x7;
 
-import io.xream.x7.EnableReyClient;
+import io.xream.x7.common.util.ClassFileReader;
+import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.internal.ClientParser;
 import io.xream.x7.reyc.internal.HttpClientProxy;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -26,7 +27,6 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
-import io.xream.x7.common.util.ClassFileReader;
 
 import java.util.ArrayList;
 import java.util.List;

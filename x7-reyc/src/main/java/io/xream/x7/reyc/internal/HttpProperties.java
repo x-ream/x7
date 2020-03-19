@@ -16,15 +16,15 @@
  */
 package io.xream.x7.reyc.internal;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
-
-@ConfigurationProperties(
-        prefix = "http"
-)
+@Configuration
 public class HttpProperties {
 
+    @Value("${http.connectTimeout:6000}")
     private int connectTimeout = 6000;
+    @Value("${http.socketTimeout:15000}")
     private int socketTimeout = 15000;
 
     public int getConnectTimeout() {

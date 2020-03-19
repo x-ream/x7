@@ -18,12 +18,11 @@ package io.xream.x7.reyc.internal;
 
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
-import io.xream.x7.reyc.TracingConfig;
+import io.xream.x7.common.bean.KV;
 import io.xream.x7.reyc.api.HeaderInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import io.xream.x7.common.bean.KV;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
 
         CloseableHttpClient httpclient = null;
         if (requestInterceptor != null && responseInterceptor != null) {
-            httpclient = TracingConfig.httpClient(requestInterceptor, responseInterceptor);
+            httpclient = httpClient(requestInterceptor, responseInterceptor);
         } else {
             httpclient = HttpClients.createDefault();
         }
@@ -101,7 +100,7 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
 
         CloseableHttpClient httpclient = null;
         if (requestInterceptor != null && responseInterceptor != null) {
-            httpclient = TracingConfig.httpClient(requestInterceptor, responseInterceptor);
+            httpclient = httpClient(requestInterceptor, responseInterceptor);
         } else {
             httpclient = HttpClients.createDefault();
         }
@@ -117,5 +116,13 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         return HttpClientUtil.get(clz,url, tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
     }
 
+
+    private  CloseableHttpClient httpClient(BraveHttpRequestInterceptor requestInterceptor,
+                                                 BraveHttpResponseInterceptor responseInterceptor) {
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .addInterceptorFirst(requestInterceptor)
+                .addInterceptorFirst(responseInterceptor).build();
+        return httpclient;
+    }
 
 }
