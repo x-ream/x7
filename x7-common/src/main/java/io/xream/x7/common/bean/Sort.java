@@ -19,6 +19,7 @@ package io.xream.x7.common.bean;
 import io.xream.x7.common.web.Direction;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Sort implements Serializable {
     private static final long serialVersionUID = 7492946384236689679L;
@@ -50,6 +51,35 @@ public class Sort implements Serializable {
     }
 
 
+    public static void sortKeyListByMask(List<String> keyList, final byte[] keyMask, Direction direction) {
+
+        int temp = 0;
+        int l = keyMask.length;
+        for (int in=0; in < l; in++){
+            if (keyMask[in] == 0){
+                temp = in;
+                break;
+            }
+        }
+        final int maskStart = temp;
+        int length = keyMask.length;
+        int directionValue = direction == Direction.ASC ? 1 : -1;
+
+        keyList.sort((a, b) -> {
+            char[] ac = a.toCharArray();
+            char[] bc = b.toCharArray();
+
+            for (int i= maskStart; i< length; i++) {
+                if (keyMask[i] == 0) {
+                    if (ac[i] > bc[i])
+                        return 1 * directionValue;
+                    if (ac[i] < bc[i])
+                        return -1 * directionValue;
+                }
+            }
+            return 0;
+        });
+    }
 
     @Override
     public String toString() {
