@@ -18,7 +18,7 @@
         <maven.test.skip>true</maven.test.skip>
         <springboot.version>2.2.3.RELEASE</springboot.version>
         <x7.version>2.3.4.RELEASE</x7.version>
-        <fastjson.version>1.2.60</fastjson.version>
+        <fastjson.version>1.2.67</fastjson.version>
     </properties>
 
     <scm>
