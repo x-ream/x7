@@ -22,7 +22,6 @@ import io.xream.x7.common.bean.BeanElement;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.repository.X;
-import io.xream.x7.common.util.TimeUtil;
 import io.xream.x7.repository.mapper.Mapper;
 import io.xream.x7.repository.mapper.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class AsyncDaoImpl implements HeartBeat, AsyncDao {
 	/**
 	 * 延时1分钟
 	 */
-	private final static int HEARTBEAT_DELAY = (int) TimeUtil.ONE_MINUTE;
+	private final static int HEARTBEAT_DELAY = 600000;
 	private long heartBeatTime = 0; // 降低心跳的实时性来提高性能
 
 	private final ExecutorService mainExecutor = Executors.newSingleThreadExecutor();

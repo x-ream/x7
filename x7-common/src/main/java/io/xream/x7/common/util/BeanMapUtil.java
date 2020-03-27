@@ -97,7 +97,7 @@ public class BeanMapUtil {
 						f.set(obj, toObject(fc, (Map) v));
 					}else{
 						if (v instanceof Long && f.getType() == Date.class){
-							f.set(obj, TimeUtil.getDate((Long)v));
+							f.set(obj, new Date((Long)v));
 						}else{
 							f.set(obj, v);
 						}
@@ -304,5 +304,6 @@ public class BeanMapUtil {
 		
 		return list;
 	}
+
 
 }
