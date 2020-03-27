@@ -247,7 +247,7 @@ public class DataObjectConverter {
             return null;
         if (value instanceof String) {
             String str = (String) value;
-            value = str.replace("<","&le").replace(">","$gt");
+            value = str.replace("<","&lt").replace(">","&gt");
         }
         return value;
     }
