@@ -274,7 +274,7 @@ public class XxxTest {
         List<Object> inList = new ArrayList<>();
         inList.add("BL");
         inList.add("NL");
-        builder.and().eq("taxType",null);
+        builder.and().ne("taxType",664);
         builder.and().in("type",inList);
         builder.paged().orderIn("type",inList);
 
