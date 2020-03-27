@@ -307,7 +307,7 @@ public class XxxController {
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class,ro);
 //		builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
-		builder.and().in("type", inList);
+		builder.and().nin("type", inList);
 		builder.paged().orderIn("type",inList);
 
 		Criteria.ResultMappedCriteria resultMapped = builder.get();

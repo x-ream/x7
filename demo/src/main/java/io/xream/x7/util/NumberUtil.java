@@ -14,7 +14,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
- package io.xream.x7.common.util;
+ package io.xream.x7.util;
+
+ import io.xream.x7.common.util.StringUtil;
 
  import java.math.BigDecimal;
  import java.util.regex.Pattern;

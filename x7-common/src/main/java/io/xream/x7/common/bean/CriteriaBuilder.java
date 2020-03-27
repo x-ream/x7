@@ -320,10 +320,6 @@ public class CriteriaBuilder {
             if (tempList.isEmpty())
                 return instance;
 
-            if (tempList.size() == 1) {
-                return eq(property, tempList.get(0));
-            }
-
             x.setPredicate(p);
             x.setKey(property);
             x.setValue(tempList);
@@ -337,7 +333,7 @@ public class CriteriaBuilder {
         }
 
         @Override
-        public CriteriaBuilder nin(String property, List<Object> list) {
+        public CriteriaBuilder nin(String property, List<? extends Object> list) {
             return doIn(PredicateAndOtherScript.NOT_IN, property, list,criteria.getParsed());
         }
 
@@ -367,7 +363,7 @@ public class CriteriaBuilder {
         }
 
         @Override
-        public CriteriaBuilder x(String sql, List<Object> valueList) {
+        public CriteriaBuilder x(String sql, List<? extends Object> valueList) {
 
             if (StringUtil.isNullOrEmpty(sql))
                 return instance;
@@ -518,7 +514,7 @@ public class CriteriaBuilder {
 
         CriteriaBuilder in(String property, List<? extends Object> list);
 
-        CriteriaBuilder nin(String property, List<Object> list);
+        CriteriaBuilder nin(String property, List<? extends Object> list);
 
         CriteriaBuilder nonNull(String property);
 
@@ -526,7 +522,7 @@ public class CriteriaBuilder {
 
         CriteriaBuilder x(String sql);
 
-        CriteriaBuilder x(String sql, List<Object> valueList);
+        CriteriaBuilder x(String sql, List<? extends Object> valueList);
 
         void under(X x);
 
