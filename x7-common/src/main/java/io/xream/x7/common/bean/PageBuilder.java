@@ -27,5 +27,5 @@ public interface PageBuilder {
     PageBuilder page(int page);
     PageBuilder orderIn(String property, List<? extends Object> inList);
     PageBuilder sort(String orderBy, Direction direction);
-    PageBuilder sort(String orderBy, Direction direction, List<Object> optValueList);
+    PageBuilder sort(String orderBy, Direction direction, List<? extends Object> optValueList);
 }

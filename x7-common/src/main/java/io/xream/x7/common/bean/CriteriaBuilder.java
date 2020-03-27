@@ -159,7 +159,7 @@ public class CriteriaBuilder {
         }
 
         @Override
-        public PageBuilder sort(String orderBy, Direction direction, List<Object> optValueList) {
+        public PageBuilder sort(String orderBy, Direction direction, List<? extends Object> optValueList) {
             if (StringUtil.isNullOrEmpty(orderBy))
                 return this;
             List<Sort> sortList = criteria.getSortList();
