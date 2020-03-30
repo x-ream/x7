@@ -26,9 +26,6 @@ import java.util.*;
 
 public class Parsed {
 
-	private boolean isTransformable = false;
-	private String transformedAlia;
-	private Parsed parsedTransformed;
 
 	private boolean isChecked = false;
 
@@ -48,19 +45,7 @@ public class Parsed {
 	private Map<String,String> mapperPropertyMapLower = new HashMap<String,String>();
 	
 	private boolean isNoCache;
-	
-	private List<String> keywordsList = new ArrayList<String>();
-	
-	private boolean isSearchable;
 
-
-	public Parsed getParsedTransformed() {
-		return parsedTransformed;
-	}
-
-	public void setParsedTransformed(Parsed parsedTransformed) {
-		this.parsedTransformed = parsedTransformed;
-	}
 
 	public Class getClz() {
 		return clz;
@@ -179,14 +164,7 @@ public class Parsed {
 			this.mapperPropertyMapLower.put(mapper.toLowerCase(),property);
 		}
 	}
-	
-	public boolean isChecked(){
-		return this.isChecked;
-	}
-	
-	public void checked(){
-		this.isChecked = true;
-	}
+
 
 	public String getTableName(String alia) {
 		if (StringUtil.isNullOrEmpty(alia))
@@ -215,40 +193,6 @@ public class Parsed {
 	public void setNoCache(boolean isNoCache) {
 		this.isNoCache = isNoCache;
 	}
-
-
-	public String getTransformedAlia() {
-		return this.transformedAlia;
-	}
-
-	public void setTransforemedAlia(String alia) {
-		this.transformedAlia = alia;
-	}
-
-	public List<String> getKeywordsList() {
-		return keywordsList;
-	}
-
-	public void setKeywordsList(List<String> keywordsList) {
-		this.keywordsList = keywordsList;
-	}
-	
-	public boolean isSearchable() {
-		return isSearchable;
-	}
-
-	public void setSearchable(boolean isSearchable) {
-		this.isSearchable = isSearchable;
-	}
-
-	public String[] getKeywardsArr(){
-
-		String[] keywordsArr = new String[this.keywordsList.size()];
-		this.keywordsList.toArray(keywordsArr);
-		
-		return keywordsArr;
-	}
-
 
 
 	public String getMapper(String property) {
@@ -282,9 +226,6 @@ public class Parsed {
 	@Override
 	public String toString() {
 		return "Parsed{" +
-				"isTransformable=" + isTransformable +
-				", transformedAlia='" + transformedAlia + '\'' +
-				", parsedTransformed=" + parsedTransformed +
 				", isChecked=" + isChecked +
 				", clz=" + clz +
 				", tableName='" + tableName + '\'' +
@@ -297,8 +238,6 @@ public class Parsed {
 				", propertyMapperMap=" + propertyMapperMap +
 				", mapperPropertyMap=" + mapperPropertyMap +
 				", isNoCache=" + isNoCache +
-				", keywordsList=" + keywordsList +
-				", isSearchable=" + isSearchable +
 				'}';
 	}
 }

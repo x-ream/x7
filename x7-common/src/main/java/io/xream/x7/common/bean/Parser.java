@@ -183,13 +183,5 @@ public class Parser {
         return cache;
     }
 
-    public static Parsed getByTableName(String tableName) {
-        for (Parsed parsed : map.values()) {
-            if (parsed.getOriginTable().equals(tableName))
-                return parsed;
-        }
-        return null;
-    }
-
 
 }
