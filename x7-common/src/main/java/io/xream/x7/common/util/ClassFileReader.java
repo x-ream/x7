@@ -17,7 +17,6 @@
 package io.xream.x7.common.util;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -127,12 +126,7 @@ public class ClassFileReader {
 			return;
 		}
 
-		File[] dirfiles = dir.listFiles(new FileFilter() {
-
-			public boolean accept(File file) {
-				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
-			}
-		});
+		File[] dirfiles = dir.listFiles(file -> (recursive && file.isDirectory()) || (file.getName().endsWith(".class")));
 
 		for (File file : dirfiles) {
 

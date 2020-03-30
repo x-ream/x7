@@ -229,8 +229,8 @@ public class BeanUtilX extends BeanUtil {
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static String parseAnno(Class clz, BeanElement ele, Field f) {
-		String type = null;
+	public static void parseAnno(Class clz, BeanElement ele, Field f) {
+
 		Method m = null;
 		try {
 			m = clz.getDeclaredMethod(ele.getter);
@@ -260,7 +260,6 @@ public class BeanUtilX extends BeanUtil {
 
 		}
 
-		return type;
 	}
 
 	@SuppressWarnings({ "rawtypes" })

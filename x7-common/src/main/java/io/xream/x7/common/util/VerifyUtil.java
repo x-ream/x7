@@ -21,14 +21,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+
 public class VerifyUtil {
 	
 	private VerifyUtil(){}
 	
 	public static String getSign(List<String> list){
 		StringBuffer sb = new StringBuffer("");
-		for(int i = 0;i < list.size(); i++){
-			sb.append(list.get(i));
+		for(String str : list){
+			sb.append(str);
 		}
 		String signString = VerifyUtil.toMD5(sb.toString());
 		return signString;
@@ -55,15 +56,13 @@ public class VerifyUtil {
 	           if (i < 16)   
 	               buf.append("0");   
 	           buf.append(Integer.toHexString(i));   
-	        }   
-	        //32位加密   
-	        return buf.toString();   
-	        // 16位的加密   
+	        }
+	        return buf.toString();
 	        //return buf.toString().substring(8, 24);    
 	    } catch (NoSuchAlgorithmException e) {   
-	        e.printStackTrace();   
-	        return null;   
-	    }   
+	        e.printStackTrace();
+	    }
+		return null;
 	}  
 	
     public final static String toMD5_Char(String s) {
@@ -71,13 +70,9 @@ public class VerifyUtil {
 
         try {
             byte[] btInput = s.getBytes();
-            // 获得MD5摘要算法的 MessageDigest 对象
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
-            // 使用指定的字节更新摘要
             mdInst.update(btInput);
-            // 获得密文
             byte[] md = mdInst.digest();
-            // 把密文转换成十六进制的字符串形式
             int j = md.length;
             char str[] = new char[j * 2];
             int k = 0;
@@ -89,8 +84,8 @@ public class VerifyUtil {
             return new String(str);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
-    }
+		return null;
+	}
 
 }
