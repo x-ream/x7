@@ -123,7 +123,7 @@ public interface BaseRepository<T> extends Typed<T> {
     List<T> list(Criteria CriteriaBuilder_build_get);
 
     /**
-     * fetchSize=50, the api not fast, to avoid OOM when scheduling
+     * like stream, fetchSize=50, the api not fast, to avoid OOM when scheduling
      * @param criteria
      * @param handler
      * @param <T>
@@ -131,7 +131,7 @@ public interface BaseRepository<T> extends Typed<T> {
     <T> void findToHandle(Criteria criteria, RowHandler<T> handler);
 
     /**
-     * fetchSize=50, the api not fast, to avoid OOM when scheduling
+     * like stream, fetchSize=50, the api not fast, to avoid OOM when scheduling
      * @param resultMappedCriteria
      * @param handler
      */
