@@ -411,12 +411,6 @@ public class CriteriaBuilder {
         this.instance = this;
     }
 
-    public static CriteriaBuilder buildCondition() {
-        Criteria criteria = new Criteria();
-        CriteriaBuilder builder = new CriteriaBuilder(criteria);
-        return builder;
-    }
-
     public static CriteriaBuilder build(Class<?> clz) {
         Criteria criteria = new Criteria();
         criteria.setClz(clz);
