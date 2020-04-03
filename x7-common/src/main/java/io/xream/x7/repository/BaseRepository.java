@@ -107,9 +107,9 @@ public interface BaseRepository<T> extends Typed<T> {
     /**
      * Standard query pageable API
      *
-     * @param CriteriaBuilder_build
+     * @param CriteriaBuilder_build_get
      */
-    Page<T> find(Criteria CriteriaBuilder_build);
+    Page<T> find(Criteria CriteriaBuilder_build_get);
 
     /**
      * @
@@ -119,6 +119,6 @@ public interface BaseRepository<T> extends Typed<T> {
 
     List<Map<String, Object>> list(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
-    List<T> list(Criteria criteria);
+    List<T> list(Criteria CriteriaBuilder_build_get);
 
 }
