@@ -32,45 +32,51 @@ import java.util.*;
 
 public class DataObjectConverter {
 
-    public static List<Map<String, Object>> dataToPropertyObjectMap(Class clz, List<Map<String, Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
-        List<Map<String, Object>> propertyMapList = new ArrayList<>();
 
-        for (Map<String, Object> mapperMap : dataMapList) {
+    public static Map<String,Object> dataToPropertyObjectMap(Class clz,Map<String,Object> dataMap, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
+        Map<String, Object> propertyMap = new HashMap<>();
+        for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
+            String mapper = entry.getKey();
+            String property = null;
+            BeanElement be = null;
+            if (resultMapped == null) {
+                Parsed parsed = Parser.get(clz);
+                property = parsed.getPropertyByLower(mapper);
+                be = parsed.getElement(property);
+            } else {
 
-            Map<String, Object> propertyMap = new HashMap<>();
-            for (Map.Entry<String, Object> entry : mapperMap.entrySet()) {
-                String mapper = entry.getKey();
-                String property = null;
-                BeanElement be = null;
-                if (resultMapped == null) {
-                    Parsed parsed = Parser.get(clz);
-                    property = parsed.getPropertyByLower(mapper);
-                    be = parsed.getElement(property);
+                if (mapper.contains(SqlScript.DOLLOR)) {
+                    property = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
                 } else {
+                    mapper = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
+                    property = resultMapped.getPropertyMapping().property(mapper);
 
-                    if (mapper.contains(SqlScript.DOLLOR)) {
-                        property = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
+                    if (property.contains(".")) {
+                        String[] arr = property.split("\\.");
+                        Parsed parsed = Parser.get(arr[0]);
+                        be = parsed.getElement(arr[1]);
                     } else {
-                        mapper = dialect.transformAlia(mapper, resultMapped.getAliaMap(), resultMapped.getResultKeyAliaMap());
-                        property = resultMapped.getPropertyMapping().property(mapper);
-
-                        if (property.contains(".")) {
-                            String[] arr = property.split("\\.");
-                            Parsed parsed = Parser.get(arr[0]);
-                            be = parsed.getElement(arr[1]);
-                        } else {
-                            Parsed parsed = Parser.get(clz);
-                            be = parsed.getElement(property);
-                        }
+                        Parsed parsed = Parser.get(clz);
+                        be = parsed.getElement(property);
                     }
                 }
-                Object value = entry.getValue();
-                value = filter(value);
-                if (be != null) {
-                    value = dialect.mappingToObject(value, be);
-                }
-                propertyMap.put(property, value);
             }
+            Object value = entry.getValue();
+            value = filter(value);
+            if (be != null) {
+                value = dialect.mappingToObject(value, be);
+            }
+            propertyMap.put(property, value);
+        }
+        return propertyMap;
+    }
+
+    public static List<Map<String, Object>> dataToPropertyObjectMapList(Class clz, List<Map<String, Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
+        List<Map<String, Object>> propertyMapList = new ArrayList<>();
+
+        for (Map<String, Object> dataMap : dataMapList) {
+
+            Map<String, Object> propertyMap = dataToPropertyObjectMap(clz, dataMap, resultMapped, dialect);
             propertyMapList.add(propertyMap);
         }
 

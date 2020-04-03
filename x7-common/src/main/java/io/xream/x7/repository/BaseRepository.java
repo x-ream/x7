@@ -17,6 +17,7 @@
 package io.xream.x7.repository;
 
 import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.RowHandler;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
@@ -121,4 +122,6 @@ public interface BaseRepository<T> extends Typed<T> {
 
     List<T> list(Criteria CriteriaBuilder_build_get);
 
+    <T> void findToHandle(Criteria criteria, RowHandler<T> handler);
+    void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler);
 }

@@ -315,11 +315,22 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     public List<T> list(Criteria criteria) {
 
         if (criteria instanceof Criteria.ResultMappedCriteria)
-            throw new CriteriaSyntaxException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
+            throw new CriteriaSyntaxException("Codeing Exception: mraybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
 
         return repository.list(criteria);
 
     }
 
+    @Override
+    public <T> void findToHandle(Criteria criteria, RowHandler<T> handler) {
+        criteria.setClz(this.clz);
+        this.repository.findToHandle(criteria,handler);
+    }
+
+    @Override
+    public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler) {
+        resultMappedCriteria.setClz(this.clz);
+        this.repository.findToHandle(resultMappedCriteria,handler);
+    }
 
 }

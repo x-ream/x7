@@ -17,10 +17,7 @@
 package io.xream.x7.repository.cache;
 
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.KV;
-import io.xream.x7.common.bean.Parsed;
-import io.xream.x7.common.bean.Parser;
+import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.cache.L2CacheResolver;
@@ -309,5 +306,13 @@ public final class CacheableRepository implements Repository, Manuable {
         return dataTransform.list(clz, sql, conditionList);
     }
 
+    @Override
+    public <T> void findToHandle(Criteria criteria, RowHandler<T> handler) {
+        this.dataTransform.findToHandle(criteria,handler);
+    }
 
+    @Override
+    public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String, Object>> handler) {
+        this.dataTransform.findToHandle(resultMappedCriteria,handler);
+    }
 }

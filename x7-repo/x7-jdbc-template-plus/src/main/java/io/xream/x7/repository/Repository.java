@@ -17,6 +17,7 @@
 package io.xream.x7.repository;
 
 import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.RowHandler;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.Page;
 
@@ -96,5 +97,8 @@ public interface Repository extends QueryForCache{
 	<T> T getOne(T condition);
 
     <T> boolean refresh(T t);
+
+	<T> void findToHandle(Criteria criteria, RowHandler<T> handler);
+	void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler);
 
 }

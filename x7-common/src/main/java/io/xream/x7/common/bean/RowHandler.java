@@ -14,18 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7;
+package io.xream.x7.common.bean;
 
-import org.springframework.context.annotation.Import;
-import io.xream.x7.lock.LockAspect;
-
-import java.lang.annotation.*;
-
-/**
- * @EnableDistributionLock
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Import({LockAspect.class})
-public @interface EnableDistributionLock { }
+public interface RowHandler<T> {
+    void handle(T t);
+}
