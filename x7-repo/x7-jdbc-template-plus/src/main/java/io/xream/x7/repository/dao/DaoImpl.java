@@ -450,7 +450,7 @@ public class DaoImpl implements Dao {
                     connection.prepareStatement(sql,
                             ResultSet.TYPE_FORWARD_ONLY,
                             ResultSet.CONCUR_READ_ONLY);
-            preparedStatement.setFetchSize(Integer.MIN_VALUE);
+            preparedStatement.setFetchSize(50);
             preparedStatement.setFetchDirection(ResultSet.FETCH_FORWARD);
 
             if (valueList != null) {
