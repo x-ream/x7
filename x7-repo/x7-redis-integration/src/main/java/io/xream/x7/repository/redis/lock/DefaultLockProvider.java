@@ -16,8 +16,11 @@
  */
 package io.xream.x7.repository.redis.lock;
 
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class DefaultLockProvider implements LockProvider {
 
+    private final static Logger logger = LoggerFactory.getLogger(DefaultLockProvider.class);
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -36,11 +40,20 @@ public class DefaultLockProvider implements LockProvider {
     public boolean lock(String key, @NotNull Integer timeOut){
         if (timeOut.intValue() == 0)
             timeOut = DEFAULT_TIMEOUT;
-        return this.stringRedisTemplate.opsForValue().setIfAbsent(key, VALUE,timeOut,TimeUnit.MILLISECONDS);
+        try {
+            return this.stringRedisTemplate.opsForValue().setIfAbsent(key, VALUE, timeOut, TimeUnit.MILLISECONDS);
+        }catch (Exception e) {
+            logger.error("DistributionLock.lock Exception: {}", ExceptionUtil.getMessage(e));
+            return true;
+        }
     }
 
     @Override
     public void unLock(DistributionLock.Lock lock){
-        this.stringRedisTemplate.delete(lock.getKey());
+        try {
+            this.stringRedisTemplate.delete(lock.getKey());
+        }catch (Exception e){
+            logger.error("DistributionLock.unlock Exception: {}", ExceptionUtil.getMessage(e));
+        }
     }
 }

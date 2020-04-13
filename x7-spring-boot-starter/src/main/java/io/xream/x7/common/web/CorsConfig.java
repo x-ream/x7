@@ -3,9 +3,8 @@ package io.xream.x7.common.web;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+
 public class CorsConfig  {
 
     @ConditionalOnMissingBean(CorsFilter.class)
