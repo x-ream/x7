@@ -18,8 +18,10 @@ package io.xream.x7.reyc.internal;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.vavr.control.Try;
 import io.xream.x7.common.util.ExceptionUtil;
@@ -32,6 +34,7 @@ import io.xream.x7.reyc.api.ReyTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -62,14 +65,21 @@ public class R4JTemplate implements ReyTemplate {
             circuitBreakerKey = "";
         }
 
-        final String backendName = circuitBreakerKey.equals("") ? "DEFAULT" : circuitBreakerKey;
+        final String backendName = circuitBreakerKey.equals("") ? "default" : circuitBreakerKey;
 
-        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerKey);
+        Optional<CircuitBreakerConfig> optionalCircuitBreakerConfig = circuitBreakerRegistry.getConfiguration(backendName);
+        CircuitBreakerConfig circuitBreakerConfig = optionalCircuitBreakerConfig.isPresent() ? optionalCircuitBreakerConfig.get() : circuitBreakerRegistry.getDefaultConfig();
+
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName,circuitBreakerConfig);
         Supplier<String> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker, backendService::handle);
 
         if (isRetry) {
-            Retry retry = retryRegistry.retry(circuitBreakerKey);
+
+            Optional<RetryConfig> optionalRetryConfig = retryRegistry.getConfiguration(circuitBreakerKey);
+            RetryConfig retryConfig = optionalRetryConfig.isPresent() ? optionalRetryConfig.get() : retryRegistry.getDefaultConfig();
+
+            Retry retry = retryRegistry.retry(circuitBreakerKey,retryConfig);
             if (retry != null) {
 
                 retry.getEventPublisher()

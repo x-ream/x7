@@ -230,7 +230,7 @@ public class XxxTest {
     }
 
 
-    public ViewEntity testOneKey(){
+    public ViewEntity testOneKeyRemote(){
         return this.testServiceRemote.testOneKey(10L);
     }
 
@@ -286,7 +286,7 @@ public class XxxTest {
 
     public void testResultMappedRemote(){
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
+        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 //        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
@@ -315,6 +315,5 @@ public class XxxTest {
             throw new RuntimeException("testFallbackOnly");
         }
     }
-
 
 }

@@ -14,7 +14,6 @@
     <url>http://x7.xream.io</url>
 
     <properties>
-        <resilience4j.version>1.2.0</resilience4j.version>
         <brave.version>3.9.0</brave.version>
     </properties>
 

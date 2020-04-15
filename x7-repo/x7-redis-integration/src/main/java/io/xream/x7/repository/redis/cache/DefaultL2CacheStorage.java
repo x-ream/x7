@@ -17,74 +17,115 @@
 package io.xream.x7.repository.redis.cache;
 
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.vavr.control.Try;
 import io.xream.x7.common.cache.L2CacheStorage;
+import io.xream.x7.repository.redis.inner.BackendService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 @Component
 public final class DefaultL2CacheStorage implements L2CacheStorage {
 
-	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
-	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate){
-		this.stringRedisTemplate = stringRedisTemplate;
-	}
+    @Autowired
+    private CircuitBreakerRegistry circuitBreakerRegistry;
 
-	public boolean set(String key, String value){
-		if (key == null || key.equals("") ) 
-			return false;
-		this.stringRedisTemplate.opsForValue().set(key, value);
-		return true;
-	}
+    @Value("${circuitbreaker.l2cache.name:l2cache}")
+    private String circuitBreakerL2cacheName;
+
+    private CircuitBreakerConfig circuitBreakerConfig = null;
 
 
-	public boolean set(String key, String value, int validSeconds, TimeUnit timeUnit){
-		if (key == null || key.equals("") )
-			return false;
-		this.stringRedisTemplate.opsForValue().set(key, value,validSeconds,timeUnit);
-		return true;
-	}
+    public <T> T handle(BackendService<T> backendService) {
 
-	
-	public String get(String key){
-
-		String str = this.stringRedisTemplate.opsForValue().get(key);
-		if (str == null)
-			return str;
-		return str.trim();
-	}
+        if (this.circuitBreakerConfig == null) {
+            Optional<CircuitBreakerConfig> optional = circuitBreakerRegistry.getConfiguration(circuitBreakerL2cacheName);
+            this.circuitBreakerConfig = optional.isPresent() ? optional.get() : circuitBreakerRegistry.getDefaultConfig();
+        }
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerL2cacheName,this.circuitBreakerConfig);
+        Supplier<T> decoratedSupplier = CircuitBreaker
+                .decorateSupplier(circuitBreaker, backendService::handle);
+        T t = Try.ofSupplier(decoratedSupplier).get();
+        return t;
+    }
 
 
-	public List<String> multiGet(List<String> keyList){
+    public boolean set(String key, String value) {
 
-		if (keyList == null || keyList.isEmpty())
-			return null;
+        return this.handle(() -> {
+            if (key == null || key.equals(""))
+                return false;
+            this.stringRedisTemplate.opsForValue().set(key, value);
+            return true;
+        });
 
-		List<String> list = this.stringRedisTemplate.opsForValue().multiGet(keyList);
-		if (list == null)
-			return null;
-		return list;
-
-	}
+    }
 
 
-	public boolean delete(String key){
+    public boolean set(String key, String value, int validSeconds, TimeUnit timeUnit) {
+        return this.handle(() -> {
+            if (key == null || key.equals(""))
+                return false;
+            this.stringRedisTemplate.opsForValue().set(key, value, validSeconds, timeUnit);
+            return true;
+        });
+    }
 
-		this.stringRedisTemplate.delete(key);
-		return true;
-	}
 
-	public Set<String> keys(String pattern){
+    public String get(String key) {
 
-		Set<String> set = this.stringRedisTemplate.keys(pattern);
+        return this.handle(() -> {
+            String str = this.stringRedisTemplate.opsForValue().get(key);
+            if (str == null)
+                return str;
+            return str.trim();
+        });
 
-		return set;
-	}
+    }
+
+
+    public List<String> multiGet(List<String> keyList) {
+
+		return this.handle(() -> {
+
+			if (keyList == null || keyList.isEmpty())
+				return null;
+
+			List<String> list = this.stringRedisTemplate.opsForValue().multiGet(keyList);
+			if (list == null)
+				return null;
+			return list;
+		});
+
+    }
+
+
+    public boolean delete(String key) {
+		return this.handle(() -> {
+			this.stringRedisTemplate.delete(key);
+			return true;
+		});
+    }
+
+    public Set<String> keys(String pattern) {
+		return this.handle(() -> {
+			Set<String> set = this.stringRedisTemplate.keys(pattern);
+
+			return set;
+		});
+    }
 
 }

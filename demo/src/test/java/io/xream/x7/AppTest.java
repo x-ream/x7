@@ -30,9 +30,9 @@ public class AppTest {
     @Test
     public void  testAll(){
 
-//        xxxTest.testNonPaged();
-//        xxxTest.testNonPaged();
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
 
@@ -40,9 +40,9 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 
 
 //        xxxTest.testDomain();
@@ -58,47 +58,47 @@ public class AppTest {
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 
-//        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.distinct();
+        xxxTest.distinct();
 
-//        xxxTest.testFindByResultMapped();
-//        xxxTest.testFindByResultMapped();
-//        xxxTest.testFindByResultMapped();
+        xxxTest.testFindByResultMapped();
+        xxxTest.testFindByResultMapped();
+        xxxTest.testFindByResultMapped();
         xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.testCreate();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.testCreateOrReplace();
-//        xxxTest.testListCriteria();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.refresh()
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
-//        xxxTest.testList();
-//        xxxTest.testList();
-//        xxxTest.testList();
+        xxxTest.testList();
+        xxxTest.testList();
+        xxxTest.testList();
 //        xxxTest.testLock();
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.testOneKey();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.get();
+        xxxTest.get();
+        xxxTest.get();
+//        xxxTest.testOneKeyRemote();
 //        xxxTest.testEnum();
 
 //        xxxTest.removeOrRefreshOrCreate();

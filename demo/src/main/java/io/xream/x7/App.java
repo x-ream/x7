@@ -17,11 +17,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient
 @EnableTracingServlet
-@EnableCorsConfig
 @EnableDateToLongForJackson
 //@EnableX7L3Caching
 @EnableDistributionLock
 @EnableFallbackOnly
+//@CrossOrigin(origins = "http://localhost:8868")
+//@EnableCorsConfig
 public class App {
 
     public static void main( String[] args )
