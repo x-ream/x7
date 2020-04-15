@@ -279,10 +279,7 @@ public class CriteriaBuilder {
 
             if (min == null || max == null)
                 return instance;
-            if (Objects.nonNull(criteria.getParsed())) {
-                if (BeanUtilX.isBaseType_0(property, max,criteria.getParsed()))
-                    return instance;
-            }
+
             if (StringUtil.isNullOrEmpty(max))
                 return instance;
             if (StringUtil.isNullOrEmpty(min))
@@ -304,7 +301,7 @@ public class CriteriaBuilder {
             if (list == null || list.isEmpty())
                 return instance;
 
-            List<Object> tempList = new ArrayList<Object>();
+            List<Object> tempList = new ArrayList<>();
             for (Object obj : list) {
                 if (Objects.isNull(obj))
                     continue;
@@ -411,6 +408,7 @@ public class CriteriaBuilder {
         this.instance = this;
     }
 
+
     public static CriteriaBuilder build(Class<?> clz) {
         Criteria criteria = new Criteria();
         criteria.setClz(clz);
@@ -441,10 +439,10 @@ public class CriteriaBuilder {
         return builder;
     }
 
-
-    public static ResultMappedBuilder buildResultMapped(Class<?> clz, Fetched ro) {
+    @Deprecated
+    public static ResultMappedBuilder buildResultMapped(Fetched ro) {
         CriteriaBuilder b = new CriteriaBuilder();
-        ResultMappedBuilder builder = b.new ResultMappedBuilder(clz);
+        ResultMappedBuilder builder = b.new ResultMappedBuilder();
 
         if (ro != null) {
             builder.xAddResultKey(ro);
@@ -456,9 +454,9 @@ public class CriteriaBuilder {
         return builder;
     }
 
-    public static ResultMappedBuilder buildResultMapped(Class<?> clz, MapResult ro) {
+    public static ResultMappedBuilder buildResultMapped(MapResult ro) {
         CriteriaBuilder b = new CriteriaBuilder();
-        ResultMappedBuilder builder = b.new ResultMappedBuilder(clz);
+        ResultMappedBuilder builder = b.new ResultMappedBuilder();
 
         if (ro != null) {
 
@@ -467,15 +465,15 @@ public class CriteriaBuilder {
             if (ro instanceof Paged) {
                 builder.paged((Paged) ro);
             }
-
         }
 
         return builder;
     }
 
-    public static ResultMappedBuilder buildResultMapped(Class<?> clz) {
+
+    public static ResultMappedBuilder buildResultMapped() {
         CriteriaBuilder b = new CriteriaBuilder();
-        ResultMappedBuilder builder = b.new ResultMappedBuilder(clz);
+        ResultMappedBuilder builder = b.new ResultMappedBuilder();
 
         return builder;
     }
@@ -556,6 +554,10 @@ public class CriteriaBuilder {
             f.setClz(clz);
             Parsed parsed = Parser.get(clz);
             f.setParsed(parsed);
+        }
+
+        public ResultMappedBuilder() {
+            init();
         }
 
         public ResultMappedBuilder(Class<?> clz) {

@@ -76,10 +76,10 @@ public class R4JTemplate implements ReyTemplate {
 
         if (isRetry) {
 
-            Optional<RetryConfig> optionalRetryConfig = retryRegistry.getConfiguration(circuitBreakerKey);
+            Optional<RetryConfig> optionalRetryConfig = retryRegistry.getConfiguration(backendName);
             RetryConfig retryConfig = optionalRetryConfig.isPresent() ? optionalRetryConfig.get() : retryRegistry.getDefaultConfig();
 
-            Retry retry = retryRegistry.retry(circuitBreakerKey,retryConfig);
+            Retry retry = retryRegistry.retry(backendName,retryConfig);
             if (retry != null) {
 
                 retry.getEventPublisher()

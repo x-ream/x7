@@ -124,6 +124,8 @@ public class SqlCriteriaParser implements CriteriaParser {
          * force index
          */
         forceIndex(sb, criteria);
+
+        filter(criteria);
         /*
          * StringList
          */
@@ -196,7 +198,6 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         boolean isNotFirst = false;
         for (Criteria.X x : refreshList) {
-
 
             if (x.getPredicate() == PredicateAndOtherScript.X) {
 
@@ -478,7 +479,6 @@ public class SqlCriteriaParser implements CriteriaParser {
         sb.append(SqlScript.SPACE).append(SqlScript.FROM).append(SqlScript.SPACE);
 
         mapping(script, criteria, sb);
-
     }
 
     private void forceIndex(StringBuilder sb, Criteria criteria) {
@@ -595,6 +595,72 @@ public class SqlCriteriaParser implements CriteriaParser {
             }
         }
 
+    }
+
+    private void filter(Criteria criteria){
+        if (criteria instanceof Criteria.ResultMappedCriteria){
+            List<Criteria.X> xList = criteria.getListX();
+            filter0(xList,criteria);
+        }
+    }
+
+    private void filter0(List<Criteria.X> xList, Criteria criteria){
+        Iterator<Criteria.X> ite = xList.iterator();
+        while (ite.hasNext()) {
+            Criteria.X x = ite.next();
+            PredicateAndOtherScript p = x.getPredicate();
+            String key = x.getKey();
+            if (p == PredicateAndOtherScript.EQ
+                    || p == PredicateAndOtherScript.NE
+                    || p == PredicateAndOtherScript.GT
+                    || p == PredicateAndOtherScript.GTE
+                    || p == PredicateAndOtherScript.LT
+                    || p == PredicateAndOtherScript.LTE) {
+
+                if (key.contains(".")){
+                    String[] arr = key.split("\\.");
+                    String alia = arr[0];
+                    String clzName = criteria.getAliaMap().get(alia);
+                    Parsed parsed = Parser.get(clzName);
+                    if (BeanUtilX.isBaseType_0(arr[1],x.getValue(),parsed)){
+                        ite.remove();
+                    }
+                }else{
+                    Parsed parsed = criteria.getParsed();
+                    if (BeanUtilX.isBaseType_0(key,x.getValue(),parsed)){
+                        ite.remove();
+                    }
+                }
+            }else if (p == PredicateAndOtherScript.IN
+            || p == PredicateAndOtherScript.NOT_IN) {
+
+                List valueList = (List)x.getValue();
+                if (valueList.size() > 1)
+                    continue;
+
+                if (key.contains(".")){
+                    String[] arr = key.split("\\.");
+                    String alia = arr[0];
+                    String clzName = criteria.getAliaMap().get(alia);
+                    Parsed parsed = Parser.get(clzName);
+
+                    if (BeanUtilX.isBaseType_0(arr[1],valueList.get(0),parsed)){
+                        ite.remove();
+                    }
+
+                }else{
+                    Parsed parsed = criteria.getParsed();
+                    if (BeanUtilX.isBaseType_0(key,valueList.get(0),parsed)){
+                        ite.remove();
+                    }
+                }
+
+            }
+            List<Criteria.X> subList = x.getSubList();
+            if (subList == null || subList.isEmpty())
+                continue;
+            filter0(subList,criteria);
+        }
     }
 
     private void x(StringBuilder sb, List<Criteria.X> xList, Criteria criteria) {

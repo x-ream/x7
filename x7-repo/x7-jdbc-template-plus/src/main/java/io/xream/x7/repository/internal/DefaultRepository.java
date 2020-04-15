@@ -294,20 +294,24 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
         if (criteria instanceof Criteria.ResultMappedCriteria)
             throw new CriteriaSyntaxException("Codeing Exception: maybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
+        criteria.setClz(this.clz);
+        criteria.setParsed(Parser.get(this.clz));
         return repository.find(criteria);
     }
 
 
     @Override
-    public Page<Map<String, Object>> find(Criteria.ResultMappedCriteria criteria) {
-        criteria.setClz(this.clz);
-        return repository.find(criteria);
+    public Page<Map<String, Object>> find(Criteria.ResultMappedCriteria resultMapped) {
+        resultMapped.setClz(this.clz);
+        resultMapped.setParsed(Parser.get(this.clz));
+        return repository.find(resultMapped);
     }
 
 
     @Override
     public List<Map<String, Object>> list(Criteria.ResultMappedCriteria resultMapped) {
         resultMapped.setClz(this.clz);
+        resultMapped.setParsed(Parser.get(this.clz));
         return repository.list(resultMapped);
     }
 
@@ -316,7 +320,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
         if (criteria instanceof Criteria.ResultMappedCriteria)
             throw new CriteriaSyntaxException("Codeing Exception: mraybe {Criteria.ResultMappedCriteria criteria = builder.get();} instead of {Criteria criteria = builder.get();}");
-
+        criteria.setClz(this.clz);
+        criteria.setParsed(Parser.get(this.clz));
         return repository.list(criteria);
 
     }
@@ -324,12 +329,14 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     @Override
     public <T> void findToHandle(Criteria criteria, RowHandler<T> handler) {
         criteria.setClz(this.clz);
+        criteria.setParsed(Parser.get(this.clz));
         this.repository.findToHandle(criteria,handler);
     }
 
     @Override
     public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler) {
         resultMappedCriteria.setClz(this.clz);
+        resultMappedCriteria.setParsed(Parser.get(this.clz));
         this.repository.findToHandle(resultMappedCriteria,handler);
     }
 
