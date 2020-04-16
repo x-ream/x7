@@ -29,7 +29,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -52,8 +51,8 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
     public <T> T handle(BackendService<T> backendService) {
 
         if (this.circuitBreakerConfig == null) {
-            Optional<CircuitBreakerConfig> optional = circuitBreakerRegistry.getConfiguration(circuitBreakerL2cacheName);
-            this.circuitBreakerConfig = optional.isPresent() ? optional.get() : circuitBreakerRegistry.getDefaultConfig();
+            this.circuitBreakerConfig = circuitBreakerRegistry.getConfiguration(circuitBreakerL2cacheName)
+                    .orElse(circuitBreakerRegistry.getDefaultConfig());
         }
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerL2cacheName,this.circuitBreakerConfig);
         Supplier<T> decoratedSupplier = CircuitBreaker

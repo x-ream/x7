@@ -16,7 +16,7 @@
  */
 package io.xream.x7.reyc.api;
 
-import io.xream.x7.reyc.BackendService;
+import io.xream.x7.api.BackendService;
 
 public interface ReyTemplate {
 

@@ -24,17 +24,16 @@ import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.vavr.control.Try;
+import io.xream.x7.api.BackendService;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.exception.BusyException;
 import io.xream.x7.exception.RemoteServiceException;
 import io.xream.x7.exception.ReyConnectException;
-import io.xream.x7.reyc.BackendService;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -67,18 +66,14 @@ public class R4JTemplate implements ReyTemplate {
 
         final String backendName = circuitBreakerKey.equals("") ? "default" : circuitBreakerKey;
 
-        Optional<CircuitBreakerConfig> optionalCircuitBreakerConfig = circuitBreakerRegistry.getConfiguration(backendName);
-        CircuitBreakerConfig circuitBreakerConfig = optionalCircuitBreakerConfig.isPresent() ? optionalCircuitBreakerConfig.get() : circuitBreakerRegistry.getDefaultConfig();
+        CircuitBreakerConfig circuitBreakerConfig = circuitBreakerRegistry.getConfiguration(backendName).orElse(circuitBreakerRegistry.getDefaultConfig());
 
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName,circuitBreakerConfig);
         Supplier<String> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker, backendService::handle);
 
         if (isRetry) {
-
-            Optional<RetryConfig> optionalRetryConfig = retryRegistry.getConfiguration(backendName);
-            RetryConfig retryConfig = optionalRetryConfig.isPresent() ? optionalRetryConfig.get() : retryRegistry.getDefaultConfig();
-
+            RetryConfig retryConfig = retryRegistry.getConfiguration(backendName).orElse(retryRegistry.getDefaultConfig());
             Retry retry = retryRegistry.retry(backendName,retryConfig);
             if (retry != null) {
 
