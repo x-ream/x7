@@ -16,9 +16,9 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.common.util.LoggerProxy;
-import io.xream.x7.reyc.BackendService;
+import io.xream.x7.api.BackendService;
 import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.common.util.LoggerProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -50,14 +50,14 @@ public class HttpClientInvocationHandler implements InvocationHandler {
                 return HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result);
             }
 
-            String result = HttpClientResolver.wrap(httpClientProxy, new BackendService() {
+            String result = HttpClientResolver.wrap(httpClientProxy, new BackendService<String>() {
                 @Override
                 public String handle() {
                     return HttpClientResolver.resolve(r,clzz);
                 }
 
                 @Override
-                public Object fallback() {
+                public String fallback() {
                     return HttpClientResolver.fallback(clzz.getName(),methodName,args);
                 }
             });

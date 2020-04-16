@@ -21,8 +21,11 @@ import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.vavr.control.Try;
+import io.xream.x7.api.BackendService;
 import io.xream.x7.common.cache.L2CacheStorage;
-import io.xream.x7.repository.redis.inner.BackendService;
+import io.xream.x7.common.util.ExceptionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -36,8 +39,12 @@ import java.util.function.Supplier;
 @Component
 public final class DefaultL2CacheStorage implements L2CacheStorage {
 
+    private final static Logger logger = LoggerFactory.getLogger(DefaultL2CacheStorage.class);
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    private L2CacheStorage fallbackStorage;
 
     @Autowired
     private CircuitBreakerRegistry circuitBreakerRegistry;
@@ -48,6 +55,10 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
     private CircuitBreakerConfig circuitBreakerConfig = null;
 
 
+    public void setFallbackStorage(L2CacheStorage l2CacheStorage) {
+        this.fallbackStorage = l2CacheStorage;
+    }
+
     public <T> T handle(BackendService<T> backendService) {
 
         if (this.circuitBreakerConfig == null) {
@@ -57,40 +68,74 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerL2cacheName,this.circuitBreakerConfig);
         Supplier<T> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker, backendService::handle);
-        T t = Try.ofSupplier(decoratedSupplier).get();
-        return t;
+        return Try.ofSupplier(decoratedSupplier).recover(e -> handleException(e,backendService)).get();
     }
 
 
+    private <T> T handleException(Throwable e, BackendService<T> backendService){
+        logger.info(ExceptionUtil.getMessage(e));
+        return backendService.fallback();
+    }
+
     public boolean set(String key, String value) {
 
-        return this.handle(() -> {
-            if (key == null || key.equals(""))
-                return false;
-            this.stringRedisTemplate.opsForValue().set(key, value);
-            return true;
+        return this.handle(new BackendService<Boolean>() {
+            @Override
+            public Boolean handle() {
+                if (key == null || key.equals(""))
+                    return false;
+                stringRedisTemplate.opsForValue().set(key, value);
+                return true;
+            }
+
+            @Override
+            public Boolean fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.set(key,value);
+                return null;
+            }
         });
 
     }
 
 
     public boolean set(String key, String value, int validSeconds, TimeUnit timeUnit) {
-        return this.handle(() -> {
-            if (key == null || key.equals(""))
-                return false;
-            this.stringRedisTemplate.opsForValue().set(key, value, validSeconds, timeUnit);
-            return true;
+        return this.handle(new BackendService<Boolean>() {
+            @Override
+            public Boolean handle() {
+                if (key == null || key.equals(""))
+                    return false;
+                stringRedisTemplate.opsForValue().set(key, value, validSeconds, timeUnit);
+                return true;
+            }
+
+            @Override
+            public Boolean fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.set(key,value,validSeconds,timeUnit);
+                return null;
+            }
         });
     }
 
 
     public String get(String key) {
 
-        return this.handle(() -> {
-            String str = this.stringRedisTemplate.opsForValue().get(key);
-            if (str == null)
-                return str;
-            return str.trim();
+        return this.handle(new BackendService<String>() {
+            @Override
+            public String handle() {
+                String str = stringRedisTemplate.opsForValue().get(key);
+                if (str == null)
+                    return null;
+                return str.trim();
+            }
+
+            @Override
+            public String fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.get(key);
+                return null;
+            }
         });
 
     }
@@ -98,33 +143,56 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
     public List<String> multiGet(List<String> keyList) {
 
-		return this.handle(() -> {
+		return this.handle(new BackendService<List<String>>() {
+            @Override
+            public List<String> handle() {
+                if (keyList == null || keyList.isEmpty())
+                    return null;
 
-			if (keyList == null || keyList.isEmpty())
-				return null;
+                return stringRedisTemplate.opsForValue().multiGet(keyList);
+            }
 
-			List<String> list = this.stringRedisTemplate.opsForValue().multiGet(keyList);
-			if (list == null)
-				return null;
-			return list;
-		});
+            @Override
+            public List<String> fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.multiGet(keyList);
+                return null;
+            }
+        });
 
     }
 
 
     public boolean delete(String key) {
-		return this.handle(() -> {
-			this.stringRedisTemplate.delete(key);
-			return true;
-		});
+		return this.handle(new BackendService<Boolean>() {
+            @Override
+            public Boolean handle() {
+                return stringRedisTemplate.delete(key);
+            }
+
+            @Override
+            public Boolean fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.delete(key);
+                return null;
+            }
+        });
     }
 
     public Set<String> keys(String pattern) {
-		return this.handle(() -> {
-			Set<String> set = this.stringRedisTemplate.keys(pattern);
+		return this.handle(new BackendService<Set<String>>() {
+            @Override
+            public Set<String> handle() {
+                return stringRedisTemplate.keys(pattern);
+            }
 
-			return set;
-		});
+            @Override
+            public Set<String> fallback() {
+                if (fallbackStorage != null)
+                    return fallbackStorage.keys(pattern);
+                return null;
+            }
+        });
     }
 
 }

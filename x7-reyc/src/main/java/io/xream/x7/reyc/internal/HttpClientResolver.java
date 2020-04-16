@@ -16,7 +16,10 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.reyc.BackendService;
+import io.xream.x7.api.BackendService;
+import io.xream.x7.common.bean.KV;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.Url;
 import io.xream.x7.reyc.api.GroupRouter;
@@ -25,9 +28,6 @@ import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
-import io.xream.x7.common.bean.KV;
-import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.StringUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -165,7 +165,7 @@ public class HttpClientResolver {
     }
 
 
-    protected static String wrap(HttpClientProxy proxy, BackendService backendService) {
+    protected static String wrap(HttpClientProxy proxy, BackendService<String> backendService) {
 
         String result = reyTemplate.support(proxy.getBackend(),proxy.isRetry(),backendService);
 
@@ -174,7 +174,7 @@ public class HttpClientResolver {
 
 
 
-    public static Object fallback(String intfName, String methodName, Object[] args) {
+    public static String fallback(String intfName, String methodName, Object[] args) {
 
         ClientParsed parsed = ClientParser.get(intfName);
         if (parsed.getFallback() == null)
@@ -189,7 +189,10 @@ public class HttpClientResolver {
                 method.invoke(parsed.getFallback(), args);
                 return null;
             }
-            return method.invoke(parsed.getFallback(), args);
+            Object obj = method.invoke(parsed.getFallback(), args);
+            if (obj == null)
+                return (String) obj;
+            return obj.toString();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Exception of fallback: " + intfName + "." + methodName);
