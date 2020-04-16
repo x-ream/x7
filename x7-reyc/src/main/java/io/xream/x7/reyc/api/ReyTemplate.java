@@ -20,5 +20,5 @@ import io.xream.x7.api.BackendService;
 
 public interface ReyTemplate {
 
-    String support(String circuitBreakerKey, boolean isRetry, BackendService service);
+    String support(String circuitBreakerKey, boolean isRetry, BackendService<String> service);
 }

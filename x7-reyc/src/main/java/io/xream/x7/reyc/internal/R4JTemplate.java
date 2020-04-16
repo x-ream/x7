@@ -58,7 +58,7 @@ public class R4JTemplate implements ReyTemplate {
     }
 
     @Override
-    public String support(String circuitBreakerKey, boolean isRetry, BackendService backendService) {
+    public String support(String circuitBreakerKey, boolean isRetry, BackendService<String> backendService) {
 
         if (StringUtil.isNullOrEmpty(circuitBreakerKey)){
             circuitBreakerKey = "";
@@ -103,7 +103,7 @@ public class R4JTemplate implements ReyTemplate {
 
 
 
-    private String hanleException(Throwable e, String tag, BackendService backendService) {
+    private String hanleException(Throwable e, String tag, BackendService<String> backendService) {
 
         if (logger.isErrorEnabled()) {
             logger.error(tag + ": " + e.getMessage());
@@ -129,7 +129,7 @@ public class R4JTemplate implements ReyTemplate {
     }
 
 
-    private void handleRemoteException(String result,BackendService backendService) {
+    private void handleRemoteException(String result,BackendService<String> backendService) {
 
         if (result == null)
             return;
