@@ -68,6 +68,8 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerL2cacheName,this.circuitBreakerConfig);
         Supplier<T> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker, backendService::handle);
+        if (fallbackStorage == null)
+            return Try.ofSupplier(decoratedSupplier).get();
         return Try.ofSupplier(decoratedSupplier).recover(e -> handleException(e,backendService)).get();
     }
 
