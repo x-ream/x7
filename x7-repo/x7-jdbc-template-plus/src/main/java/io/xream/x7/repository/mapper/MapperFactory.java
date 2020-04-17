@@ -45,7 +45,6 @@ public class MapperFactory implements Mapper {
 	 * @param type
 	 *            (BeanMapper.CREATE|BeanMapper.REFRESH|BeanMapper.DROP|
 	 *            BeanMapper.QUERY)
-	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static String getSql(Class clz, String type) {
@@ -79,7 +78,6 @@ public class MapperFactory implements Mapper {
 	/**
 	 * 
 	 * @param clz
-	 * @return
 	 */
 	public static List<BeanElement> getElementList(Class clz) {
 		return Parser.get(clz).getBeanElementList();

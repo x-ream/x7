@@ -41,7 +41,6 @@ public interface Repository extends QueryForCache{
 	/**
 	 * 创建
 	 * @param obj
-	 * @return
 	 */
 	long create(Object obj);
 	boolean createOrReplace(Object obj);

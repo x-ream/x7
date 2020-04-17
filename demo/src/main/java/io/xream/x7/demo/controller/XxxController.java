@@ -133,7 +133,7 @@ public class XxxController {
 				.reduce(ReduceType.SUM, "catTest.dogId", Having.wrap(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
-		.paged().scroll(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);
+		.paged().totalRowsIgnored(true).page(1).rows(2).sort("catTest.dogId",Direction.DESC);
 		String sourceScript = "catTest ";
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 		resultMapped.setSourceScript(sourceScript);
@@ -170,7 +170,7 @@ public class XxxController {
 		};
 
 		ro.setResultKeys(resultKeys);
-//		ro.setScroll(true);
+//		ro.setTotalRowsIgnored(true);
 
 //		ro.setResultKeyMap();
 
@@ -242,7 +242,7 @@ public class XxxController {
 		};
 
 		ro.setResultKeys(resultKeys);
-//		ro.setScroll(true);
+//		ro.setTotalRowsIgnored(true);
 
 //		ro.setResultKeyMap();
 

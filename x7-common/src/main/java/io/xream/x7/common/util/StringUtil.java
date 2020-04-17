@@ -90,7 +90,6 @@ public class StringUtil {
 	 *
 	 * @param str  like:   \\$\\{[\\w]*\\}      \{[\\w]*\\}
 	 * @param pattern
-	 * @return
 	 */
 	public static List<String> listByRegEx(String str, Pattern pattern){//"$\\{[\\w]*\\}"
 

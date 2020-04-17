@@ -77,7 +77,6 @@ public interface BaseRepository<T> extends Typed<T> {
     /**
      * LOAD
      *
-     * @return
      */
     List<T> list();
 
@@ -112,11 +111,7 @@ public interface BaseRepository<T> extends Typed<T> {
      */
     Page<T> find(Criteria CriteriaBuilder_build_get);
 
-    /**
-     * @
-     */
     Page<Map<String, Object>> find(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
-
 
     List<Map<String, Object>> list(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
