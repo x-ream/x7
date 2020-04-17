@@ -16,6 +16,7 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.common.bean.KV;
 import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.api.GroupRouter;
 import org.slf4j.Logger;
@@ -23,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import io.xream.x7.common.bean.KV;
-import io.xream.x7.common.util.StringUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -34,13 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class ClientParser {
 
     private static Logger logger = LoggerFactory.getLogger(ClientParser.class);
-
-    protected static Pattern pattern1 = Pattern.compile("\\$\\{[\\s\\S]*\\}");
 
     private final static Map<String, ClientParsed> map = new HashMap<>();
 
@@ -58,33 +54,13 @@ public class ClientParser {
         ReyClient reyClient = (ReyClient) reyClientAnno;
 
         String url = reyClient.value();
-
-        {
-            if (StringUtil.isNotNull(url)) {
-                if (url.contains("$")) {
-                    List<String> regxList = StringUtil.listByRegEx(url, pattern1);
-                    if (regxList != null && !regxList.isEmpty()) {
-                        String regx = regxList.get(0);
-                        String key = regx.replace("${", "").replace("}", "");
-                        String value = environment.getProperty(key);
-
-                        if (value == null) {
-                            logger.error("ReyClient Fatal Error, Can't find the config of key: '" + key +"', App will shutdown");
-                            System.exit(0);
-                        }
-
-                        url = url.replace(regx, value);
-                    }
-                }
-            }
-        }
+        url = environment.resolvePlaceholders(url);
 
         ClientParsed parsed = new ClientParsed();
-
-        map.put(clz.getName(),parsed);
-
         parsed.setObjectType(clz);
         parsed.setUrl(url);
+
+        map.put(clz.getName(),parsed);
 
 
         /*
@@ -190,7 +166,5 @@ public class ClientParser {
         }
 
     }
-
-
 
 }
