@@ -117,8 +117,8 @@ public class CriteriaBuilder {
     private PageBuilder pageBuilder = new PageBuilder() {
 
         @Override
-        public PageBuilder totalRowsIgnored(boolean isTotalRowsIgnored) {
-            criteria.setTotalRowsIgnored(isTotalRowsIgnored);
+        public PageBuilder ignoreTotalRows() {
+            criteria.setTotalRowsIgnored(true);
             return this;
         }
 
@@ -149,25 +149,11 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(orderBy))
                 return this;
             List<Sort> sortList = criteria.getSortList();
-            if (sortList == null){
+            if (sortList == null) {
                 sortList = new ArrayList<>();
                 criteria.setSortList(sortList);
             }
-            Sort sort = new Sort(orderBy,direction);
-            sortList.add(sort);
-            return this;
-        }
-
-        @Override
-        public PageBuilder sort(String orderBy, Direction direction, List<? extends Object> optValueList) {
-            if (StringUtil.isNullOrEmpty(orderBy))
-                return this;
-            List<Sort> sortList = criteria.getSortList();
-            if (sortList == null){
-                sortList = new ArrayList<>();
-                criteria.setSortList(sortList);
-            }
-            Sort sort = new Sort(orderBy,direction);
+            Sort sort = new Sort(orderBy, direction);
             sortList.add(sort);
             return this;
         }
