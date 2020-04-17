@@ -376,7 +376,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                 Criteria.X x = reduce.getHaving();
                 if (x != null) {
                     x.setKey(alianName);
-                    if (!criteria.isScroll()){
+                    if (!criteria.isTotalRowsIgnored()){
                         throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().scroll(true)");
                     }
                 }
@@ -488,7 +488,7 @@ public class SqlCriteriaParser implements CriteriaParser {
     }
 
     private StringBuilder count(StringBuilder sb, Criteria criteria) {
-        if (!criteria.isScroll()) {
+        if (!criteria.isTotalRowsIgnored()) {
             StringBuilder countSb = new StringBuilder();
             countSb.append(SqlScript.SELECT).append(SqlScript.SPACE).append(criteria.getCountDistinct()).append(SqlScript.SPACE).append(sb);
             return countSb;

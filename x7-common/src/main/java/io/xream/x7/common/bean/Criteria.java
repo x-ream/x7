@@ -35,7 +35,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	private static final long serialVersionUID = 7088698915888081349L;
 
 	private Class<?> clz;
-	private boolean isScroll;
+	private boolean isTotalRowsIgnored;
 	private int page;
 	private int rows;
 	private Object routeKey;
@@ -129,12 +129,13 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		return fixedSortList;
 	}
 
-	public boolean isScroll() {
-		return isScroll;
+	public void setTotalRowsIgnored(boolean totalRowsIgnored) {
+		isTotalRowsIgnored = totalRowsIgnored;
 	}
 
-	public void setScroll(boolean isScroll) {
-		this.isScroll = isScroll;
+	@Override
+	public boolean isTotalRowsIgnored() {
+		return isTotalRowsIgnored;
 	}
 
 	public int getPage() {
@@ -189,7 +190,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	}
 	public void paged(Paged paged) {
 
-		this.isScroll = paged.isScroll();
+		this.isTotalRowsIgnored = paged.isTotalRowsIgnored();
 		this.page = paged.getPage();
 		this.rows = paged.getRows();
 		this.sortList = paged.getSortList();
@@ -199,7 +200,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	@Override
 	public String toString() {
 		return "Criteria{" +
-				"isScroll=" + isScroll +
+				"isTotalRowsIgnored=" + isTotalRowsIgnored +
 				", page=" + page +
 				", rows=" + rows +
 				", sortList='" + sortList + '\'' +

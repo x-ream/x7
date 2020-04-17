@@ -117,8 +117,8 @@ public class CriteriaBuilder {
     private PageBuilder pageBuilder = new PageBuilder() {
 
         @Override
-        public PageBuilder scroll(boolean isScroll) {
-            criteria.setScroll(isScroll);
+        public PageBuilder totalRowsIgnored(boolean isTotalRowsIgnored) {
+            criteria.setTotalRowsIgnored(isTotalRowsIgnored);
             return this;
         }
 
@@ -651,7 +651,7 @@ public class CriteriaBuilder {
          *
          * @param type
          * @param property
-         * @param having   paged().scroll(true), if isScroll == false，will throw Exception
+         * @param having   paged().totalRowsIgnored(true), if isTotalRowsIgnored == false，will throw Exception
          */
         public ResultMappedBuilder reduce(ReduceType type, String property, Having having) {
             Reduce reduce = new Reduce();

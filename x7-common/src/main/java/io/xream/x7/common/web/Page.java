@@ -44,7 +44,7 @@ public class Page<T> implements Paged, Serializable{
 	private long totalRows = -1;
 	private List<T> list = new ArrayList<T>();
 	private List<String> keyList = new ArrayList<String>();
-	private boolean isScroll;
+	private boolean totalRowsIgnored;
 	private List<Sort> sortList;
 
 
@@ -52,7 +52,7 @@ public class Page<T> implements Paged, Serializable{
 	}
 
 	public Page(Paged paged){
-		setScroll(paged.isScroll());
+		setTotalRowsIgnored(paged.isTotalRowsIgnored());
 		if (paged.getPage() > 0)
 			setPage(paged.getPage());
 		if (paged.getRows() > 0)
@@ -154,14 +154,13 @@ public class Page<T> implements Paged, Serializable{
 		this.keyList = keyList;
 	}
 
-	public boolean isScroll() {
-		return isScroll;
+	public boolean isTotalRowsIgnored() {
+		return totalRowsIgnored;
 	}
 
-	public void setScroll(boolean isScroll) {
-		this.isScroll = isScroll;
+	public void setTotalRowsIgnored(boolean totalRowsIgnored) {
+		this.totalRowsIgnored = totalRowsIgnored;
 	}
-
 
 	@Override
 	public List<Sort> getSortList() {
@@ -180,7 +179,7 @@ public class Page<T> implements Paged, Serializable{
 	}
 	
 	public int getPage() {
-		if (isScroll){
+		if (totalRowsIgnored){
 			return page;
 		}
 		if (totalRows == -1)
@@ -199,7 +198,7 @@ public class Page<T> implements Paged, Serializable{
 	
 	@Override
 	public String toString() {
-		return "Page [isScroll=" + isScroll + ", " +
+		return "Page [totalRowsIgnored=" + totalRowsIgnored + ", " +
 				"totalRows=" + totalRows + ", " +
 				"page=" + page + ", " +
 				"rows=" + rows + ", " +

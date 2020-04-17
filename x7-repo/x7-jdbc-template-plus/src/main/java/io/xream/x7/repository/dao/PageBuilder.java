@@ -29,7 +29,7 @@ public class PageBuilder {
         long count = 0;
         int rows = criteria.getRows();
         int page =criteria.getPage();
-        if (!criteria.isScroll()) {
+        if (!criteria.isTotalRowsIgnored()) {
             int size = list.size();
             if (page == 0) {
                 count = size;
@@ -49,7 +49,7 @@ public class PageBuilder {
         pagination.setPage(page == 0 ? 1 : page);
         pagination.setRows(rows == 0 ? Integer.MAX_VALUE : rows);
         pagination.setSortList(criteria.getSortList());
-        pagination.setScroll(criteria.isScroll());
+        pagination.setTotalRowsIgnored(criteria.isTotalRowsIgnored());
         pagination.setList(list);
         pagination.setTotalRows(count);
 

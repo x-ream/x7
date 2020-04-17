@@ -431,7 +431,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 			final String totalRowsString = getTotalRowsString(criteria);
 
-			if (!criteria.isScroll()) {
+			if (!criteria.isTotalRowsIgnored()) {
 				// totalRows from cache
 				long totalRows = getTotalRows(clz, totalRowsString);
 				if (totalRows == DEFAULT_NUM) {

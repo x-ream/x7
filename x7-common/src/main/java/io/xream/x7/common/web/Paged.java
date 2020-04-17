@@ -24,7 +24,7 @@ import java.util.List;
  * @author Sim Wang
  */
 public interface Paged {
-	boolean isScroll();
+	boolean isTotalRowsIgnored();
 	int getPage();
 	int getRows();
 	List<Sort> getSortList();

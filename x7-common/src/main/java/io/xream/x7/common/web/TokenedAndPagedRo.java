@@ -27,7 +27,7 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 	private String passportId;
 	private String token;
 	private String passportType;
-	private boolean isScroll;
+	private boolean totalRowsIgnored;
 	private int page;
 	private int rows;
 	private String orderBy;
@@ -53,6 +53,13 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 	public void setPassportType(String passportType) {
 		this.passportType = passportType;
 	}
+	@Override
+	public boolean isTotalRowsIgnored() {
+		return this.totalRowsIgnored;
+	}
+	public void setTotalRowsIgnored(boolean totalRowsIgnored) {
+		this.totalRowsIgnored = totalRowsIgnored;
+	}
 	public int getPage() {
 		return page;
 	}
@@ -77,11 +84,8 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 	public void setDirection(Direction sc) {
 		this.direction = sc;
 	}
-	public boolean isScroll() {
-		return isScroll;
-	}
 	public void setScroll(boolean isScroll) {
-		this.isScroll = isScroll;
+		this.totalRowsIgnored = isScroll;
 	}
 
 	@Override
@@ -112,7 +116,7 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 				"passportId='" + passportId + '\'' +
 				", token='" + token + '\'' +
 				", passportType='" + passportType + '\'' +
-				", isScroll=" + isScroll +
+				", totalRowsIgnored=" + totalRowsIgnored +
 				", page=" + page +
 				", rows=" + rows +
 				", orderBy='" + orderBy + '\'' +

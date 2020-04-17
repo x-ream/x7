@@ -22,7 +22,7 @@ import java.util.List;
 
 public interface PageBuilder {
 
-    PageBuilder scroll(boolean isScroll);
+    PageBuilder totalRowsIgnored(boolean isTotalRowsIgnored);
     PageBuilder rows(int rows);
     PageBuilder page(int page);
     PageBuilder orderIn(String property, List<? extends Object> inList);

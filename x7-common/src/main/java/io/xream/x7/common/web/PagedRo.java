@@ -24,18 +24,25 @@ import java.util.List;
 
 public class PagedRo implements Paged{
 
-	private boolean isScroll;
+	private boolean totalRowsIgnored;
 	private int page;
 	private int rows;
 	private String orderBy;
 	private Direction direction;
 	private List<Sort> sortList;
-	public boolean isScroll() {
-		return isScroll;
-	}
 	public void setScroll(boolean isScroll) {
-		this.isScroll = isScroll;
+		this.totalRowsIgnored = isScroll;
 	}
+
+	@Override
+	public boolean isTotalRowsIgnored() {
+		return this.totalRowsIgnored;
+	}
+
+	public void setTotalRowsIgnored(boolean totalRowsIgnored) {
+		this.totalRowsIgnored = totalRowsIgnored;
+	}
+
 	public int getPage() {
 		return page;
 	}
@@ -85,7 +92,7 @@ public class PagedRo implements Paged{
 	@Override
 	public String toString() {
 		return "PagedRo{" +
-				"isScroll=" + isScroll +
+				"totalRowsIgnored=" + totalRowsIgnored +
 				", page=" + page +
 				", rows=" + rows +
 				", orderBy='" + orderBy + '\'' +
