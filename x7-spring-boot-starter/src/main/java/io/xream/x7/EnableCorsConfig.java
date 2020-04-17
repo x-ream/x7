@@ -17,15 +17,19 @@
 package io.xream.x7;
 
 import io.xream.x7.common.web.CorsConfig;
+import io.xream.x7.common.web.CorsRegistrar;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
+/**
+ * Alter @CrossOrgin , as global CorsConfig
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({CorsConfig.class})
+@Import({CorsRegistrar.class, CorsConfig.class})
 public @interface EnableCorsConfig {
 
-
+    String[] value() default {};
 }

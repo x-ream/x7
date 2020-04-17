@@ -14,22 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7;
+package io.xream.x7.common.web;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import io.xream.x7.EnableCorsConfig;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
+
+import java.util.Map;
 
 
-@Configuration
-@ComponentScan({"io.xream.x7.repository.redis"})
-public class BootConfiguration  {
+public class CorsRegistrar implements ImportBeanDefinitionRegistrar {
 
-    @ConditionalOnMissingBean(X7Env.class)
-    @Bean
-    public X7Env x7Env(){
-        return new X7Env();
+    private String[] arr;
+    public String[] getArr(){
+        return this.arr;
     }
 
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
+        Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableCorsConfig.class.getName());
+
+
+        Object obj = attributes.get("value");
+
+        CorsConfig.arr = (String[]) obj;
+    }
 }

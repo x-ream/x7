@@ -21,8 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@EnableX7L3Caching
 @EnableDistributionLock
 @EnableFallbackOnly
-//@CrossOrigin(origins = "http://localhost:8868")
-//@EnableCorsConfig
+@EnableCorsConfig("${access.domain}")
 public class App {
 
     public static void main( String[] args )
