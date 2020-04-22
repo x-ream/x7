@@ -47,15 +47,14 @@ public class RepositoryStarter  {
     @Bean
     @Order(2)
     public Dialect dialect(Environment environment){
-        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
+        String driverClassName = getDbDriverKey(environment);
 
-        String driver = driverClassName.toLowerCase();
         Dialect dialect = null;
         try {
-            if (driver.contains(DbType.MYSQL)) {
+            if (driverClassName.contains(DbType.MYSQL)) {
                 DbType.value = DbType.MYSQL;
                 dialect = (Dialect) Class.forName("io.xream.x7.repository.dialect.MySqlDialect").newInstance();
-            } else if (driver.contains(DbType.ORACLE)) {
+            } else if (driverClassName.contains(DbType.ORACLE)) {
                 DbType.value = DbType.ORACLE;
                 dialect = (Dialect) Class.forName("io.xream.x7.repository.dialect.OracleDialect").newInstance();
             }
@@ -71,7 +70,7 @@ public class RepositoryStarter  {
     @Order(3)
     public CriteriaParser criteriaParser(Dialect dialect,Environment environment) {
 
-        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
+        String driverClassName = getDbDriverKey(environment);
 
         CriteriaParser criteriaParser =  null;
         if (driverClassName.toLowerCase().contains("mysql")
@@ -88,7 +87,8 @@ public class RepositoryStarter  {
     @Order(4)
     public Dao dao(Environment environment){
 
-        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
+        String driverClassName = getDbDriverKey(environment);
+
         Dao dao =  null;
         if (driverClassName.toLowerCase().contains("mysql")
                 || driverClassName.toLowerCase().contains("oracle")) {
@@ -115,10 +115,9 @@ public class RepositoryStarter  {
     @Order(7)
     public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver,Environment environment){
 
-        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
+        String driverClassName = getDbDriverKey(environment);
 
         DataTransform dataTransform = null;
-
         if (driverClassName.toLowerCase().contains("mysql")
                 || driverClassName.toLowerCase().contains("oracle")) {
             dataTransform = new SqlDataTransform();
@@ -150,6 +149,18 @@ public class RepositoryStarter  {
      */
     private void initDialect(Dialect dialect) {
         MapperFactory.Dialect = dialect;
+    }
+
+    private String getDbDriverKey(Environment environment) {
+        String driverClassName = null;
+        try {
+            driverClassName = environment.getProperty("spring.datasource.driver-class-name");
+        }catch (Exception e){
+
+        }
+        if (driverClassName == null)
+            return "mysql";
+        return driverClassName.toLowerCase();
     }
 
 }
