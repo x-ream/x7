@@ -33,4 +33,6 @@ public interface L2CacheStorage {
 
     List<String> multiGet(List<String> keyArr);
 
+
+    void setFallbackStorage(L2CacheStorage l2CacheStorage);
 }

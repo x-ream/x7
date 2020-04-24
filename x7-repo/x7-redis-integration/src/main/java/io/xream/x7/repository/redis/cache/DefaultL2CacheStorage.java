@@ -54,7 +54,7 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
     private CircuitBreakerConfig circuitBreakerConfig = null;
 
-
+    @Autowired
     public void setFallbackStorage(L2CacheStorage l2CacheStorage) {
         this.fallbackStorage = l2CacheStorage;
     }

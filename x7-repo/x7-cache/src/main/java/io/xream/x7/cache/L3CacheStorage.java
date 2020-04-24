@@ -23,4 +23,6 @@ public interface L3CacheStorage {
     void set(String key, String value, long expireTime, TimeUnit timeUnit);
 
     String get(String key, long expireTime, TimeUnit timeUnit);
+
+    void setFallbackStorage(L3CacheStorage l3CacheStorage);
 }

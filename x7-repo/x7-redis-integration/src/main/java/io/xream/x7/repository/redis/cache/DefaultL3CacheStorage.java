@@ -20,6 +20,7 @@ import io.xream.x7.cache.L3CacheStorage;
 import io.xream.x7.common.cache.Protection;
 import io.xream.x7.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,16 @@ public final class DefaultL3CacheStorage implements L3CacheStorage {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    private L3CacheStorage fallbackStorage;
+
+    @Value("${circuitbreaker.l3cache.name:l3cache}")
+    private String circuitBreakerL3cacheName;
+
+    @Override
+    public void setFallbackStorage(L3CacheStorage fallbackStorage) {
+        this.fallbackStorage = fallbackStorage;
+    }
 
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
