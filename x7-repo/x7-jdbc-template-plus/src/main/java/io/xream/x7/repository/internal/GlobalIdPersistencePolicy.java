@@ -21,9 +21,9 @@ import io.xream.x7.repository.ManuRepository;
 import io.xream.x7.repository.id.IdGenerator;
 
 
-public class GlobalIdPersistencePolicy {
+public final class GlobalIdPersistencePolicy {
 
-    public static void persist(long id, String clzName) {
+    protected static void persist(long id, String clzName) {
         CasualWorker.accept(() -> {
             IdGenerator generator = new IdGenerator();
             generator.setClzName(clzName);
