@@ -30,9 +30,9 @@ import org.springframework.util.Assert;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class RemoveOrRefreshOrCreateBiz {
+public final class RemoveOrRefreshOrCreateBiz {
 
-    public static <T> boolean doIt(Class<T> clz, Repository repository, RemoveOrRrefreshOrCreate wrapper) {
+    protected static <T> boolean doIt(Class<T> clz, Repository repository, RemoveOrRrefreshOrCreate wrapper) {
 
         Assert.notNull(wrapper, "removeOrRefreshOrCreate(wrapper),wrapper is null");
 
