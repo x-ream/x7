@@ -407,11 +407,8 @@ public class DaoImpl implements Dao {
 
         List<T> list = queryForList(sql, clz, queryMap.values(), this.dialect, jdbcTemplate);
 
-        if (list.isEmpty()) {
-            if (DataObjectConverter.filterGetOneWithLongKey(parsed, queryMap))
-                throw new IllegalArgumentException("API of getOne(T) can't accept object with keyOne = 0L: " + conditionObj);
-            return null;//not throw EntityNotFoundException
-        }
+        if (list.isEmpty())
+            return null;
         if (list.size() > 1)
             throw new TooManyResultsException("Expected one result (or null) to be returned by API of getOne(T), but found: " + list.size());
         return list.get(0);

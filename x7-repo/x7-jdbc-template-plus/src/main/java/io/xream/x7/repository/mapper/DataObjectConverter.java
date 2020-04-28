@@ -17,7 +17,6 @@
 package io.xream.x7.repository.mapper;
 
 import io.xream.x7.common.bean.*;
-import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
@@ -229,20 +228,6 @@ public class DataObjectConverter {
 
     }
 
-    public static boolean filterGetOneWithLongKey(Parsed parsed, Map<String, Object> queryMap) {
-        String key = parsed.getKey(X.KEY_ONE);
-        BeanElement be = parsed.getElement(key);
-        if (be.clz == Long.class) {
-            String mapper = be.getMapper();
-            if (queryMap.containsKey(mapper)) {
-                Object keyObj = queryMap.get(mapper);
-                if (Long.valueOf(keyObj.toString()) == 0L) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     public static void log(Class clz, List<Object> valueList) {
         LoggerProxy.debug(clz, valueList);
