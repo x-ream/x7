@@ -27,6 +27,7 @@ import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.SqlParsed;
+import io.xream.x7.repository.exception.TooManyResultsException;
 import io.xream.x7.repository.mapper.DataObjectConverter;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.mapper.Mapper;
@@ -411,6 +412,8 @@ public class DaoImpl implements Dao {
                 throw new IllegalArgumentException("API of getOne(T) can't accept object with keyOne = 0L: " + conditionObj);
             return null;//not throw EntityNotFoundException
         }
+        if (list.size() > 1)
+            throw new TooManyResultsException("Expected one result (or null) to be returned by API of getOne(T), but found: " + list.size());
         return list.get(0);
     }
 
