@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -45,6 +46,25 @@ public final class DefaultL3CacheStorage implements L3CacheStorage {
 
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
+    }
+
+    @Override
+    public boolean lock(String key, @NotNull Integer timeOut) {
+        if (timeOut.intValue() == 0)
+            timeOut = 60000;
+        try {
+            return this.stringRedisTemplate.opsForValue().setIfAbsent(key, "1", timeOut, TimeUnit.MILLISECONDS);
+        }catch (Exception e) {
+            return true;
+        }
+    }
+
+    @Override
+    public void unLock(String key) {
+        try {
+            this.stringRedisTemplate.delete(key);
+        }catch (Exception e){
+        }
     }
 
     @Override

@@ -16,9 +16,13 @@
  */
 package io.xream.x7.cache;
 
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
-public interface L3CacheStorage {
+public interface L3CacheStorage  {
+
+    boolean lock(String key, @NotNull Integer timeOut);
+    void unLock(String key);
 
     void set(String key, String value, long expireTime, TimeUnit timeUnit);
 
