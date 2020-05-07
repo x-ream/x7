@@ -520,10 +520,12 @@ public class BeanUtilX extends BeanUtil {
 		}
 		for (String str : arr){
 			boolean isKeyWord = false;
-			for (String kw : keyWordArr){
-				if (kw.equals(str.toLowerCase())){
-					isKeyWord = true;
-					break;
+			if (!str.toLowerCase().equals("order")) {
+				for (String kw : keyWordArr) {
+					if (kw.equals(str.toLowerCase())) {
+						isKeyWord = true;
+						break;
+					}
 				}
 			}
 

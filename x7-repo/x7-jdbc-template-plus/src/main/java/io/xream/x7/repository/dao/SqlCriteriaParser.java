@@ -621,6 +621,8 @@ public class SqlCriteriaParser implements CriteriaParser {
                     String[] arr = key.split("\\.");
                     String alia = arr[0];
                     String clzName = criteria.getAliaMap().get(alia);
+                    if (clzName == null)
+                        clzName = alia;
                     Parsed parsed = Parser.get(clzName);
                     if (BeanUtilX.isBaseType_0(arr[1],x.getValue(),parsed)){
                         ite.remove();
@@ -642,6 +644,8 @@ public class SqlCriteriaParser implements CriteriaParser {
                     String[] arr = key.split("\\.");
                     String alia = arr[0];
                     String clzName = criteria.getAliaMap().get(alia);
+                    if (clzName == null)
+                        clzName = alia;
                     Parsed parsed = Parser.get(clzName);
 
                     if (BeanUtilX.isBaseType_0(arr[1],valueList.get(0),parsed)){

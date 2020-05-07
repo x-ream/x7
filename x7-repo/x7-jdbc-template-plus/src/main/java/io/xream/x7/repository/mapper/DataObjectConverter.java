@@ -52,7 +52,8 @@ public class DataObjectConverter {
 
                     if (property.contains(".")) {
                         String[] arr = property.split("\\.");
-                        Parsed parsed = Parser.get(arr[0]);
+                        String clzName = resultMapped.getAliaMap().get(arr[0]);
+                        Parsed parsed = Parser.get(clzName);
                         be = parsed.getElement(arr[1]);
                     } else {
                         Parsed parsed = Parser.get(clz);

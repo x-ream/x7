@@ -21,7 +21,6 @@ import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.SqlScript;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.repository.mapper.Dialect;
 
 import java.math.BigDecimal;
@@ -116,19 +115,19 @@ public class MySqlDialect implements Dialect {
                 mapper = resultKeyAliaMap.get(mapper);
             }
         }
-        if (aliaMap.isEmpty())
-            return mapper;
+//        if (aliaMap.isEmpty())
+//            return mapper;
 
-        if (mapper.contains(".")) {
-            String[] arr = mapper.split("\\.");
-            String alia = arr[0];
-            String p = arr[1];
-            String clzName = aliaMap.get(alia);
-            if (StringUtil.isNullOrEmpty(clzName)){
-                clzName = alia;
-            }
-            return clzName+"."+p;
-        }
+//        if (mapper.contains(".")) {
+//            String[] arr = mapper.split("\\.");
+//            String alia = arr[0];
+//            String p = arr[1];
+//            String clzName = aliaMap.get(alia);
+//            if (StringUtil.isNullOrEmpty(clzName)){
+//                clzName = alia;
+//            }
+//            return clzName+"."+p;
+//        }
 
         return mapper;
 
