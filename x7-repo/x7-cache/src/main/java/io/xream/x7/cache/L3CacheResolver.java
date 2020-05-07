@@ -34,50 +34,51 @@ public interface L3CacheResolver extends Protection{
     L3CacheStorage getStorage();
 
     default String resolve(String key, long expireTime, TimeUnit timeUnit, Callable caller) {
-        try {
-            String value = getStorage().get(key, expireTime, timeUnit); //从缓存里获取
-            if (StringUtil.isNotNull(value)) {//如果有
-                PeriodCounter.reset(key);
-                if (DEFAULT_VALUE.equals(value)) //防止缓存击穿
-                    return null;
-                return value;//就返回缓存结果
-            }
-        }catch (Exception e) {
-            PeriodCounter.reset(key);
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
-        }
-
-        final String lockKey = key+"~LOCK";
-        boolean locked = getStorage().lock(lockKey,60000);
-        if (locked) {
+        boolean flag = true;
+        while (flag) {
             try {
-                Object obj = caller.call();//读数据库或远程调用
-                if (obj == null) {
-                    getStorage().set(key, DEFAULT_VALUE, expireTime, timeUnit);//防缓存击穿
-                    return null;
-                } else {
-                    String str = JsonX.toJson(obj);//转成JSON字符串
-                    getStorage().set(key, str, expireTime, timeUnit);//然后存到缓存
-                    return str;//锁住资源的人，等待至同步返回查询结果
+                String value = getStorage().get(key, expireTime, timeUnit); //从缓存里获取
+                if (StringUtil.isNotNull(value)) {//如果有
+                    PeriodCounter.reset(key);
+                    if (DEFAULT_VALUE.equals(value)) //防止缓存击穿
+                        return null;
+                    return value;//就返回缓存结果
                 }
-            } catch (Throwable e) {
-                throw new RuntimeException(ExceptionUtil.getMessage(e));
-            } finally {
-                PeriodCounter.reset(key);
-                getStorage().unLock(lockKey);
-            }
-        }else {
-            PeriodCounter.increment(key);
-            try {
-                Thread.sleep(PeriodCounter.SLEEP_MILLIS);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 PeriodCounter.reset(key);
                 throw new RuntimeException(ExceptionUtil.getMessage(e));
             }
-            return resolve(key, expireTime, timeUnit, caller);//递归请求
+
+            final String lockKey = key + "~LOCK";
+            boolean locked = getStorage().lock(lockKey, 60000);
+            if (locked) {
+                try {
+                    Object obj = caller.call();//读数据库或远程调用
+                    if (obj == null) {
+                        getStorage().set(key, DEFAULT_VALUE, expireTime, timeUnit);//防缓存击穿
+                        return null;
+                    } else {
+                        String str = JsonX.toJson(obj);//转成JSON字符串
+                        getStorage().set(key, str, expireTime, timeUnit);//然后存到缓存
+                        return str;//锁住资源的人，等待至同步返回查询结果
+                    }
+                } catch (Throwable e) {
+                    throw new RuntimeException(ExceptionUtil.getMessage(e));
+                } finally {
+                    PeriodCounter.reset(key);
+                    getStorage().unLock(lockKey);
+                }
+            } else {
+                PeriodCounter.increment(key);
+                try {
+                    Thread.sleep(L3CacheConfig.waitTimeMills);
+                } catch (InterruptedException e) {
+                    PeriodCounter.reset(key);
+                    throw new RuntimeException(ExceptionUtil.getMessage(e));
+                }
+            }
         }
-
-
+        return null;
     }
 
 
@@ -85,7 +86,6 @@ public interface L3CacheResolver extends Protection{
 
         private final static Map<String, Long> countMap = new ConcurrentHashMap<>();
         private final static long MAX_COUNT = 40;
-        private final static long SLEEP_MILLIS = 1000;
 
         private static void increment(String key) {
             key = wrapKey(key);

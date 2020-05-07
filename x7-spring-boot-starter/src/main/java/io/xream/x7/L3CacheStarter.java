@@ -16,22 +16,24 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.cache.L3CacheAspect;
-import org.springframework.context.annotation.Import;
+import io.xream.x7.cache.L3CacheConfig;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
 
-import java.lang.annotation.*;
+import java.util.Map;
 
-/**
- *  if read data only from cache, and if no data in cache then return <br>
- *  use @CacheableL3 instead of @Cacheable <br>
- *  <br>
- *  for the interrupt of return, the client has to retry about 10 times, 300ms/time suggested <br>
- *  <br>
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Import({L3CacheStarter.class,L3CacheAspect.class})
-public @interface EnableX7L3Caching {
-    int waitTimeMills() default 300;
+
+public class L3CacheStarter implements ImportBeanDefinitionRegistrar {
+
+
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
+        Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7L3Caching.class.getName());
+
+        Object obj = attributes.get("waitTimeMills");
+
+        L3CacheConfig.waitTimeMills = Long.valueOf(obj.toString());
+
+    }
 }

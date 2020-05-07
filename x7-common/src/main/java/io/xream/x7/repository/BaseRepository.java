@@ -87,15 +87,6 @@ public interface BaseRepository<T> extends Typed<T> {
      */
     List<T> list(T conditionObj);
 
-    /**
-     * sometimes, we use the API, for example: <br>
-     * 1. foo.setIsDeleted(false) and other condition  <br>
-     * 2. get address  by various of condition <br>
-     * 3. get user  by name <br>
-     * <br>
-     * Notes:  <br>
-     * do not use getOne(obj) instead of get(keyOne), get(keyOne) <br>
-     */
     T getOne(T conditionObj);
 
     /**
