@@ -30,6 +30,7 @@ import io.xream.x7.repository.exception.SqlBuildException;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.util.SqlParserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -530,7 +531,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                     script = rmc.getSourceScripts().stream().distinct().filter(sc -> optimizeSourceScript(sc,sb.conditionList)).map(SourceScript::sql).collect(Collectors.joining()).trim();
                 }
             }
-
+            Assert.notNull(script,"Not set sourceScript of ResultMappedBuilder");
         }else {
             script = criteria.sourceScript();
         }
