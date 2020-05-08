@@ -27,6 +27,7 @@ public interface SqlScript {
 	String SET = " SET ";
 	String UPDATE = "UPDATE";
 	String IN = " IN ";
+	String ON = " ON ";
 
 	String AS = " AS ";
 

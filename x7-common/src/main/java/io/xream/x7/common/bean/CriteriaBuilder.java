@@ -520,9 +520,41 @@ public class CriteriaBuilder {
         return this.criteria;
     }
 
-
+    protected SourceScript sourceScriptTemp;
     public class ResultMappedBuilder extends CriteriaBuilder {
 
+        private SourceScriptBuilder sourceScriptBuilder = new SourceScriptBuilder() {
+
+            @Override
+            public SourceScriptBuilder source(String source) {
+                sourceScriptTemp.setSource(source);
+                return this;
+            }
+
+            @Override
+            public SourceScriptBuilder alia(String alia) {
+                sourceScriptTemp.setAlia(alia);
+                return this;
+            }
+
+            @Override
+            public SourceScriptBuilder joinType(JoinType joinType) {
+                sourceScriptTemp.setJoinType(joinType);
+                return this;
+            }
+
+            @Override
+            public SourceScriptBuilder on(String on) {
+                sourceScriptTemp.setOn(on);
+                return this;
+            }
+        };
+
+        public SourceScriptBuilder sourceScript(){
+            sourceScriptTemp = new SourceScript();
+            get().getSourceScripts().add(sourceScriptTemp);
+            return this.sourceScriptBuilder;
+        }
 
         @Override
         public Criteria.ResultMappedCriteria get() {
@@ -578,6 +610,8 @@ public class CriteriaBuilder {
         }
 
         public ResultMappedBuilder resultKey(String resultKey) {
+            if (StringUtil.isNullOrEmpty(resultKey))
+                return this;
             get().getResultKeyList().add(resultKey);
             return this;
         }
@@ -588,6 +622,8 @@ public class CriteriaBuilder {
         }
 
         public ResultMappedBuilder sourceScript(String sourceScript) {
+            if (StringUtil.isNullOrEmpty(sourceScript))
+                return this;
             get().setSourceScript(sourceScript);
             return this;
         }
@@ -652,6 +688,7 @@ public class CriteriaBuilder {
             get().getReduceList().add(reduce);
             return this;
         }
+
 
     }
 

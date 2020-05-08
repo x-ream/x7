@@ -16,18 +16,21 @@
  */
 package io.xream.x7.common.bean;
 
-public enum ReduceType {
+public enum JoinType {
+    MAIN(""),
+    JOIN(" JOIN "),
+    INNER_JOIN(" INNER JOIN "),
+    OUTER_JOIN(" OUTER JOIN "),
+    LEFT_JOIN(" LEFT JOIN "),
+    RIGHT_JOIN(" RIGHT JOIN "),
+    COMMA(" , ");
 
-    MAX,
-    MIN,
+    private String sql;
+    private JoinType(String sql){
+        this.sql = sql;
+    }
 
-    SUM,
-    COUNT,
-    AVG,
-    GROUP_CONCAT,
-
-    SUM_DISTINCT,
-    COUNT_DISTINCT,
-    AVG_DISTINCT,
-    GROUP_CONCAT_DISTINCT
+    public String sql(){
+        return this.sql;
+    }
 }

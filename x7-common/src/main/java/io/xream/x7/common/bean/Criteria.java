@@ -214,9 +214,10 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		private static final long serialVersionUID = -2365612538012282380L;
 		private List<String> resultKeyList = new ArrayList<String>();
-		private String sourceScript;
 		private String groupBy;
 		private Distinct distinct;
+		private String sourceScript;
+		private List<SourceScript> sourceScripts = new ArrayList<>();
 		private List<Reduce> reduceList = new ArrayList<>();
 		@JsonIgnore
 		private transient PropertyMapping propertyMapping;
@@ -234,6 +235,10 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		public List<Reduce> getReduceList() {
 			return reduceList;
+		}
+
+		public List<SourceScript> getSourceScripts() {
+			return sourceScripts;
 		}
 
 		public ResultMappedCriteria(){
@@ -304,11 +309,9 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			}
 		}
 
-
-		@Override
-		public String resultAllScript() {
+		public void adpterResultScript() {
 			if (Objects.nonNull(super.customedResultKey)&&!super.customedResultKey.equals(SqlScript.STAR)){
-				return super.customedResultKey;
+				return;
 			}else {
 				int size = 0;
 				String column = "";
@@ -323,10 +326,11 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 						}
 					}
 				}
-				return column;
+				super.customedResultKey = column;
 			}
 
 		}
+
 
 		@Override
 		public String toString() {

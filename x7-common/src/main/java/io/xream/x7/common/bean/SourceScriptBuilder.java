@@ -16,18 +16,9 @@
  */
 package io.xream.x7.common.bean;
 
-public enum ReduceType {
-
-    MAX,
-    MIN,
-
-    SUM,
-    COUNT,
-    AVG,
-    GROUP_CONCAT,
-
-    SUM_DISTINCT,
-    COUNT_DISTINCT,
-    AVG_DISTINCT,
-    GROUP_CONCAT_DISTINCT
+public interface SourceScriptBuilder {
+    SourceScriptBuilder source(String source);
+    SourceScriptBuilder alia(String alia);
+    SourceScriptBuilder joinType(JoinType joinType);
+    SourceScriptBuilder on(String on);
 }
