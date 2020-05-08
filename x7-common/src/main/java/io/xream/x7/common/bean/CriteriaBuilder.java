@@ -587,6 +587,11 @@ public class CriteriaBuilder {
             super.criteria.paged(paged);
         }
 
+        public ResultMappedBuilder sourceScript(String sourceScript) {
+            get().setSourceScript(sourceScript);
+            return this;
+        }
+
         public ResultMappedBuilder distinct(Object... objs) {
             if (objs == null)
                 throw new RuntimeException("distinct non resultKey");

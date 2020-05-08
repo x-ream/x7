@@ -364,6 +364,15 @@ public class SqlCriteriaParser implements CriteriaParser {
                 if (reduceType == ReduceType.GROUP_CONCAT_DISTINCT){
                     reduceType = ReduceType.GROUP_CONCAT;
                     value = "DISTINCT " + value;
+                }else  if (reduceType == ReduceType.SUM_DISTINCT){
+                    reduceType = ReduceType.SUM;
+                    value = "DISTINCT " + value;
+                }else  if (reduceType == ReduceType.COUNT_DISTINCT){
+                    reduceType = ReduceType.COUNT;
+                    value = "DISTINCT " + value;
+                }else  if (reduceType == ReduceType.AVG_DISTINCT){
+                    reduceType = ReduceType.AVG;
+                    value = "DISTINCT " + value;
                 }
 
                 column.append(SqlScript.SPACE)

@@ -24,5 +24,9 @@ public enum ReduceType {
     MIN,
     AVG,
     GROUP_CONCAT,
+    
+    SUM_DISTINCT,
+    COUNT_DISTINCT,
+    AVG_DISTINCT,
     GROUP_CONCAT_DISTINCT
 }
