@@ -22,8 +22,11 @@ public class SourceScript {
 
     private String source;
     private JoinType joinType;
-    private String on;
+    private On on;
     private String alia;
+
+    private transient boolean used;
+    private transient boolean targeted;
 
     public String getSource() {
         return source;
@@ -41,11 +44,11 @@ public class SourceScript {
         this.joinType = joinType;
     }
 
-    public String getOn() {
+    public On getOn() {
         return on;
     }
 
-    public void setOn(String on) {
+    public void setOn(On on) {
         this.on = on;
     }
 
@@ -57,23 +60,64 @@ public class SourceScript {
         this.alia = alia;
     }
 
+    public boolean isUsed() {
+        return this.used;
+    }
+
+    public void used() {
+        this.used = true;
+    }
+
+    public boolean isTargeted() {
+        return targeted;
+    }
+
+    public void targeted() {
+        this.targeted = true;
+    }
+
+    public String alia(){
+        return alia == null ? source : alia;
+    }
+
     public String sql(){
         if (StringUtil.isNullOrEmpty(source))
             return "";
-        if (joinType == null || joinType == JoinType.MAIN)
+        if (joinType == null || joinType == JoinType.MAIN) {
+            if (alia != null && !alia.equals(source))
+                return source + " " + alia;
             return source;
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(joinType.sql()).append(source);
-        if (StringUtil.isNotNull(alia))
-            sb.append(SqlScript.SPACE).append(alia).append(SqlScript.SPACE);
-        if (StringUtil.isNotNull(on)){
-            if (on.toLowerCase().trim().startsWith("on"))
-                sb.append(on);
-            else
-                sb.append(SqlScript.ON).append(on);
+
+        if (alia != null && !alia.equals(source))
+            sb.append(SqlScript.SPACE).append(alia);
+
+        if (on != null){
+            String aliaName = alia == null ? source : alia;
+            String key = on.getKey();
+            if (StringUtil.isNotNull(key)) {
+                sb.append(SqlScript.ON)
+                        .append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
+                        .append(PredicateAndOtherScript.EQ.sql())
+                        .append(aliaName).append(".").append(on.getKey());
+            }
         }
 
 
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "SourceScript{" +
+                "source='" + source + '\'' +
+                ", joinType=" + joinType +
+                ", on=" + on +
+                ", alia='" + alia + '\'' +
+                ", used=" + used +
+                ", targeted=" + targeted +
+                '}';
     }
 }

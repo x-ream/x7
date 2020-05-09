@@ -59,6 +59,8 @@ public class SqlCriteriaParser implements CriteriaParser {
     }
 
     private String mapping(String key, Criteria criteria) {
+        if (key.contains("("))
+            return key;
 
         if (key.contains(SqlScript.POINT)) {
 
@@ -108,13 +110,14 @@ public class SqlCriteriaParser implements CriteriaParser {
     @Override
     public SqlParsed parse(Criteria criteria) {
 
+
+        SqlBuilder sqlBuilder = SqlBuilder.get();
+
         parseAlia(criteria);
 
         filter(criteria);
 
         env(criteria);
-
-        SqlBuilder sqlBuilder = SqlBuilder.get();
 
         resultKey(sqlBuilder,criteria);
         /*
@@ -485,63 +488,104 @@ public class SqlCriteriaParser implements CriteriaParser {
     private void parseAlia(Criteria criteria) {
 
         if (criteria instanceof Criteria.ResultMappedCriteria) {
-            Criteria.ResultMappedCriteria resultMappedCriteria = (Criteria.ResultMappedCriteria) criteria;
+            Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
 
-            String script;
-            if (resultMappedCriteria.getSourceScripts() !=null && !resultMappedCriteria.getSourceScripts().isEmpty()){
-                script = resultMappedCriteria.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining());
-            }else{
-                script = resultMappedCriteria.sourceScript();
+            if (rmc.getSourceScripts().isEmpty()){// builderSource null
+                String script = criteria.sourceScript();//string -> list<>
+                List<String> list = SourceScriptBuilder.split(script);
+                List<SourceScript> sourceScripts = SourceScriptBuilder.parse(list);
+                rmc.getSourceScripts().addAll(sourceScripts);
             }
 
-            Map<String, String> aliaMap = BeanUtilX.parseAliaBySourceScriptSql(script);
-            resultMappedCriteria.setAliaMap(aliaMap);
+            Map<String,String> aliaMap = new HashMap<>();
+            for (SourceScript sc : rmc.getSourceScripts()){
+                aliaMap.put(sc.alia(),sc.getSource());
+            }
+
+            rmc.setAliaMap(aliaMap);
         }
+
     }
 
-    private boolean optimizeSourceScript (SourceScript sourceScript, List<String> conditionList) {
 
+    private void optimizeSourceScript (List<SourceScript> sourceScripts,List<String> conditionList){
+        if (sourceScripts.size() == 1)
+            return;
         String first = conditionList.get(0);
         if (!first.contains("."))
-            return true;
-        for (String key : conditionList){
-            if (StringUtil.isNullOrEmpty(sourceScript.getAlia())){
-                if (key.contains(sourceScript.getSource()+"."))
-                    return true;
-            }else{
-                if (key.contains(sourceScript.getAlia()+"."))
-                    return true;
+            return;
+        for (SourceScript sourceScript : sourceScripts) {
+            for (String key : conditionList){
+                if (StringUtil.isNullOrEmpty(sourceScript.getAlia())){
+                    if (key.contains(sourceScript.getSource()+".")){
+                        sourceScript.used();
+                        break;
+                    }
+                }else{
+                    if (key.contains(sourceScript.getAlia()+".")) {
+                        sourceScript.used();
+                        break;
+                    }
+                }
             }
         }
 
-        return false;
+        int size = sourceScripts.size();
+        for (int i = size -1; i>=0; i--) {
+            SourceScript sourceScript = sourceScripts.get(i);
+            if (!sourceScript.isUsed() && !sourceScript.isTargeted())
+                continue;
+            for (int j = i-1; j>=0 ;j--){
+                SourceScript sc = sourceScripts.get(j);
+                if (sourceScript.getSource().equals(sc.getSource()))
+                    continue;
+                if(sourceScript.getOn() == null || sourceScript.getOn().getJoinFrom() == null)
+                    continue;
+                if (sc.alia().equals(sourceScript.getOn().getJoinFrom().getAlia())){
+                    sc.targeted();
+                    break;
+                }
+            }
+        }
+
+        Iterator<SourceScript> ite = sourceScripts.iterator();
+        while (ite.hasNext()){
+            SourceScript sourceScript = ite.next();
+            if (!sourceScript.isUsed() && !sourceScript.isTargeted())
+                ite.remove();
+        }
     }
 
     private void sourceScript(SqlBuilder sb, Criteria criteria) {
-        String script = null;
 
+        sb.sbSource.append(SqlScript.SPACE);
+
+        String script = null;
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
-            if (rmc.getSourceScripts().isEmpty()){
-                script = criteria.sourceScript();
-            }else{
-                if (rmc.resultAllScript().trim().equals("*")){
+
+            if (rmc.getSourceScripts().isEmpty()){// builderSource null
+                script = criteria.sourceScript();//string -> list<>
+                if ((! rmc.resultAllScript().trim().equals("*")) && script.contains(".")){
+                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionList);
                     script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
-                }else {
-                    script = rmc.getSourceScripts().stream().distinct().filter(sc -> optimizeSourceScript(sc,sb.conditionList)).map(SourceScript::sql).collect(Collectors.joining()).trim();
                 }
+            }else{
+                if (! rmc.resultAllScript().trim().equals("*")){
+                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionList);
+                }
+                script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
             }
+
             Assert.notNull(script,"Not set sourceScript of ResultMappedBuilder");
+            sb.sbSource.append(SqlScript.FROM).append(SqlScript.SPACE);
+
         }else {
             script = criteria.sourceScript();
+            if (!script.startsWith(SqlScript.FROM) || !script.startsWith(SqlScript.FROM.toLowerCase()))
+                sb.sbSource.append(SqlScript.FROM).append(SqlScript.SPACE);
         }
 
-
-        if (script.startsWith(SqlScript.FROM) || script.startsWith(SqlScript.FROM.toLowerCase())) {
-            script = script.replaceFirst(SqlScript.FROM, SqlScript.NONE);
-        }
-
-        sb.sbSource.append(SqlScript.SPACE).append(SqlScript.FROM).append(SqlScript.SPACE);
 
         mapping(script, criteria, sb.sbSource);
     }
@@ -600,6 +644,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             if (x.getPredicate() == PredicateAndOtherScript.X) {
                 appendConjunction(sb, x, criteria, isWhere);
                 sb.append(x.getKey());
+                conditionList.add(x.getKey());
                 Object valueObject = x.getValue();
                 if (valueObject != null) {
                     if (valueObject instanceof List) {

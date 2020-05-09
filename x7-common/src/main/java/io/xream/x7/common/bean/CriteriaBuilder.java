@@ -544,7 +544,10 @@ public class CriteriaBuilder {
             }
 
             @Override
-            public SourceScriptBuilder on(String on) {
+            public SourceScriptBuilder on(String key, JoinFrom joinTarget) {
+                On on = new On();
+                on.setKey(key);
+                on.setJoinTarget(joinTarget);
                 sourceScriptTemp.setOn(on);
                 return this;
             }
