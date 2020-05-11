@@ -652,6 +652,7 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(functionScript) || keys == null)
                 return this;
             Assert.notNull(functionAlia_wrap, "function no alia");
+            Assert.notNull(functionAlia_wrap.getPropertyOrAlia());
             FunctionResultKey functionResultKey = new FunctionResultKey();
             functionResultKey.setScript(functionScript);
             functionResultKey.setAlia(functionAlia_wrap.getAlia());
