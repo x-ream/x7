@@ -445,14 +445,13 @@ public class SqlCriteriaParser implements CriteriaParser {
                 for (String key : functionResultKey.getKeys()) {
                     sqlBuilder.conditionList.add(key);
                     String mapper = mapping(key, criteria);
-                    mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
                     function = function.replaceFirst("\\?",mapper);
                 }
-                String resultKeyName = functionResultKey.getResultKeyName();
-                String aliaKey = StringUtil.isNotNull(functionResultKey.getAlia()) ? (functionResultKey.getAlia() +"." + resultKeyName) : resultKeyName;
-                resultKeyAliaMap.put(aliaKey, resultKeyName);
+                String alian = "c" + resultKeyAliaMap.size();
+                String aliaKey = functionResultKey.getAlia();
+                resultKeyAliaMap.put(aliaKey, alian);
                 propertyMapping.put(aliaKey,aliaKey);
-                column.append(SqlScript.SPACE).append(function).append(SqlScript.SPACE).append(functionResultKey.getResultKeyName());
+                column.append(SqlScript.SPACE).append(function).append(SqlScript.AS).append(alian);
                 if (i < size - 1) {
                     column.append(SqlScript.COMMA);
                 }

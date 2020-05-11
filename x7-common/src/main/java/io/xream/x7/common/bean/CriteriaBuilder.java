@@ -643,19 +643,18 @@ public class CriteriaBuilder {
 
         /**
          *
-         * @param functionExpress FUNCTION(?,?)
+         * @param functionScript FUNCTION(?,?)
          *
          * @param keys  test.createAt, test.endAt
          *
          */
-        public ResultMappedBuilder resultKeyFunction(String script, String alia, String resultKeyName, String...keys) {
-            if (StringUtil.isNullOrEmpty(script) || keys == null)
+        public ResultMappedBuilder resultKeyFunction( FunctionAlia functionAlia_wrap, String functionScript, String...keys) {
+            if (StringUtil.isNullOrEmpty(functionScript) || keys == null)
                 return this;
-            Assert.notNull(resultKeyName);
+            Assert.notNull(functionAlia_wrap, "function no alia");
             FunctionResultKey functionResultKey = new FunctionResultKey();
-            functionResultKey.setScript(script);
-            functionResultKey.setAlia(alia);
-            functionResultKey.setResultKeyName(resultKeyName);
+            functionResultKey.setScript(functionScript);
+            functionResultKey.setAlia(functionAlia_wrap.getAlia());
             functionResultKey.setKeys(keys);
             get().getResultFuntionList().add(functionResultKey);
             return this;

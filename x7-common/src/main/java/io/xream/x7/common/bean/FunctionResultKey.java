@@ -20,7 +20,6 @@ public class FunctionResultKey {
 
     private String script;
     private String alia;
-    private String resultKeyName;
     private String[] keys;
 
     public String getScript() {
@@ -39,14 +38,6 @@ public class FunctionResultKey {
         this.alia = alia;
     }
 
-    public String getResultKeyName() {
-        return resultKeyName;
-    }
-
-    public void setResultKeyName(String resultKeyName) {
-        this.resultKeyName = resultKeyName;
-    }
-
     public String[] getKeys() {
         return keys;
     }
@@ -60,7 +51,6 @@ public class FunctionResultKey {
         return "FunctionResultKey{" +
                 "script='" + script + '\'' +
                 ", alia='" + alia + '\'' +
-                ", resultKeyName='" + resultKeyName + '\'' +
                 ", keys=" + keys +
                 '}';
     }
