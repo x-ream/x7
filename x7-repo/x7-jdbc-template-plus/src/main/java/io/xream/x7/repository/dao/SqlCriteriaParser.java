@@ -59,8 +59,8 @@ public class SqlCriteriaParser implements CriteriaParser {
     }
 
     private String mapping(String key, Criteria criteria) {
-        if (key.contains("("))
-            return key;
+//        if (key.contains("("))
+//            return key;
 
         if (key.contains(SqlScript.POINT)) {
 

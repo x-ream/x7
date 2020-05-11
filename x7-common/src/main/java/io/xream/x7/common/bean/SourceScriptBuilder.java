@@ -81,7 +81,7 @@ public interface SourceScriptBuilder {
                     String selfKey =  sourceScriptsSplittedList.get(++i);
                     i++;// =
                     String targetKey = sourceScriptsSplittedList.get(++i);
-                    if (targetKey.startsWith(sourceScript.getSource()) || targetKey.startsWith(sourceScript.getAlia())) {
+                    if (targetKey.startsWith(sourceScript.getSource()) || (sourceScript.getAlia() != null && targetKey.startsWith(sourceScript.getAlia()))) {
                         String temp = selfKey;
                         selfKey = targetKey;
                         targetKey = temp;
