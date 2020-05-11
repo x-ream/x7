@@ -27,7 +27,9 @@ public interface SourceScriptBuilder {
 
     SourceScriptBuilder joinType(JoinType joinType);
 
-    SourceScriptBuilder on(String key, JoinFrom joinTarget);
+    SourceScriptBuilder on(String key, On.Op op, JoinFrom joinTarget);
+
+    SourceScriptBuilder onOr(String key, On.Op op, JoinFrom joinTarget);
 
     static List<SourceScript> parse(List<String> sourceScriptsSplittedList) {
 
@@ -78,25 +80,40 @@ public interface SourceScriptBuilder {
                     sourceScript.setJoinType(JoinType.COMMA);
                     break;
                 case "ON":
-                    String selfKey =  sourceScriptsSplittedList.get(++i);
-                    i++;// =
-                    String targetKey = sourceScriptsSplittedList.get(++i);
-                    if (targetKey.startsWith(sourceScript.getSource()) || (sourceScript.getAlia() != null && targetKey.startsWith(sourceScript.getAlia()))) {
-                        String temp = selfKey;
-                        selfKey = targetKey;
-                        targetKey = temp;
+                    String andOr = "ON";
+                    boolean flag = true;
+                    while (flag) {
+                        String selfKey = sourceScriptsSplittedList.get(++i);
+                        String op = sourceScriptsSplittedList.get(++i);// op
+                        String targetKey = sourceScriptsSplittedList.get(++i);
+                        if (targetKey.startsWith(sourceScript.getSource()) || (sourceScript.getAlia() != null && targetKey.startsWith(sourceScript.getAlia()))) {
+                            String temp = selfKey;
+                            selfKey = targetKey;
+                            targetKey = temp;
+                        }
+
+                        int selfIndex = selfKey.indexOf(".");
+                        int targetIndex = targetKey.indexOf(".");
+
+                        JoinFrom joinFrom = new JoinFrom();
+                        joinFrom.setAlia(targetKey.substring(0, targetIndex));
+                        joinFrom.setKey(targetKey.substring(targetIndex + 1));
+                        On on = new On();
+                        on.setKey(selfKey.substring(selfIndex + 1));
+                        on.setOp(op);
+                        on.setAndOr(andOr);
+                        on.setJoinTarget(joinFrom);
+                        sourceScript.getOnList().add(on);
+
+                        flag = false;
+                        if (i + 1 == size)
+                            return list;
+                        andOr = sourceScriptsSplittedList.get(i + 1);
+                        if (andOr.equals("AND") || andOr.equals("OR")){
+                            flag = true;
+                            i++;
+                        }
                     }
-
-                    int selfIndex = selfKey.indexOf(".");
-                    int targetIndex = targetKey.indexOf(".");
-
-                    JoinFrom joinFrom = new JoinFrom();
-                    joinFrom.setAlia(targetKey.substring(0, targetIndex));
-                    joinFrom.setKey(targetKey.substring(targetIndex+1));
-                    On on = new On();
-                    on.setKey(selfKey.substring(selfIndex+1));
-                    on.setJoinTarget(joinFrom);
-                    sourceScript.setOn(on);
                     break;
 
                 default:
@@ -117,6 +134,8 @@ public interface SourceScriptBuilder {
 
         return list;
     }
+
+
 
     static Map<String, String> parseAlia(List<String> sourceScriptsSplittedArr) {
 
@@ -170,7 +189,31 @@ public interface SourceScriptBuilder {
     }
 
     static List<String> split(String sourceScript) {
-        sourceScript = sourceScript.replace("="," = ");
+        String[] opArrTwo = {"!=","<>","<=",">="};
+        String[] opArrTwoTemp = {"&ne","&ne","&lte","&gte"};
+        String[] opArrOne = {"=","<",">"};
+
+        boolean flag = false;
+        for (int i=0; i<4; i++){
+            if (sourceScript.contains(opArrTwo[i])) {
+                flag = true;
+                sourceScript = sourceScript.replace(opArrTwo[i], opArrTwoTemp[i]);
+            }
+        }
+
+
+        for (String op : opArrOne ){
+            if (sourceScript.contains(op))
+                sourceScript = sourceScript.replace(op," "+op + " ");
+        }
+
+        if (flag){
+            for (int i=0; i<4; i++){
+                if (sourceScript.contains(opArrTwoTemp[i]))
+                    sourceScript = sourceScript.replace(opArrTwoTemp[i], " " + opArrTwo[i] + " ");
+            }
+        }
+
         if (sourceScript.contains(",")){
             sourceScript = sourceScript.replace(","," , ");
         }

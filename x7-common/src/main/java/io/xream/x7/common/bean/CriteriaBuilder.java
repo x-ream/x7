@@ -544,11 +544,32 @@ public class CriteriaBuilder {
             }
 
             @Override
-            public SourceScriptBuilder on(String key, JoinFrom joinTarget) {
+            public SourceScriptBuilder on(String key, On.Op op,JoinFrom joinTarget) {
                 On on = new On();
                 on.setKey(key);
+                on.setOp(op.sql());
                 on.setJoinTarget(joinTarget);
-                sourceScriptTemp.setOn(on);
+                if (sourceScriptTemp.getOnList().isEmpty()){
+                    on.setAndOr("ON");
+                }else{
+                    on.setAndOr(AndOr.AND.name());
+                }
+                sourceScriptTemp.getOnList().add(on);
+                return this;
+            }
+
+            @Override
+            public SourceScriptBuilder onOr(String key, On.Op op,JoinFrom joinTarget) {
+                On on = new On();
+                on.setKey(key);
+                on.setOp(op.sql());
+                on.setJoinTarget(joinTarget);
+                if (sourceScriptTemp.getOnList().isEmpty()){
+                    on.setAndOr("ON");
+                }else{
+                    on.setAndOr(AndOr.OR.name());
+                }
+                sourceScriptTemp.getOnList().add(on);
                 return this;
             }
         };
@@ -616,6 +637,21 @@ public class CriteriaBuilder {
             if (StringUtil.isNullOrEmpty(resultKey))
                 return this;
             get().getResultKeyList().add(resultKey);
+            return this;
+        }
+
+        /**
+         *
+         * @param functionExpress FUNCTION(?,?)
+         *
+         * @param keys  test.createAt, test.endAt
+         *
+         */
+        public ResultMappedBuilder resultFuntion(String functionExpress, String...keys) {
+            if (StringUtil.isNullOrEmpty(functionExpress) || keys == null)
+                return this;
+            KV kv = new KV(functionExpress, keys);
+            get().getResultFuntionList().add(kv);
             return this;
         }
 

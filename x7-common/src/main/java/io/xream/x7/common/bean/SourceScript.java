@@ -18,11 +18,14 @@ package io.xream.x7.common.bean;
 
 import io.xream.x7.common.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SourceScript {
 
     private String source;
     private JoinType joinType;
-    private On on;
+    private List<On> onList = new ArrayList<>();
     private String alia;
 
     private transient boolean used;
@@ -44,12 +47,12 @@ public class SourceScript {
         this.joinType = joinType;
     }
 
-    public On getOn() {
-        return on;
+    public List<On> getOnList() {
+        return onList;
     }
 
-    public void setOn(On on) {
-        this.on = on;
+    public void setOnList(List<On> onList) {
+        this.onList = onList;
     }
 
     public String getAlia() {
@@ -76,11 +79,11 @@ public class SourceScript {
         this.targeted = true;
     }
 
-    public String alia(){
+    public String alia() {
         return alia == null ? source : alia;
     }
 
-    public String sql(){
+    public String sql() {
         if (StringUtil.isNullOrEmpty(source))
             return "";
         if (joinType == null || joinType == JoinType.MAIN) {
@@ -94,17 +97,18 @@ public class SourceScript {
         if (alia != null && !alia.equals(source))
             sb.append(SqlScript.SPACE).append(alia);
 
-        if (on != null){
+        for (On on : onList) {
+            sb.append(SqlScript.SPACE).append(on.getAndOr());
+
             String aliaName = alia == null ? source : alia;
             String key = on.getKey();
             if (StringUtil.isNotNull(key)) {
-                sb.append(SqlScript.ON)
+                sb.append(SqlScript.SPACE)
                         .append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
-                        .append(PredicateAndOtherScript.EQ.sql())
+                        .append(SqlScript.SPACE).append(on.getOp()).append(SqlScript.SPACE)
                         .append(aliaName).append(".").append(on.getKey());
             }
         }
-
 
         return sb.toString();
     }
@@ -114,7 +118,7 @@ public class SourceScript {
         return "SourceScript{" +
                 "source='" + source + '\'' +
                 ", joinType=" + joinType +
-                ", on=" + on +
+                ", onList=" + onList +
                 ", alia='" + alia + '\'' +
                 ", used=" + used +
                 ", targeted=" + targeted +

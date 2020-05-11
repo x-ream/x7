@@ -120,6 +120,7 @@ public class SqlCriteriaParser implements CriteriaParser {
         env(criteria);
 
         resultKey(sqlBuilder,criteria);
+
         /*
          * select column
          */
@@ -422,8 +423,39 @@ public class SqlCriteriaParser implements CriteriaParser {
                 if (i < size - 1) {
                     column.append(SqlScript.COMMA);
                 }
+                flag = true;
+            }
+
+        }
+
+        List<KV> funtionList = resultMapped.getResultFuntionList();
+        if (!funtionList.isEmpty()) {//Maybe function support, no mapping
+            if (flag) {
+                column.append(SqlScript.COMMA);
+            }
+
+            int size = funtionList.size();
+            for (int i = 0; i < size; i++) {
+                KV kv = funtionList.get(i);
+
+                String function = kv.getK();
+                String[] arr = (String[])kv.getV();
+
+                for (String key : arr) {
+                    sqlBuilder.conditionList.add(key);
+                    String mapper = mapping(key, criteria);
+                    propertyMapping.put(key, mapper);
+                    mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
+                    function.replaceFirst("\\?",mapper);
+                }
+
+                column.append(SqlScript.SPACE).append(function);
+                if (i < size - 1) {
+                    column.append(SqlScript.COMMA);
+                }
             }
         }
+
 
         String script = column.toString();
         if (StringUtil.isNullOrEmpty(script)) {
@@ -539,12 +571,17 @@ public class SqlCriteriaParser implements CriteriaParser {
                 SourceScript sc = sourceScripts.get(j);
                 if (sourceScript.getSource().equals(sc.getSource()))
                     continue;
-                if(sourceScript.getOn() == null || sourceScript.getOn().getJoinFrom() == null)
-                    continue;
-                if (sc.alia().equals(sourceScript.getOn().getJoinFrom().getAlia())){
-                    sc.targeted();
-                    break;
+                boolean flag = false;
+                for (On on : sourceScript.getOnList()) {
+                    if (on == null || on.getJoinFrom() == null)
+                        continue;
+                    if (sc.alia().equals(on.getJoinFrom().getAlia())){
+                        sc.targeted();
+                        flag = true;
+                        break;
+                    }
                 }
+                if (flag) break;
             }
         }
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 public interface SqlScript {
 
-	List<String> SOURCE_SCRIPT = Arrays.asList("INNER","LEFT","RIGHT","OUTER","JOIN",",","FULL","ON","=","(",")");
+	List<String> SOURCE_SCRIPT = Arrays.asList("INNER","LEFT","RIGHT","OUTER","JOIN",",","FULL","ON", "AND","OR","LIKE", "!=", "<=", ">=", "<>", "=", "<",">", "(",")");
 
 	String[] KEYWORDS = {
 			"order",
