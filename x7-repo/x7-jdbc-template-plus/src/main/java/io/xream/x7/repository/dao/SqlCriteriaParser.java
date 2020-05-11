@@ -428,28 +428,31 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         }
 
-        List<KV> funtionList = resultMapped.getResultFuntionList();
-        if (!funtionList.isEmpty()) {//Maybe function support, no mapping
+        List<FunctionResultKey> funtionList = resultMapped.getResultFuntionList();
+        if (!funtionList.isEmpty()) {//
             if (flag) {
                 column.append(SqlScript.COMMA);
             }
 
+            Map<String,String> resultKeyAliaMap = resultMapped.getResultKeyAliaMap();
+
             int size = funtionList.size();
             for (int i = 0; i < size; i++) {
-                KV kv = funtionList.get(i);
+                FunctionResultKey functionResultKey = funtionList.get(i);
 
-                String function = kv.getK();
-                String[] arr = (String[])kv.getV();
+                String function = functionResultKey.getScript();
 
-                for (String key : arr) {
+                for (String key : functionResultKey.getKeys()) {
                     sqlBuilder.conditionList.add(key);
                     String mapper = mapping(key, criteria);
-                    propertyMapping.put(key, mapper);
                     mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
-                    function.replaceFirst("\\?",mapper);
+                    function = function.replaceFirst("\\?",mapper);
                 }
-
-                column.append(SqlScript.SPACE).append(function);
+                String resultKeyName = functionResultKey.getResultKeyName();
+                String aliaKey = StringUtil.isNotNull(functionResultKey.getAlia()) ? (functionResultKey.getAlia() +"." + resultKeyName) : resultKeyName;
+                resultKeyAliaMap.put(aliaKey, resultKeyName);
+                propertyMapping.put(aliaKey,aliaKey);
+                column.append(SqlScript.SPACE).append(function).append(SqlScript.SPACE).append(functionResultKey.getResultKeyName());
                 if (i < size - 1) {
                     column.append(SqlScript.COMMA);
                 }

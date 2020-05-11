@@ -25,6 +25,7 @@ import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.Fetched;
 import io.xream.x7.common.web.MapResult;
 import io.xream.x7.common.web.Paged;
+import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -647,11 +648,16 @@ public class CriteriaBuilder {
          * @param keys  test.createAt, test.endAt
          *
          */
-        public ResultMappedBuilder resultFuntion(String functionExpress, String...keys) {
-            if (StringUtil.isNullOrEmpty(functionExpress) || keys == null)
+        public ResultMappedBuilder resultKeyFunction(String script, String alia, String resultKeyName, String...keys) {
+            if (StringUtil.isNullOrEmpty(script) || keys == null)
                 return this;
-            KV kv = new KV(functionExpress, keys);
-            get().getResultFuntionList().add(kv);
+            Assert.notNull(resultKeyName);
+            FunctionResultKey functionResultKey = new FunctionResultKey();
+            functionResultKey.setScript(script);
+            functionResultKey.setAlia(alia);
+            functionResultKey.setResultKeyName(resultKeyName);
+            functionResultKey.setKeys(keys);
+            get().getResultFuntionList().add(functionResultKey);
             return this;
         }
 
