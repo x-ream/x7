@@ -108,7 +108,7 @@ public interface SourceScriptBuilder {
                         flag = false;
                         if (i + 1 == size)
                             return list;
-                        andOr = sourceScriptsSplittedList.get(i + 1);
+                        andOr = sourceScriptsSplittedList.get(i + 1).toUpperCase();
                         if (andOr.equals("AND") || andOr.equals("OR")){
                             flag = true;
                             i++;
