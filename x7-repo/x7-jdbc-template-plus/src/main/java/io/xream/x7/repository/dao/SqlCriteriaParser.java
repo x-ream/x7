@@ -880,6 +880,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             appendConjunction(sb, x, criteria, isWhere);
 
             sb.append(v).append(p.sql());
+            conditionList.add(v.toString()); //v is not null || v is null
 
         } else {
             if (StringUtil.isNullOrEmpty(x.getKey()))
