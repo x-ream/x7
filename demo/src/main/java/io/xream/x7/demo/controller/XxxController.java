@@ -1,9 +1,11 @@
 package io.xream.x7.demo.controller;
 
+
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
+import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.Page;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 
 @RestController
 @RequestMapping("/xxx")
@@ -129,7 +133,7 @@ public class XxxController {
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
 		builder.distinct("catTest.dogId")
 				.distinct("catTest.catFriendName")
-				.reduce(ReduceType.COUNT,"catTest.id")
+				.reduce(ReduceType.COUNT_DISTINCT,"catTest.id")
 				.reduce(ReduceType.SUM, "catTest.dogId", Having.wrap(PredicateAndOtherScript.GT, 2))
 				.groupBy("catTest.dogId")
 				.groupBy("catTest.catFriendName")
@@ -165,8 +169,8 @@ public class XxxController {
 		String[] resultKeys = {
 				"catTest.id",
 				"catTest.catFriendName",
-				"dogTest.id",
-				"dogTest.userName"
+//				"dogTest.id",
+//				"dogTest.userName"
 		};
 
 		ro.setResultKeys(resultKeys);
@@ -194,11 +198,18 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
+		builder.and().eq("catTest.dogId",0);
+		builder.and().x("dogTest.petId = 0");
 		builder.and().in("catTest.catFriendName", inList);
-//		builder.paged().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
-		String sourceScript = "    catTest     LEFT JOIN        dogTest  on catTest.dogId =         dogTest.id";
+		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
+
+		builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
+		//或者如下
+		builder.sourceScript().source("catTest");
+		builder.sourceScript().source("dogTest").joinType(JoinType.INNER_JOIN).on("id", On.Op.EQ, JoinFrom.wrap("catTest","dogId"));
+
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
-		resultMapped.setSourceScript(sourceScript);
+
 		Page<Map<String,Object>> page = repository.find(resultMapped);
 
 //		Cat cat = this.catRepository.get(110);
@@ -217,52 +228,14 @@ public class XxxController {
 
 
 	@RequestMapping("/testAlia")
+	@CacheableL3(expireTime = 2, timeUnit = TimeUnit.MINUTES)
 	public ViewEntity testAlia(@RequestBody CatRO ro) {
-
-		{// sample, send the json by ajax from web page
-			Map<String, Object> catMap = new HashMap<>();
-			catMap.put("id", "");
-//			catMap.put("catFriendName", "");
-//			catMap.put("time", "");
-
-			Map<String, Object> dogMap = new HashMap<>();
-			dogMap.put("number", "");
-			dogMap.put("userName", "");
-
-			ro.getResultKeyMap().put("c", catMap);
-			ro.getResultKeyMap().put("d", dogMap);
-		}
-
-
-		String[] resultKeys = {
-				"c.id",
-				"c.catFriendName",
-//				"d.number",
-				"d.userName"
-		};
-
-		ro.setResultKeys(resultKeys);
-//		ro.setTotalRowsIgnored(true);
-
-//		ro.setResultKeyMap();
 
 		List<Object> inList = new ArrayList<>();
 		inList.add("gggg");
 		inList.add("xxxxx");
-		ro.setOrderBy("c.catFriendName,c.id");
 
-		Sort sort1 = new Sort();
-		sort1.setOrderBy("c.catFriendName");
-		sort1.setDirection(Direction.ASC);
-		Sort sort2 = new Sort();
-		sort2.setOrderBy("c.id");
-		sort2.setDirection(Direction.DESC);
-		List<Sort> sortList = new ArrayList<Sort>();
-		sortList.add(sort1);
-		sortList.add(sort2);
 
-		ro.setOrderBy("c.catFriendName,c.id");
-		ro.setDirection(Direction.DESC);
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
@@ -271,9 +244,8 @@ public class XxxController {
 		builder.and().eq("d.petId",0);
 		builder.and().in("c.dogId", Arrays.asList(0));
 		builder.paged().orderIn("c.catFriendName",inList).sort("c.id",Direction.DESC);
-		String sourceScript = "catTest c LEFT JOIN dogTest d on c.dogId = d.id";
+		builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
-		resultMapped.setSourceScript(sourceScript);
 		Page<Map<String,Object>> page = repository.find(resultMapped);
 
 		Cat cat = this.catRepository.get(110);
@@ -295,8 +267,8 @@ public class XxxController {
 
 
 		String[] resultKeys = {
-				"id",
-				"type"
+				"c.id",
+				"c.type"
 		};
 //		ro.setOrderBy("cat.dogId");
 
@@ -306,10 +278,11 @@ public class XxxController {
 		inList.add("WHITE");
 		inList.add("BLACK");
 
-		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
-//		builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
-		builder.and().nin("type", inList);
-		builder.paged().orderIn("type",inList);
+		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+		builder.distinct("c.id").reduce(ReduceType.COUNT_DISTINCT,"c.dogId").groupBy("c.id");
+		builder.and().nin("c.type", Arrays.asList("WHITE","BLACK"));
+		builder.paged().orderIn("c.type",Arrays.asList("WHITE","BLACK"));
+		builder.sourceScript().source("catTest").alia("c");
 
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 
@@ -332,7 +305,7 @@ public class XxxController {
 		inList.add("NL");
 		builder.and().eq("taxType",null);
 		builder.and().in("type",inList);
-		builder.paged().orderIn("type",inList);
+		builder.paged().ignoreTotalRows().orderIn("type",inList);
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
 		Criteria criteria = builder.get();
@@ -406,7 +379,11 @@ public class XxxController {
 	public ViewEntity testResultMap(){
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-		builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
+		builder
+				.distinct("id")
+				.reduce(ReduceType.COUNT_DISTINCT,"dogId")
+				.groupBy("id")
+		;
 		builder.and().eq("type","NL");
 		builder.paged().page(1).rows(10).sort("id",Direction.DESC);
 
