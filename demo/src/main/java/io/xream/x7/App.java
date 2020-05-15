@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableReyClient
 @EnableTracingServlet
 @EnableDateToLongForJackson
-//@EnableX7L3Caching
+@EnableX7L3Caching(waitTimeMills = 1000)
 @EnableDistributionLock
 @EnableFallbackOnly
 @EnableCorsConfig("${access.domain}")

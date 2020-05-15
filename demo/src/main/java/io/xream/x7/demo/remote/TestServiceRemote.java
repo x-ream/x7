@@ -4,7 +4,7 @@ package io.xream.x7.demo.remote;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
-import io.xream.x7.demo.CatRO;
+import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.reyc.ReyClient;
 import org.springframework.web.bind.annotation.RequestMapping;

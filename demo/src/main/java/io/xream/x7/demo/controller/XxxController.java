@@ -12,6 +12,7 @@ import io.xream.x7.common.web.Page;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.*;
 import io.xream.x7.demo.bean.*;
+import io.xream.x7.demo.ro.CatRO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -181,7 +182,6 @@ public class XxxController {
 		List<Object> inList = new ArrayList<>();
 		inList.add("gggg");
 		inList.add("xxxxx");
-		ro.setOrderBy("catTest.catFriendName,catTest.id");
 
 		Sort sort1 = new Sort();
 		sort1.setOrderBy("catTest.catFriendName");
@@ -193,8 +193,7 @@ public class XxxController {
 		sortList.add(sort1);
 		sortList.add(sort2);
 
-		ro.setOrderBy("catTest.catFriendName,catTest.id");
-		ro.setDirection(Direction.DESC);
+
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);

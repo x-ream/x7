@@ -10,10 +10,12 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
-import io.xream.x7.demo.CatRO;
+import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
+import io.xream.x7.demo.bean.Order;
 import io.xream.x7.demo.bean.TestBoo;
+import io.xream.x7.demo.controller.OrderController;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.fallback.FallbackOnly;
@@ -41,6 +43,8 @@ public class XxxTest {
     private TestServiceRemote testServiceRemote;
     @Autowired
     private XxxController controller;
+    @Autowired
+    private OrderController orderController;
 
     @Autowired
     private DistributionLockTester distributionLockTester;
@@ -75,8 +79,6 @@ public class XxxTest {
     public  void testOne() {
 
         CatRO cat = new CatRO();
-        cat.setRows(10);
-        cat.setPage(1);
 
 
 
@@ -283,7 +285,7 @@ public class XxxTest {
 
         this.testServiceRemote.testCriteriaRemote(criteria);
     }
-
+    
     public void testResultMappedRemote(){
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
@@ -314,6 +316,26 @@ public class XxxTest {
         if (b){
             throw new RuntimeException("testFallbackOnly");
         }
+    }
+
+
+    public void testOrder(){
+        Order order1 = new Order();
+        order1.setId(1);
+        order1.setName("ds0_TEST");
+        this.orderController.create(order1);
+    }
+
+    public void testOrderFind(){
+        this.orderController.find();
+    }
+
+    public void testOrderFindByAlia(){
+        this.orderController.findBuAlia();
+    }
+
+    public void inOrder(){
+        this.orderController.in();
     }
 
 }
