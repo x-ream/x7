@@ -321,7 +321,7 @@ public class XxxTest {
 
     public void testOrder(){
         Order order1 = new Order();
-        order1.setId(1);
+        order1.setId(4);
         order1.setName("ds0_TEST");
         this.orderController.create(order1);
     }
