@@ -21,12 +21,13 @@ import io.xream.x7.common.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SourceScript {
+public class SourceScript implements SqlConditionCriteria,SqlConditionCriteria.PreParser {
 
     private String source;
     private JoinType joinType;
-    private List<On> onList = new ArrayList<>();
+    private On on;
     private String alia;
+    private List<X> listX = new ArrayList<>();
 
     private transient boolean used;
     private transient boolean targeted;
@@ -47,12 +48,20 @@ public class SourceScript {
         this.joinType = joinType;
     }
 
-    public List<On> getOnList() {
-        return onList;
+    public List<X> getListX() {
+        return listX;
     }
 
-    public void setOnList(List<On> onList) {
-        this.onList = onList;
+    public void setListX(List<X> listX) {
+        this.listX = listX;
+    }
+
+    public On getOn() {
+        return on;
+    }
+
+    public void setOn(On on) {
+        this.on = on;
     }
 
     public String getAlia() {
@@ -83,6 +92,11 @@ public class SourceScript {
         return alia == null ? source : alia;
     }
 
+
+    public void pre(List<Object> valueList) {
+        pre(valueList, listX);
+    }
+
     public String sql() {
         if (StringUtil.isNullOrEmpty(source))
             return "";
@@ -97,18 +111,23 @@ public class SourceScript {
         if (alia != null && !alia.equals(source))
             sb.append(SqlScript.SPACE).append(alia);
 
-        for (On on : onList) {
-            sb.append(SqlScript.SPACE).append(on.getAndOr());
-
-            String aliaName = alia == null ? source : alia;
-            String key = on.getKey();
-            if (StringUtil.isNotNull(key)) {
-                sb.append(SqlScript.SPACE)
-                        .append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
-                        .append(SqlScript.SPACE).append(on.getOp()).append(SqlScript.SPACE)
-                        .append(aliaName).append(".").append(on.getKey());
+        {
+            if (on != null) {
+                sb.append(SqlScript.SPACE).append(SqlScript.ON);
+                String aliaName = alia == null ? source : alia;
+                String key = on.getKey();
+                if (StringUtil.isNotNull(key)) {
+                    sb.append(SqlScript.SPACE)
+                            .append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
+                            .append(SqlScript.SPACE).append(on.getOp()).append(SqlScript.SPACE)
+                            .append(aliaName)
+                            .append(".")
+                            .append(key);
+                }
             }
         }
+
+        buildSql(sb, listX);
 
         return sb.toString();
     }
@@ -118,10 +137,12 @@ public class SourceScript {
         return "SourceScript{" +
                 "source='" + source + '\'' +
                 ", joinType=" + joinType +
-                ", onList=" + onList +
+                ", on =" + on +
                 ", alia='" + alia + '\'' +
+                ", listX='" + listX + '\'' +
                 ", used=" + used +
                 ", targeted=" + targeted +
                 '}';
     }
+
 }

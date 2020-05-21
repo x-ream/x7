@@ -118,7 +118,7 @@ public class XxxController {
 		refreshCondition.refresh("testList",testList);
 		refreshCondition.refresh("testObj",dark);
 		refreshCondition.refresh("test = test - 3");
-		refreshCondition.refresh("createAt = null");
+		refreshCondition.refresh("createAt",new Date());
 		refreshCondition.in("id",Arrays.asList(247,248));
 
 		boolean flag = this.catRepository.refresh(refreshCondition);//必须带ID更新，没ID报错
@@ -197,7 +197,7 @@ public class XxxController {
 //		ro.setSortList(sortList);
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
-		builder.and().eq("catTest.dogId",0);
+		builder.beginSub().eq("catTest.dogId",0).endSub();
 		builder.and().x("dogTest.petId = 0");
 		builder.and().in("catTest.catFriendName", inList);
 		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy

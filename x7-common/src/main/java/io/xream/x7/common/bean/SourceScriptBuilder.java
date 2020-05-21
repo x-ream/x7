@@ -27,12 +27,17 @@ public interface SourceScriptBuilder {
 
     SourceScriptBuilder joinType(JoinType joinType);
 
+    SourceScriptBuilder on(String key, JoinFrom joinTarget);
     SourceScriptBuilder on(String key, On.Op op, JoinFrom joinTarget);
 
-    SourceScriptBuilder onOr(String key, On.Op op, JoinFrom joinTarget);
+    ConditionCriteriaBuilder condition();
 
+    /**
+     * NOT SUPPORT CONDITION(AND|OR) OF lEFT JOIN | RIGHT JOIN
+     * @param sourceScriptsSplittedList
+     * @return
+     */
     static List<SourceScript> parse(List<String> sourceScriptsSplittedList) {
-
 
         List<SourceScript> list = new ArrayList<>();
 
@@ -41,6 +46,8 @@ public interface SourceScriptBuilder {
         for (int i = 0; i < size; i++) {
             String str = sourceScriptsSplittedList.get(i);
             String strUpper = str.toUpperCase();
+            if (strUpper.equals("AND") || strUpper.equals("OR"))
+                throw new IllegalArgumentException("SourceScript String does not support ON AND | OR, try to call builder.sourceScript()");
 
             if ("from".equals(str.toLowerCase()))
                 continue;
@@ -80,9 +87,7 @@ public interface SourceScriptBuilder {
                     sourceScript.setJoinType(JoinType.COMMA);
                     break;
                 case "ON":
-                    String andOr = "ON";
-                    boolean flag = true;
-                    while (flag) {
+
                         String selfKey = sourceScriptsSplittedList.get(++i);
                         String op = sourceScriptsSplittedList.get(++i);// op
                         String targetKey = sourceScriptsSplittedList.get(++i);
@@ -101,19 +106,8 @@ public interface SourceScriptBuilder {
                         On on = new On();
                         on.setKey(selfKey.substring(selfIndex + 1));
                         on.setOp(op);
-                        on.setAndOr(andOr);
                         on.setJoinTarget(joinFrom);
-                        sourceScript.getOnList().add(on);
 
-                        flag = false;
-                        if (i + 1 == size)
-                            return list;
-                        andOr = sourceScriptsSplittedList.get(i + 1).toUpperCase();
-                        if (andOr.equals("AND") || andOr.equals("OR")){
-                            flag = true;
-                            i++;
-                        }
-                    }
                     break;
 
                 default:
@@ -136,57 +130,57 @@ public interface SourceScriptBuilder {
     }
 
 
-
-    static Map<String, String> parseAlia(List<String> sourceScriptsSplittedArr) {
-
-        Map<String, String> map = new HashMap<>();
-
-        List<String> list = new ArrayList<>();
-        Set<String> tryAliaSet = new HashSet<>();
-
-        if (sourceScriptsSplittedArr.size() == 1) {
-            map.put(sourceScriptsSplittedArr.get(0), sourceScriptsSplittedArr.get(0));
-            return map;
-        }
-        for (String str : sourceScriptsSplittedArr) {
-            boolean isKeyWord = false;
-
-            for (String kw : SqlScript.SOURCE_SCRIPT) {
-                if (kw.equals(str.toLowerCase())) {
-                    isKeyWord = true;
-                    break;
-                }
-            }
-
-            if (!isKeyWord) {
-                if (str.contains(".")) {
-                    str = str.substring(0, str.indexOf("."));
-                    tryAliaSet.add(str);
-                } else {
-                    if (StringUtil.isNotNull(str)) {
-                        list.add(str);
-                    }
-                }
-            }
-        }
-
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            String str = list.get(i);
-            if (tryAliaSet.contains(str)) {
-                map.put(str, str);
-            } else {
-                if (i + 1 < size) {
-                    String alia = list.get(i + 1);
-                    if (tryAliaSet.contains(alia)) ;
-                    map.put(alia, str);
-                    i++;
-                }
-            }
-        }
-
-        return map;
-    }
+//
+//    static Map<String, String> parseAlia(List<String> sourceScriptsSplittedArr) {
+//
+//        Map<String, String> map = new HashMap<>();
+//
+//        List<String> list = new ArrayList<>();
+//        Set<String> tryAliaSet = new HashSet<>();
+//
+//        if (sourceScriptsSplittedArr.size() == 1) {
+//            map.put(sourceScriptsSplittedArr.get(0), sourceScriptsSplittedArr.get(0));
+//            return map;
+//        }
+//        for (String str : sourceScriptsSplittedArr) {
+//            boolean isKeyWord = false;
+//
+//            for (String kw : SqlScript.SOURCE_SCRIPT) {
+//                if (kw.equals(str.toLowerCase())) {
+//                    isKeyWord = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!isKeyWord) {
+//                if (str.contains(".")) {
+//                    str = str.substring(0, str.indexOf("."));
+//                    tryAliaSet.add(str);
+//                } else {
+//                    if (StringUtil.isNotNull(str)) {
+//                        list.add(str);
+//                    }
+//                }
+//            }
+//        }
+//
+//        int size = list.size();
+//        for (int i = 0; i < size; i++) {
+//            String str = list.get(i);
+//            if (tryAliaSet.contains(str)) {
+//                map.put(str, str);
+//            } else {
+//                if (i + 1 < size) {
+//                    String alia = list.get(i + 1);
+//                    if (tryAliaSet.contains(alia)) ;
+//                    map.put(alia, str);
+//                    i++;
+//                }
+//            }
+//        }
+//
+//        return map;
+//    }
 
     static List<String> split(String sourceScript) {
         String[] opArrTwo = {"!=","<>","<=",">="};

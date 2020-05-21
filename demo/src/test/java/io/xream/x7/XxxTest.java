@@ -199,7 +199,7 @@ public class XxxTest {
         Cat cat = new Cat();
         cat.setId(1000L);
         cat.setType("LOCK--------sss");
-        Criteria.X x = new Criteria.X();
+        io.xream.x7.common.bean.X x = new io.xream.x7.common.bean.X();
 //        cat.getListX().add(x);
         CasualWorker.accept(new Runnable() {
             @Override

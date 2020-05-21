@@ -18,7 +18,6 @@ package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
@@ -36,7 +35,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SqlCriteriaParser implements CriteriaParser {
+public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,SqlConditionCriteria.Filter, SqlConditionCriteria.PreParser {
 
     @Autowired
     private Dialect dialect;
@@ -46,7 +45,7 @@ public class SqlCriteriaParser implements CriteriaParser {
     }
 
 
-    private void mapping(String script, Criteria criteria, StringBuilder sb) {
+    private void mapping(String script, CriteriaCondition criteria, StringBuilder sb) {
         String[] keyArr = script.split(SqlScript.SPACE);//
         int length = keyArr.length;
         for (int i = 0; i < length; i++) {
@@ -58,53 +57,31 @@ public class SqlCriteriaParser implements CriteriaParser {
         }
     }
 
-    private String mapping(String key, Criteria criteria) {
-//        if (key.contains("("))
-//            return key;
-
-        if (key.contains(SqlScript.POINT)) {
-
-            String[] arr = key.split("\\.");
-            String alia = arr[0];
-            String property = arr[1];
-
-            String clzName = BeanUtilX.getClzName(alia, criteria);
-
-            Parsed parsed = Parser.get(clzName);
-            if (parsed == null)
-                throw new RuntimeException("Entity Bean Not Exist: " + BeanUtil.getByFirstUpper(key));
-
-            String value = parsed.getTableName(alia) + SqlScript.POINT + parsed.getMapper(property);
-
-            return value;
-        }
-
-        if (criteria instanceof Criteria.ResultMappedCriteria) {
-            Parsed parsed = Parser.get(key);
-            if (parsed != null) {
-                return parsed.getTableName();
-            }
-        }
-
-        Class clz = criteria.getClz();
-        Parsed parsed = Parser.get(clz);
-        if (key.equals(BeanUtilX.getByFirstLower(parsed.getClz().getSimpleName())))
-            return parsed.getTableName();
-        String value = parsed.getMapper(key);
-        if (value == null)
-            return key;
-        return value;
-
-    }
 
     @Override
     public String parseCondition(CriteriaCondition criteriaCondition) {
         if (Objects.isNull(criteriaCondition))
             return "";
         StringBuilder sb = new StringBuilder();
-        List<Criteria.X> xList = criteriaCondition.getListX();
-        x(sb, xList, criteriaCondition, new ArrayList<String>(),true);
-        return sb.toString();
+        List<X> xList = criteriaCondition.getListX();
+
+        if (xList.isEmpty())
+            return "";
+
+        filter(xList, criteriaCondition);//过滤
+        if (xList.isEmpty())
+            return "";
+
+        pre(criteriaCondition.getValueList(),xList);
+
+        xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
+
+        buildSql(sb,xList);
+
+        String script = sb.toString();
+        StringBuilder sbb = new StringBuilder();
+        mapping(script, criteriaCondition, sbb);
+        return sbb.toString();
     }
 
     @Override
@@ -113,9 +90,9 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         SqlBuilder sqlBuilder = SqlBuilder.get();
 
-        parseAlia(criteria);
+        parseAlia(criteria,sqlBuilder);
 
-        filter(criteria);
+        filter0(criteria);
 
         env(criteria);
 
@@ -129,10 +106,12 @@ public class SqlCriteriaParser implements CriteriaParser {
          * force index
          */
         forceIndex(sqlBuilder, criteria);
+
+        sourceScriptValueList(criteria);
         /*
          * StringList
          */
-        x(sqlBuilder, criteria.getListX(), criteria);
+        condition(sqlBuilder, criteria.getListX(), criteria);
 
         SqlBuilder countSql = count(sqlBuilder.sbCondition, criteria);
         /*
@@ -168,9 +147,9 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         String conditionSql = parseCondition(refreshCondition);
 
-        if (conditionSql.startsWith(" AND")|| conditionSql.startsWith("AND")) {
-            conditionSql = conditionSql.replaceFirst("AND", "WHERE");
-        }
+//        if (conditionSql.startsWith(" AND")|| conditionSql.startsWith("AND")) {
+//            conditionSql = conditionSql.replaceFirst("AND", "WHERE");
+//        }
 
         conditionSql = SqlParserUtil.mapper(conditionSql, parsed);
 
@@ -184,10 +163,10 @@ public class SqlCriteriaParser implements CriteriaParser {
         return sql;
     }
 
-    private void filterCondition(Parsed parsed,List<Criteria.X> listX){
-        Iterator<Criteria.X> ite = listX.iterator();
+    private void filterCondition(Parsed parsed,List<X> listX){
+        Iterator<X> ite = listX.iterator();
         while(ite.hasNext()){
-            Criteria.X x = ite.next();
+            X x = ite.next();
             if (BeanUtilX.isBaseType_0(x.getKey(), x.getValue(), parsed)){
                 ite.remove();
             }
@@ -200,12 +179,12 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         sb.append(SqlScript.SET);
 
-        List<Criteria.X> refreshList = refreshCondition.getRefreshList();
+        List<X> refreshList = refreshCondition.getRefreshList();
 
         List<Object> refreshValueList = new ArrayList<>();
 
         boolean isNotFirst = false;
-        for (Criteria.X x : refreshList) {
+        for (X x : refreshList) {
 
             if (x.getPredicate() == PredicateAndOtherScript.X) {
 
@@ -340,7 +319,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             StringBuilder distinctColumn = new StringBuilder();
             distinctColumn.append(column);
             for (String resultKey : list) {
-                sqlBuilder.conditionList.add(resultKey);
+                sqlBuilder.conditionSet.add(resultKey);
                 String mapper = mapping(resultKey, criteria);
                 propertyMapping.put(resultKey, mapper);//REDUCE ALIAN NAME
                 distinctColumn.append(SqlScript.SPACE).append(mapper);
@@ -366,7 +345,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                 if (flag) {
                     column.append(SqlScript.COMMA);
                 }
-                sqlBuilder.conditionList.add(reduce.getProperty());
+                sqlBuilder.conditionSet.add(reduce.getProperty());
                 String alianProperty = reduce.getProperty() + SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
                 String alianName = alianProperty.replace(SqlScript.POINT, SqlScript.DOLLOR);
                 resultMapped.getResultKeyAliaMap().put(alianName, alianProperty);
@@ -395,7 +374,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                         .append(SqlScript.RIGHT_PARENTTHESIS).append(SqlScript.SPACE)//" ) "
                         .append(SqlScript.AS).append(SqlScript.SPACE).append(alianName);
 
-                Criteria.X x = reduce.getHaving();
+                X x = reduce.getHaving();
                 if (x != null) {
                     x.setKey(alianName);
                     if (!criteria.isTotalRowsIgnored()){
@@ -415,7 +394,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             int size = resultList.size();
             for (int i = 0; i < size; i++) {
                 String key = resultList.get(i);
-                sqlBuilder.conditionList.add(key);
+                sqlBuilder.conditionSet.add(key);
                 String mapper = mapping(key, criteria);
                 propertyMapping.put(key, mapper);
                 mapper = this.dialect.resultKeyAlian(mapper, resultMapped);
@@ -428,22 +407,22 @@ public class SqlCriteriaParser implements CriteriaParser {
 
         }
 
-        List<FunctionResultKey> funtionList = resultMapped.getResultFuntionList();
-        if (!funtionList.isEmpty()) {//
+        List<FunctionResultKey> functionList = resultMapped.getResultFuntionList();
+        if (!functionList.isEmpty()) {//
             if (flag) {
                 column.append(SqlScript.COMMA);
             }
 
             Map<String,String> resultKeyAliaMap = resultMapped.getResultKeyAliaMap();
 
-            int size = funtionList.size();
+            int size = functionList.size();
             for (int i = 0; i < size; i++) {
-                FunctionResultKey functionResultKey = funtionList.get(i);
+                FunctionResultKey functionResultKey = functionList.get(i);
 
                 String function = functionResultKey.getScript();
 
                 for (String key : functionResultKey.getKeys()) {
-                    sqlBuilder.conditionList.add(key);
+                    sqlBuilder.conditionSet.add(key);
                     String mapper = mapping(key, criteria);
                     function = function.replaceFirst("\\?",mapper);
                 }
@@ -487,7 +466,7 @@ public class SqlCriteriaParser implements CriteriaParser {
             int i = 0, l = arr.length;
             for (String groupBy : arr) {
                 groupBy = groupBy.trim();
-                sb.conditionList.add(groupBy);
+                sb.conditionSet.add(groupBy);
                 if (StringUtil.isNotNull(groupBy)) {
                     String mapper = mapping(groupBy, criteria);
                     sb.sbCondition.append(mapper);
@@ -510,16 +489,16 @@ public class SqlCriteriaParser implements CriteriaParser {
         if (reduceList.isEmpty())
             return;
         for (Reduce reduce : reduceList) {
-            Criteria.X x = reduce.getHaving();
+            X x = reduce.getHaving();
             if (x == null)
                 continue;
             sb.sbCondition.append(x.getConjunction().sql()).append(x.getKey()).append(x.getPredicate().sql()).append(x.getValue());
-            sb.conditionList.add(x.getKey());
+            sb.conditionSet.add(x.getKey());
         }
     }
 
 
-    private void parseAlia(Criteria criteria) {
+    private void parseAlia(Criteria criteria, SqlBuilder sqlBuilder) {
 
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
@@ -537,19 +516,36 @@ public class SqlCriteriaParser implements CriteriaParser {
             }
 
             rmc.setAliaMap(aliaMap);
+
+            for (SourceScript sourceScript: rmc.getSourceScripts()){
+                preOptimizeListX(sourceScript.getListX(),sqlBuilder.conditionSet);
+            }
         }
 
     }
 
+    private void preOptimizeListX(List<X> xList, Set<String> conditionSet) {
+        for (X x : xList){
+            conditionSet.add(x.getKey());
+        }
+    }
 
-    private void optimizeSourceScript (List<SourceScript> sourceScripts,List<String> conditionList){
-        if (sourceScripts.size() == 1)
+    private void optimizeSourceScript (List<SourceScript> sourceScripts,Set<String> conditionSet){
+        if (sourceScripts.size() <= 1)
             return;
-        String first = conditionList.get(0);
-        if (!first.contains("."))
-            return;
+        if (conditionSet.size()>0) {
+            for (String test : conditionSet) {
+                if (test != null) {
+                    if (test.contains("."))
+                        break;
+                    return;
+                }
+            }
+        }
         for (SourceScript sourceScript : sourceScripts) {
-            for (String key : conditionList){
+            for (String key : conditionSet){
+                if (key == null)
+                    continue;
                 if (StringUtil.isNullOrEmpty(sourceScript.getAlia())){
                     if (key.contains(sourceScript.getSource()+".")){
                         sourceScript.used();
@@ -573,19 +569,16 @@ public class SqlCriteriaParser implements CriteriaParser {
                 SourceScript sc = sourceScripts.get(j);
                 if (sourceScript.getSource().equals(sc.getSource()))
                     continue;
-                boolean flag = false;
-                for (On on : sourceScript.getOnList()) {
+                //FIXME
+                On on = sourceScript.getOn();
                     if (on == null || on.getJoinFrom() == null)
                         continue;
                     if (sc.alia().equals(on.getJoinFrom().getAlia())){
                         sc.targeted();
-                        flag = true;
                         break;
                     }
                 }
-                if (flag) break;
             }
-        }
 
         Iterator<SourceScript> ite = sourceScripts.iterator();
         while (ite.hasNext()){
@@ -604,14 +597,10 @@ public class SqlCriteriaParser implements CriteriaParser {
             Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
 
             if (rmc.getSourceScripts().isEmpty()){// builderSource null
-                script = criteria.sourceScript();//string -> list<>
-                if ((! rmc.resultAllScript().trim().equals("*")) && script.contains(".")){
-                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionList);
-                    script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
-                }
+                script = criteria.sourceScript();
             }else{
                 if (! rmc.resultAllScript().trim().equals("*")){
-                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionList);
+                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionSet);//FIXME  + ON AND
                 }
                 script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
             }
@@ -633,7 +622,7 @@ public class SqlCriteriaParser implements CriteriaParser {
         if (StringUtil.isNullOrEmpty(criteria.getForceIndex()))
             return;
         sqlBuilder.sbCondition.append("FORCE INDEX(" + criteria.getForceIndex() + ")");
-        sqlBuilder.conditionList.add(criteria.getForceIndex());
+        sqlBuilder.conditionSet.add(criteria.getForceIndex());
     }
 
     private SqlBuilder count(StringBuilder sbCondition, Criteria criteria) {
@@ -661,7 +650,7 @@ public class SqlCriteriaParser implements CriteriaParser {
                 String orderBy = sort.getOrderBy();
                 String mapper = mapping(orderBy, criteria);
                 sb.sbCondition.append(mapper).append(SqlScript.SPACE);
-                sb.conditionList.add(orderBy);
+                sb.conditionSet.add(orderBy);
                 Direction direction = sort.getDirection();
                 if (direction == null) {
                     sb.sbCondition.append(Direction.DESC);
@@ -677,263 +666,42 @@ public class SqlCriteriaParser implements CriteriaParser {
 
     }
 
-    private void x(StringBuilder sb, List<Criteria.X> xList, CriteriaCondition criteria, List<String> conditionList, boolean isWhere) {
-        for (Criteria.X x : xList) {
-
-            if (x.getPredicate() == PredicateAndOtherScript.X) {
-                appendConjunction(sb, x, criteria, isWhere);
-                sb.append(x.getKey());
-                conditionList.add(x.getKey());
-                Object valueObject = x.getValue();
-                if (valueObject != null) {
-                    if (valueObject instanceof List) {
-                        criteria.getValueList().addAll((List<Object>) valueObject);
-                    } else {
-                        criteria.getValueList().add(valueObject);
-                    }
-                }
-                continue;
-            }
-
-
-            Object v = x.getValue();
-            if (Objects.isNull(v))
-                continue;
-
-
-            if (Objects.nonNull(x.getConjunction())) {
-
-                List<Criteria.X> subList = x.getSubList();
-                if (x.getSubList() != null) {
-                    StringBuilder xSb = new StringBuilder();
-
-                    x(xSb, subList, criteria, conditionList,false);//sub concat
-
-                    String script = xSb.toString();
-                    if (StringUtil.isNotNull(script)) {
-                        final String and = ConjunctionAndOtherScript.AND.sql();
-                        final String or = ConjunctionAndOtherScript.OR.sql();
-                        if (script.startsWith(and)) {
-                            script = script.replaceFirst(and, SqlScript.NONE);
-                        } else if (script.startsWith(or)) {
-                            script = script.replaceFirst(or, SqlScript.NONE);
-                        }
-                        x.setScript(PredicateAndOtherScript.SUB_BEGIN.sql() + script + PredicateAndOtherScript.SUB_END.sql());
-                    }
-                }
-
-            }
-
-            if (PredicateAndOtherScript.SUB_BEGIN == x.getPredicate()) {
-                continue;
-            } else if (PredicateAndOtherScript.SUB_END == x.getPredicate()) {
-                continue;
-            }
-
-            if (StringUtil.isNotNull(x.getKey())) {
-                if (x.getKey().equals(PredicateAndOtherScript.SUB.sql())) {
-                    if (Objects.nonNull(x.getScript())) {
-
-                        appendConjunction(sb, x, criteria, isWhere);
-                        sb.append(x.getScript());
-                    }
-                    continue;
-                }
-            }
-            x(x, criteria, conditionList,isWhere);
-
-            if (Objects.nonNull(x.getScript())) {
-                sb.append(x.getScript());
-            }
-        }
-
-    }
-
-    private void filter(Criteria criteria){
+    private void filter0(Criteria criteria){
         if (criteria instanceof Criteria.ResultMappedCriteria){
-            List<Criteria.X> xList = criteria.getListX();
-            filter0(xList,criteria);
-        }
-    }
+            List<X> xList = criteria.getListX();
+            filter(xList,criteria);
 
-    private void filter0(List<Criteria.X> xList, Criteria criteria){
-        Iterator<Criteria.X> ite = xList.iterator();
-        while (ite.hasNext()) {
-            Criteria.X x = ite.next();
-            PredicateAndOtherScript p = x.getPredicate();
-            String key = x.getKey();
-            if (p == PredicateAndOtherScript.EQ
-                    || p == PredicateAndOtherScript.NE
-                    || p == PredicateAndOtherScript.GT
-                    || p == PredicateAndOtherScript.GTE
-                    || p == PredicateAndOtherScript.LT
-                    || p == PredicateAndOtherScript.LTE) {
-
-                if (key.contains(".")){
-                    String[] arr = key.split("\\.");
-                    String alia = arr[0];
-                    String clzName = criteria.getAliaMap().get(alia);
-                    if (clzName == null)
-                        clzName = alia;
-                    Parsed parsed = Parser.get(clzName);
-                    if (BeanUtilX.isBaseType_0(arr[1],x.getValue(),parsed)){
-                        ite.remove();
-                    }
-                }else{
-                    Parsed parsed = criteria.getParsed();
-                    if (BeanUtilX.isBaseType_0(key,x.getValue(),parsed)){
-                        ite.remove();
-                    }
-                }
-            }else if (p == PredicateAndOtherScript.IN
-            || p == PredicateAndOtherScript.NOT_IN) {
-
-                List valueList = (List)x.getValue();
-                if (valueList.size() > 1)
-                    continue;
-
-                if (key.contains(".")){
-                    String[] arr = key.split("\\.");
-                    String alia = arr[0];
-                    String clzName = criteria.getAliaMap().get(alia);
-                    if (clzName == null)
-                        clzName = alia;
-                    Parsed parsed = Parser.get(clzName);
-
-                    if (BeanUtilX.isBaseType_0(arr[1],valueList.get(0),parsed)){
-                        ite.remove();
-                    }
-
-                }else{
-                    Parsed parsed = criteria.getParsed();
-                    if (BeanUtilX.isBaseType_0(key,valueList.get(0),parsed)){
-                        ite.remove();
-                    }
-                }
-
+            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()){
+                filter(sourceScript.getListX(),criteria);
             }
-            List<Criteria.X> subList = x.getSubList();
-            if (subList == null || subList.isEmpty())
-                continue;
-            filter0(subList,criteria);
         }
     }
 
-    private void x(SqlBuilder sqlBuilder, List<Criteria.X> xList, Criteria criteria) {
+    private void sourceScriptValueList(Criteria criteria) {
+        if (criteria instanceof Criteria.ResultMappedCriteria) {
+            List<Object> valueList = criteria.getValueList();
+            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()){
+                sourceScript.pre(valueList);
+            }
+        }
+    }
+
+    private void condition(SqlBuilder sqlBuilder, List<X> xList, Criteria criteria) {
+        if (xList.isEmpty())
+            return;
+        preOptimizeListX(xList,sqlBuilder.conditionSet);//优化连表查询前的准备
 
         StringBuilder xsb = new StringBuilder();
-        x(xsb, xList, criteria, sqlBuilder.conditionList,true);
+
+        pre(criteria.getValueList(),xList);//提取占位符对应的值
+        if (xList.isEmpty())
+            return;
+        xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
+        buildSql(xsb,xList);
 
         String script = xsb.toString();
 
         mapping(script, criteria, sqlBuilder.sbCondition);
-
-    }
-
-
-    private void appendConjunction(StringBuilder sb, Criteria.X x, CriteriaCondition criteriaBuilder, boolean isWhere) {
-        if (Objects.isNull(x.getConjunction()))
-            return;
-        if (criteriaBuilder instanceof Criteria) {
-            Criteria criteria = (Criteria) criteriaBuilder;
-            if (isWhere && criteria.isWhere()) {
-                criteria.setWhere(false);
-                sb.append(ConjunctionAndOtherScript.WHERE.sql());
-            } else {
-                sb.append(x.getConjunction().sql());
-            }
-        } else {
-            sb.append(x.getConjunction().sql());
-        }
-    }
-
-    private void x(Criteria.X x, CriteriaCondition criteria, List<String> conditionList, boolean isWhere) {
-
-        StringBuilder sb = new StringBuilder();
-        PredicateAndOtherScript p = x.getPredicate();
-        Object v = x.getValue();
-
-        if (p == PredicateAndOtherScript.IN || p == PredicateAndOtherScript.NOT_IN) {
-
-            appendConjunction(sb, x, criteria, isWhere);
-
-            sb.append(x.getKey()).append(p.sql());
-            conditionList.add(x.getKey());
-            List<Object> inList = (List<Object>) v;
-            in(sb, inList);
-        } else if (p == PredicateAndOtherScript.BETWEEN) {
-
-            appendConjunction(sb, x, criteria, isWhere);
-
-            sb.append(x.getKey()).append(p.sql());
-            conditionList.add(x.getKey());
-
-            between(sb);
-
-            MinMax minMax = (MinMax) v;
-            List<Object> valueList = criteria.getValueList();
-            valueList.add(minMax.getMin());
-            valueList.add(minMax.getMax());
-
-        } else if (p == PredicateAndOtherScript.IS_NOT_NULL || p == PredicateAndOtherScript.IS_NULL) {
-
-            appendConjunction(sb, x, criteria, isWhere);
-
-            sb.append(v).append(p.sql());
-            conditionList.add(v.toString()); //v is not null || v is null
-
-        } else {
-            if (StringUtil.isNullOrEmpty(x.getKey()))
-                return;
-
-            appendConjunction(sb, x, criteria, isWhere);
-
-            Class clz = v.getClass();
-            sb.append(x.getKey()).append(x.getPredicate().sql());
-            conditionList.add(x.getKey());
-            if (clz == String.class) {
-                String str = v.toString();
-                if (str.startsWith(SqlScript.WELL_NO) && str.endsWith(SqlScript.WELL_NO)) {
-                    str = str.replace(SqlScript.WELL_NO, SqlScript.NONE);
-                    sb.append(str);
-                    return;
-                } else {
-                    sb.append(SqlScript.PLACE_HOLDER);
-                }
-            } else {
-                sb.append(SqlScript.PLACE_HOLDER);
-            }
-
-            //if (BeanUtil.isEnum(clz) || BeanUtil.isEnum(clz.getSuperclass())) {
-            if (BeanUtil.isEnum(clz)) {
-                try {
-                    criteria.getValueList().add(((Enum) v).name());
-                } catch (Exception e) {
-
-                }
-            } else {
-                criteria.getValueList().add(v);
-            }
-        }
-        x.setScript(sb.toString());
-    }
-
-    private void between(StringBuilder sb) {
-
-        sb.append(SqlScript.PLACE_HOLDER).append(ConjunctionAndOtherScript.AND.sql()).append(SqlScript.PLACE_HOLDER);
-
-    }
-
-    private void in(StringBuilder sb, List<Object> inList) {
-
-        if (inList == null || inList.isEmpty())
-            return;
-
-        Object v = inList.get(0);
-
-        Class<?> vType = v.getClass();
-
-        SqlUtil.buildIn(sb,vType,inList);
 
     }
 
@@ -943,7 +711,7 @@ public class SqlCriteriaParser implements CriteriaParser {
         private StringBuilder sbResult = new StringBuilder();
         private StringBuilder sbSource = new StringBuilder();
         private StringBuilder sbCondition = new StringBuilder();
-        private List<String> conditionList = new ArrayList<>();
+        private Set<String> conditionSet = new HashSet<>();
 
         public static SqlBuilder get(){
             return new SqlBuilder();

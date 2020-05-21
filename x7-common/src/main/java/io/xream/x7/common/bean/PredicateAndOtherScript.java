@@ -34,7 +34,7 @@ public enum PredicateAndOtherScript implements SqlScript{
 	SUB_BEGIN("( "),
 	SUB_END(" )"),
 	SUB(" SUB "),
-	X("X");
+	X(" ");
 
 	private String sqlOper;
 	private PredicateAndOtherScript(String sqlOper){

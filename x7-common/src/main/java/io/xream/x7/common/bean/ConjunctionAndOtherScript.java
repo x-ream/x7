@@ -18,6 +18,7 @@ package io.xream.x7.common.bean;
 
 public enum ConjunctionAndOtherScript implements SqlScript{
 
+	NONE(""),
 	AND(" AND "),
 	OR(" OR "),
 	ORDER_BY(" ORDER BY "),

@@ -33,8 +33,8 @@ public final class ManuRepository {
 	}
 	
 	
-	public static List<Map<String,Object>> list(Class clz, String sql, List<Object> conditionList){
-		return cacheableRepository.list(clz, sql, conditionList);
+	public static List<Map<String,Object>> list(Class clz, String sql, List<Object> conditionSet){
+		return cacheableRepository.list(clz, sql, conditionSet);
 	}
 
 

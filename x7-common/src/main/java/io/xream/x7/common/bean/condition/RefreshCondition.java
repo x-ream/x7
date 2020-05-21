@@ -18,9 +18,6 @@ package io.xream.x7.common.bean.condition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.xream.x7.common.bean.*;
-import io.xream.x7.common.repository.X;
-import io.xream.x7.common.util.BeanUtilX;
-import io.xream.x7.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +25,12 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class RefreshCondition<T> implements CriteriaCondition, Routeable {
+public class RefreshCondition<T> extends ConditionCriteriaBuilder implements CriteriaCondition, Routeable {
 
-    private List<Criteria.X> refreshList = new ArrayList<>();
-    private List<Criteria.X> listX = new ArrayList<>();
+    private List<X> refreshList = new ArrayList<>();
     private String sourceStript;//FIXME
 
+    private List<X> listX = new ArrayList<>();
     private Object routeKey;
     @JsonIgnore
     private transient Class clz;
@@ -49,7 +46,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         this.clz = clz;
     }
 
-    public List<Criteria.X> getRefreshList() {
+    public List<X> getRefreshList() {
         return refreshList;
     }
 
@@ -63,7 +60,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
     }
 
     @Override
-    public List<Criteria.X> getListX() {
+    public List<X> getListX() {
         return listX;
     }
 
@@ -78,6 +75,11 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         return null;
     }
 
+    @Override
+    public Parsed getParsed() {
+        return Parser.get(this.clz);
+    }
+
 
     @Override
     public Object getRouteKey() {
@@ -90,6 +92,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
 
     @Deprecated
     public RefreshCondition(){
+        init(listX,this);
     }
 
 
@@ -103,6 +106,11 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         return this;
     }
 
+
+    public RefreshCondition or() {
+        return (RefreshCondition) super.or();
+    }
+
     /**
      *
      * String sqlX = "propertyA = propertyA + propertyB + 1"
@@ -113,7 +121,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         if (Objects.isNull(sqlX))
             return this;
 
-        Criteria.X x = new Criteria.X();
+        X x = new X();
         x.setPredicate(PredicateAndOtherScript.X);
         x.setKey(sqlX);
         this.refreshList.add(x);
@@ -126,7 +134,7 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         if (Objects.isNull(value))
             return this;
 
-        Criteria.X x = new Criteria.X();
+        X x = new X();
         x.setPredicate(PredicateAndOtherScript.EQ);
         x.setKey(property);
         x.setValue(value);
@@ -139,8 +147,8 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         if (clz == null)
             return null;
         Parsed parsed = Parser.get(clz);
-        String keyOne = parsed.getKey(X.KEY_ONE);
-        for (Criteria.X x : listX) {
+        String keyOne = parsed.getKey(io.xream.x7.common.repository.X.KEY_ONE);
+        for (X x : listX) {
             String key = x.getKey();
             if (key != null && key.equals(keyOne)) {
                 return new KV(key,x.getValue());
@@ -149,138 +157,82 @@ public class RefreshCondition<T> implements CriteriaCondition, Routeable {
         return null;
     }
 
-    private RefreshCondition doGle(PredicateAndOtherScript p, String property, Object value) {
-        if (value == null)
-            return this;
-
-        if (StringUtil.isNullOrEmpty(value))
-            return this;
-
-        Criteria.X x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setPredicate(p);
-        x.setKey(property);
-        x.setValue(value);
-        this.listX.add(x);
-        return this;
-    }
-
-    private RefreshCondition doIn(PredicateAndOtherScript p, String property,List<? extends Object> list ){
-
-        if (list == null || list.isEmpty())
-            return this;
-
-        List<Object> tempList = new ArrayList<Object>();
-        for (Object obj : list) {
-            if (Objects.isNull(obj))
-                continue;
-
-            if (!tempList.contains(obj)) {
-                tempList.add(obj);
-            }
-        }
-
-        if (tempList.isEmpty())
-            return this;
-
-        if (tempList.size() == 1) {
-            return eq(property, tempList.get(0));
-        }
-
-        Criteria.X x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setPredicate(p);
-        x.setKey(property);
-        x.setValue(tempList);
-
-        this.listX.add(x);
-        return this;
-    }
-
-    private RefreshCondition doNull(PredicateAndOtherScript p, String property){
-        if (StringUtil.isNullOrEmpty(property))
-            return this;
-
-        Criteria.X x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setPredicate(p);
-        x.setValue(property);
-        this.listX.add(x);
-        return this;
-    }
-    
-    public RefreshCondition eq(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.EQ,property,value);
-    }
-
-
-    public RefreshCondition lt(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.LT,property,value);
-    }
-
-  
-    public RefreshCondition lte(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.LTE,property,value);
-    }
-
-
-    public RefreshCondition gt(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.GT,property,value);
-    }
-
-
-    public RefreshCondition gte(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.GTE,property,value);
-    }
-
-
-    public RefreshCondition ne(String property, Object value) {
-        return this.doGle(PredicateAndOtherScript.NE,property,value);
-    }
-
- 
-    public RefreshCondition in(String property, List<?> list) {
-        return this.doIn(PredicateAndOtherScript.IN,property,list);
-    }
-
-    public RefreshCondition nin(String property, List<Object> list) {
-        return this.doIn(PredicateAndOtherScript.NOT_IN,property,list);
-    }
-
-  
-    public RefreshCondition nonNull(String property) {
-        return doNull(PredicateAndOtherScript.IS_NOT_NULL, property);
-    }
-
-    
-    public RefreshCondition isNull(String property) {
-        return doNull(PredicateAndOtherScript.IS_NULL, property);
-    }
-
-    
-    public RefreshCondition x(String sql) {
-        return x(sql, null);
-    }
-
-   
-    public RefreshCondition x(String sql, List<Object> valueList) {
-        if (StringUtil.isNullOrEmpty(sql))
-            return this;
-
-        sql = BeanUtilX.normalizeSql(sql);
-
-        Criteria.X x = new Criteria.X();
-        x.setConjunction(ConjunctionAndOtherScript.AND);
-        x.setPredicate(PredicateAndOtherScript.X);
-        x.setKey(sql);
-        x.setValue(valueList);
-        this.listX.add(x);
-
-        return this;
-    }
 
     public RefreshCondition routeKey(Object routeKey) {
         this.routeKey = routeKey;
         return this;
+    }
+
+
+    public RefreshCondition eq(String key, Object value) {
+        return (RefreshCondition) super.eq(key,value);
+    }
+
+    public RefreshCondition gt(String key, Object value) {
+        return (RefreshCondition) super.gt(key,value);
+    }
+
+    public RefreshCondition gte(String key, Object value) {
+        return (RefreshCondition) super.gte(key,value);
+    }
+
+    public RefreshCondition lt(String key, Object value) {
+        return (RefreshCondition) super.lt(key,value);
+    }
+
+    public RefreshCondition lte(String key, Object value) {
+        return (RefreshCondition) super.lte(key,value);
+    }
+
+    public RefreshCondition ne(String property, Object value) {
+        return (RefreshCondition) super.ne(property, value);
+    }
+
+    public RefreshCondition like(String property, String value) {
+        return (RefreshCondition) super.like(property, value);
+    }
+
+    public RefreshCondition likeRight(String property, String value) {
+        return (RefreshCondition) super.likeRight(property, value);
+    }
+
+    public RefreshCondition notLike(String property, String value) {
+        return (RefreshCondition) super.notLike(property, value);
+    }
+
+    public RefreshCondition between(String property, Object min, Object max) {
+        return (RefreshCondition) super.between(property, min, max);
+    }
+
+    public RefreshCondition in(String property, List<? extends Object> list) {
+        return (RefreshCondition) super.in(property,list);
+    }
+
+    public RefreshCondition nin(String property, List<? extends Object> list) {
+        return (RefreshCondition) super.nin(property,list);
+    }
+
+    public RefreshCondition nonNull(String property){
+        return (RefreshCondition) super.nonNull(property);
+    }
+
+    public RefreshCondition isNull(String property){
+        return (RefreshCondition) super.isNull(property);
+    }
+
+    public RefreshCondition  x(String sql){
+        return (RefreshCondition) super.x(sql);
+    }
+
+    public RefreshCondition  x(String sql, List<? extends Object> valueList){
+        return (RefreshCondition) super.x(sql, valueList);
+    }
+
+    public RefreshCondition  beginSub(){
+        return (RefreshCondition) super.beginSub();
+    }
+
+    public RefreshCondition  endSub(){
+        return (RefreshCondition) super.endSub();
     }
 }

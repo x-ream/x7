@@ -23,5 +23,5 @@ public interface Manuable {
 
      <T> boolean execute(T obj, String sql);
 
-     List<Map<String,Object>> list(Class clz, String sql, List<Object> conditionList);
+     List<Map<String,Object>> list(Class clz, String sql, List<Object> conditionSet);
 }

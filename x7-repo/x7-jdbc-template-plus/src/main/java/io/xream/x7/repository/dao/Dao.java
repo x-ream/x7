@@ -47,7 +47,7 @@ public interface Dao {
 	<T> List<T> list(Object conditionObj);
 	
 	List<Map<String,Object>>  list(Class clz, String sql,
-			List<Object> conditionList);
+			List<Object> conditionSet);
 
 	<T> T get(KeyOne<T> keyOne);
 	

@@ -161,11 +161,11 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private List<String> getKeyList(Class clz, List<String> conditionList){
-		if (conditionList == null || conditionList.isEmpty())
+	private List<String> getKeyList(Class clz, List<String> conditionSet){
+		if (conditionSet == null || conditionSet.isEmpty())
 			return null;
 		List<String> keyList = new ArrayList<>();
-		for (String condition : conditionList){
+		for (String condition : conditionSet){
 			String key = getSimpleKey(clz, condition);
 			keyList.add(key);
 		}

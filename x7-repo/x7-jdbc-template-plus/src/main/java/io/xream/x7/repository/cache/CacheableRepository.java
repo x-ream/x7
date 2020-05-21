@@ -302,8 +302,8 @@ public final class CacheableRepository implements Repository, Manuable {
     }
 
     @Override
-    public List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionList) {
-        return dataTransform.list(clz, sql, conditionList);
+    public List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionSet) {
+        return dataTransform.list(clz, sql, conditionSet);
     }
 
     @Override

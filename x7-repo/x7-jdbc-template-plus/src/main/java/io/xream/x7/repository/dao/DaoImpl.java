@@ -190,7 +190,7 @@ public class DaoImpl implements Dao {
 
 
     @Override
-    public List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionList) {
+    public List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionSet) {
 
         sql = SqlUtil.filter(sql);
         Parsed parsed = Parser.get(clz);
@@ -198,7 +198,7 @@ public class DaoImpl implements Dao {
 
         LoggerProxy.debug(clz, sql);
 
-        return queryForList(sql, clz, conditionList, this.dialect, jdbcTemplate);
+        return queryForList(sql, clz, conditionSet, this.dialect, jdbcTemplate);
     }
 
 

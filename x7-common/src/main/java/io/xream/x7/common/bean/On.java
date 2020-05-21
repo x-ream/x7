@@ -18,7 +18,6 @@ package io.xream.x7.common.bean;
 
 public class On {
     private String key;
-    private String andOr;
     private String op;
     private JoinFrom joinFrom;
 
@@ -28,14 +27,6 @@ public class On {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public String getAndOr() {
-        return andOr;
-    }
-
-    public void setAndOr(String andOr) {
-        this.andOr = andOr;
     }
 
     public String getOp() {
@@ -58,7 +49,6 @@ public class On {
     public String toString() {
         return "On{" +
                 "key='" + key + '\'' +
-                ", andOr='" + andOr + '\'' +
                 ", op='" + op + '\'' +
                 ", joinFrom=" + joinFrom +
                 '}';
@@ -70,8 +60,7 @@ public class On {
         GT(">"),
         LT ("<"),
         GTE (">="),
-        LTE ("<="),
-        LIKE ("LIKE");
+        LTE ("<=");
 
         private Op(String str){
             op = str;

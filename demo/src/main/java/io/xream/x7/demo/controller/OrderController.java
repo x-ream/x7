@@ -8,6 +8,7 @@ import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.OrderItemRepository;
 import io.xream.x7.demo.OrderRepository;
 import io.xream.x7.demo.bean.Order;
+import io.xream.x7.demo.bean.OrderType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,20 +66,22 @@ public class OrderController {
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("o.id");
-        builder.and().eq("o.name","test");
+        builder.and().beginSub().eq("o.name",null).endSub();
         builder.and().in("i.name", Arrays.asList("test"));
         builder.and().nonNull("i.name");
         builder.and().nonNull("l.log");
-//        builder.and().beginSub().gt("o.createAt",System.currentTimeMillis() - 1000000)
-//                .and().lt("o.createAt",System.currentTimeMillis()).endSub();
-//        builder.sourceScript("from order o INNER join orderItem i ON i.orderId != o.id AND i.name = o.name");
-
         builder.sourceScript().source("order").alia("o");
-        builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.INNER_JOIN)
-                .on("orderId", On.Op.NE,JoinFrom.wrap("o","id"))
-                .onOr("name",On.Op.EQ, JoinFrom.wrap("o","name"));
-        builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.LEFT_JOIN)
-                .on("orderId", On.Op.EQ,JoinFrom.wrap("o","id"));
+        builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
+                .on("orderId", JoinFrom.wrap("o","id"))
+                .condition().or()
+                    .beginSub()
+                        .x("i.orderId = 0").or().lte("i.orderId",2)
+                            .beginSub().eq("i.type", OrderType.SINGLE).endSub()
+                        .or().eq("i.type", null).
+                            beginSub().eq("o.type",OrderType.SINGLE).endSub()
+                    .endSub();
+        builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
+                .on("orderId", JoinFrom.wrap("o","id"));
 
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 

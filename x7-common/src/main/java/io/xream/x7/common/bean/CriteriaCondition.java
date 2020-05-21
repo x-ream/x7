@@ -21,7 +21,8 @@ import java.util.Map;
 
 
 public interface CriteriaCondition{
-    List<Criteria.X> getListX();
+    List<X> getListX();
     List<Object> getValueList();
     Map<String,String> getAliaMap();
+    Parsed getParsed();
 }

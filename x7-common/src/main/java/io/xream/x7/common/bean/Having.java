@@ -18,21 +18,21 @@ package io.xream.x7.common.bean;
 
 public  class Having {
 
-    private Criteria.X x;
+    private X x;
 
     private Having() {
     }
 
     public static Having wrap(PredicateAndOtherScript script, Object value){
         Having having = new Having();
-        having.x = new Criteria.X();
+        having.x = new X();
         having.x.setConjunction(ConjunctionAndOtherScript.HAVING);
         having.x.setPredicate(script);
         having.x.setValue(value);
         return having;
     }
 
-    protected Criteria.X x() {
+    protected X x() {
         return x;
     }
 

@@ -141,8 +141,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
         if (unSafe) {
             String key = parsed.getKey(X.KEY_ONE);
-            List<Criteria.X> listX = refreshCondition.getListX();
-            for (Criteria.X x : listX) {
+            List<io.xream.x7.common.bean.X> listX = refreshCondition.getListX();
+            for (io.xream.x7.common.bean.X x : listX) {
                 if (key.equals(x.getKey())) {
                     Object value = x.getValue();
                     if (Objects.nonNull(value) && !value.toString().equals("0")) {

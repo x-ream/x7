@@ -38,6 +38,8 @@ public class JoinFrom {
     }
 
     public static JoinFrom wrap(String alia, String key) {
+        if (key.contains("."))
+            throw new IllegalArgumentException("JoinFrom key can not contains '.'");
         JoinFrom joinFrom = new JoinFrom();
         joinFrom.setAlia(alia);
         joinFrom.setKey(key);
