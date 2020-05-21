@@ -63,7 +63,7 @@ public class AppTest {
 
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
