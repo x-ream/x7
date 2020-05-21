@@ -177,8 +177,6 @@ public class ConditionCriteriaBuilder {
     public ConditionCriteriaBuilder beginSub(){
         X x = new X(isOr());
         x.setPredicate(PredicateAndOtherScript.SUB);
-//        x.setKey(PredicateAndOtherScript.SUB.sql());// special treat FIXME
-//        x.setValue(PredicateAndOtherScript.SUB);
 
         List<X> subList = new ArrayList<>();
         x.setSubList(subList);
