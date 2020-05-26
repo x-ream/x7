@@ -31,7 +31,6 @@ public interface InOptimization {
 
     static  <T> List<T> in(InCondition inCondition, CacheableRepository repository){
 
-        Parsed parsed = Parser.get(inCondition.getClz());
         if (inCondition.getInList().isEmpty())
             return new ArrayList<T>();
 
@@ -40,6 +39,7 @@ public interface InOptimization {
         for (Object obj : inCondition.getInList()) {
             if (Objects.isNull(obj))
                 continue;
+            Parsed parsed = Parser.get(inCondition.getClz());
             if (BeanUtilX.isBaseType_0(inCondition.getProperty(), obj, parsed))
                 continue;
             if (!inList.contains(obj)) {

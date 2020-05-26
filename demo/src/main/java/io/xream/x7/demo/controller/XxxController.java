@@ -133,13 +133,12 @@ public class XxxController {
 
 		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
 		builder.distinct("catTest.dogId")
-				.distinct("catTest.catFriendName")
+				.resultKey("catTest.catFriendName")
 				.reduce(ReduceType.COUNT_DISTINCT,"catTest.id")
-				.reduce(ReduceType.SUM, "catTest.dogId", Having.wrap(PredicateAndOtherScript.GT, 2))
+				.reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(PredicateAndOtherScript.GT, 1))
 				.groupBy("catTest.dogId")
-				.groupBy("catTest.catFriendName")
 		.paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId",Direction.DESC);
-		String sourceScript = "catTest ";
+		String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 		resultMapped.setSourceScript(sourceScript);
 		Page<Map<String,Object>> page = repository.find(resultMapped);
@@ -179,28 +178,28 @@ public class XxxController {
 
 //		ro.setResultKeyMap();
 
-		List<Object> inList = new ArrayList<>();
-		inList.add("gggg");
-		inList.add("xxxxx");
-
-		Sort sort1 = new Sort();
-		sort1.setOrderBy("catTest.catFriendName");
-		sort1.setDirection(Direction.ASC);
-		Sort sort2 = new Sort();
-		sort2.setOrderBy("catTest.id");
-		sort2.setDirection(Direction.DESC);
-		List<Sort> sortList = new ArrayList<Sort>();
-		sortList.add(sort1);
-		sortList.add(sort2);
+//		List<Object> inList = new ArrayList<>();
+//		inList.add("gggg");
+//		inList.add("xxxxx");
+//
+//		Sort sort1 = new Sort();
+//		sort1.setOrderBy("catTest.catFriendName");
+//		sort1.setDirection(Direction.ASC);
+//		Sort sort2 = new Sort();
+//		sort2.setOrderBy("catTest.id");
+//		sort2.setDirection(Direction.DESC);
+//		List<Sort> sortList = new ArrayList<Sort>();
+//		sortList.add(sort1);
+//		sortList.add(sort2);
 
 
 //		ro.setSortList(sortList);
 
-		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
-		builder.beginSub().eq("catTest.dogId",0).endSub();
-		builder.and().x("dogTest.petId = 0");
-		builder.and().in("catTest.catFriendName", inList);
-		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
+		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+		builder.resultKey("catTest.id").resultKey("catTest.catFriendName");
+		builder.beginSub().gte("dogTest.id",0).endSub();
+//		builder.and().in("catTest.catFriendName", inList);
+//		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 
 		builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
 		//或者如下
@@ -408,8 +407,9 @@ public class XxxController {
 //		builder.resultKey("id").resultKey("type");
 		List<Object> inList = Arrays.asList("NL","BL");
 		builder.and().in("type",inList).and().in("id",Arrays.asList(1,251));
-		builder.paged().orderIn("type",inList);
+//		builder.paged().orderIn("type",inList);
 		builder.forceIndex("IDX_CAT_DOG_ID");
+		builder.paged().ignoreTotalRows();
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
 		Criteria criteria = builder.get();
@@ -418,9 +418,9 @@ public class XxxController {
 		criteria = JsonX.toObject(str,Criteria.class);
 		System.out.println(criteria);
 
-		List<Cat> list = catRepository.list(criteria);
+		 catRepository.find(criteria);
 
-		return ViewEntity.ok(list);
+		return ViewEntity.ok(null);
 	}
 
 	@RequestMapping("/list")

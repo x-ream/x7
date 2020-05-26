@@ -310,7 +310,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         if (Objects.nonNull(resultMapped.getDistinct())) {
 
-            if (!flag) resultMapped.getResultKeyList().clear();//去掉构造方法里设置的返回key
+//            if (!flag) resultMapped.getResultKeyList().clear();//去掉构造方法里设置的返回key
 
             column.append(SqlScript.DISTINCT);
             List<String> list = resultMapped.getDistinct().getList();
@@ -339,7 +339,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         if (!reduceList.isEmpty()) {
 
-            if (!flag) resultMapped.getResultKeyList().clear();//去掉构造方法里设置的返回key
+//            if (!flag) resultMapped.getResultKeyList().clear();//去掉构造方法里设置的返回key
 
             for (Reduce reduce : reduceList) {
                 if (flag) {
@@ -527,6 +527,10 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
     private void preOptimizeListX(List<X> xList, Set<String> conditionSet) {
         for (X x : xList){
             conditionSet.add(x.getKey());
+            List<X> subList = x.getSubList();
+            if (subList != null && !subList.isEmpty()) {
+                preOptimizeListX(subList, conditionSet);
+            }
         }
     }
 
