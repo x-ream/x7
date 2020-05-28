@@ -54,7 +54,7 @@ public class OrderController {
 //                .and().lt("createAt",System.currentTimeMillis()).endSub();
         builder.sourceScript().source("order").alia("o");
 //        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.wrap("order","id"))
-//                .condition().x("orderItem.name = order.name");
+//                .more().x("orderItem.name = order.name");
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
 
@@ -69,14 +69,14 @@ public class OrderController {
     @RequestMapping("/findByAlia")
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.distinct("o.id");
+        builder.resultKey("o.name").distinct("o.id");
         builder.beginSub().eq("o.name",null).endSub();
         builder.in("i.name", Arrays.asList("test"));
         builder.nonNull("i.name").nonNull("l.log");
         builder.sourceScript().source("order").alia("o");
         builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
                 .on("orderId", JoinFrom.wrap("o","id"))
-                .condition().or()
+                .more().or()
                     .beginSub()
                         .x("i.orderId = 0").or().lte("i.orderId",2)
                             .beginSub().eq("i.type", OrderType.SINGLE).endSub()

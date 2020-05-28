@@ -234,7 +234,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             }
 
             @Override
-            public ConditionCriteriaBuilder condition() {
+            public ConditionCriteriaBuilder more() {
                 return ConditionCriteriaBuilder.build(sourceScriptTemp.getListX());
             }
 

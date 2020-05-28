@@ -31,7 +31,7 @@ public interface SourceScriptBuilder {
 
     SourceScriptBuilder on(String key, On.Op op, JoinFrom joinFrom);
 
-    ConditionCriteriaBuilder condition();
+    ConditionCriteriaBuilder more();
 
     /**
      * NOT SUPPORT CONDITION(AND|OR) OF lEFT JOIN | RIGHT JOIN

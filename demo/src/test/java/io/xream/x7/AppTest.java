@@ -38,7 +38,7 @@ public class AppTest {
 
 //        xxxTest.inOrder();
         xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
