@@ -41,7 +41,7 @@ public class On {
         return joinFrom;
     }
 
-    public void setJoinTarget(JoinFrom joinFrom) {
+    public void setJoinFrom(JoinFrom joinFrom) {
         this.joinFrom = joinFrom;
     }
 

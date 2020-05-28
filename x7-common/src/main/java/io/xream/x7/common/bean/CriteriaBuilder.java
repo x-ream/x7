@@ -29,10 +29,9 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- *
  * @author Sim
  */
-public class CriteriaBuilder extends ConditionCriteriaBuilder{
+public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
     private Criteria criteria;
 
@@ -104,13 +103,12 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
     };
 
 
-
     private CriteriaBuilder() {
     }
 
     private CriteriaBuilder(Criteria criteria) {
         this.criteria = criteria;
-        init(this.criteria.getListX(),this);
+        init(this.criteria.getListX(), this);
     }
 
 
@@ -160,7 +158,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
 
     public static ResultMappedBuilder buildResultMapped(MapResult ro) {
 
-        ResultMappedBuilder builder =  new CriteriaBuilder().new ResultMappedBuilder();
+        ResultMappedBuilder builder = new CriteriaBuilder().new ResultMappedBuilder();
 
         if (ro != null) {
 
@@ -188,6 +186,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
     }
 
     protected SourceScript sourceScriptTemp;
+
     public class ResultMappedBuilder extends CriteriaBuilder {
 
         private SourceScriptBuilder sourceScriptBuilder = new SourceScriptBuilder() {
@@ -211,25 +210,25 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
             }
 
             @Override
-            public SourceScriptBuilder on(String key, JoinFrom joinTarget) {
+            public SourceScriptBuilder on(String key, JoinFrom joinFrom) {
                 if (key.contains("."))
                     throw new IllegalArgumentException("On key can not contains '.'");
                 On on = new On();
                 on.setKey(key);
                 on.setOp(On.Op.EQ.sql());
-                on.setJoinTarget(joinTarget);
+                on.setJoinFrom(joinFrom);
                 sourceScriptTemp.setOn(on);
                 return this;
             }
 
             @Override
-            public SourceScriptBuilder on(String key, On.Op op,JoinFrom joinTarget) {
+            public SourceScriptBuilder on(String key, On.Op op, JoinFrom joinFrom) {
                 if (key.contains("."))
                     throw new IllegalArgumentException("On key can not contains '.'");
                 On on = new On();
                 on.setKey(key);
                 on.setOp(op.sql());
-                on.setJoinTarget(joinTarget);
+                on.setJoinFrom(joinFrom);
                 sourceScriptTemp.setOn(on);
                 return this;
             }
@@ -241,7 +240,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
 
         };
 
-        public SourceScriptBuilder sourceScript(){
+        public SourceScriptBuilder sourceScript() {
             sourceScriptTemp = new SourceScript();
             get().getSourceScripts().add(sourceScriptTemp);
             return this.sourceScriptBuilder;
@@ -256,7 +255,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
 
             Criteria.ResultMappedCriteria resultMapped = new Criteria.ResultMappedCriteria();
             super.criteria = resultMapped;
-            init(super.criteria.getListX(),this);
+            init(super.criteria.getListX(), this);
         }
 
         private void init(Class<?> clz) {
@@ -303,19 +302,16 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
             return this;
         }
 
-        public ResultMappedBuilder withPointKey(){
+        public ResultMappedBuilder withPointKey() {
             get().setPointKey(true);
             return this;
         }
 
         /**
-         *
          * @param functionScript FUNCTION(?,?)
-         *
-         * @param keys  test.createAt, test.endAt
-         *
+         * @param keys           test.createAt, test.endAt
          */
-        public ResultMappedBuilder resultKeyFunction(ResultKeyAlia functionAlia_wrap, String functionScript, String...keys) {
+        public ResultMappedBuilder resultKeyFunction(ResultKeyAlia functionAlia_wrap, String functionScript, String... keys) {
             if (StringUtil.isNullOrEmpty(functionScript) || keys == null)
                 return this;
             Assert.notNull(functionAlia_wrap, "function no alia");
@@ -387,7 +383,6 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
         }
 
         /**
-         *
          * @param type
          * @param property
          * @param having   paged().totalRowsIgnored(true), if isTotalRowsIgnored == false，will throw Exception
