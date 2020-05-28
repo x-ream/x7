@@ -44,7 +44,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
         this.dialect = dialect;
     }
 
-
     private void mapping(String script, CriteriaCondition criteria, StringBuilder sb) {
         String[] keyArr = script.split(SqlScript.SPACE);//
         int length = keyArr.length;
@@ -53,7 +52,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
             String target = mapping(origin, criteria);
             sb.append(target).append(SqlScript.SPACE);
-
         }
     }
 
@@ -87,7 +85,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
     @Override
     public SqlParsed parse(Criteria criteria) {
 
-
         SqlBuilder sqlBuilder = SqlBuilder.get();
 
         parseAlia(criteria,sqlBuilder);
@@ -97,7 +94,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
         env(criteria);
 
         resultKey(sqlBuilder,criteria);
-
         /*
          * select column
          */
@@ -124,15 +120,12 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
          * sort
          */
         sort(sqlBuilder, criteria);
-
         /*
          * from table
          */
         sourceScript(sqlBuilder, criteria);
 
-        SqlParsed sqlParsed = sqlArr(sqlBuilder, criteria, countSql);
-
-        return sqlParsed;
+        return sqlArr(sqlBuilder, criteria, countSql);
     }
 
     @Override
@@ -167,9 +160,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                 ite.remove();
             }
         }
-
     }
-
 
     private void concatRefresh(StringBuilder sb, Parsed parsed, RefreshCondition refreshCondition) {
 
@@ -255,7 +246,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
             }
 
         }
-
 
         if (!refreshValueList.isEmpty()) {
             refreshCondition.getValueList().addAll(0, refreshValueList);
@@ -432,7 +422,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                 }
             }
         }
-
 
         String script = column.toString();
         if (StringUtil.isNullOrEmpty(script)) {
