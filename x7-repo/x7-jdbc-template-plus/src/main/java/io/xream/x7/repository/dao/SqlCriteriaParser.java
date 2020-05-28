@@ -488,11 +488,18 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         if (reduceList.isEmpty())
             return;
+        boolean flag = true;
         for (Reduce reduce : reduceList) {
             X x = reduce.getHaving();
             if (x == null)
                 continue;
-            sb.sbCondition.append(x.getConjunction().sql()).append(x.getKey()).append(x.getPredicate().sql()).append(x.getValue());
+            if (flag){
+                sb.sbCondition.append(ConjunctionAndOtherScript.HAVING.sql());
+                flag = false;
+            }else{
+                sb.sbCondition.append(ConjunctionAndOtherScript.AND.sql());
+            }
+            sb.sbCondition.append(x.getKey()).append(x.getPredicate().sql()).append(x.getValue());
             sb.conditionSet.add(x.getKey());
         }
     }
