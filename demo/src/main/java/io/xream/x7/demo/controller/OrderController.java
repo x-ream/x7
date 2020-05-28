@@ -69,7 +69,7 @@ public class OrderController {
     @RequestMapping("/findByAlia")
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.resultKey("o.name").distinct("o.id");
+        builder.resultKey("o.name").distinct("o.id").reduce(ReduceType.COUNT,"o.createAt",Having.wrap(Op.GTE,0));
         builder.beginSub().eq("o.name",null).endSub();
         builder.in("i.name", Arrays.asList("test"));
         builder.nonNull("i.name").nonNull("l.log");
@@ -85,6 +85,7 @@ public class OrderController {
                     .endSub();
         builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
                 .on("orderId", JoinFrom.wrap("o","id"));
+        builder.groupBy("o.id");
 
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 

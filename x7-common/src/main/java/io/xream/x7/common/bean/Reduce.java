@@ -21,7 +21,7 @@ public class Reduce {
     private ReduceType type;
     private String property;
 
-    private X having;
+    private Having having;
 
     public ReduceType getType() {
         return type;
@@ -39,11 +39,11 @@ public class Reduce {
         this.property = property;
     }
 
-    public X getHaving() {
+    public Having getHaving() {
         return having;
     }
 
-    public void setHaving(X having) {
+    public void setHaving(Having having) {
         this.having = having;
     }
 

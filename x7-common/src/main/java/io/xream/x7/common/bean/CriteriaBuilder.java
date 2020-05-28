@@ -215,14 +215,14 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
                     throw new IllegalArgumentException("On key can not contains '.'");
                 On on = new On();
                 on.setKey(key);
-                on.setOp(On.Op.EQ.sql());
+                on.setOp(Op.EQ.sql());
                 on.setJoinFrom(joinFrom);
                 sourceScriptTemp.setOn(on);
                 return this;
             }
 
             @Override
-            public SourceScriptBuilder on(String key, On.Op op, JoinFrom joinFrom) {
+            public SourceScriptBuilder on(String key, Op op, JoinFrom joinFrom) {
                 if (key.contains("."))
                     throw new IllegalArgumentException("On key can not contains '.'");
                 On on = new On();
@@ -391,7 +391,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             Reduce reduce = new Reduce();
             reduce.setType(type);
             reduce.setProperty(property);
-            reduce.setHaving(having.x());
+            reduce.setHaving(having);
             get().getReduceList().add(reduce);
             return this;
         }

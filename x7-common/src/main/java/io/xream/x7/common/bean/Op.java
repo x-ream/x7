@@ -16,43 +16,19 @@
  */
 package io.xream.x7.common.bean;
 
-public  class Having {
+public enum  Op {
+    EQ ("="),
+    NE( "!="),
+    GT(">"),
+    LT ("<"),
+    GTE (">="),
+    LTE ("<=");
 
-    private String key;
-    private Op op;
-    private Object value;
-
-    private Having() {
+    private Op(String str){
+        op = str;
     }
-
-    public static Having wrap(Op op, Object value){
-        Having having = new Having();
-        having.op = op;
-        having.value = value;
-        return having;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Op getOp() {
+    private String op;
+    public String sql(){
         return op;
-    }
-
-    public void setOp(Op op) {
-        this.op = op;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
     }
 }

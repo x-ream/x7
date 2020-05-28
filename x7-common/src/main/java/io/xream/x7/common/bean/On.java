@@ -54,20 +54,4 @@ public class On {
                 '}';
     }
 
-    public static enum  Op {
-        EQ ("="),
-        NE( "!="),
-        GT(">"),
-        LT ("<"),
-        GTE (">="),
-        LTE ("<=");
-
-        private Op(String str){
-            op = str;
-        }
-        private String op;
-        public String sql(){
-            return op;
-        }
-    }
 }

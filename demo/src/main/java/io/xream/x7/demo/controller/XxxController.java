@@ -135,7 +135,7 @@ public class XxxController {
 		builder.distinct("catTest.dogId")
 				.resultKey("catTest.catFriendName")
 				.reduce(ReduceType.COUNT_DISTINCT,"catTest.id")
-				.reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(PredicateAndOtherScript.GT, 1))
+				.reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(Op.GT, 1))
 				.groupBy("catTest.dogId")
 		.paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId",Direction.DESC);
 		String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
@@ -204,7 +204,7 @@ public class XxxController {
 		builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
 		//或者如下
 		builder.sourceScript().source("catTest");
-		builder.sourceScript().source("dogTest").joinType(JoinType.INNER_JOIN).on("id", On.Op.EQ, JoinFrom.wrap("catTest","dogId"));
+		builder.sourceScript().source("dogTest").joinType(JoinType.INNER_JOIN).on("id", Op.EQ, JoinFrom.wrap("catTest","dogId"));
 
 		Criteria.ResultMappedCriteria resultMapped = builder.get();
 

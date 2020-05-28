@@ -147,10 +147,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         String conditionSql = parseCondition(refreshCondition);
 
-//        if (conditionSql.startsWith(" AND")|| conditionSql.startsWith("AND")) {
-//            conditionSql = conditionSql.replaceFirst("AND", "WHERE");
-//        }
-
         conditionSql = SqlParserUtil.mapper(conditionSql, parsed);
 
         sb.append(conditionSql);
@@ -374,11 +370,11 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                         .append(SqlScript.RIGHT_PARENTTHESIS).append(SqlScript.SPACE)//" ) "
                         .append(SqlScript.AS).append(SqlScript.SPACE).append(alianName);
 
-                X x = reduce.getHaving();
-                if (x != null) {
-                    x.setKey(alianName);
+                Having h = reduce.getHaving();
+                if (h != null) {
+                    h.setKey(alianName);
                     if (!criteria.isTotalRowsIgnored()){
-                        throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().scroll(true)");
+                        throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().ignoreTotalRows()");
                     }
                 }
 
@@ -490,8 +486,8 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
             return;
         boolean flag = true;
         for (Reduce reduce : reduceList) {
-            X x = reduce.getHaving();
-            if (x == null)
+            Having h = reduce.getHaving();
+            if (h == null)
                 continue;
             if (flag){
                 sb.sbCondition.append(ConjunctionAndOtherScript.HAVING.sql());
@@ -499,8 +495,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
             }else{
                 sb.sbCondition.append(ConjunctionAndOtherScript.AND.sql());
             }
-            sb.sbCondition.append(x.getKey()).append(x.getPredicate().sql()).append(x.getValue());
-            sb.conditionSet.add(x.getKey());
+            sb.sbCondition.append(h.getKey()).append(h.getOp().sql()).append(h.getValue());
         }
     }
 

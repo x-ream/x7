@@ -29,7 +29,7 @@ public interface SourceScriptBuilder {
 
     SourceScriptBuilder on(String key, JoinFrom joinFrom);
 
-    SourceScriptBuilder on(String key, On.Op op, JoinFrom joinFrom);
+    SourceScriptBuilder on(String key, Op op, JoinFrom joinFrom);
 
     ConditionCriteriaBuilder more();
 
