@@ -220,6 +220,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		private String sourceScript;
 		private List<SourceScript> sourceScripts = new ArrayList<>();
 		private List<Reduce> reduceList = new ArrayList<>();
+		private boolean isPointKey;
 		@JsonIgnore
 		private transient PropertyMapping propertyMapping;
 		@JsonIgnore
@@ -298,6 +299,14 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		public List<FunctionResultKey> getResultFuntionList() {
 			return resultFuntionList;
+		}
+
+		public boolean isPointKey() {
+			return isPointKey;
+		}
+
+		public void setPointKey(boolean pointKey) {
+			isPointKey = pointKey;
 		}
 
 		@Override

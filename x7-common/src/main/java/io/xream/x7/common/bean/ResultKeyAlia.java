@@ -18,7 +18,7 @@ package io.xream.x7.common.bean;
 
 import io.xream.x7.common.util.StringUtil;
 
-public class FunctionAlia {
+public class ResultKeyAlia {
 
     private String objectOrAlia;
     private String propertyOrAlia;
@@ -39,8 +39,14 @@ public class FunctionAlia {
         this.propertyOrAlia = propertyOrAlia;
     }
 
-    public static FunctionAlia wrap(String objectOrAlia, String propertyOrAlia) {
-        FunctionAlia functionAlia = new FunctionAlia();
+    public static ResultKeyAlia wrap(String propertyOrAlia) {
+        ResultKeyAlia functionAlia = new ResultKeyAlia();
+        functionAlia.setPropertyOrAlia(propertyOrAlia);
+        return functionAlia;
+    }
+
+    public static ResultKeyAlia wrap(String objectOrAlia, String propertyOrAlia) {
+        ResultKeyAlia functionAlia = new ResultKeyAlia();
         functionAlia.setObjectOrAlia(objectOrAlia);
         functionAlia.setPropertyOrAlia(propertyOrAlia);
         return functionAlia;

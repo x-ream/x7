@@ -303,6 +303,11 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
             return this;
         }
 
+        public ResultMappedBuilder withPointKey(){
+            get().setPointKey(true);
+            return this;
+        }
+
         /**
          *
          * @param functionScript FUNCTION(?,?)
@@ -310,7 +315,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder{
          * @param keys  test.createAt, test.endAt
          *
          */
-        public ResultMappedBuilder resultKeyFunction( FunctionAlia functionAlia_wrap, String functionScript, String...keys) {
+        public ResultMappedBuilder resultKeyFunction(ResultKeyAlia functionAlia_wrap, String functionScript, String...keys) {
             if (StringUtil.isNullOrEmpty(functionScript) || keys == null)
                 return this;
             Assert.notNull(functionAlia_wrap, "function no alia");

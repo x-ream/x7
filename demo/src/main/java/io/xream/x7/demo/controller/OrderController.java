@@ -42,16 +42,20 @@ public class OrderController {
     @RequestMapping("/find")
     public ViewEntity find(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.distinct("order.id");
-        builder.resultKeyFunction(FunctionAlia.wrap("order","at"),"YEAR(?)","order.createAt");
-        builder.and().eq("order.name","test");
+        builder.distinct("o.id");
+        builder.resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt");
+        builder.resultKeyFunction(ResultKeyAlia.wrap("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
+        builder.withPointKey();
+        builder.eq("o.name","test");
 //        builder.and().eq("orderItem.name","test");
 //        builder.and().nonNull("orderItem.name");
 //        builder.and().in("orderItem.name", Arrays.asList("xxx"));
-        builder.and().beginSub().gt("order.createAt",System.currentTimeMillis() - 1000000)
-                .and().lt("order.createAt",System.currentTimeMillis()).endSub();
-        builder.sourceScript("from order inner join orderItem on orderItem.orderId = order.id and orderItem.name = order.name");
-        builder.paged().ignoreTotalRows().page(1).rows(10).sort("order.id", Direction.DESC);
+//        builder.and().beginSub().gt("createAt",System.currentTimeMillis() - 1000000)
+//                .and().lt("createAt",System.currentTimeMillis()).endSub();
+        builder.sourceScript().source("order").alia("o");
+//        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.wrap("order","id"))
+//                .condition().x("orderItem.name = order.name");
+        builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
 
         Criteria.ResultMappedCriteria criteria = builder.get();
@@ -66,10 +70,9 @@ public class OrderController {
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("o.id");
-        builder.and().beginSub().eq("o.name",null).endSub();
-        builder.and().in("i.name", Arrays.asList("test"));
-        builder.and().nonNull("i.name");
-        builder.and().nonNull("l.log");
+        builder.beginSub().eq("o.name",null).endSub();
+        builder.in("i.name", Arrays.asList("test"));
+        builder.nonNull("i.name").nonNull("l.log");
         builder.sourceScript().source("order").alia("o");
         builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
                 .on("orderId", JoinFrom.wrap("o","id"))
@@ -93,10 +96,9 @@ public class OrderController {
     }
 
     public ViewEntity in(){
-        InCondition inCondition = new InCondition();
-        inCondition.setProperty("name");
-        inCondition.setInList(Arrays.asList("xxx"));
-        List<Order> list = this.orderRepository.in(inCondition);
+        List<Order> list = this.orderRepository.in(
+                InCondition.wrap("name",Arrays.asList("xxx"))
+        );
         return ViewEntity.ok(list);
     }
 

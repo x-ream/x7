@@ -429,7 +429,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                 String alian = "c" + resultKeyAliaMap.size();
                 String aliaKey = functionResultKey.getAlia();
                 resultKeyAliaMap.put(aliaKey, alian);
-                propertyMapping.put(aliaKey,aliaKey);
+                propertyMapping.put(aliaKey,alian);
                 column.append(SqlScript.SPACE).append(function).append(SqlScript.AS).append(alian);
                 if (i < size - 1) {
                     column.append(SqlScript.COMMA);

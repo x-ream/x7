@@ -37,7 +37,7 @@ public class AppTest {
 //        xxxTest.domain();
 
 //        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
+        xxxTest.testOrderFind();
 //        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
@@ -76,7 +76,7 @@ public class AppTest {
 //        xxxTest.distinct();
 //        xxxTest.distinct();
 
-        xxxTest.testFindByResultMapped();
+//        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testOne();
