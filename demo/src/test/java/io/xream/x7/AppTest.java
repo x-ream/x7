@@ -38,7 +38,7 @@ public class AppTest {
 
 //        xxxTest.inOrder();
         xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
+//        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
@@ -74,13 +74,13 @@ public class AppTest {
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
-//        xxxTest.distinct();
+        xxxTest.distinct();
 
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testFindByResultMapped();
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();

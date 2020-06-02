@@ -171,7 +171,12 @@ public class SqlUtil {
                 Object value = inList.get(j);
                 if (value == null )
                     continue;
-                String ev = ((Enum) value).name();
+                String ev = null;
+                if (value instanceof String){ //只需要判断是否是String, 防止远程调用时无法把String转成枚举
+                    ev = (String)value;
+                }else {
+                    ev = ((Enum) value).name();
+                }
                 sb.append(SqlScript.SINGLE_QUOTES).append(ev).append(SqlScript.SINGLE_QUOTES);//'string'
                 if (j < length - 1) {
                     sb.append(SqlScript.COMMA);

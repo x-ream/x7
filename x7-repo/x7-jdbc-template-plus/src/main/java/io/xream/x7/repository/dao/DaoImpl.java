@@ -533,7 +533,7 @@ public class DaoImpl implements Dao {
         List<Map<String, Object>> dataMapList = queryForMapList(sql, list, dialect, jdbcTemplate);
         List<Map<String, Object>> propertyMapList = DataObjectConverter.dataToPropertyObjectMapList(resultMapped.getClz(), dataMapList, resultMapped, dialect);
 
-        if (resultMapped.isPointKey())
+        if (resultMapped.isKeyWithPoint())
             return propertyMapList;
 
         if (!propertyMapList.isEmpty())
