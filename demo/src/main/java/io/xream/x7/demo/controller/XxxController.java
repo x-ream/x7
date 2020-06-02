@@ -397,8 +397,8 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-        List<Object> inList = Arrays.asList("TEST", "BOO");
-        builder.and().in("testBoo", inList).or().in("id", Arrays.asList(1, 251));
+        builder.and().in("testBoo", Arrays.asList(TestBoo.TEST,TestBoo.BOO))
+                .or().in("id", Arrays.asList(1, 251));
 //		builder.paged().orderIn("type",inList);
         builder.forceIndex("IDX_CAT_DOG_ID");
         builder.paged().ignoreTotalRows();
@@ -463,8 +463,9 @@ public class XxxController {
 //	@Transactional
     public ViewEntity in() {
 
-        InCondition inCondition = InCondition.wrap("testBoo", Arrays.asList(TestBoo.BOO, TestBoo.TEST));
-        List<Cat> catList = this.catRepository.in(inCondition);
+        List<Cat> catList = this.catRepository.in(
+                InCondition.wrap("testBoo", Arrays.asList(TestBoo.BOO, TestBoo.TEST))
+        );
         System.out.println(catList);
         catList.forEach(cat -> System.out.println(cat.getTestBoo()));
 
@@ -510,9 +511,6 @@ public class XxxController {
         this.catRepository.removeOrRefreshOrCreate(wrapper);
 
         Cat cat = this.catRepository.get(466);
-        System.out.println("date: " + date.getTime());
-        System.out.println("createAt: " + cat.getCreateAt().getTime());
-        System.out.println("————————————————>>>> " + cat.getCreateAt() + ",  ? " + (date.getTime() == cat.getCreateAt().getTime()));
 
         return ViewEntity.ok();
     }
