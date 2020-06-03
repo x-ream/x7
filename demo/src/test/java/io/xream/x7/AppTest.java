@@ -73,7 +73,7 @@ public class AppTest {
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.distinct();
 //        xxxTest.distinct();
 //
 //        xxxTest.testFindByResultMapped();
@@ -84,7 +84,7 @@ public class AppTest {
 //        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.testCreate();
 //        xxxTest.testListCriteria();
 //        xxxTest.testCreateOrReplace();

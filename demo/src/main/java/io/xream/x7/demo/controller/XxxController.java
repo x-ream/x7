@@ -128,7 +128,7 @@ public class XxxController {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
         builder.distinct("catTest.dogId")
-                .resultKey("catTest.catFriendName")
+                .distinct("catTest.catFriendName")
                 .reduce(ReduceType.COUNT_DISTINCT, "catTest.id")
                 .reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(Op.GT, 1))
                 .groupBy("catTest.dogId")
@@ -391,13 +391,13 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-        builder.in("testList", Arrays.asList("BOO"))
-                .ne("type","xxxxx")
-                .or().in("id", Arrays.asList(1, 251));
+        builder.in("testBoo", Arrays.asList("BOO"))
+                .ne("type","xxxxxZZZZZ")
+                .or().in("id", Arrays.asList(247, 248));
 //		builder.paged().orderIn("type",inList);
         builder.forceIndex("IDX_CAT_DOG_ID");
-        builder.paged().ignoreTotalRows();
-        Cat cat;
+        builder.paged().ignoreTotalRows().orderIn("testBoo",Arrays.asList("BOO"));
+
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
         Criteria criteria = builder.get();
