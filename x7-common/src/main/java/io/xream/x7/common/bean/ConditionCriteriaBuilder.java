@@ -96,35 +96,6 @@ public class ConditionCriteriaBuilder {
         return doLike(PredicateAndOtherScript.NOT_LIKE,property,likeValue);
     }
 
-    public ConditionCriteriaBuilder between(String property, Object min, Object max){
-
-        if (min == null || max == null) {
-            isOr();
-            return instance;
-        }
-
-        if (StringUtil.isNullOrEmpty(max)){
-            isOr();
-            return instance;
-        }
-        if (StringUtil.isNullOrEmpty(min)){
-            isOr();
-            return instance;
-        }
-
-        MinMax minMax = new MinMax();
-        minMax.setMin(min);
-        minMax.setMax(max);
-
-        X x = new X(isOr());
-        x.setPredicate(PredicateAndOtherScript.BETWEEN);
-        x.setKey(property);
-        x.setValue(minMax);
-        this.add(x);
-
-        return instance;
-    }
-
     public ConditionCriteriaBuilder in(String property, List<? extends Object> list){
         return doIn(PredicateAndOtherScript.IN,property,list);
     }

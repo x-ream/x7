@@ -18,6 +18,7 @@ package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
@@ -31,7 +32,6 @@ import io.xream.x7.repository.util.SqlParserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -136,7 +136,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         concatRefresh(sb, parsed, refreshCondition);
 
-        filterCondition(parsed, refreshCondition.getListX());
+        filter(refreshCondition.getListX(),refreshCondition);
 
         String conditionSql = parseCondition(refreshCondition);
 
@@ -150,16 +150,6 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
             throw new SqlBuildException(sql);
 
         return sql;
-    }
-
-    private void filterCondition(Parsed parsed,List<X> listX){
-        Iterator<X> ite = listX.iterator();
-        while(ite.hasNext()){
-            X x = ite.next();
-            if (BeanUtilX.isBaseType_0(x.getKey(), x.getValue(), parsed)){
-                ite.remove();
-            }
-        }
     }
 
     private void concatRefresh(StringBuilder sb, Parsed parsed, RefreshCondition refreshCondition) {
@@ -224,22 +214,15 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                     if (be == null) {
                         throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
                     }
-                    if (be.clz == Date.class) {
-                        if (x.getValue() instanceof Long) {
-                            x.setValue(new Date(((Long) x.getValue()).longValue()));
-                        }
-                    } else if (be.clz == Timestamp.class) {
-                        if (x.getValue() instanceof Long) {
-                            x.setValue(new Timestamp(((Long) x.getValue()).longValue()));
-                        }
-                    } else if (be.isJson) {
+                    if (BeanUtil.testEnumConstant(be.clz,x.getValue())) {
+                    }else if (BeanUtilX.testNumberValueToDate(be.clz,x)) {
+                    }else if (be.isJson) {
                         Object v = x.getValue();
                         if (v != null) {
                             String str = JsonX.toJson(v);
                             x.setValue(str);
                         }
                     }
-
                 }
 
                 refreshValueList.add(x.getValue());

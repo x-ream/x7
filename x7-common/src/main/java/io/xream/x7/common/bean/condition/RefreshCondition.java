@@ -77,6 +77,8 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
 
     @Override
     public Parsed getParsed() {
+        if (this.clz == null)
+            return null;
         return Parser.get(this.clz);
     }
 
@@ -198,10 +200,6 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
 
     public RefreshCondition notLike(String property, String value) {
         return (RefreshCondition) super.notLike(property, value);
-    }
-
-    public RefreshCondition between(String property, Object min, Object max) {
-        return (RefreshCondition) super.between(property, min, max);
     }
 
     public RefreshCondition in(String property, List<? extends Object> list) {

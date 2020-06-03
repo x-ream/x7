@@ -367,4 +367,19 @@ public class BeanUtil {
         return clz.isEnum() || (superClzz != null && superClzz.isEnum());
     }
 
+    public static boolean testEnumConstant(Class clz, Object value) {
+        if (value instanceof String){
+            if (isEnum(clz)) {
+                Enum.valueOf(clz, (String)value);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEnumConstant(Class<? extends Enum> clz, String value) {
+        Enum.valueOf(clz, (String)value);
+        return true;
+    }
+
 }

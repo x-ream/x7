@@ -113,7 +113,8 @@ public class XxxController {
                         .refresh("testList", Arrays.asList("8989","2222"))
                         .refresh("testObj", dark)
                         .refresh("test = test - 3")
-                        .refresh("createAt", new Date())
+                        .refresh("createAt", System.currentTimeMillis())
+                        .gt("createAt", System.currentTimeMillis())
                         .in("id", Arrays.asList(247, 248))
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
@@ -234,19 +235,12 @@ public class XxxController {
         builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
         builder.and().in("c.catFriendName", inList);
         builder.and().eq("d.petId", 0);
+        builder.and().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(0));
         builder.paged().orderIn("c.catFriendName", inList).sort("c.id", Direction.DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMappedCriteria resultMapped = builder.get();
         Page<Map<String, Object>> page = repository.find(resultMapped);
-
-        Cat cat = this.catRepository.get(110);
-
-        System.out.println("____cat: " + cat);
-
-        List<Cat> catList = this.catRepository.in(InCondition.wrap("id", Arrays.asList(109, 110)));
-
-        System.out.println("____catList: " + catList);
 
         return ViewEntity.ok(page);
 
@@ -397,11 +391,13 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-        builder.and().in("testBoo", Arrays.asList(TestBoo.TEST,TestBoo.BOO))
+        builder.in("testList", Arrays.asList("BOO"))
+                .ne("type","xxxxx")
                 .or().in("id", Arrays.asList(1, 251));
 //		builder.paged().orderIn("type",inList);
         builder.forceIndex("IDX_CAT_DOG_ID");
         builder.paged().ignoreTotalRows();
+        Cat cat;
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
         Criteria criteria = builder.get();

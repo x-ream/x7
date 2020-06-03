@@ -87,7 +87,12 @@ public interface SqlConditionCriteria extends KeyMapper{
                 Object value = inList.get(j);
                 if (value == null)
                     continue;
-                String ev = ((Enum) value).name();
+                String ev = null;
+                if (value instanceof String){
+                    ev = (String) value;
+                }else {
+                    ev = ((Enum) value).name();
+                }
                 sb.append(SqlScript.SINGLE_QUOTES).append(ev).append(SqlScript.SINGLE_QUOTES);//'string'
                 if (j < length - 1) {
                     sb.append(SqlScript.COMMA);
@@ -153,11 +158,15 @@ public interface SqlConditionCriteria extends KeyMapper{
                         Parsed parsed = Parser.get(clzName);
                         if (BeanUtilX.isBaseType_0(arr[1],x.getValue(),parsed)){
                             ite.remove();
+                        }else{
+                            BeanUtilX.testNumberValueToDate(parsed.getElement(arr[1]).clz,x);
                         }
                     }else{
                         Parsed parsed = criteria.getParsed();
                         if (BeanUtilX.isBaseType_0(key,x.getValue(),parsed)){
                             ite.remove();
+                        }else{
+                            BeanUtilX.testNumberValueToDate(parsed.getElement(x.getKey()).clz,x);
                         }
                     }
                 }else if (p == PredicateAndOtherScript.IN

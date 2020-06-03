@@ -537,4 +537,20 @@ public class BeanUtilX extends BeanUtil {
         return null;
     }
 
+    public static boolean testNumberValueToDate(Class clzz, io.xream.x7.common.bean.X x){
+        if (clzz == Date.class) {
+            if (x.getValue() instanceof Long) {
+                x.setValue(new Date(((Long) x.getValue()).longValue()));
+            }
+            return true;
+        } else if (clzz == Timestamp.class) {
+            if (x.getValue() instanceof Long) {
+                x.setValue(new Timestamp(((Long) x.getValue()).longValue()));
+            }
+            return true;
+        }
+
+        return false;
+    }
+
 }
