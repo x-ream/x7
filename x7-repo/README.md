@@ -103,7 +103,7 @@
             14. refresh(RefreshCondition) //根据主键更新
             15. refreshUnSafe(RefreshCondition)//不根据主键更新
             16. remove(id)//根据主键删除
-            17. removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T>) //编辑页面列表时写数据库
+            17. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
             
             
 ####    标准拼接API
@@ -133,7 +133,10 @@
 
         MAP查询结果构建API
             19. distinct //去重
-            20. reduce //汇总, 含having接口
+            20. reduce //归并计算
+                    // .reduce(ReduceType.SUM, "dogTest.petId") 
+                    // .reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(Op.GT, 1))
+                    //含Having接口 (仅仅在reduc查询后,有限支持Having)
             21. groupBy //分组
             22. resultKey //指定返回列
             23. resultKeyFunction //返回列函数支持
@@ -146,10 +149,13 @@
             27. sourceScript().source("orderItem").alia("i").joinType(JoinType.INNER_JOIN)
                                               .on("orderId", JoinFrom.wrap("o","id")) //fluent构建连表sql
             28.               .more().[1~18] // LEFT JOIN等, 更多条件
-                                           
             
+        分页及排序API
+            29. paged(PagedAndTokenedRo) //前端请求参数构建分页及排序
+            30. paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC) 
+                                           
         更新构建API
-            29. refresh
+            31. refresh
             
         不支持项
             in(sql) // 和连表查询及二级缓存的设计有一定的冲突
