@@ -138,6 +138,12 @@
                 Criteria.ResultMappedCriteria criteria = builder.get();
                 orderRepository.find(criteria);
             }
+            
+            {
+                orderRepository.refresh(
+                    RefreshCondition.build().refresh("status","PAYING").eq("id",1).eq("status","UN_PAID")
+                );
+            }
         
         条件构建API:
             1. and // AND 默认, 可省略，也可不省略
