@@ -119,10 +119,30 @@
         CriteriaBuilder.ResultMappedBuilder //返回ResultMappedCriteria, 查出Map形式记录，支持连表查询
         RefreshCondition //构建要更新的字段和条件
         
+        代码片段:
+            {
+                CriteriaBuilder builder = CriteriaBuilder.build(Order.class); 
+                builder.eq("userId",obj.getUserId()).eq("status","PAID");
+                Criteria criteria = builer.get();
+                orderRepository.find(criteria);
+            }
+        
+            {
+                CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+                builder.resultKey("o.id);
+                builder.eq("o.status","PAID");
+                builder.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
+                builder.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
+                builder.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
+                builder.paged(obj);
+                Criteria.ResultMappedCriteria criteria = builder.get();
+                orderRepository.find(criteria);
+            }
+        
         条件构建API:
             1. and // AND 默认, 可省略，也可不省略
             2. or // OR
-            3. eq // =
+            3. eq // = (eq, 以及其它的API, 值为null，不会被拼接到SQL)
             4. ne // !=
             5. gt // >
             6. gte // >=
@@ -135,7 +155,7 @@
             13. nin // not in
             14. isNull // is null
             15. nonNull // is not null
-            16. x // 简单的手写sql片段， 例如 foo.amount = bar.price * bar.qty
+            16. x // 简单的手写sql片段， 例如 x("foo.amount = bar.price * bar.qty") , x("item.quantity = 0")
             17. beginSub // 左括号
             18. endSub // 右括号
 
@@ -164,6 +184,13 @@
                                            
         更新构建API
             31. refresh
+            
+        框架优化
+            sourceScript
+                如果条件和返回都不包括sourceScript里的连表，框架会优化移除连接（目标连接表需要，中间表则不会
+                被移除）。
+            in
+                每500个条件会切割出一次in查询
             
         不支持项
             in(sql) // 和连表查询及二级缓存的设计有一定的冲突
