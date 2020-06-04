@@ -8,7 +8,7 @@ public interface KeyMapper {
     default String mapping(String key, CriteriaCondition criteria) {
 
 
-        if (key.contains(SqlScript.POINT)) {
+        if (key.contains(SqlScript.DOT)) {
 
             String[] arr = key.split("\\.");
             String alia = arr[0];
@@ -20,7 +20,7 @@ public interface KeyMapper {
             if (parsed == null)
                 throw new RuntimeException("Entity Bean Not Exist: " + BeanUtil.getByFirstUpper(key));
 
-            String value = parsed.getTableName(alia) + SqlScript.POINT + parsed.getMapper(property);
+            String value = parsed.getTableName(alia) + SqlScript.DOT + parsed.getMapper(property);
 
             return value;
         }

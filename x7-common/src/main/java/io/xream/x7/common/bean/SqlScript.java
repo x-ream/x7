@@ -129,7 +129,7 @@ public interface SqlScript {
 	String PLACE_HOLDER = "?";
 	String EQ_PLACE_HOLDER = " = ?";
 	String LIKE_HOLDER = "%";
-	String POINT = ".";
+	String DOT = ".";
 	String COMMA = ",";
 	String STAR = "*";
 	String UNDER_LINE = "_";

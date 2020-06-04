@@ -316,7 +316,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                 }
                 sqlBuilder.conditionSet.add(reduce.getProperty());
                 String alianProperty = reduce.getProperty() + SqlScript.UNDER_LINE + reduce.getType().toString().toLowerCase();//property_count
-                String alianName = alianProperty.replace(SqlScript.POINT, SqlScript.DOLLOR);
+                String alianName = alianProperty.replace(SqlScript.DOT, SqlScript.DOLLOR);
                 resultMapped.getResultKeyAliaMap().put(alianName, alianProperty);
 
                 String value = mapping(reduce.getProperty(), criteria);

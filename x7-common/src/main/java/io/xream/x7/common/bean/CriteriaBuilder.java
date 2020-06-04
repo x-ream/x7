@@ -357,7 +357,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
                         if (value instanceof Map) {
                             Map vMap = (Map) value;
                             for (Object k : vMap.keySet()) {
-                                distinct.add(key.toString() + SqlScript.POINT + k.toString());
+                                distinct.add(key.toString() + SqlScript.DOT + k.toString());
                             }
                         }
                     }

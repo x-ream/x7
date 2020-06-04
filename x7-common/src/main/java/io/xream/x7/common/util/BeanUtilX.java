@@ -461,7 +461,7 @@ public class BeanUtilX extends BeanUtil {
         } else {
             str = property;
         }
-        if (str.contains(SqlScript.POINT)) {
+        if (str.contains(SqlScript.DOT)) {
             String[] xxx = str.split("\\.");
             if (xxx.length == 1)
                 property = xxx[0];
