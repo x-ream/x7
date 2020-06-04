@@ -1,5 +1,7 @@
 # x7
-   [http://x7.xream.io](http://x7.xream.io)
+   [http://x7.xream.io](http://x7.xream.io) 
+   
+   [详细说明](https://github.com/x-ream/x7/blob/master/x7-repo/README.md)
    
 [![license](https://img.shields.io/github/license/x-ream/x7.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![maven](https://img.shields.io/maven-central/v/io.xream.x7/x7-parent.svg)](https://search.maven.org/search?q=io.xream)
@@ -11,7 +13,6 @@
           @EnableDistributionLock       @Lock             or  
              { DistributionLock.by(key).lock(task) }
              
-          [readme](blob/master/x7-repo/README.md)
           
        x7-reyc
           /reyc     (wrapped Resilience4J)
