@@ -110,7 +110,7 @@
 
         MAP查询结果构建API
             19. distinct //去重
-            20. reduce //汇总, 含having入口
+            20. reduce //汇总, 含having接口
             21. groupBy //分组
             22. resultKey //指定返回列
             23. resultKeyFunction //返回列带函数计算
