@@ -14,7 +14,7 @@
         public class App{
             main()
          
-        @Lock(condition="#foo.getId()")
+        @Lock(condition="#foo.getId()") //需要自定义condition
         public void doSomething(Foo foo)
     
     使用场景: 多个服务可能会同时修改同一个资源, 就需要能锁住那个资源
@@ -64,7 +64,7 @@
         public class App{
             main()
      
-        @CacheableL3(expireTime = 1000, condition="#foo.getId()")
+        @CacheableL3(expireTime = 1000, condition="#foo.getId()") //默认condition为对象JSON的MD5值
         public void doSomething(Foo foo)
 
      可在项目里单独使用，使用场景:
