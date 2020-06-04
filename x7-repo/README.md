@@ -136,7 +136,8 @@
             20. reduce //汇总, 含having接口
             21. groupBy //分组
             22. resultKey //指定返回列
-            23. resultKeyFunction //返回列带函数计算
+            23. resultKeyFunction //返回列函数支持
+                    // .resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt")
             24. resultWithDottedKey //连表查询返回非JSON格式数据,map的key包含"."  (结果优化2)
            
         连表构建API
@@ -151,8 +152,8 @@
             29. refresh
             
         不支持项
-            in(sql)
-            x(function, List<String>)
-            union
+            in(sql) // 和连表查询及二级缓存的设计有一定的冲突
+            x(function, List<String>) // 建议业务设计避免需要函数计算的查询条件
+            union // 过于复杂
             
                 
