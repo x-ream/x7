@@ -315,7 +315,7 @@ public class XxxController {
                 .groupBy("id")
         ;
         builder.and().eq("type", "NL");
-        builder.paged().page(1).rows(10).sort("id", Direction.DESC);
+        builder.paged().ignoreTotalRows().page(1).rows(10).sort("id", Direction.DESC);
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
         Page<Map<String, Object>> page = this.catRepository.find(resultMappedCriteria);

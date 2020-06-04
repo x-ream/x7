@@ -112,7 +112,7 @@
         RefreshCondition //构建要更新的字段和条件
         
         条件构建API:
-            1. and // AND 默认, 下一个版本可省略，也可不省略
+            1. and // AND 默认, 可省略，也可不省略
             2. or // OR
             3. eq // =
             4. ne // !=
