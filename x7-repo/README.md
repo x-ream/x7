@@ -6,15 +6,28 @@
     
 ## x7-lock  分布式锁框架
 
-    代码块: DistributionLock.by(key).lock( o -> {});
-    注解: @EnableDistributionLock     @Lock(condition="spEL")
+    代码块使用
+        DistributionLock.by(key).lock( o -> {});
+        
+    注解使用
+        @EnableDistributionLock
+        public class App{
+            main()
+         
+        @Lock(condition="#foo.getId()")
+        public void doSomething(Foo foo)
     
     使用场景: 多个服务可能会同时修改同一个资源, 就需要能锁住那个资源
     非常规用: 分布式锁防客户端重复请求(一般用token机制防客户端重复请求)
 
 ## x7-cache 缓存框架
    
-### 二级缓存 @EnableX7L2Caching
+### 二级缓存 
+
+    注解使用
+        @EnableX7L2Caching
+        public class App{
+            main()
 
     二级缓存是基于redis.multiGet的高速缓存实现。
 
@@ -44,7 +57,15 @@
         listPlainValue(ResultMappedCriteria)
         
         
-###  三级缓存 + 一级缓存  @EnableX7L3Caching(waitTimeMills = 1000)  @CacheableL3
+###  三级缓存 + 一级缓存  
+
+     注解使用
+        @EnableX7L3Caching(waitTimeMills = 1000)
+        public class App{
+            main()
+     
+        @CacheableL3(expireTime = 1000, condition="#foo.getId()")
+        public void doSomething(Foo foo)
 
      可在项目里单独使用，使用场景:
          1. 报表
@@ -54,6 +75,9 @@
 
 ####    使用方法: 
     @EnableX7Repostory  
+    public class App{
+        main()
+    
     代码片段:
     @Repository
     public interface FooRepository extends BaseRepository<Foo> {}
@@ -126,14 +150,9 @@
         更新构建API
             29. refresh
             
-        
-        
+        不支持项
+            in(sql)
+            x(function, List<String>)
+            union
             
-           
-            
-            
-        
-        
-        
-            
-        
+                
