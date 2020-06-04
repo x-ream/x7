@@ -10,6 +10,8 @@
           @EnableX7L3Caching            @CacheableL3
           @EnableDistributionLock       @Lock             or  
              { DistributionLock.by(key).lock(task) }
+             
+          [readme](blob/master/x7-repo/README.md)
           
        x7-reyc
           /reyc     (wrapped Resilience4J)
