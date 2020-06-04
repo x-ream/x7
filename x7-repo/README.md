@@ -145,7 +145,7 @@
                 );
             }
         
-        条件构建API:
+        条件构建API  (CriteriaBuilder | ResultMappedBuilder)
             1. and // AND 默认, 可省略，也可不省略
             2. or // OR
             3. eq // = (eq, 以及其它的API, 值为null，不会被拼接到SQL)
@@ -165,7 +165,7 @@
             17. beginSub // 左括号
             18. endSub // 右括号
 
-        MAP查询结果构建API
+        MAP查询结果构建API  (ResultMappedBuilder)
             19. distinct //去重
             20. reduce //归并计算
                     // .reduce(ReduceType.SUM, "dogTest.petId") 
@@ -177,18 +177,18 @@
                     // .resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt")
             24. resultWithDottedKey //连表查询返回非JSON格式数据,map的key包含"."  (结果优化2)
            
-        连表构建API
+        连表构建API  (ResultMappedBuilder)
             25. sourceScript(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
             26. sourceScript("order").alia("o") //连表里的主表
             27. sourceScript().source("orderItem").alia("i").joinType(JoinType.INNER_JOIN)
                                               .on("orderId", JoinFrom.wrap("o","id")) //fluent构建连表sql
             28.               .more().[1~18] // LEFT JOIN等, 更多条件
             
-        分页及排序API
+        分页及排序API  (ResultMappedBuilder)
             29. paged(PagedAndTokenedRo) //前端请求参数构建分页及排序
             30. paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC) 
                                            
-        更新构建API
+        更新构建API  (RefreshCondition)
             31. refresh
             
         框架优化
