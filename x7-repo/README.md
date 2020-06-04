@@ -172,7 +172,7 @@
             24. resultWithDottedKey //连表查询返回非JSON格式数据,map的key包含"."  (结果优化2)
            
         连表构建API
-            25. sourceScript(joinSql) //简单的连表SQL
+            25. sourceScript(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
             26. sourceScript("order").alia("o") //连表里的主表
             27. sourceScript().source("orderItem").alia("i").joinType(JoinType.INNER_JOIN)
                                               .on("orderId", JoinFrom.wrap("o","id")) //fluent构建连表sql
