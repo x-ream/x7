@@ -22,7 +22,7 @@
 
 ## x7-cache 缓存框架
    
-### 二级缓存 
+#### 二级缓存 
 
     注解使用
         @EnableX7L2Caching
@@ -57,7 +57,7 @@
         listPlainValue(ResultMappedCriteria)
         
         
-###  三级缓存 + 一级缓存  
+####  三级缓存 + 一级缓存  
 
      注解使用
         @EnableX7L3Caching(waitTimeMills = 1000)
