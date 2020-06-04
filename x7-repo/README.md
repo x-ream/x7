@@ -82,12 +82,12 @@
             17. removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T>) //编辑页面列表时写数据库
             
             
-####    标准拼接接口
+####    标准拼接API
         CriteriaBuilder // 返回Criteria, 查出对象形式记录
         CriteriaBuilder.ResultMappedBuilder //返回ResultMappedCriteria, 查出Map形式记录，支持连表查询
         RefreshCondition //构建要更新的字段和条件
         
-        条件构建的API:
+        条件构建API:
             1. and // AND 默认, 下一个版本可省略，也可不省略
             2. or // OR
             3. eq // =
@@ -123,7 +123,7 @@
             28.               .more().[1~18] // LEFT JOIN等, 更多条件
                                            
             
-        更新内容构建API
+        更新构建API
             29. refresh
             
         
