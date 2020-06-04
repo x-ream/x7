@@ -73,7 +73,7 @@
          
 ##  x7-jdbc-template-plus 数据库ORM框架
 
-####    使用方法: 
+####    使用方法
     @EnableX7Repostory  
     public class App{
         main()
@@ -82,8 +82,16 @@
     @Repository
     public interface FooRepository extends BaseRepository<Foo> {}
     
-####    实体类注解: 
-    @X.Key(定义主键，必选)   @X.Mapping(定义对象和关系映射, 可选)
+####    实体类注解
+    @X.Key //主键, 必须
+    private Long id;
+    
+    @X.Mapping("t_dog_demo") // 可选, 默认表名是 dog
+    public class Dog {
+    
+    @X.Mapping("dog_name") // 可选, 默认列名是 name
+    private String name;
+    
     
 ####    BaseRepository API
     
