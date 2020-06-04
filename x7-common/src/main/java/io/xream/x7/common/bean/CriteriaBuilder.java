@@ -302,8 +302,8 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             return this;
         }
 
-        public ResultMappedBuilder keyWithPoint() {
-            get().setKeyWithPoint(true);
+        public ResultMappedBuilder resultWithDottedKey() {
+            get().setResultWithDottedKey(true);
             return this;
         }
 

@@ -285,12 +285,10 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-        List<Object> inList = new ArrayList<>();
-        inList.add("BL");
-        inList.add("NL");
+
         builder.and().eq("taxType", null);
-        builder.and().in("type", inList);
-        builder.paged().ignoreTotalRows().orderIn("type", inList);
+        builder.and().in("type", Arrays.asList("BL","NL"));
+        builder.paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
 
 //		Criteria.ResultMappedCriteria criteria = builder.get();
         Criteria criteria = builder.get();

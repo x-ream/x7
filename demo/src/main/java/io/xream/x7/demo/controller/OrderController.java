@@ -42,7 +42,7 @@ public class OrderController {
     @RequestMapping("/find")
     public ViewEntity find(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.keyWithPoint().distinct("o.id");
+        builder.resultWithDottedKey().distinct("o.id");
         builder.resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt");
         builder.resultKeyFunction(ResultKeyAlia.wrap("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
         builder.eq("o.name","test");

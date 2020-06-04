@@ -47,8 +47,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	@JsonIgnore
 	private transient Parsed parsed;
 	@JsonIgnore
-	private transient boolean isWhere = true;
-	@JsonIgnore
 	private transient List<Object> valueList = new ArrayList<Object>();
 	@JsonIgnore
 	private transient String countDistinct = "COUNT(*) count";
@@ -87,14 +85,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 	}
 	public String getCountDistinct(){
 		return this.countDistinct;
-	}
-
-	public boolean isWhere() {
-		return isWhere;
-	}
-
-	public void setWhere(boolean where) {
-		isWhere = where;
 	}
 
 	public List<Sort> getSortList() {
@@ -220,14 +210,11 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		private String sourceScript;
 		private List<SourceScript> sourceScripts = new ArrayList<>();
 		private List<Reduce> reduceList = new ArrayList<>();
-		private boolean isKeyWithPoint;
+		private boolean isResultWithDottedKey;
 		@JsonIgnore
 		private transient PropertyMapping propertyMapping;
 		@JsonIgnore
 		private transient Map<String,String> aliaMap;
-		/*
-		 * only for oracle
-		 */
 		@JsonIgnore
 		private transient Map<String,String> resultKeyAliaMap = new HashMap<>();
 
@@ -301,12 +288,12 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			return resultFuntionList;
 		}
 
-		public boolean isKeyWithPoint() {
-			return this.isKeyWithPoint;
+		public boolean isResultWithDottedKey() {
+			return isResultWithDottedKey;
 		}
 
-		public void setKeyWithPoint(boolean pointKey) {
-			this.isKeyWithPoint = pointKey;
+		public void setResultWithDottedKey(boolean resultWithDottedKey) {
+			isResultWithDottedKey = resultWithDottedKey;
 		}
 
 		@Override
