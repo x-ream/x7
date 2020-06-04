@@ -38,10 +38,12 @@
         4. listPlainValue(ResultMappedCriteria)
         
     以上设计意味着，如果in和list查询返回记录条数超过20条, 二级缓存
-    会失去效果. 
-    既然不用二级缓存，如果要返回很多条记录，自定义返回列, 请使用:
+    会失去高速响应的效果，请务必关闭二级缓存. 
+    如果需要返回很多条记录，需要自定义返回列, 请使用:
         find(ResultMappedCriteria)
         list(ResultMappedCriteria)
+        listPlainValue(ResultMappedCriteria)
+        
         
 ###  三级缓存 + 一级缓存  @EnableX7L3Caching(waitTimeMills = 1000)  @CacheableL3
 
