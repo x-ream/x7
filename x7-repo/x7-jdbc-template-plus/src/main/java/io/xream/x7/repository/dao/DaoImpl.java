@@ -390,14 +390,14 @@ public class DaoImpl implements Dao {
     }
 
     @Override
-    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
+    public <K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped){
         Class clz = resultMapped.getClz();
         SqlParsed sqlParsed = SqlUtil.fromCriteria(resultMapped, criteriaParser, dialect);
         String sql = sqlParsed.getSql().toString();
 
         LoggerProxy.debug(clz, sql);
 
-        return queryForPlainValueList(sql,resultMapped,this.dialect,jdbcTemplate);
+        return queryForPlainValueList(clzz,sql,resultMapped,this.dialect,jdbcTemplate);
     }
 
 
@@ -511,11 +511,9 @@ public class DaoImpl implements Dao {
         }
     }
 
-    private <K> List<K> queryForPlainValueList(String sql, Criteria.ResultMappedCriteria resultMappedCriteria, Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private <K> List<K> queryForPlainValueList(Class<K> clzz, String sql, Criteria.ResultMappedCriteria resultMappedCriteria, Dialect dialect, JdbcTemplate jdbcTemplate) {
 
         List<Object> valueList = resultMappedCriteria.getValueList();
-
-        Class<K> clzz = resultMappedCriteria.getPlainValueClzz();
 
         if (valueList == null || valueList.isEmpty()) {
             return this.jdbcTemplate.query(sql, new SingleColumnRowMapper<>(clzz));

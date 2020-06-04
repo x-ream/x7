@@ -316,10 +316,10 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     }
 
     @Override
-    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
+    public <K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped){
         resultMapped.setClz(this.clz);
         resultMapped.setParsed(Parser.get(this.clz));
-        return repository.listPlainValue(resultMapped);
+        return repository.listPlainValue(clzz,resultMapped);
     }
 
     @Override

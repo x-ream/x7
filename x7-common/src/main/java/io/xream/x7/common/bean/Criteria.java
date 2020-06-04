@@ -332,31 +332,6 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		}
 
-		public <K> Class<K> getPlainValueClzz() {
-
-			String key = null;
-			if (this.distinct !=null ){
-				key = this.distinct.getList().get(0);
-			}else if (this.resultKeyList != null) {
-				key = this.resultKeyList.get(0);
-			}else if (this.resultFuntionList != null) {
-				throw new IllegalArgumentException("BaseRepository.listPlainValue(criteria) not support Function Key Criteria");
-			}
-			if (key.contains(SqlScript.POINT)) {
-
-				String[] arr = key.split("\\.");
-				String alia = arr[0];
-				String property = arr[1];
-
-				String clzName = BeanUtilX.getClzName(alia, this);
-
-				Parsed parsed = Parser.get(clzName);
-
-				return parsed.getElement(property).clz;
-			}else{
-				return this.getParsed().getElement(key).clz;
-			}
-		}
 
 		@Override
 		public String toString() {

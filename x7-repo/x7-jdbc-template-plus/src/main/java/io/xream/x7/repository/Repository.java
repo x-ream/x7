@@ -89,7 +89,7 @@ public interface Repository extends QueryForCache{
 	 */
 	List<Map<String,Object>> list(Criteria.ResultMappedCriteria resultMapped);
 
-	<K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped);
+	<K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped);
 
 	<T> List<T> list(Criteria criteria);
 

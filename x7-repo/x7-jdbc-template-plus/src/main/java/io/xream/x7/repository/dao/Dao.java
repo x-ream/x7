@@ -57,7 +57,7 @@ public interface Dao {
 
 	List<Map<String,Object>> list(Criteria.ResultMappedCriteria resultMapped);
 
-	<K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped);
+	<K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped);
 
 	<T> Page<T> find(Criteria criteria);
 

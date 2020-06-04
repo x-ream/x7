@@ -159,7 +159,7 @@ public class XxxController {
 
         Criteria.ResultMappedCriteria resultMapped = builder.get();
 
-        List<Long> idList = repository.listPlainValue(resultMapped);
+        List<Long> idList = repository.listPlainValue(Long.class, resultMapped);
 
 
         return ViewEntity.ok(idList);

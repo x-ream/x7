@@ -302,8 +302,8 @@ public final class CacheableRepository implements Repository, Manuable {
     }
 
     @Override
-    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
-        return dataTransform.listPlainValue(resultMapped);
+    public <K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped){
+        return dataTransform.listPlainValue(clzz,resultMapped);
     }
 
 

@@ -121,8 +121,8 @@ public class SqlDataTransform implements DataTransform {
     }
 
     @Override
-    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
-        return this.dao.listPlainValue(resultMapped);
+    public <K> List<K> listPlainValue(Class<K> clzz, Criteria.ResultMappedCriteria resultMapped){
+        return this.dao.listPlainValue(clzz, resultMapped);
     }
 
     @Override
