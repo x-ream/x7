@@ -7,7 +7,7 @@
    x7/x7-repo [DETAILS README](https://github.com/x-ream/x7/blob/master/x7-repo/README.md)
 
 
-### BRIEF
+### SNAPSHOT
        
        x7-repo     (wrapped Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
