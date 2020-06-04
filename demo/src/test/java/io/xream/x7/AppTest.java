@@ -36,9 +36,9 @@ public class AppTest {
 //        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
-//        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.inOrder();
+        xxxTest.testOrderFind();
+        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
@@ -46,7 +46,7 @@ public class AppTest {
 
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 
 
 
@@ -63,23 +63,23 @@ public class AppTest {
 
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
 
         xxxTest.testListPlainValue();
 
-//        xxxTest.testAlia();
+        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
-//        xxxTest.distinct();
+        xxxTest.distinct();
 //
 
 //        xxxTest.testOne();
-//        xxxTest.testListCriteria();
-//        xxxTest.refreshByCondition();
+        xxxTest.testListCriteria();
+        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
@@ -106,7 +106,7 @@ public class AppTest {
 //        xxxTest.testOneKeyRemote();
 //        xxxTest.testEnum();
 
-//        xxxTest.removeOrRefreshOrCreate();
+//        xxxTest.removeRefreshCreate();
 //
 //        xxxTest.testCacheGet();
 

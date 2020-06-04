@@ -18,7 +18,7 @@ package io.xream.x7.repository.internal;
 
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
-import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
+import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
@@ -30,11 +30,11 @@ import org.springframework.util.Assert;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public final class RemoveOrRefreshOrCreateBiz {
+public final class RemoveRefreshCreateBiz {
 
-    protected static <T> boolean doIt(Class<T> clz, Repository repository, RemoveOrRrefreshOrCreate wrapper) {
+    protected static <T> boolean doIt(Class<T> clz, Repository repository, RemoveRefreshCreate wrapper) {
 
-        Assert.notNull(wrapper, "removeOrRefreshOrCreate(wrapper),wrapper is null");
+        Assert.notNull(wrapper, "removeRefreshCreate(wrapper),wrapper is null");
 
         if (wrapper.getList() == null || wrapper.getList().isEmpty())
             return false;

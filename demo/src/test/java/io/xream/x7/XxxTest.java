@@ -260,8 +260,8 @@ public class XxxTest {
         this.controller.refreshOrCreat(cat);
     }
 
-    public void removeOrRefreshOrCreate(){
-        this.controller.removeOrRefreshOrCreate();
+    public void removeRefreshCreate(){
+        this.controller.removeRefreshCreate();
     }
 
     public  void testCacheGet(){

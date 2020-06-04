@@ -4,7 +4,7 @@ package io.xream.x7.demo.controller;
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
+import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
@@ -148,7 +148,7 @@ public class XxxController {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("catTest.id");
-        builder.beginSub().gte("dogTest.id", 0).endSub();
+        builder.beginSub().gte("dogTest.id", 1000000).endSub();
 //		builder.and().in("catTest.catFriendName", inList);
 //		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 
@@ -427,7 +427,7 @@ public class XxxController {
     }
 
     @RequestMapping("/rrc")
-    public ViewEntity removeOrRefreshOrCreate() {
+    public ViewEntity removeRefreshCreate() {
 
         Date date = new Date();
         Cat cat1 = new Cat();
@@ -443,13 +443,13 @@ public class XxxController {
 
         List<Cat> list = Arrays.asList(cat1, cat2);
 
-        RemoveOrRrefreshOrCreate<Cat> wrapper = RemoveOrRrefreshOrCreate.wrap(list, new Object[]{1, 251});
+        RemoveRefreshCreate<Cat> wrapper = RemoveRefreshCreate.wrap(list, new Object[]{1, 251});
 
         String str = JsonX.toJson(wrapper);
-        wrapper = JsonX.toObject(str, RemoveOrRrefreshOrCreate.class);
+        wrapper = JsonX.toObject(str, RemoveRefreshCreate.class);
         System.out.println(wrapper);
 
-        this.catRepository.removeOrRefreshOrCreate(wrapper);
+        this.catRepository.removeRefreshCreate(wrapper);
 
         Cat cat = this.catRepository.get(466);
 

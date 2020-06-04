@@ -19,7 +19,7 @@ package io.xream.x7.repository.internal;
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.bean.condition.RemoveOrRrefreshOrCreate;
+import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.StringUtil;
@@ -165,8 +165,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
     }
 
     @Override
-    public boolean removeOrRefreshOrCreate(RemoveOrRrefreshOrCreate<T> wrapper){
-        return RemoveOrRefreshOrCreateBiz.doIt(this.clz,this.repository,wrapper);
+    public boolean removeRefreshCreate(RemoveRefreshCreate<T> wrapper){
+        return RemoveRefreshCreateBiz.doIt(this.clz,this.repository,wrapper);
     }
 
     @Override

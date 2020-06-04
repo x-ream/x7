@@ -22,7 +22,7 @@ import io.xream.x7.common.bean.Routeable;
 import java.util.List;
 
 
-public class RemoveOrRrefreshOrCreate<T> implements Routeable {
+public class RemoveRefreshCreate<T> implements Routeable {
 
     private Object routeKey;
     @JsonIgnore
@@ -32,13 +32,13 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
     private Object[] ins;
 
     @Deprecated
-    public RemoveOrRrefreshOrCreate(){}
-    public static <T> RemoveOrRrefreshOrCreate wrap(List<T> list, Object[] ins){
+    public RemoveRefreshCreate(){}
+    public static <T> RemoveRefreshCreate wrap(List<T> list, Object[] ins){
         return wrap(null,list,ins);
     }
 
-    public static <T> RemoveOrRrefreshOrCreate wrap(Object routeKey,List<T> list, Object[] ins){
-        RemoveOrRrefreshOrCreate rrc =  new RemoveOrRrefreshOrCreate();
+    public static <T> RemoveRefreshCreate wrap(Object routeKey, List<T> list, Object[] ins){
+        RemoveRefreshCreate rrc =  new RemoveRefreshCreate();
         rrc.routeKey = routeKey;
         rrc.list = list;
         rrc.ins = ins;
@@ -80,7 +80,7 @@ public class RemoveOrRrefreshOrCreate<T> implements Routeable {
 
     @Override
     public String toString() {
-        return "RemoveOrRrefreshOrCreate{" +
+        return "RemoveRefreshCreate{" +
                 "routeKey=" + routeKey +
                 ", list=" + list +
                 ", ins=" + ins +
