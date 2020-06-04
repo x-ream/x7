@@ -40,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -388,6 +389,17 @@ public class DaoImpl implements Dao {
         return queryForMapList(sql, resultMapped, this.dialect, jdbcTemplate);
     }
 
+    @Override
+    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
+        Class clz = resultMapped.getClz();
+        SqlParsed sqlParsed = SqlUtil.fromCriteria(resultMapped, criteriaParser, dialect);
+        String sql = sqlParsed.getSql().toString();
+
+        LoggerProxy.debug(clz, sql);
+
+        return queryForPlainValueList(sql,resultMapped,this.dialect,jdbcTemplate);
+    }
+
 
     @Override
     public <T> T getOne(T conditionObj) {
@@ -485,7 +497,6 @@ public class DaoImpl implements Dao {
 
         });
 
-
     }
 
 
@@ -497,6 +508,21 @@ public class DaoImpl implements Dao {
             return jdbcTemplate.update(sql, arr) > 0;
         } catch (Exception e) {
             throw DaoExceptionTranslator.onRollback(null, e, logger);
+        }
+    }
+
+    private <K> List<K> queryForPlainValueList(String sql, Criteria.ResultMappedCriteria resultMappedCriteria, Dialect dialect, JdbcTemplate jdbcTemplate) {
+
+        List<Object> valueList = resultMappedCriteria.getValueList();
+
+        Class<K> clzz = resultMappedCriteria.getPlainValueClzz();
+
+        if (valueList == null || valueList.isEmpty()) {
+            return this.jdbcTemplate.query(sql, new SingleColumnRowMapper<>(clzz));
+        }else {
+            Object[] arr = dialect.toArr(valueList);
+            return this.jdbcTemplate.query(sql, arr,
+                    new SingleColumnRowMapper<>(clzz));
         }
     }
 

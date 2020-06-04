@@ -143,55 +143,11 @@ public class XxxController {
 
 
     //	@CacheableL3(expireTime = 3, timeUnit = TimeUnit.MINUTES)
-    @RequestMapping("/test")
-    public ViewEntity testFindByResultMapped(@RequestBody CatRO ro) {
-
-        {// sample, send the json by ajax from web page
-            Map<String, Object> catMap = new HashMap<>();
-            catMap.put("id", "");
-//			catMap.put("catFriendName", "");
-//			catMap.put("time", "");
-
-            Map<String, Object> dogMap = new HashMap<>();
-            dogMap.put("number", "");
-            dogMap.put("userName", "");
-
-            ro.getResultKeyMap().put("catTest", catMap);
-            ro.getResultKeyMap().put("dogTest", dogMap);
-        }
-
-
-        String[] resultKeys = {
-                "catTest.id",
-                "catTest.catFriendName",
-//				"dogTest.id",
-//				"dogTest.userName"
-        };
-
-        ro.setResultKeys(resultKeys);
-//		ro.setTotalRowsIgnored(true);
-
-//		ro.setResultKeyMap();
-
-//		List<Object> inList = new ArrayList<>();
-//		inList.add("gggg");
-//		inList.add("xxxxx");
-//
-//		Sort sort1 = new Sort();
-//		sort1.setOrderBy("catTest.catFriendName");
-//		sort1.setDirection(Direction.ASC);
-//		Sort sort2 = new Sort();
-//		sort2.setOrderBy("catTest.id");
-//		sort2.setDirection(Direction.DESC);
-//		List<Sort> sortList = new ArrayList<Sort>();
-//		sortList.add(sort1);
-//		sortList.add(sort2);
-
-
-//		ro.setSortList(sortList);
+    @RequestMapping("/listPlainValue")
+    public ViewEntity testListPlainValue(@RequestBody CatRO ro) {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.resultKey("catTest.id").resultKey("catTest.catFriendName");
+        builder.distinct("catTest.id");
         builder.beginSub().gte("dogTest.id", 0).endSub();
 //		builder.and().in("catTest.catFriendName", inList);
 //		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
@@ -203,19 +159,10 @@ public class XxxController {
 
         Criteria.ResultMappedCriteria resultMapped = builder.get();
 
-        Page<Map<String, Object>> page = repository.find(resultMapped);
+        List<Long> idList = repository.listPlainValue(resultMapped);
 
-//		Cat cat = this.catRepository.get(110);
-//
-//		System.out.println("____cat: " + cat);
-//
-//		List<Long> idList = new ArrayList<>();
-//		idList.add(109L);
-//		idList.add(110L);
-//		List<Cat> catList = this.catRepository.in(InCondition.wrap("id",inList));
-//		System.out.println("____catList: " + catList);
 
-        return ViewEntity.ok(page);
+        return ViewEntity.ok(idList);
 
     }
 

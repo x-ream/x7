@@ -106,6 +106,8 @@ public interface BaseRepository<T> extends Typed<T> {
 
     List<Map<String, Object>> list(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
 
+    <K> List<K> listPlainValue(Criteria.ResultMappedCriteria CriteriaBuilder_ResultMappedBuilder_build_get);
+
     List<T> list(Criteria CriteriaBuilder_build_get);
 
     /**

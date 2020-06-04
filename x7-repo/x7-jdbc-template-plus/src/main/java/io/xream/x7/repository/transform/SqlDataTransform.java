@@ -43,23 +43,17 @@ public class SqlDataTransform implements DataTransform {
 
     @Override
     public long create(Object obj) {
-
         return this.dao.create(obj);
-
     }
 
     @Override
     public boolean createOrReplace(Object obj) {
-
         return this.dao.createOrReplace(obj);
-
     }
 
     @Override
     public boolean createBatch(List<?> objList) {
-
         return this.dao.createBatch(objList);
-
     }
 
     @Override
@@ -74,32 +68,24 @@ public class SqlDataTransform implements DataTransform {
 
     @Override
     public <T> boolean refresh(RefreshCondition<T> refreshCondition) {
-
         return this.dao.refreshByCondition(refreshCondition);
-
     }
 
     @Override
     public <T> boolean remove(KeyOne<T> keyOne) {
-
         return this.dao.remove(keyOne);
-
     }
 
 
     @Override
     public <T> boolean execute(T obj, String sql) {
-
         return this.dao.execute(obj, sql);
-
     }
 
 
     @Override
     public <T> List<T> list(Object obj) {
-
         return this.dao.list(obj);
-
     }
 
     @Override
@@ -109,41 +95,38 @@ public class SqlDataTransform implements DataTransform {
 
     @Override
     public <T> T get(KeyOne<T> keyOne) {//带ID查询, 不需要alia; 不带ID查询,需要alia
-
         return this.dao.get(keyOne);
-
     }
 
 
     @Override
     public <T> List<T> in(InCondition inCondition) {
-
         return this.dao.in(inCondition);
-
     }
 
 
     @Override
     public <T> Page<T> find(Criteria criteria) {
-
         return this.dao.find(criteria);
     }
 
     @Override
-    public Page<Map<String, Object>> find(Criteria.ResultMappedCriteria criteria) {
-
-        return this.dao.find(criteria);
+    public Page<Map<String, Object>> find(Criteria.ResultMappedCriteria resultMapped) {
+        return this.dao.find(resultMapped);
     }
 
     @Override
-    public List<Map<String, Object>> list(Criteria.ResultMappedCriteria criteria) {
+    public List<Map<String, Object>> list(Criteria.ResultMappedCriteria resultMapped) {
+        return this.dao.list(resultMapped);
+    }
 
-        return this.dao.list(criteria);
+    @Override
+    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
+        return this.dao.listPlainValue(resultMapped);
     }
 
     @Override
     public <T> List<T> list(Criteria criteria) {
-
         return this.dao.list(criteria);
     }
 

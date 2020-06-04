@@ -56,11 +56,11 @@ public class XxxTest {
 
     }
 
-    public  void testFindByResultMapped() {
+    public  void testListPlainValue() {
 
         CatRO cat = new CatRO();
 
-        ViewEntity ve = this.controller.testFindByResultMapped(cat);
+        ViewEntity ve = this.controller.testListPlainValue(cat);
 
         System.out.println("\n______Result: " + ve);
 

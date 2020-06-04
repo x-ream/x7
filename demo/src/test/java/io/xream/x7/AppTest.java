@@ -68,17 +68,15 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testFindByResultMapped();
+        xxxTest.testListPlainValue();
 
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
-        xxxTest.distinct();
+//        xxxTest.distinct();
 //        xxxTest.distinct();
 //
-//        xxxTest.testFindByResultMapped();
-//        xxxTest.testFindByResultMapped();
-//        xxxTest.testFindByResultMapped();
+
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();

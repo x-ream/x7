@@ -302,6 +302,12 @@ public final class CacheableRepository implements Repository, Manuable {
     }
 
     @Override
+    public <K> List<K> listPlainValue(Criteria.ResultMappedCriteria resultMapped){
+        return dataTransform.listPlainValue(resultMapped);
+    }
+
+
+    @Override
     public List<Map<String, Object>> list(Class clz, String sql, List<Object> conditionSet) {
         return dataTransform.list(clz, sql, conditionSet);
     }
