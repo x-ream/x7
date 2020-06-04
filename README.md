@@ -1,11 +1,13 @@
 # x7
    [http://x7.xream.io](http://x7.xream.io) 
    
-   [详细说明](https://github.com/x-ream/x7/blob/master/x7-repo/README.md)
-   
 [![license](https://img.shields.io/github/license/x-ream/x7.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![maven](https://img.shields.io/maven-central/v/io.xream.x7/x7-parent.svg)](https://search.maven.org/search?q=io.xream)
 
+   x7/x7-repo [DETAILS README](https://github.com/x-ream/x7/blob/master/x7-repo/README.md)
+
+
+### BRIEF
        
        x7-repo     (wrapped Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
