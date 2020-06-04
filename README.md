@@ -31,7 +31,7 @@
        x7-seata-spring-boot-starter
        
        
-### Notes
+### NOTES
        1. A method, coded with io.xream/reliable or seata, maybe we can not use:
             @Lock  or 
             { DistributionLock.by(key).lock(task) }
