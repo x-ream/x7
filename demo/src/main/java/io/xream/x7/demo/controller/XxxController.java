@@ -7,7 +7,6 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.*;
@@ -20,6 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static io.xream.x7.common.bean.JoinType.INNER_JOIN;
+import static io.xream.x7.common.bean.Op.GT;
+import static io.xream.x7.common.bean.ReduceType.COUNT_DISTINCT;
+import static io.xream.x7.common.bean.ReduceType.SUM;
+import static io.xream.x7.common.web.Direction.DESC;
 
 
 @RestController
@@ -129,10 +134,10 @@ public class XxxController {
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
         builder.distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
-                .reduce(ReduceType.COUNT_DISTINCT, "catTest.id")
-                .reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(Op.GT, 1))
+                .reduce(COUNT_DISTINCT, "catTest.id")
+                .reduce(SUM, "dogTest.petId", Having.wrap(GT, 1))
                 .groupBy("catTest.dogId")
-                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", Direction.DESC);
+                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
         String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
         Criteria.ResultMappedCriteria resultMapped = builder.get();
         resultMapped.setSourceScript(sourceScript);
@@ -155,7 +160,7 @@ public class XxxController {
         builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
         //或者如下
         builder.sourceScript().source("catTest");
-        builder.sourceScript().source("dogTest").joinType(JoinType.INNER_JOIN).on("id", JoinFrom.wrap("catTest", "dogId"));
+        builder.sourceScript().source("dogTest").joinType(INNER_JOIN).on("id", JoinFrom.wrap("catTest", "dogId"));
 
         Criteria.ResultMappedCriteria resultMapped = builder.get();
 
@@ -184,7 +189,7 @@ public class XxxController {
         builder.and().eq("d.petId", 0);
         builder.and().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(0));
-        builder.paged().orderIn("c.catFriendName", inList).sort("c.id", Direction.DESC);
+        builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMappedCriteria resultMapped = builder.get();
         Page<Map<String, Object>> page = repository.find(resultMapped);
@@ -211,7 +216,7 @@ public class XxxController {
         inList.add("BLACK");
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.distinct("c.id").reduce(ReduceType.COUNT_DISTINCT, "c.dogId").groupBy("c.id");
+        builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
         builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.paged().orderIn("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.sourceScript().source("catTest").alia("c");
@@ -311,11 +316,11 @@ public class XxxController {
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder
                 .distinct("id")
-                .reduce(ReduceType.COUNT_DISTINCT, "dogId")
+                .reduce(COUNT_DISTINCT, "dogId")
                 .groupBy("id")
         ;
         builder.and().eq("type", "NL");
-        builder.paged().ignoreTotalRows().page(1).rows(10).sort("id", Direction.DESC);
+        builder.paged().ignoreTotalRows().page(1).rows(10).sort("id", DESC);
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
         Page<Map<String, Object>> page = this.catRepository.find(resultMappedCriteria);

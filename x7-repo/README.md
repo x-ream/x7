@@ -185,7 +185,7 @@
             28.               .more().[1~18] // LEFT JOIN等, 更多条件
             
         分页及排序API  (ResultMappedBuilder)
-            29. paged(PagedAndTokenedRo) //前端请求参数构建分页及排序
+            29. paged(PagedRo) //前端请求参数构建分页及排序; 或者服务端编程API[30]
             30. paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC) 
                                            
         更新构建API  (RefreshCondition)
