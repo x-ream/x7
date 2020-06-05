@@ -220,16 +220,11 @@ public interface SqlConditionCriteria extends KeyMapper{
                     Object value = x.getValue();
                     if (value == null)
                         continue;
-                    if (value instanceof List) {
-                        for (Object v : (List)value){
+                    if (value instanceof Object[]) {
+                        for (Object v : (Object[])value){
                             add(valueList,v);
                         }
-                    } else {
-                        if (StringUtil.isNotNull(value.toString())) {
-                            add(valueList,value);
-                        }
                     }
-
                 } else if (x.getPredicate() == PredicateAndOtherScript.BETWEEN) {
                     MinMax minMax = (MinMax) x.getValue();
                     valueList.add(minMax.getMin());

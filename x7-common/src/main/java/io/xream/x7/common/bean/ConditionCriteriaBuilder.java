@@ -112,11 +112,8 @@ public class ConditionCriteriaBuilder {
         return doNull(PredicateAndOtherScript.IS_NULL,property);
     }
 
-    public ConditionCriteriaBuilder x(String sql){
-        return x(sql,null);
-    }
 
-    public ConditionCriteriaBuilder x(String sql, List<? extends Object> valueList){
+    public ConditionCriteriaBuilder x(String sql, Object... objs){
 
         if (StringUtil.isNullOrEmpty(sql)){
             isOr();
@@ -128,7 +125,7 @@ public class ConditionCriteriaBuilder {
         X x = new X(isOr());
         x.setPredicate(PredicateAndOtherScript.X);
         x.setKey(sql);
-        x.setValue(valueList);
+        x.setValue(objs);
         this.add(x);
 
         return instance;

@@ -77,7 +77,7 @@ public class OrderController {
                 .on("orderId", JoinFrom.wrap("o","id"))
                 .more().or()
                     .beginSub()
-                        .x("i.orderId = 0").or().lte("i.orderId",2)
+                        .x("i.orderId > ? and i.orderId < ?", 2,10).or().lte("i.orderId",2)
                             .beginSub().eq("i.type", OrderType.SINGLE).endSub()
                         .or().eq("i.type", null).
                             beginSub().eq("o.type",OrderType.SINGLE).endSub()
