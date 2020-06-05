@@ -1,6 +1,6 @@
 # x7-repo 数据库及数据相关的框架
 
-    x7-rep/x7-lock
+    x7-repo/x7-lock
     x7-repo/x7-cache
     x7-repo/x7-jdbc-template-plus
     
