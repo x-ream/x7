@@ -113,7 +113,7 @@ public class ConditionCriteriaBuilder {
     }
 
 
-    public ConditionCriteriaBuilder x(String sql, Object... objs){
+    public ConditionCriteriaBuilder x(String sql, Object... values){
 
         if (StringUtil.isNullOrEmpty(sql)){
             isOr();
@@ -125,7 +125,7 @@ public class ConditionCriteriaBuilder {
         X x = new X(isOr());
         x.setPredicate(PredicateAndOtherScript.X);
         x.setKey(sql);
-        x.setValue(objs);
+        x.setValue(values);
         this.add(x);
 
         return instance;
