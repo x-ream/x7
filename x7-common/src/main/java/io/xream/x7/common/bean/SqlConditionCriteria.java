@@ -52,7 +52,6 @@ public interface SqlConditionCriteria extends KeyMapper{
                 } else if (x.getPredicate() == PredicateAndOtherScript.IS_NULL
                         || x.getPredicate() == PredicateAndOtherScript.IS_NOT_NULL
                         || x.getPredicate() == PredicateAndOtherScript.X) {
-                    //....
                 } else {
                     sb.append(SqlScript.PLACE_HOLDER).append(SqlScript.SPACE);
                 }
