@@ -187,8 +187,8 @@ public class XxxController {
         builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
         builder.or().in("c.catFriendName", inList);
         builder.or().eq("d.petId", 1);
-        builder.and().lt("c.time",System.currentTimeMillis());
-        builder.or().in("c.dogId", Arrays.asList(0));
+        builder.or().lt("c.time",System.currentTimeMillis());
+        builder.and().in("c.dogId", Arrays.asList(1));
         builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMappedCriteria resultMapped = builder.get();

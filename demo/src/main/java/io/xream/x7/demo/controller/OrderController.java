@@ -46,14 +46,17 @@ public class OrderController {
         builder.resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt");
         builder.resultKeyFunction(ResultKeyAlia.wrap("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
         builder.eq("o.name","test");
-//        builder.and().eq("orderItem.name","test");
-//        builder.and().nonNull("orderItem.name");
-//        builder.and().in("orderItem.name", Arrays.asList("xxx"));
-//        builder.and().beginSub().gt("createAt",System.currentTimeMillis() - 1000000)
-//                .and().lt("createAt",System.currentTimeMillis()).endSub();
-        builder.sourceScript().source("order").alia("o");
+        builder.and().eq("i.name","test");
+        builder.and().nonNull("l.log");
+//        builder.and().nonNull("i.name");
+//        builder.and().in("i.name", Arrays.asList("xxx"));
+//        builder.and().beginSub().gt("o.createAt",System.currentTimeMillis() - 1000000)
+//                .and().lt("o.createAt",System.currentTimeMillis()).endSub();
+//        builder.sourceScript().source("order").alia("o");
 //        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.wrap("order","id"))
 //                .more().x("orderItem.name = order.name");
+        builder.sourceScript("FROM order o INNER JOIN orderItem i ON o.id = i.orderId" +
+                " INNER JOIN orderLog l ON o.id = l.orderId");
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
 

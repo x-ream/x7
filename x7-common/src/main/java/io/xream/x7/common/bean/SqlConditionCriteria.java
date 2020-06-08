@@ -53,8 +53,6 @@ public interface SqlConditionCriteria extends KeyMapper{
                         || x.getPredicate() == PredicateAndOtherScript.IS_NOT_NULL
                         || x.getPredicate() == PredicateAndOtherScript.X) {
                     //....
-                } else if (x.getPredicate() == PredicateAndOtherScript.BETWEEN) {
-                    between(sb);
                 } else {
                     sb.append(SqlScript.PLACE_HOLDER).append(SqlScript.SPACE);
                 }

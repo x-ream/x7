@@ -113,12 +113,11 @@ public class SourceScript implements SqlConditionCriteria,SqlConditionCriteria.P
 
         {
             if (on != null) {
-                sb.append(SqlScript.SPACE).append(SqlScript.ON);
+                sb.append(SqlScript.ON);
                 String aliaName = alia == null ? source : alia;
                 String key = on.getKey();
                 if (StringUtil.isNotNull(key)) {
-                    sb.append(SqlScript.SPACE)
-                            .append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
+                    sb.append(on.getJoinFrom().getAlia()).append(".").append(on.getJoinFrom().getKey())
                             .append(SqlScript.SPACE).append(on.getOp()).append(SqlScript.SPACE)
                             .append(aliaName)
                             .append(".")
