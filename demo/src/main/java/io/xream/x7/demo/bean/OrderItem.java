@@ -9,6 +9,7 @@ public class OrderItem {
     private long orderId;
     private String name;
     private OrderType type;
+    private Long quantity;
 
     public long getId() {
         return id;
@@ -42,12 +43,21 @@ public class OrderItem {
         this.type = type;
     }
 
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
         return "OrderItem{" +
                 "id=" + id +
                 ", orderId=" + orderId +
                 ", name='" + name + '\'' +
+                ", quantity='" + quantity + '\'' +
                 '}';
     }
 }

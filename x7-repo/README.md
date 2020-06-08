@@ -7,7 +7,7 @@
 ## x7-lock  分布式锁框架
 
     代码块使用
-        DistributionLock.by(key).lock( o -> {});
+        DistributionLock.by(key).lock(o -> {});
         
     注解使用
         @EnableDistributionLock
@@ -99,18 +99,18 @@
             2. list(Object) //对象查列表
             3. find(Criteria) //标准拼接查询，返回对象形式记录，返回分页对象
             4. list(Criteria) //标准拼接查询，返回对象形式记录，不返回分页对象
-            5. get(id) //根据主键查询记录
+            5. get(Id) //根据主键查询记录
             6. getOne(Object) //数据库只有一条记录时，就返回那条记录
             7. list() //无条件查全表, 几乎没使用场景
             8. find(ResultMappedCriteria) //标准拼接查询，返回Map形式记录，返回分页对象
             9. list(ResultMappedCriteria) //标准拼接查询，返回Map形式记录，不返回分页对象
             10. listPlainValue(Class<K>, ResultMappedCriteria)//返回没有key的单列数据列表 (结果优化1)
-            11. fidnToHandle(ResultMappedCriteria,RowHandler<Map<String,Object>> ) //流处理API
+            11. fidnToHandle(ResultMappedCriteria, RowHandler<Map<String,Object>>) //流处理API
             12. creaet(Object) //插入一条
             13. createBatch(List<Object>) //批量插入
             14. refresh(RefreshCondition) //根据主键更新
             15. refreshUnSafe(RefreshCondition)//不根据主键更新
-            16. remove(id)//根据主键删除
+            16. remove(Id)//根据主键删除
             17. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
             
             

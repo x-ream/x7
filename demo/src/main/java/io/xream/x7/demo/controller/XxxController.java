@@ -185,10 +185,10 @@ public class XxxController {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
-        builder.and().in("c.catFriendName", inList);
-        builder.and().eq("d.petId", 0);
+        builder.or().in("c.catFriendName", inList);
+        builder.or().eq("d.petId", 1);
         builder.and().lt("c.time",System.currentTimeMillis());
-        builder.and().in("c.dogId", Arrays.asList(0));
+        builder.or().in("c.dogId", Arrays.asList(0));
         builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMappedCriteria resultMapped = builder.get();

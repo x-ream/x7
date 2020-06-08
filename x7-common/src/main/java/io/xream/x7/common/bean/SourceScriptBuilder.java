@@ -92,23 +92,24 @@ public interface SourceScriptBuilder {
 
                     String selfKey = sourceScriptsSplittedList.get(++i);
                     String op = sourceScriptsSplittedList.get(++i);// op
-                    String targetKey = sourceScriptsSplittedList.get(++i);
-                    if (targetKey.startsWith(sourceScript.getSource()) || (sourceScript.getAlia() != null && targetKey.startsWith(sourceScript.getAlia()))) {
+                    String fromKey = sourceScriptsSplittedList.get(++i);
+                    if (fromKey.startsWith(sourceScript.getSource()) || (sourceScript.getAlia() != null && fromKey.startsWith(sourceScript.getAlia()))) {
                         String temp = selfKey;
-                        selfKey = targetKey;
-                        targetKey = temp;
+                        selfKey = fromKey;
+                        fromKey = temp;
                     }
 
                     int selfIndex = selfKey.indexOf(".");
-                    int targetIndex = targetKey.indexOf(".");
+                    int fromIndex = fromKey.indexOf(".");
 
                     JoinFrom joinFrom = new JoinFrom();
-                    joinFrom.setAlia(targetKey.substring(0, targetIndex));
-                    joinFrom.setKey(targetKey.substring(targetIndex + 1));
+                    joinFrom.setAlia(fromKey.substring(0, fromIndex));
+                    joinFrom.setKey(fromKey.substring(fromIndex + 1));
                     On on = new On();
                     on.setKey(selfKey.substring(selfIndex + 1));
                     on.setOp(op);
                     on.setJoinFrom(joinFrom);
+                    sourceScript.setOn(on);
 
                     break;
 
