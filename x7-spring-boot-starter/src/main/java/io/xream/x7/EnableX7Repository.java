@@ -27,6 +27,10 @@ import java.lang.annotation.*;
 public @interface EnableX7Repository {
 
     /**
+     * Spring JdbcTemplate support baseType bean, while ORM framework not support baseType bean
+     */
+    boolean beanWithoutBaseType() default false;
+    /**
      * t_
      */
     String mappingPrefix() default "";

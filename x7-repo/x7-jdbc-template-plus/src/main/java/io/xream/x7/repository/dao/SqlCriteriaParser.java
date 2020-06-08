@@ -18,10 +18,7 @@ package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.util.BeanUtil;
-import io.xream.x7.common.util.BeanUtilX;
-import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.common.util.*;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.repository.CriteriaParser;
 import io.xream.x7.repository.SqlParsed;
@@ -196,7 +193,14 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                     sb.append(sql);
                 } else {
 
-                    if (StringUtil.isNullOrEmpty(x.getValue().toString()) || BeanUtilX.isBaseType_0(key, x.getValue(), parsed)) {
+                    BeanElement be = parsed.getElementMap().get(key);
+                    if (be == null) {
+                        throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
+                    }
+
+                    NumberValueAndDateUtil.testNumberValueToDate(be.clz,x);
+
+                    if (StringUtil.isNullOrEmpty(String.valueOf(x.getValue())) || BaseTypeUtil.isBaseType_0(key, x.getValue(), parsed)) {
                         continue;
                     }
 
@@ -206,16 +210,13 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
                     isNotFirst = true;
 
+
                     String mapper = parsed.getMapper(key);
                     sb.append(mapper);
                     sb.append(SqlScript.EQ_PLACE_HOLDER);
 
-                    BeanElement be = parsed.getElementMap().get(key);
-                    if (be == null) {
-                        throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
-                    }
+
                     if (BeanUtil.testEnumConstant(be.clz,x.getValue())) {
-                    }else if (BeanUtilX.testNumberValueToDate(be.clz,x)) {
                     }else if (be.isJson) {
                         Object v = x.getValue();
                         if (v != null) {

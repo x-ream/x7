@@ -452,66 +452,6 @@ public class BeanUtilX extends BeanUtil {
 
     }
 
-    private static BeanElement getBeanElement(String property, Parsed parsed) {
-
-        String str = null;
-        if (property.contains(SqlScript.SPACE)) {
-            String[] arr = property.split(SqlScript.SPACE);
-            str = arr[0];
-        } else {
-            str = property;
-        }
-        if (str.contains(SqlScript.DOT)) {
-            String[] xxx = str.split("\\.");
-            if (xxx.length == 1)
-                property = xxx[0];
-            else
-                property = xxx[1];
-        } else {
-            property = str;
-        }
-
-        BeanElement be = parsed.getElement(property);
-
-        return be;
-
-    }
-
-
-    public static boolean isBaseType_0(String property, Object v, Parsed parsed) {
-
-        if (v instanceof String)
-            return false;
-
-        double d = 0;
-        try {
-            d = Double.valueOf(v.toString());
-            if (d != 0) return false;
-        } catch (Exception e) {
-            return false;
-        }
-
-        BeanElement be = getBeanElement(property, parsed);
-
-        if (be == null) {
-            return false; //FIXME
-        }
-
-        Class<?> vType = be.clz;
-
-
-        if (vType == int.class || vType == long.class || vType == float.class
-                || vType == double.class
-                || vType == short.class
-                || vType == byte.class) {
-
-            return true;
-        }
-
-
-        return false;
-    }
-
     public static <T> Object tryToGetId(T t, Parsed parsed) {
 
         Field f = parsed.getKeyField(X.KEY_ONE);
@@ -537,20 +477,5 @@ public class BeanUtilX extends BeanUtil {
         return null;
     }
 
-    public static boolean testNumberValueToDate(Class clzz, io.xream.x7.common.bean.X x){
-        if (clzz == Date.class) {
-            if (x.getValue() instanceof Long) {
-                x.setValue(new Date(((Long) x.getValue()).longValue()));
-            }
-            return true;
-        } else if (clzz == Timestamp.class) {
-            if (x.getValue() instanceof Long) {
-                x.setValue(new Timestamp(((Long) x.getValue()).longValue()));
-            }
-            return true;
-        }
-
-        return false;
-    }
 
 }

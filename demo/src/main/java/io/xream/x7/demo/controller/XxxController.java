@@ -119,7 +119,7 @@ public class XxxController {
                         .refresh("testObj", dark)
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
-                        .gt("createAt", System.currentTimeMillis())
+                        .lt("createAt", 0)
                         .in("id", Arrays.asList(247, 248))
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
@@ -186,9 +186,9 @@ public class XxxController {
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
         builder.or().in("c.catFriendName", inList);
-        builder.or().eq("d.petId", 1);
+        builder.or().eq("d.petId", 0);
         builder.or().lt("c.time",System.currentTimeMillis());
-        builder.and().in("c.dogId", Arrays.asList(1));
+        builder.and().in("c.dogId", Arrays.asList(0));
         builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMappedCriteria resultMapped = builder.get();

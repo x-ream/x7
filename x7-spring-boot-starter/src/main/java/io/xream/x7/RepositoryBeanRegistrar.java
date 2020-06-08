@@ -16,6 +16,7 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.common.util.BaseTypeUtil;
 import io.xream.x7.common.util.ClassFileReader;
 import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.internal.RepositoryProxy;
@@ -47,6 +48,10 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
         Set<Class<?>> set = ClassFileReader.getClasses(basePackage);
 
         Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7Repository.class.getName());
+
+        Object beanWithoutBaseType = attributes.get("beanWithoutBaseType");
+        BaseTypeUtil.beanWithoutBaseType = Boolean.valueOf(String.valueOf(beanWithoutBaseType));
+
         Object obj = attributes.get("basePackages");
         if (obj != null){
             String[] strs = (String[]) obj;
