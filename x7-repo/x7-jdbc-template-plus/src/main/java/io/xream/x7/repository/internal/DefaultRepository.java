@@ -107,8 +107,6 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
         if (id == 0)
             throw new PersistenceException("UNEXPECTED EXCEPTION WHILE CREATING ID");
 
-        GlobalIdPersistencePolicy.persist(id, clzName);
-
         return id;
     }
 

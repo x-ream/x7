@@ -16,17 +16,13 @@
  */
 package io.xream.x7.repository;
 
-import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
-import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.repository.id.IdGenerator;
 import io.xream.x7.repository.mapper.Mapper;
 import io.xream.x7.repository.mapper.MapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +45,6 @@ public class HealthChecker {
         }
 
 
-        String sql = "CREATE TABLE IF NOT EXISTS `idGenerator` ( "
-                + "`clzName` varchar(120) NOT NULL, "
-                + "`maxId` bigint(13) DEFAULT NULL, "
-                + "PRIMARY KEY (`clzName`) "
-                + ") ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
-
-        try {
-            ManuRepository.execute(new IdGenerator(), sql);
-        } catch (Exception e) {
-
-        }
 
         System.out.println("-------------------------------------------------");
 
@@ -82,19 +67,6 @@ public class HealthChecker {
                     }
                 }
 
-                Parsed clzParsed = Parser.get(clz);
-                Field f = clzParsed.getKeyField(X.KEY_ONE);
-                if (f.getType() == String.class)
-                    continue;
-                final String name = clz.getName();
-                IdGenerator generator = new IdGenerator();
-                generator.setClzName(name);
-                List<IdGenerator> list = repository.list(generator);
-                if (list.isEmpty()) {
-                    logger.info("id init: " + generator.getClzName());
-                    generator.setMaxId(0);
-                    repository.create(generator);
-                }
 
             } catch (Exception e) {
                 flag |= true;

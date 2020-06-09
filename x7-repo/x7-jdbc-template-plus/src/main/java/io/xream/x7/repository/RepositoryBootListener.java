@@ -24,8 +24,6 @@ public class RepositoryBootListener {
 
     public static void onStarted(ConfigurableApplicationContext applicationContext) {
 
-        Repository repository = applicationContext.getBean(Repository.class);
-
         IdGeneratorPolicy idGeneratorPolicy = null;
         try {
             idGeneratorPolicy = applicationContext.getBean(IdGeneratorPolicy.class);
@@ -44,8 +42,6 @@ public class RepositoryBootListener {
             e.printStackTrace();
         }
 
-
     }
-
-
+    
 }
