@@ -16,11 +16,8 @@
  */
 package io.xream.x7.repository;
 
-import io.xream.x7.repository.id.IdGenerator;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.List;
 
 
 public class RepositoryBootListener {
@@ -40,17 +37,8 @@ public class RepositoryBootListener {
 
         try {
             Thread.sleep(1000);
-            IdGenerator obj = null;
-            try {
-                obj = IdGenerator.class.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            List<IdGenerator> idGeneratorList = repository.list(obj);
             if (idGeneratorPolicy != null) {
-                idGeneratorPolicy.onStart(idGeneratorList);
+                idGeneratorPolicy.onStart(HealthChecker.getRepositoryList());
             }
         } catch (Exception e) {
             e.printStackTrace();

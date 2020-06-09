@@ -17,6 +17,8 @@
 package io.xream.x7.repository.id;
 
 
+import io.xream.x7.repository.BaseRepository;
+
 import java.util.List;
 
 public interface IdGeneratorPolicy {
@@ -25,5 +27,5 @@ public interface IdGeneratorPolicy {
 
     long createId(String clzName);
 
-    void onStart(List<IdGenerator> idGeneratorList);
+    void onStart(List<BaseRepository> repositoryList);
 }

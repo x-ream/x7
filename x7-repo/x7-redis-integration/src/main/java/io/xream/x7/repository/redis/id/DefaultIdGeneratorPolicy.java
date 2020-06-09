@@ -16,7 +16,9 @@
  */
 package io.xream.x7.repository.redis.id;
 
-import io.xream.x7.repository.id.IdGenerator;
+import io.xream.x7.common.bean.*;
+import io.xream.x7.common.repository.X;
+import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -40,35 +42,30 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
 
     }
 
+
     @Override
-    public void onStart(List<IdGenerator> idGeneratorList) {
+    public void onStart(List<BaseRepository> repositoryList) {
 
-            System.out.println("\n" + "----------------------------------------");
+        if (repositoryList == null)
+            return;
 
-            for (IdGenerator generator : idGeneratorList) {
-                String name = generator.getClzName();
-                long maxId = generator.getMaxId();
+        for (BaseRepository baseRepository : repositoryList) {
+            CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+            Class clzz = baseRepository.getClz();
+            Parsed parsed = Parser.get(clzz);
+            String key = parsed.getKey(X.KEY_ONE);
+            BeanElement be = parsed.getElement(key);
+            if (be.clz == String.class)
+                continue;
+            builder.reduce(ReduceType.MAX, be.property).paged().ignoreTotalRows();
+            Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 
-                String idInRedis = null;
-                Object obj = this.stringRedisTemplate.opsForHash().get(IdGeneratorPolicy.ID_MAP_KEY, name);
+            List<Long> idList = baseRepository.listPlainValue(Long.class,resultMappedCriteria);
+            Long maxId = idList.stream().findFirst().orElse(0L);
+            String name = baseRepository.getClz().getName();
 
-                if (obj != null) {
-                    idInRedis =  obj.toString().trim();
-                }
+            this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
+        }
 
-                System.out.println(name + ",test, idInDB = " + maxId + ", idInRedis = " + idInRedis);
-
-
-                if (idInRedis == null) {
-                    this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
-                } else if (idInRedis != null && maxId > Long.valueOf(idInRedis)) {
-                    this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
-                }
-
-                System.out.println(name + ",final, idInRedis = " + this.stringRedisTemplate.opsForHash().get(IdGeneratorPolicy.ID_MAP_KEY, name));
-
-
-            }
-            System.out.println("----------------------------------------" + "\n");
     }
 }

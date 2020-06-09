@@ -82,8 +82,8 @@ public class OrderController {
                     .beginSub()
                         .x("i.orderId > ? and YEAR(o.createAt) >= ?", 2,2020).or().lte("i.orderId",2)
                             .beginSub().eq("i.type", OrderType.SINGLE).endSub()
-                        .or().eq("i.type", null).
-                            beginSub().eq("o.type",OrderType.SINGLE).endSub()
+                        .or().eq("i.type", null)
+                            .beginSub().eq("o.type",OrderType.SINGLE).endSub()
                     .endSub();
         builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
                 .on("orderId", JoinFrom.wrap("o","id"));
