@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.util;
+package io.xream.x7.common.filter;
 
 import io.xream.x7.common.bean.*;
 
-public class BaseTypeUtil {
+public class BaseTypeFilter {
 
     public static boolean beanWithoutBaseType = false;
 
@@ -32,7 +32,7 @@ public class BaseTypeUtil {
             clzName = alia;
         Parsed parsed = Parser.get(clzName);
 
-        return BaseTypeUtil.isBaseType_0(arr[1],v,parsed);
+        return BaseTypeFilter.isBaseType_0(arr[1],v,parsed);
     }
 
     public static boolean isBaseType_0(String property, Object v, Parsed parsed) {

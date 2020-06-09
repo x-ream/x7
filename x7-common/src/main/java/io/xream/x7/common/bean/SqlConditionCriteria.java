@@ -16,9 +16,9 @@
  */
 package io.xream.x7.common.bean;
 
-import io.xream.x7.common.util.BaseTypeUtil;
+import io.xream.x7.common.filter.BaseTypeFilter;
 import io.xream.x7.common.util.BeanUtil;
-import io.xream.x7.common.util.NumberValueAndDateUtil;
+import io.xream.x7.common.support.TimestampSupport;
 import io.xream.x7.common.util.StringUtil;
 
 import java.util.Iterator;
@@ -154,19 +154,19 @@ public interface SqlConditionCriteria extends KeyMapper{
                         if (clzName == null)
                             clzName = alia;
                         Parsed parsed = Parser.get(clzName);
-                        if (BaseTypeUtil.isBaseType_0(arr[1],x.getValue(),parsed)){
+                        if (BaseTypeFilter.isBaseType_0(arr[1],x.getValue(),parsed)){
                             ite.remove();
                         }else{
-                            NumberValueAndDateUtil.testNumberValueToDate(parsed.getElement(arr[1]).clz,x);
+                            TimestampSupport.testNumberValueToDate(parsed.getElement(arr[1]).clz,x);
                             if (x.getValue() == null)
                                 ite.remove();
                         }
                     }else{
                         Parsed parsed = criteria.getParsed();
-                        if (BaseTypeUtil.isBaseType_0(key,x.getValue(),parsed)){
+                        if (BaseTypeFilter.isBaseType_0(key,x.getValue(),parsed)){
                             ite.remove();
                         }else{
-                            NumberValueAndDateUtil.testNumberValueToDate(parsed.getElement(x.getKey()).clz,x);
+                            TimestampSupport.testNumberValueToDate(parsed.getElement(x.getKey()).clz,x);
                             if (x.getValue() == null)
                                 ite.remove();
                         }
@@ -179,12 +179,12 @@ public interface SqlConditionCriteria extends KeyMapper{
                         continue;
 
                     if (key.contains(".")){
-                        if (BaseTypeUtil.isBaseType_0(key,valueList.get(0),criteria)){
+                        if (BaseTypeFilter.isBaseType_0(key,valueList.get(0),criteria)){
                             ite.remove();
                         }
                     }else{
                         Parsed parsed = criteria.getParsed();
-                        if (BaseTypeUtil.isBaseType_0(key,valueList.get(0),parsed)){
+                        if (BaseTypeFilter.isBaseType_0(key,valueList.get(0),parsed)){
                             ite.remove();
                         }
                     }

@@ -19,7 +19,7 @@ package io.xream.x7.repository.cache;
 import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.Parser;
 import io.xream.x7.common.bean.condition.InCondition;
-import io.xream.x7.common.util.BaseTypeUtil;
+import io.xream.x7.common.filter.BaseTypeFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public interface InOptimization {
             if (Objects.isNull(obj))
                 continue;
             Parsed parsed = Parser.get(inCondition.getClz());
-            if (BaseTypeUtil.isBaseType_0(inCondition.getProperty(), obj, parsed))
+            if (BaseTypeFilter.isBaseType_0(inCondition.getProperty(), obj, parsed))
                 continue;
             if (!inList.contains(obj)) {
                 inList.add(obj);

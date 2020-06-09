@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.util;
+package io.xream.x7.common.support;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class NumberValueAndDateUtil {
+public class TimestampSupport {
 
     public static boolean testNumberValueToDate(Class clzz, io.xream.x7.common.bean.X x){
         if (clzz == Date.class) {

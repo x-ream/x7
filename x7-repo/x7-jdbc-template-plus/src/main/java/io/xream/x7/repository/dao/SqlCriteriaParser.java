@@ -18,6 +18,8 @@ package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.filter.BaseTypeFilter;
+import io.xream.x7.common.support.TimestampSupport;
 import io.xream.x7.common.util.*;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.repository.CriteriaParser;
@@ -198,9 +200,9 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
                         throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
                     }
 
-                    NumberValueAndDateUtil.testNumberValueToDate(be.clz,x);
+                    TimestampSupport.testNumberValueToDate(be.clz,x);
 
-                    if (StringUtil.isNullOrEmpty(String.valueOf(x.getValue())) || BaseTypeUtil.isBaseType_0(key, x.getValue(), parsed)) {
+                    if (StringUtil.isNullOrEmpty(String.valueOf(x.getValue())) || BaseTypeFilter.isBaseType_0(key, x.getValue(), parsed)) {
                         continue;
                     }
 
