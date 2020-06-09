@@ -111,12 +111,6 @@ public interface SqlConditionCriteria extends KeyMapper{
         sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);
     }
 
-    static void between(StringBuilder sb) {
-
-        sb.append(SqlScript.PLACE_HOLDER).append(ConjunctionAndOtherScript.AND.sql()).append(SqlScript.PLACE_HOLDER);
-
-    }
-
     static String filter(String sql) {
         sql = sql.replace("drop", SqlScript.SPACE)
                 .replace(";", SqlScript.SPACE);// 手动拼接SQL,
