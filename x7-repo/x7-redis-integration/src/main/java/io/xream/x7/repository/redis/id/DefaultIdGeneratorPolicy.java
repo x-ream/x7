@@ -37,18 +37,13 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
 
     @Override
     public long createId(String clzName) {
-
         return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,clzName,1);
-
     }
-
 
     @Override
     public void onStart(List<BaseRepository> repositoryList) {
-
         if (repositoryList == null)
             return;
-
         for (BaseRepository baseRepository : repositoryList) {
             CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
             Class clzz = baseRepository.getClz();
@@ -61,11 +56,11 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 
             List<Long> idList = baseRepository.listPlainValue(Long.class,resultMappedCriteria);
-            Long maxId = idList.stream().findFirst().orElse(0L);
+            Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClz().getName();
 
             this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
         }
-
     }
+
 }
