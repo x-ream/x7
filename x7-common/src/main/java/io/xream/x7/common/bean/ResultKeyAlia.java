@@ -39,13 +39,13 @@ public class ResultKeyAlia {
         this.propertyOrAlia = propertyOrAlia;
     }
 
-    public static ResultKeyAlia wrap(String propertyOrAlia) {
+    public static ResultKeyAlia of(String propertyOrAlia) {
         ResultKeyAlia functionAlia = new ResultKeyAlia();
         functionAlia.setPropertyOrAlia(propertyOrAlia);
         return functionAlia;
     }
 
-    public static ResultKeyAlia wrap(String objectOrAlia, String propertyOrAlia) {
+    public static ResultKeyAlia of(String objectOrAlia, String propertyOrAlia) {
         ResultKeyAlia functionAlia = new ResultKeyAlia();
         functionAlia.setObjectOrAlia(objectOrAlia);
         functionAlia.setPropertyOrAlia(propertyOrAlia);

@@ -37,7 +37,7 @@ public class JoinFrom {
         this.key = key;
     }
 
-    public static JoinFrom wrap(String alia, String key) {
+    public static JoinFrom of(String alia, String key) {
         if (key.contains("."))
             throw new IllegalArgumentException("JoinFrom key can not contains '.'");
         JoinFrom joinFrom = new JoinFrom();

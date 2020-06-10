@@ -43,8 +43,8 @@ public class OrderController {
     public ViewEntity find(){
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.resultWithDottedKey().distinct("o.id");
-        builder.resultKeyFunction(ResultKeyAlia.wrap("o","at"),"YEAR(?)","o.createAt");
-        builder.resultKeyFunction(ResultKeyAlia.wrap("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
+        builder.resultKeyFunction(ResultKeyAlia.of("o","at"),"YEAR(?)","o.createAt");
+        builder.resultKeyFunction(ResultKeyAlia.of("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
         builder.eq("o.name","test");
         builder.and().eq("i.name","test");
         builder.and().nonNull("l.log");
@@ -53,7 +53,7 @@ public class OrderController {
 //        builder.and().beginSub().gt("o.createAt",System.currentTimeMillis() - 1000000)
 //                .and().lt("o.createAt",System.currentTimeMillis()).endSub();
 //        builder.sourceScript().source("order").alia("o");
-//        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.wrap("order","id"))
+//        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.of("order","id"))
 //                .more().x("orderItem.name = order.name");
         builder.sourceScript("FROM order o INNER JOIN orderItem i ON o.id = i.orderId" +
                 " INNER JOIN orderLog l ON o.id = l.orderId");
@@ -77,7 +77,7 @@ public class OrderController {
         builder.nonNull("i.name").nonNull("l.log");
         builder.sourceScript().source("order").alia("o");
         builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
-                .on("orderId", JoinFrom.wrap("o","id"))
+                .on("orderId", JoinFrom.of("o","id"))
                 .more().or()
                     .beginSub()
                         .x("i.orderId > ? and YEAR(o.createAt) >= ?", 2,2020).or().lte("i.orderId",2)
@@ -86,7 +86,7 @@ public class OrderController {
                             .beginSub().eq("o.type",OrderType.SINGLE).endSub()
                     .endSub();
         builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
-                .on("orderId", JoinFrom.wrap("o","id"));
+                .on("orderId", JoinFrom.of("o","id"));
         builder.groupBy("o.id");
 
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
