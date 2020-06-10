@@ -398,9 +398,6 @@ public class DaoImpl implements Dao {
         LoggerProxy.debug(clz, sql);
 
         List<K> list = queryForPlainValueList(clzz,sql,resultMapped,this.dialect,jdbcTemplate);
-//        if (list.size() == 1 && list.get(0) == null) { //support jdk stream().findFirst().orElse()
-//            list.remove(0);
-//        }
         return list;
     }
 
