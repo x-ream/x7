@@ -135,7 +135,7 @@ public class XxxController {
         builder.distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
                 .reduce(COUNT_DISTINCT, "catTest.id")
-                .reduce(SUM, "dogTest.petId", Having.wrap(GT, 1))
+                .reduce(SUM, "dogTest.petId", Having.of(GT, 1))
                 .groupBy("catTest.dogId")
                 .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
         String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";

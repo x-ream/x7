@@ -25,7 +25,7 @@ public  class Having {
     private Having() {
     }
 
-    public static Having wrap(Op op, Object value){
+    public static Having of(Op op, Object value){
         Having having = new Having();
         having.op = op;
         having.value = value;

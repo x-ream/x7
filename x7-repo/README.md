@@ -169,7 +169,7 @@
             19. distinct //去重
             20. reduce //归并计算
                     // .reduce(ReduceType.SUM, "dogTest.petId") 
-                    // .reduce(ReduceType.SUM, "dogTest.petId", Having.wrap(Op.GT, 1))
+                    // .reduce(ReduceType.SUM, "dogTest.petId", Having.of(Op.GT, 1))
                     //含Having接口 (仅仅在reduc查询后,有限支持Having)
             21. groupBy //分组
             22. resultKey //指定返回列
