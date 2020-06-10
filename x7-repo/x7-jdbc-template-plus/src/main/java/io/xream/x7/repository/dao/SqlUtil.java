@@ -22,7 +22,7 @@ import io.xream.x7.common.repository.X;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.SqlParsed;
 import io.xream.x7.repository.exception.PersistenceException;
@@ -95,9 +95,9 @@ public class SqlUtil {
     }
 
 
-    protected static String buildRefresh(Parsed parsed, RefreshCondition refreshCondition, CriteriaParser criteriaParser) {
+    protected static String buildRefresh(Parsed parsed, RefreshCondition refreshCondition, CriteriaToSql criteriaParser) {
 
-        return criteriaParser.parseRefresh(parsed,refreshCondition);
+        return criteriaParser.fromRefresh(parsed,refreshCondition);
     }
 
     protected static String concatRefresh(StringBuilder sb, Parsed parsed, Map<String, Object> refreshMap) {
@@ -197,8 +197,8 @@ public class SqlUtil {
         sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);
     }
 
-    protected static SqlParsed fromCriteria(Criteria criteria, CriteriaParser criteriaParser, Dialect dialect) {
-        SqlParsed sqlParsed = criteriaParser.parse(criteria);
+    protected static SqlParsed fromCriteria(Criteria criteria, CriteriaToSql criteriaParser, Dialect dialect) {
+        SqlParsed sqlParsed = criteriaParser.from(criteria);
         String sql = sqlParsed.getSql().toString();
 
         int page = criteria.getPage();

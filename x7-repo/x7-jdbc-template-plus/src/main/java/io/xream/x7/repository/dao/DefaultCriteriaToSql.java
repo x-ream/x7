@@ -22,7 +22,7 @@ import io.xream.x7.common.filter.BaseTypeFilter;
 import io.xream.x7.common.support.TimestampSupport;
 import io.xream.x7.common.util.*;
 import io.xream.x7.common.web.Direction;
-import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.SqlParsed;
 import io.xream.x7.repository.exception.CriteriaSyntaxException;
 import io.xream.x7.repository.exception.SqlBuildException;
@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,SqlConditionCriteria.Filter, SqlConditionCriteria.PreParser {
+public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToSql, ConditionCriteriaToSql.Filter, ConditionCriteriaToSql.Pre {
 
     @Autowired
     private Dialect dialect;
@@ -56,7 +56,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
 
     @Override
-    public String parseCondition(CriteriaCondition criteriaCondition) {
+    public String fromCondition(CriteriaCondition criteriaCondition) {
         if (Objects.isNull(criteriaCondition))
             return "";
         StringBuilder sb = new StringBuilder();
@@ -73,7 +73,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
 
-        buildSql(sb,xList);
+        buildConditionSql(sb,xList);
 
         String script = sb.toString();
         StringBuilder sbb = new StringBuilder();
@@ -82,7 +82,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
     }
 
     @Override
-    public SqlParsed parse(Criteria criteria) {
+    public SqlParsed from(Criteria criteria) {
 
         SqlBuilder sqlBuilder = SqlBuilder.get();
 
@@ -128,7 +128,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
     }
 
     @Override
-    public String parseRefresh(Parsed parsed, RefreshCondition refreshCondition) {
+    public String fromRefresh(Parsed parsed, RefreshCondition refreshCondition) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(parsed.getTableName()).append(SqlScript.SPACE);
@@ -137,7 +137,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
 
         filter(refreshCondition.getListX(),refreshCondition);
 
-        String conditionSql = parseCondition(refreshCondition);
+        String conditionSql = fromCondition(refreshCondition);
 
         conditionSql = SqlParserUtil.mapper(conditionSql, parsed);
 
@@ -678,7 +678,7 @@ public class SqlCriteriaParser implements CriteriaParser,SqlConditionCriteria,Sq
         if (xList.isEmpty())
             return;
         xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
-        buildSql(xsb,xList);
+        buildConditionSql(xsb,xList);
 
         String script = xsb.toString();
 

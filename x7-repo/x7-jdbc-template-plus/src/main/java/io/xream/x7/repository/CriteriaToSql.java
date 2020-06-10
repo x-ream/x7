@@ -22,13 +22,13 @@ import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.repository.mapper.Dialect;
 
-public interface CriteriaParser {
+public interface CriteriaToSql {
 
     void setDialect(Dialect dialect);
 
-    String parseCondition(CriteriaCondition criteriaCondition) ;
+    String fromCondition(CriteriaCondition criteriaCondition) ;
 
-    SqlParsed parse(Criteria criteria) ;
+    SqlParsed from(Criteria criteria) ;
 
-    String parseRefresh(Parsed parsed, RefreshCondition refreshCondition);
+    String fromRefresh(Parsed parsed, RefreshCondition refreshCondition);
 }

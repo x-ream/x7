@@ -24,9 +24,9 @@ import io.xream.x7.common.util.StringUtil;
 import java.util.Iterator;
 import java.util.List;
 
-public interface SqlConditionCriteria extends KeyMapper{
+public interface ConditionCriteriaToSql extends KeyMapper{
 
-    default void buildSql(StringBuilder sb, List<X> listX) {
+    default void buildConditionSql(StringBuilder sb, List<X> listX) {
         if (listX == null || listX.isEmpty())
             return;
         for (X x : listX) {
@@ -38,7 +38,7 @@ public interface SqlConditionCriteria extends KeyMapper{
                 x.getSubList().get(0).setConjunction(ConjunctionAndOtherScript.NONE);
                 sb.append(x.getConjunction().sql());
                 sb.append(SqlScript.SPACE).append(SqlScript.LEFT_PARENTTHESIS).append(SqlScript.SPACE);
-                buildSql(sb, x.getSubList());
+                buildConditionSql(sb, x.getSubList());
                 sb.append(SqlScript.SPACE).append(SqlScript.RIGHT_PARENTTHESIS);
                 continue;
             }
@@ -192,7 +192,7 @@ public interface SqlConditionCriteria extends KeyMapper{
 
     }
 
-    interface PreParser {
+    interface Pre {
         default void pre(List<Object> valueList, List<X> listX) {
             for (X x : listX) {
                 if (x.getPredicate() == PredicateAndOtherScript.SUB){

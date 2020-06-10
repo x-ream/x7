@@ -18,14 +18,14 @@ package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.DbType;
 import io.xream.x7.repository.ManuRepositoryStarter;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.Dao;
 import io.xream.x7.repository.dao.DaoImpl;
-import io.xream.x7.repository.dao.SqlCriteriaParser;
+import io.xream.x7.repository.dao.DefaultCriteriaToSql;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.mapper.Dialect;
@@ -68,14 +68,14 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(3)
-    public CriteriaParser criteriaParser(Dialect dialect,Environment environment) {
+    public CriteriaToSql criteriaParser(Dialect dialect, Environment environment) {
 
         String driverClassName = getDbDriverKey(environment);
 
-        CriteriaParser criteriaParser =  null;
+        CriteriaToSql criteriaParser =  null;
         if (driverClassName.toLowerCase().contains("mysql")
                 || driverClassName.toLowerCase().contains("oracle")) {
-            criteriaParser = new SqlCriteriaParser();
+            criteriaParser = new DefaultCriteriaToSql();
             criteriaParser.setDialect(dialect);
         }
 

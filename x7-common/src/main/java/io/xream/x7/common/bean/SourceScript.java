@@ -21,7 +21,7 @@ import io.xream.x7.common.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SourceScript implements SqlConditionCriteria,SqlConditionCriteria.PreParser {
+public class SourceScript implements ConditionCriteriaToSql, ConditionCriteriaToSql.Pre {
 
     private String source;
     private JoinType joinType;
@@ -126,7 +126,7 @@ public class SourceScript implements SqlConditionCriteria,SqlConditionCriteria.P
             }
         }
 
-        buildSql(sb, listX);
+        buildConditionSql(sb, listX);
 
         return sb.toString();
     }

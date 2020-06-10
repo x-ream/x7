@@ -24,7 +24,7 @@ import io.xream.x7.common.util.BeanMapUtil;
 import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Page;
-import io.xream.x7.repository.CriteriaParser;
+import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.SqlParsed;
 import io.xream.x7.repository.exception.TooManyResultsException;
@@ -55,7 +55,7 @@ import java.util.*;
 public class DaoImpl implements Dao {
 
     @Autowired
-    private CriteriaParser criteriaParser;
+    private CriteriaToSql criteriaParser;
     @Autowired
     private Dialect dialect;
     @Autowired
