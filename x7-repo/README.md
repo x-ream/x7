@@ -105,7 +105,7 @@
             8. find(ResultMappedCriteria) //标准拼接查询，返回Map形式记录，返回分页对象
             9. list(ResultMappedCriteria) //标准拼接查询，返回Map形式记录，不返回分页对象
             10. listPlainValue(Class<K>, ResultMappedCriteria)//返回没有key的单列数据列表 (结果优化1)
-            11. fidnToHandle(ResultMappedCriteria, RowHandler<Map<String,Object>>) //流处理API
+            11. findToHandle(ResultMappedCriteria, RowHandler<Map<String,Object>>) //流处理API
             12. creaet(Object) //插入一条
             13. createBatch(List<Object>) //批量插入
             14. refresh(RefreshCondition) //根据主键更新
