@@ -21,10 +21,12 @@ import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.repository.X;
-import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Page;
-import io.xream.x7.repository.*;
+import io.xream.x7.repository.BaseRepository;
+import io.xream.x7.repository.HealthChecker;
+import io.xream.x7.repository.KeyOne;
+import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.exception.CriteriaSyntaxException;
 import io.xream.x7.repository.exception.PersistenceException;
 import io.xream.x7.repository.id.IdGeneratorService;
@@ -242,16 +244,7 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
     @Override
     public List<T> list() {
-
-        T t = null;
-        try {
-            t = this.clz.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
-        }
-        return repository.list(t);
+        return repository.listByClzz(this.clz);
     }
 
     @Override

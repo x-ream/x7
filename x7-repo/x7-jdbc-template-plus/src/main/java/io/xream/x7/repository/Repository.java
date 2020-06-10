@@ -102,4 +102,5 @@ public interface Repository extends QueryForCache{
 	<T> void findToHandle(Criteria criteria, RowHandler<T> handler);
 	void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler);
 
+	<T> List<T> listByClzz(Class<T> clzz);
 }

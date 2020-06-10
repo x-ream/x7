@@ -20,6 +20,7 @@ import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.RowHandler;
 import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.dao.Dao;
@@ -139,5 +140,17 @@ public class SqlDataTransform implements DataTransform {
     @Override
     public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> handler) {
         this.dao.findToHandle(resultMappedCriteria,handler);
+    }
+
+    @Override
+    public <T> List<T> listByClzz(Class<T> clzz) {
+
+        T obj = null;
+        try{
+            obj = clzz.newInstance();
+        }catch (Exception e){
+            throw new RuntimeException(ExceptionUtil.getMessage(e));
+        }
+        return this.dao.list(obj);
     }
 }

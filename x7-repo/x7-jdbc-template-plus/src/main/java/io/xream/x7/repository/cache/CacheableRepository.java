@@ -159,6 +159,10 @@ public final class CacheableRepository implements Repository, Manuable {
         return flag;
     }
 
+    @Override
+    public <T> List<T> listByClzz(Class<T> clzz) {
+        return this.dataTransform.listByClzz(clzz);
+    }
 
     @Override
     public <T> List<T> list(Object conditionObj) {
@@ -321,4 +325,5 @@ public final class CacheableRepository implements Repository, Manuable {
     public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String, Object>> handler) {
         this.dataTransform.findToHandle(resultMappedCriteria,handler);
     }
+
 }
