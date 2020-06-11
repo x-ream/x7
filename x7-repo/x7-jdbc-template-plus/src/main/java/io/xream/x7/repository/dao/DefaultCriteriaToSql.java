@@ -580,8 +580,10 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
             if (rmc.getSourceScripts().isEmpty()){// builderSource null
                 script = criteria.sourceScript();
             }else{
-                if (! rmc.resultAllScript().trim().equals("*")){
-                    optimizeSourceScript(rmc.getSourceScripts(), sb.conditionSet);//FIXME  + ON AND
+                if (!rmc.isWithoutOptimization()) {
+                    if (!rmc.resultAllScript().trim().equals("*")) {
+                        optimizeSourceScript(rmc.getSourceScripts(), sb.conditionSet);//FIXME  + ON AND
+                    }
                 }
                 script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
             }

@@ -211,6 +211,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		private List<SourceScript> sourceScripts = new ArrayList<>();
 		private List<Reduce> reduceList = new ArrayList<>();
 		private boolean isResultWithDottedKey;
+		private boolean isWithoutOptimization;
 		@JsonIgnore
 		private transient PropertyMapping propertyMapping;
 		@JsonIgnore
@@ -294,6 +295,14 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 
 		public void setResultWithDottedKey(boolean resultWithDottedKey) {
 			isResultWithDottedKey = resultWithDottedKey;
+		}
+
+		public boolean isWithoutOptimization() {
+			return isWithoutOptimization;
+		}
+
+		public void setWithoutOptimization(boolean withoutOptimization) {
+			isWithoutOptimization = withoutOptimization;
 		}
 
 		@Override

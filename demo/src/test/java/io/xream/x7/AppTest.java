@@ -37,7 +37,7 @@ public class AppTest {
 //        xxxTest.domain();
 
 //        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
+        xxxTest.testOrderFind();
 //        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
@@ -70,7 +70,7 @@ public class AppTest {
 
 //        xxxTest.testListPlainValue();
 
-        xxxTest.testAlia();
+//        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
@@ -79,7 +79,7 @@ public class AppTest {
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-        xxxTest.refreshByCondition();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();

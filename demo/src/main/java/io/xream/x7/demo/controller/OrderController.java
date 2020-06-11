@@ -47,7 +47,7 @@ public class OrderController {
         builder.resultKeyFunction(ResultKeyAlia.of("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
         builder.eq("o.name","test");
         builder.and().eq("i.name","test");
-        builder.and().nonNull("l.log");
+//        builder.and().nonNull("l.log");
 //        builder.and().nonNull("i.name");
 //        builder.and().in("i.name", Arrays.asList("xxx"));
 //        builder.and().beginSub().gt("o.createAt",System.currentTimeMillis() - 1000000)
@@ -57,6 +57,7 @@ public class OrderController {
 //                .more().x("orderItem.name = order.name");
         builder.sourceScript("FROM order o INNER JOIN orderItem i ON o.id = i.orderId" +
                 " INNER JOIN orderLog l ON o.id = l.orderId");
+        builder.withoutOptimization();
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
 

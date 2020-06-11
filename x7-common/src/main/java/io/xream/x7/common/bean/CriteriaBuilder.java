@@ -246,6 +246,11 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             return this.sourceScriptBuilder;
         }
 
+        public ResultMappedBuilder withoutOptimization() {
+            get().setWithoutOptimization(true);
+            return this;
+        }
+
         @Override
         public Criteria.ResultMappedCriteria get() {
             return (ResultMappedCriteria) super.get();
