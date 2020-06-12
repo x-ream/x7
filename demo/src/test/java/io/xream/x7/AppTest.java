@@ -36,15 +36,15 @@ public class AppTest {
 //        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
-//        xxxTest.inOrder();
+        xxxTest.inOrder();
         xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 
@@ -61,7 +61,7 @@ public class AppTest {
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 
@@ -70,7 +70,7 @@ public class AppTest {
 
 //        xxxTest.testListPlainValue();
 
-//        xxxTest.testAlia();
+        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
