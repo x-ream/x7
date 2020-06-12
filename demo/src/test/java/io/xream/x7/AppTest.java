@@ -74,7 +74,7 @@ public class AppTest {
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
-//        xxxTest.distinct();
+        xxxTest.distinct();
 //
 
 //        xxxTest.testOne();
@@ -111,6 +111,8 @@ public class AppTest {
 //        xxxTest.testCacheGet();
 
 //        xxxTest.testFallbackOnly("test");
+
+//        xxxTest.testTemporaryTable();
 
     }
 

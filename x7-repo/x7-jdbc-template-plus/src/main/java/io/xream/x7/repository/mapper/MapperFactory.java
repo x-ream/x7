@@ -65,7 +65,7 @@ public class MapperFactory implements Mapper {
 
 		Map<String, String> sqlMap = sqlsMap.get(clz);
 		if (sqlMap == null) {
-			sqlMap = new HashMap<String, String>();
+			sqlMap = new HashMap<>();
 			sqlsMap.put(clz, sqlMap);
 			parseBean(clz);
 			return sqlMap.remove(CREATE_TABLE);

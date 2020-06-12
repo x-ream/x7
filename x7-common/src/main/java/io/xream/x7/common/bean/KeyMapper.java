@@ -2,6 +2,7 @@ package io.xream.x7.common.bean;
 
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.StringUtil;
 
 public interface KeyMapper {
 
@@ -14,13 +15,20 @@ public interface KeyMapper {
             String alia = arr[0];
             String property = arr[1];
 
+
             String clzName = BeanUtilX.getClzName(alia, criteria);
 
             Parsed parsed = Parser.get(clzName);
             if (parsed == null)
                 throw new RuntimeException("Entity Bean Not Exist: " + BeanUtil.getByFirstUpper(key));
 
-            String value = parsed.getTableName(alia) + SqlScript.DOT + parsed.getMapper(property);
+            String p = parsed.getMapper(property);
+            if (StringUtil.isNullOrEmpty(p)) {
+                return ((Criteria.ResultMappedCriteria) criteria).getResultKeyAliaMap().get(key);
+            }
+
+            String value = parsed.getTableName(alia) + SqlScript.DOT + p;
+
 
             return value;
         }

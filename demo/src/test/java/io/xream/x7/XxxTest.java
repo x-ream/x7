@@ -10,14 +10,15 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
-import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
 import io.xream.x7.demo.bean.Order;
 import io.xream.x7.demo.bean.TestBoo;
+import io.xream.x7.demo.controller.CatEggController;
 import io.xream.x7.demo.controller.OrderController;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
+import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.fallback.FallbackOnly;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,6 +51,11 @@ public class XxxTest {
     @Autowired
     private DistributionLockTester distributionLockTester;
 
+    @Autowired
+    private CatEggController catEggController;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public  void refreshByCondition() {
 
@@ -337,5 +344,12 @@ public class XxxTest {
     public void inOrder(){
         this.orderController.in();
     }
+
+    public void testTemporaryTable(){
+
+        this.catEggController.test();
+
+    }
+
 
 }

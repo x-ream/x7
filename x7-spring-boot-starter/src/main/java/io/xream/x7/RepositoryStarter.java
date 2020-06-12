@@ -18,16 +18,15 @@ package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.repository.CriteriaToSql;
-import io.xream.x7.repository.DbType;
-import io.xream.x7.repository.ManuRepositoryStarter;
-import io.xream.x7.repository.Repository;
+import io.xream.x7.repository.*;
 import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.Dao;
 import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.DefaultCriteriaToSql;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
+import io.xream.x7.repository.internal.DefaultTemporaryRepository;
+import io.xream.x7.repository.mapper.DefaultTemporaryTableParser;
 import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.mapper.MapperFactory;
 import io.xream.x7.repository.transform.DataTransform;
@@ -68,23 +67,25 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(3)
-    public CriteriaToSql criteriaParser(Dialect dialect, Environment environment) {
+    public CriteriaToSql criteriaParser(Dialect dialect) {
 
-        String driverClassName = getDbDriverKey(environment);
-
-        CriteriaToSql criteriaParser =  null;
-        if (driverClassName.toLowerCase().contains("mysql")
-                || driverClassName.toLowerCase().contains("oracle")) {
-            criteriaParser = new DefaultCriteriaToSql();
-            criteriaParser.setDialect(dialect);
-        }
+        CriteriaToSql criteriaParser =  new DefaultCriteriaToSql();
+        criteriaParser.setDialect(dialect);
 
         return criteriaParser;
     }
 
-
     @Bean
     @Order(4)
+    public TemporaryRepository.Parser temporaryTableParser(Dialect dialect){
+        DefaultTemporaryTableParser temporaryTableParser = new DefaultTemporaryTableParser();
+        temporaryTableParser.setDialect(dialect);
+        return temporaryTableParser;
+    }
+
+
+    @Bean
+    @Order(5)
     public Dao dao(Environment environment){
 
         String driverClassName = getDbDriverKey(environment);
@@ -98,21 +99,21 @@ public class RepositoryStarter  {
     }
 
     @Bean
-    @Order(5)
+    @Order(6)
     public L2CacheResolver cacheResolver(){
         return new DefaultL2CacheResolver();
     }
 
 
     @Bean
-    @Order(6)
+    @Order(7)
     public IdGeneratorService idGenerator(){
         DefaultIdGeneratorService idGenerator = new DefaultIdGeneratorService();
         return idGenerator;
     }
 
     @Bean
-    @Order(7)
+    @Order(8)
     public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver,Environment environment){
 
         String driverClassName = getDbDriverKey(environment);
@@ -136,11 +137,26 @@ public class RepositoryStarter  {
 
     @ConditionalOnMissingBean(X7Data.class)
     @Bean
-    @Order(8)
+    @Order(9)
     public X7Data enableData(){
         return new X7Data();
     }
 
+    @Bean
+    @Order(10)
+    public TemporaryRepository temporaryRepository(Dao dao,Environment environment){
+        String driverClassName = getDbDriverKey(environment);
+        DefaultTemporaryRepository temporaryRepository = new DefaultTemporaryRepository();
+        DataTransform dataTransform = null;
+        if (driverClassName.toLowerCase().contains("mysql")
+                || driverClassName.toLowerCase().contains("oracle")) {
+            dataTransform = new SqlDataTransform();
+            ((SqlDataTransform) dataTransform).setDao(dao);
+        }
+        temporaryRepository.setDataTransform(dataTransform);
+
+        return temporaryRepository;
+    }
 
     /**
      * TODO:
