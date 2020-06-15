@@ -6,10 +6,10 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.CatEgg;
+import io.xream.x7.demo.service.CatService;
 import io.xream.x7.repository.TemporaryRepository;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,43 +18,47 @@ import org.springframework.web.bind.annotation.RestController;
 public class CatEggController {
 
     @Autowired
-    private TemporaryRepository.Parser temporaryRepositoryParser;
-    @Autowired
     private TemporaryRepository temporaryRepository;
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
     private CatRepository catRepository;
+    @Autowired
+    private CatService catService;
 
     @RequestMapping("/test")
     public ViewEntity test(){
-        String sql = this.temporaryRepositoryParser.parseAndGetSql(CatEgg.class);
-        System.out.println(sql);
-
-        this.jdbcTemplate.execute(sql);
+        boolean flag = this.temporaryRepository.createRepository(CatEgg.class);
+        System.out.println(flag);
 
         CatEgg catEgg = new CatEgg();
         catEgg.setId(1);
-        catEgg.setCatId(1);
+        catEgg.setCatId(2);
         catEgg.setName("test");
 
-        boolean flag = this.temporaryRepository.create(catEgg);
+        this.temporaryRepository.create(catEgg);
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.sourceScript("FROM cat c inner join catEgg e on e.catId = c.id");
+        builder.resultWithDottedKey().resultKey("c.id").resultKey("c.type");
+        builder.withoutOptimization().sourceScript("FROM cat c inner join catEgg e on e.catId = c.id");
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 
         this.catRepository.findToHandle(resultMappedCriteria, map -> {
 
-            Long id = MapUtils.getLong(map,"id");
-            String catType = MapUtils.getString(map,"type");
+            Long id = MapUtils.getLong(map,"c.id");
+            String catType = MapUtils.getString(map,"c.type");
 
-            this.catRepository.refresh(
-                    RefreshCondition.build().refresh("type",catType).eq("id",id)
-            );
+            try {
+                //service | fallback, not suggest to use transaction
+                this.catService.refresh(
+                        RefreshCondition.build().refresh("type", "NNLL").eq("id", id)
+                );
+            }catch (Exception e){
+
+            }
 
         });
+
+        this.temporaryRepository.dropRepository(CatEgg.class);
 
         return ViewEntity.ok();
     }

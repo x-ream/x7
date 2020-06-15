@@ -16,17 +16,27 @@
  */
 package io.xream.x7.repository.internal;
 
+import io.xream.x7.common.bean.Criteria;
+import io.xream.x7.common.bean.Parsed;
 import io.xream.x7.repository.TemporaryRepository;
+import io.xream.x7.repository.dao.TemporaryDao;
 import io.xream.x7.repository.transform.DataTransform;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class DefaultTemporaryRepository implements TemporaryRepository {
 
+    @Autowired
+    private TemporaryDao temporaryDao;
+    @Autowired
+    private TemporaryRepository.Parser temporaryRepositoryParser;
+
     private DataTransform dataTransform;
     public void setDataTransform(DataTransform dataTransform) {
         this.dataTransform = dataTransform;
     }
+
 
     @Override
     public boolean create(Object obj) {
@@ -38,5 +48,32 @@ public class DefaultTemporaryRepository implements TemporaryRepository {
     @Override
     public boolean createBatch(List objList) {
         return this.dataTransform.createBatch(objList);
+    }
+
+    @Override
+    public boolean findToCreate(Class clzz, Criteria.ResultMappedCriteria resultMappedCriteria) {
+
+        Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
+        if (parsed == null) {
+            io.xream.x7.common.bean.Parser.parse(clzz);
+        }
+
+        return this.temporaryDao.findToCreate(clzz, resultMappedCriteria);
+    }
+
+    @Override
+    public boolean createRepository(Class clzz) {
+        String sql = temporaryRepositoryParser.parseAndGetSql(clzz);
+        return this.temporaryDao.execute(sql);
+    }
+
+    @Override
+    public boolean dropRepository(Class clzz) {
+        Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
+        if (parsed == null) {
+            parsed = io.xream.x7.common.bean.Parser.get(clzz);
+        }
+        String sql = "DROP TABLE " + parsed.getTableName();
+        return this.temporaryDao.execute(sql);
     }
 }

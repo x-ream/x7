@@ -51,7 +51,7 @@ public class DefaultTemporaryTableParser implements TemporaryRepository.Parser {
         Parsed parsed = Parser.get(clzz.getSimpleName());
         if (parsed != null)
             throw new RuntimeException("Table exists while parse temporary table entity to get sql: " + clzz.getName());
-        Parser.get(clzz);
+        Parser.parse(clzz);
 
         return getTableSql(clzz);
     }

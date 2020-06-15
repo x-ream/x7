@@ -14,33 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository;
+package io.xream.x7.repository.dao;
 
 import io.xream.x7.common.bean.Criteria;
 
-import java.util.List;
+public interface TemporaryDao {
 
-/**
- * How to update with TemporaryRepository?
- * suggest:
- *      .findToHandle(resultMappedCriteria, map -> {
- *
- *             refresh(
- *                  RefreshCondition.build()....
- *             )
- *
- *         });
- */
-public interface TemporaryRepository {
-
-    boolean create(Object obj);
-    boolean createBatch(List objList);
     boolean findToCreate(Class clzz, Criteria.ResultMappedCriteria resultMappedCriteria);
 
-    boolean createRepository(Class clzz);
-    boolean dropRepository(Class clzz);
-
-    interface Parser {
-        String parseAndGetSql(Class clzz);
-    }
+    boolean execute(String sql);
 }

@@ -20,9 +20,7 @@ import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.repository.*;
 import io.xream.x7.repository.cache.CacheableRepository;
-import io.xream.x7.repository.dao.Dao;
-import io.xream.x7.repository.dao.DaoImpl;
-import io.xream.x7.repository.dao.DefaultCriteriaToSql;
+import io.xream.x7.repository.dao.*;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.internal.DefaultTemporaryRepository;
@@ -142,8 +140,15 @@ public class RepositoryStarter  {
         return new X7Data();
     }
 
+
     @Bean
     @Order(10)
+    public TemporaryDao temporaryDao(){
+        return new TemporaryDaoImpl();
+    }
+
+    @Bean
+    @Order(11)
     public TemporaryRepository temporaryRepository(Dao dao,Environment environment){
         String driverClassName = getDbDriverKey(environment);
         DefaultTemporaryRepository temporaryRepository = new DefaultTemporaryRepository();
