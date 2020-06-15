@@ -79,7 +79,7 @@ public class AppTest {
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-//        xxxTest.refreshByCondition();
+        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
@@ -112,7 +112,7 @@ public class AppTest {
 
 //        xxxTest.testFallbackOnly("test");
 
-        xxxTest.testTemporaryTable();
+//        xxxTest.testTemporaryTable();
 
     }
 

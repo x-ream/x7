@@ -1,5 +1,6 @@
 package io.xream.x7.common.bean;
 
+import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.BeanUtil;
 import io.xream.x7.common.util.BeanUtilX;
 import io.xream.x7.common.util.StringUtil;
@@ -34,6 +35,13 @@ public interface KeyMapper {
         }
 
         if (criteria instanceof Criteria.ResultMappedCriteria) {
+            Parsed parsed = Parser.get(key);
+            if (parsed != null) {
+                return parsed.getTableName();
+            }
+        }
+
+        if (criteria instanceof RefreshCondition){
             Parsed parsed = Parser.get(key);
             if (parsed != null) {
                 return parsed.getTableName();

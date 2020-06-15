@@ -139,10 +139,13 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
             String key = parsed.getKey(X.KEY_ONE);
             List<io.xream.x7.common.bean.X> listX = refreshCondition.getListX();
             for (io.xream.x7.common.bean.X x : listX) {
-                if (key.equals(x.getKey())) {
+                String k = x.getKey();
+                boolean b = k.contains(".") ? k.endsWith("."+key) : key.equals(k);
+                if (b) {
                     Object value = x.getValue();
                     if (Objects.nonNull(value) && !value.toString().equals("0")) {
                         unSafe = false;//Safe
+                        break;
                     }
                 }
             }

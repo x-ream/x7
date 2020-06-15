@@ -114,13 +114,14 @@ public class XxxController {
 
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
-                        .refresh("testBoo", "BOO")
-                        .refresh("testList", Arrays.asList("8989","2222"))
-                        .refresh("testObj", dark)
-                        .refresh("test = test - 3")
-                        .refresh("createAt", System.currentTimeMillis())
-                        .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248))
+                        .refresh("cat.testBoo", "BOO")
+                        .refresh("cat.testList", Arrays.asList("8989","2222"))
+                        .refresh("cat.testObj", dark)
+                        .refresh("cat.test = cat.test - 3")
+                        .refresh("cat.createAt", System.currentTimeMillis())
+                        .lt("cat.createAt", 0)
+                        .in("cat.id", Arrays.asList(247, 248))
+                        .sourceScript("cat LEFT JOIN dogTest on dogTest.id = cat.dogId")
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
 

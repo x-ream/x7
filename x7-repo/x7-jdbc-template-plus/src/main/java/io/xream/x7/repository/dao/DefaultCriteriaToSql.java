@@ -69,11 +69,11 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         if (xList.isEmpty())
             return "";
 
-        pre(criteriaCondition.getValueList(),xList);
+        pre(criteriaCondition.getValueList(), xList);
 
         xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
 
-        buildConditionSql(sb,xList);
+        buildConditionSql(sb, xList);
 
         String script = sb.toString();
         StringBuilder sbb = new StringBuilder();
@@ -86,13 +86,13 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
         SqlBuilder sqlBuilder = SqlBuilder.get();
 
-        parseAlia(criteria,sqlBuilder);
+        parseAlia(criteria, sqlBuilder);
 
         filter0(criteria);
 
         env(criteria);
 
-        resultKey(sqlBuilder,criteria);
+        resultKey(sqlBuilder, criteria);
         /*
          * select column
          */
@@ -127,15 +127,32 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         return sqlArr(sqlBuilder, criteria, countSql);
     }
 
+    private String sourceScriptOfRefresh(Parsed parsed, RefreshCondition refreshCondition) {
+        String sourceScript = refreshCondition.getSourceScript();
+        if (StringUtil.isNullOrEmpty(sourceScript))
+            return parsed.getTableName();
+
+        parseAliaFromRefresh(refreshCondition);
+
+        sourceScript = BeanUtilX.normalizeSql(sourceScript);
+
+        StringBuilder sb = new StringBuilder();
+        mapping(sourceScript, refreshCondition, sb);
+
+        return sb.toString();
+    }
+
     @Override
     public String fromRefresh(Parsed parsed, RefreshCondition refreshCondition) {
 
+        String sourceScript = sourceScriptOfRefresh(parsed, refreshCondition);
+
         StringBuilder sb = new StringBuilder();
-        sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(parsed.getTableName()).append(SqlScript.SPACE);
+        sb.append(SqlScript.UPDATE).append(SqlScript.SPACE).append(sourceScript).append(SqlScript.SPACE);
 
         concatRefresh(sb, parsed, refreshCondition);
 
-        filter(refreshCondition.getListX(),refreshCondition);
+        filter(refreshCondition.getListX(), refreshCondition);
 
         String conditionSql = fromCondition(refreshCondition);
 
@@ -176,9 +193,9 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
                 String sql = BeanUtilX.normalizeSql(str);
 
-                sql = SqlParserUtil.mapper(sql, parsed);
-
-                sb.append(sql);
+//                sql = SqlParserUtil.mapper(sql, parsed);
+//               sb.append(sql);
+                mapping(sql, refreshCondition, sb);
 
             } else {
                 String key = x.getKey();
@@ -191,16 +208,30 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                     isNotFirst = true;
 
                     String sql = BeanUtilX.normalizeSql(key);
-                    sql = SqlParserUtil.mapper(sql, parsed);
-                    sb.append(sql);
+//                    sql = SqlParserUtil.mapper(sql, parsed);
+//                    sb.append(sql);
+                    mapping(sql, refreshCondition, sb);
                 } else {
 
-                    BeanElement be = parsed.getElementMap().get(key);
+                    String k = null;
+                    Parsed p;
+                    if (key.contains(".")) {
+                        String[] arr = key.split("\\.");
+                        p = Parser.get(arr[0]);
+                        if (p == null)
+                            throw new RuntimeException("can not find the clzz: " + arr[0]);
+                        k = arr[1];
+                    }else{
+                        k = key;
+                        p = parsed;
+                    }
+
+                    BeanElement be = p.getElementMap().get(k);
                     if (be == null) {
                         throw new RuntimeException("can not find the property " + key + " of " + parsed.getClzName());
                     }
 
-                    TimestampSupport.testNumberValueToDate(be.clz,x);
+                    TimestampSupport.testNumberValueToDate(be.clz, x);
 
                     if (StringUtil.isNullOrEmpty(String.valueOf(x.getValue())) || BaseTypeFilter.isBaseType_0(key, x.getValue(), parsed)) {
                         continue;
@@ -213,13 +244,13 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                     isNotFirst = true;
 
 
-                    String mapper = parsed.getMapper(key);
+                    String mapper = mapping(key,refreshCondition);
                     sb.append(mapper);
                     sb.append(SqlScript.EQ_PLACE_HOLDER);
 
 
-                    if (BeanUtil.testEnumConstant(be.clz,x.getValue())) {
-                    }else if (be.isJson) {
+                    if (BeanUtil.testEnumConstant(be.clz, x.getValue())) {
+                    } else if (be.isJson) {
                         Object v = x.getValue();
                         if (v != null) {
                             String str = JsonX.toJson(v);
@@ -269,7 +300,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         criteria.getValueList().clear();
     }
 
-    private void resultKey(SqlBuilder sqlBuilder,Criteria criteria) {
+    private void resultKey(SqlBuilder sqlBuilder, Criteria criteria) {
         if (!(criteria instanceof Criteria.ResultMappedCriteria))
             return;
 
@@ -325,16 +356,16 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 String value = mapping(reduce.getProperty(), criteria);
 
                 ReduceType reduceType = reduce.getType();
-                if (reduceType == ReduceType.GROUP_CONCAT_DISTINCT){
+                if (reduceType == ReduceType.GROUP_CONCAT_DISTINCT) {
                     reduceType = ReduceType.GROUP_CONCAT;
                     value = "DISTINCT " + value;
-                }else  if (reduceType == ReduceType.SUM_DISTINCT){
+                } else if (reduceType == ReduceType.SUM_DISTINCT) {
                     reduceType = ReduceType.SUM;
                     value = "DISTINCT " + value;
-                }else  if (reduceType == ReduceType.COUNT_DISTINCT){
+                } else if (reduceType == ReduceType.COUNT_DISTINCT) {
                     reduceType = ReduceType.COUNT;
                     value = "DISTINCT " + value;
-                }else  if (reduceType == ReduceType.AVG_DISTINCT){
+                } else if (reduceType == ReduceType.AVG_DISTINCT) {
                     reduceType = ReduceType.AVG;
                     value = "DISTINCT " + value;
                 }
@@ -349,7 +380,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 Having h = reduce.getHaving();
                 if (h != null) {
                     h.setKey(alianName);
-                    if (!criteria.isTotalRowsIgnored()){
+                    if (!criteria.isTotalRowsIgnored()) {
                         throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().ignoreTotalRows()");
                     }
                 }
@@ -385,7 +416,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 column.append(SqlScript.COMMA);
             }
 
-            Map<String,String> resultKeyAliaMap = resultMapped.getResultKeyAliaMap();
+            Map<String, String> resultKeyAliaMap = resultMapped.getResultKeyAliaMap();
 
             int size = functionList.size();
             for (int i = 0; i < size; i++) {
@@ -396,12 +427,12 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 for (String key : functionResultKey.getKeys()) {
                     sqlBuilder.conditionSet.add(key);
                     String mapper = mapping(key, criteria);
-                    function = function.replaceFirst("\\?",mapper);
+                    function = function.replaceFirst("\\?", mapper);
                 }
                 String alian = "c" + resultKeyAliaMap.size();
                 String aliaKey = functionResultKey.getAlia();
                 resultKeyAliaMap.put(aliaKey, alian);
-                propertyMapping.put(aliaKey,alian);
+                propertyMapping.put(aliaKey, alian);
                 column.append(SqlScript.SPACE).append(function).append(SqlScript.AS).append(alian);
                 if (i < size - 1) {
                     column.append(SqlScript.COMMA);
@@ -454,7 +485,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         if (!(criteria instanceof Criteria.ResultMappedCriteria))
             return;
 
-        Criteria.ResultMappedCriteria resultMapped = (Criteria.ResultMappedCriteria)criteria;
+        Criteria.ResultMappedCriteria resultMapped = (Criteria.ResultMappedCriteria) criteria;
         List<Reduce> reduceList = resultMapped.getReduceList();
 
         if (reduceList.isEmpty())
@@ -464,14 +495,27 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
             Having h = reduce.getHaving();
             if (h == null)
                 continue;
-            if (flag){
+            if (flag) {
                 sb.sbCondition.append(ConjunctionAndOtherScript.HAVING.sql());
                 flag = false;
-            }else{
+            } else {
                 sb.sbCondition.append(ConjunctionAndOtherScript.AND.sql());
             }
             sb.sbCondition.append(h.getKey()).append(h.getOp().sql()).append(h.getValue());
         }
+    }
+
+
+    private void parseAliaFromRefresh(RefreshCondition refreshCondition) {
+
+        String script = refreshCondition.getSourceScript();//string -> list<>
+        List<String> list = SourceScriptBuilder.split(script);
+        List<SourceScript> sourceScripts = SourceScriptBuilder.parse(list);
+
+        for (SourceScript sc : sourceScripts) {
+            refreshCondition.getAliaMap().put(sc.alia(), sc.getSource());
+        }
+
     }
 
 
@@ -480,29 +524,29 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
 
-            if (rmc.getSourceScripts().isEmpty()){// builderSource null
+            if (rmc.getSourceScripts().isEmpty()) {// builderSource null
                 String script = criteria.sourceScript();//string -> list<>
                 List<String> list = SourceScriptBuilder.split(script);
                 List<SourceScript> sourceScripts = SourceScriptBuilder.parse(list);
                 rmc.getSourceScripts().addAll(sourceScripts);
             }
 
-            Map<String,String> aliaMap = new HashMap<>();
-            for (SourceScript sc : rmc.getSourceScripts()){
-                aliaMap.put(sc.alia(),sc.getSource());
+            Map<String, String> aliaMap = new HashMap<>();
+            for (SourceScript sc : rmc.getSourceScripts()) {
+                aliaMap.put(sc.alia(), sc.getSource());
             }
 
             rmc.setAliaMap(aliaMap);
 
-            for (SourceScript sourceScript: rmc.getSourceScripts()){
-                preOptimizeListX(sourceScript.getListX(),sqlBuilder.conditionSet);
+            for (SourceScript sourceScript : rmc.getSourceScripts()) {
+                preOptimizeListX(sourceScript.getListX(), sqlBuilder.conditionSet);
             }
         }
 
     }
 
     private void preOptimizeListX(List<X> xList, Set<String> conditionSet) {
-        for (X x : xList){
+        for (X x : xList) {
             conditionSet.add(x.getKey());
             List<X> subList = x.getSubList();
             if (subList != null && !subList.isEmpty()) {
@@ -511,10 +555,10 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         }
     }
 
-    private void optimizeSourceScript (List<SourceScript> sourceScripts,Set<String> conditionSet){
+    private void optimizeSourceScript(List<SourceScript> sourceScripts, Set<String> conditionSet) {
         if (sourceScripts.size() <= 1)
             return;
-        if (conditionSet.size()>0) {
+        if (conditionSet.size() > 0) {
             for (String test : conditionSet) {
                 if (test != null) {
                     if (test.contains("."))
@@ -524,16 +568,16 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
             }
         }
         for (SourceScript sourceScript : sourceScripts) {
-            for (String key : conditionSet){
+            for (String key : conditionSet) {
                 if (key == null)
                     continue;
-                if (StringUtil.isNullOrEmpty(sourceScript.getAlia())){
-                    if (key.contains(sourceScript.getSource()+".")){
+                if (StringUtil.isNullOrEmpty(sourceScript.getAlia())) {
+                    if (key.contains(sourceScript.getSource() + ".")) {
                         sourceScript.used();
                         break;
                     }
-                }else{
-                    if (key.contains(sourceScript.getAlia()+".")) {
+                } else {
+                    if (key.contains(sourceScript.getAlia() + ".")) {
                         sourceScript.used();
                         break;
                     }
@@ -542,27 +586,27 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         }
 
         int size = sourceScripts.size();
-        for (int i = size -1; i>=0; i--) {
+        for (int i = size - 1; i >= 0; i--) {
             SourceScript sourceScript = sourceScripts.get(i);
             if (!sourceScript.isUsed() && !sourceScript.isTargeted())
                 continue;
-            for (int j = i-1; j>=0 ;j--){
+            for (int j = i - 1; j >= 0; j--) {
                 SourceScript sc = sourceScripts.get(j);
                 if (sourceScript.getSource().equals(sc.getSource()))
                     continue;
                 //FIXME
                 On on = sourceScript.getOn();
-                    if (on == null || on.getJoinFrom() == null)
-                        continue;
-                    if (sc.alia().equals(on.getJoinFrom().getAlia())){
-                        sc.targeted();
-                        break;
-                    }
+                if (on == null || on.getJoinFrom() == null)
+                    continue;
+                if (sc.alia().equals(on.getJoinFrom().getAlia())) {
+                    sc.targeted();
+                    break;
                 }
             }
+        }
 
         Iterator<SourceScript> ite = sourceScripts.iterator();
-        while (ite.hasNext()){
+        while (ite.hasNext()) {
             SourceScript sourceScript = ite.next();
             if (!sourceScript.isUsed() && !sourceScript.isTargeted())
                 ite.remove();
@@ -577,9 +621,9 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             Criteria.ResultMappedCriteria rmc = (Criteria.ResultMappedCriteria) criteria;
 
-            if (rmc.getSourceScripts().isEmpty()){// builderSource null
+            if (rmc.getSourceScripts().isEmpty()) {// builderSource null
                 script = criteria.sourceScript();
-            }else{
+            } else {
                 if (!rmc.isWithoutOptimization()) {
                     if (!rmc.resultAllScript().trim().equals("*")) {
                         optimizeSourceScript(rmc.getSourceScripts(), sb.conditionSet);//FIXME  + ON AND
@@ -588,10 +632,10 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 script = rmc.getSourceScripts().stream().map(SourceScript::sql).collect(Collectors.joining()).trim();
             }
 
-            Assert.notNull(script,"Not set sourceScript of ResultMappedBuilder");
+            Assert.notNull(script, "Not set sourceScript of ResultMappedBuilder");
             sb.sbSource.append(SqlScript.FROM).append(SqlScript.SPACE);
 
-        }else {
+        } else {
             script = criteria.sourceScript();
             if (!script.startsWith(SqlScript.FROM) || !script.startsWith(SqlScript.FROM.toLowerCase()))
                 sb.sbSource.append(SqlScript.FROM).append(SqlScript.SPACE);
@@ -649,13 +693,13 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
     }
 
-    private void filter0(Criteria criteria){
-        if (criteria instanceof Criteria.ResultMappedCriteria){
+    private void filter0(Criteria criteria) {
+        if (criteria instanceof Criteria.ResultMappedCriteria) {
             List<X> xList = criteria.getListX();
-            filter(xList,criteria);
+            filter(xList, criteria);
 
-            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()){
-                filter(sourceScript.getListX(),criteria);
+            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()) {
+                filter(sourceScript.getListX(), criteria);
             }
         }
     }
@@ -663,7 +707,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
     private void sourceScriptValueList(Criteria criteria) {
         if (criteria instanceof Criteria.ResultMappedCriteria) {
             List<Object> valueList = criteria.getValueList();
-            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()){
+            for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()) {
                 sourceScript.pre(valueList);
             }
         }
@@ -672,15 +716,15 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
     private void condition(SqlBuilder sqlBuilder, List<X> xList, Criteria criteria) {
         if (xList.isEmpty())
             return;
-        preOptimizeListX(xList,sqlBuilder.conditionSet);//优化连表查询前的准备
+        preOptimizeListX(xList, sqlBuilder.conditionSet);//优化连表查询前的准备
 
         StringBuilder xsb = new StringBuilder();
 
-        pre(criteria.getValueList(),xList);//提取占位符对应的值
+        pre(criteria.getValueList(), xList);//提取占位符对应的值
         if (xList.isEmpty())
             return;
         xList.get(0).setConjunction(ConjunctionAndOtherScript.WHERE);
-        buildConditionSql(xsb,xList);
+        buildConditionSql(xsb, xList);
 
         String script = xsb.toString();
 
@@ -696,7 +740,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         private StringBuilder sbCondition = new StringBuilder();
         private Set<String> conditionSet = new HashSet<>();
 
-        public static SqlBuilder get(){
+        public static SqlBuilder get() {
             return new SqlBuilder();
         }
     }

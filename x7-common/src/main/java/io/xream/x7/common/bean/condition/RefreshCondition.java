@@ -19,16 +19,13 @@ package io.xream.x7.common.bean.condition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.xream.x7.common.bean.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 public class RefreshCondition<T> extends ConditionCriteriaBuilder implements CriteriaCondition, Routeable {
 
     private List<X> refreshList = new ArrayList<>();
-    private String sourceStript;//FIXME
+    private String sourceScript;//FIXME
 
     private List<X> listX = new ArrayList<>();
     private Object routeKey;
@@ -36,6 +33,8 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
     private transient Class clz;
     @JsonIgnore
     private transient List<Object> valueList = new ArrayList<>();
+    @JsonIgnore
+    private transient Map<String,String> aliaMap = new HashMap<>();
 
 
     public Class getClz() {
@@ -51,12 +50,12 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
     }
 
 
-    public String getSourceStript() {
-        return sourceStript;
+    public String getSourceScript() {
+        return this.sourceScript;
     }
 
-    public void setSourceStript(String sourceStript) {
-        this.sourceStript = sourceStript;
+    public void setSourceScript(String sourceScript) {
+        this.sourceScript = sourceScript;
     }
 
     @Override
@@ -72,7 +71,7 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
 
     @Override
     public Map<String, String> getAliaMap() {
-        return null;
+        return this.aliaMap;
     }
 
     @Override
@@ -232,5 +231,10 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
 
     public RefreshCondition  endSub(){
         return (RefreshCondition) super.endSub();
+    }
+
+    public RefreshCondition sourceScript(String sourceScript) {
+        this.sourceScript = sourceScript;
+        return this;
     }
 }
