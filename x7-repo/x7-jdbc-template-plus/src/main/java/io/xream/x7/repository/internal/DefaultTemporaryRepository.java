@@ -18,14 +18,20 @@ package io.xream.x7.repository.internal;
 
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.Parsed;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.repository.TemporaryRepository;
 import io.xream.x7.repository.dao.TemporaryDao;
 import io.xream.x7.repository.transform.DataTransform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class DefaultTemporaryRepository implements TemporaryRepository {
+
+    private Logger logger = LoggerFactory.getLogger(TemporaryRepository.class);
 
     @Autowired
     private TemporaryDao temporaryDao;
@@ -38,42 +44,68 @@ public class DefaultTemporaryRepository implements TemporaryRepository {
     }
 
 
+    private boolean doProxy(String logTag, Callable<Boolean> callable) {
+        long startTime = System.currentTimeMillis();
+        boolean flag = false;
+        try {
+            flag = callable.call();
+        }catch (Exception e){
+            logger.warn("{} exception: {}" , logTag,ExceptionUtil.getMessage(e));
+            throw new RuntimeException(ExceptionUtil.getMessage(e));
+        }finally {
+            long endTime = System.currentTimeMillis();
+            logger.info("{} result: {}, cost time: {}ms" , logTag, flag, (endTime - startTime));
+        }
+
+        return flag;
+    }
+
+
     @Override
     public boolean create(Object obj) {
-        boolean flag = this.dataTransform.create(obj) > 0;
-        System.out.println(this.dataTransform.getOne(obj));
-        return flag;
+        return doProxy("create(Object)", () -> dataTransform.create(obj) > 0);
     }
 
     @Override
     public boolean createBatch(List objList) {
-        return this.dataTransform.createBatch(objList);
+        return doProxy("createBatch(List)", () -> dataTransform.createBatch(objList) );
     }
 
     @Override
     public boolean findToCreate(Class clzz, Criteria.ResultMappedCriteria resultMappedCriteria) {
 
-        Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
-        if (parsed == null) {
-            io.xream.x7.common.bean.Parser.parse(clzz);
-        }
+        return doProxy("findToCreate(Class, ResultMappedCriteria)", () -> {
+            Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
+            if (parsed == null) {
+                io.xream.x7.common.bean.Parser.parse(clzz);
+            }
 
-        return this.temporaryDao.findToCreate(clzz, resultMappedCriteria);
+            return temporaryDao.findToCreate(clzz, resultMappedCriteria);
+        });
+
     }
 
     @Override
     public boolean createRepository(Class clzz) {
-        String sql = temporaryRepositoryParser.parseAndGetSql(clzz);
-        return this.temporaryDao.execute(sql);
+
+        return doProxy("createRepository(Class)", () -> {
+            String sql = temporaryRepositoryParser.parseAndGetSql(clzz);
+            return temporaryDao.execute(sql);
+        });
+
     }
 
     @Override
     public boolean dropRepository(Class clzz) {
-        Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
-        if (parsed == null) {
-            parsed = io.xream.x7.common.bean.Parser.get(clzz);
-        }
-        String sql = "DROP TABLE " + parsed.getTableName();
-        return this.temporaryDao.execute(sql);
+
+        return doProxy("dropRepository(Class)", () -> {
+            Parsed parsed = io.xream.x7.common.bean.Parser.get(clzz.getSimpleName());
+            if (parsed == null) {
+                parsed = io.xream.x7.common.bean.Parser.get(clzz);
+            }
+            String sql = "DROP TABLE " + parsed.getTableName();
+            return temporaryDao.execute(sql);
+        });
+
     }
 }

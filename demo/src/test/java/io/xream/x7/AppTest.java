@@ -112,7 +112,7 @@ public class AppTest {
 
 //        xxxTest.testFallbackOnly("test");
 
-//        xxxTest.testTemporaryTable();
+        xxxTest.testTemporaryTable();
 
     }
 
