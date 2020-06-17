@@ -2,8 +2,8 @@ package io.xream.x7.demo.aop;
 
 
 import io.xream.x7.common.util.ExceptionUtil;
-import io.xream.x7.util.TimeUtil;
 import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.util.TimeUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,11 +12,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 @Aspect
 @Configuration
-@Order(-1)
+//@Order(-1)
 public class WebAop {
 
 

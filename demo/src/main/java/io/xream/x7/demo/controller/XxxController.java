@@ -114,7 +114,7 @@ public class XxxController {
 
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
-                        .refresh("testBoo", "BOO")
+                        .refresh("testBoo", "TEST")
                         .refresh("testList", Arrays.asList("8989","2222"))
                         .refresh("testObj", dark)
                         .refresh("test = test - 3")
@@ -125,7 +125,9 @@ public class XxxController {
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
 
-        return ViewEntity.ok(flag);
+        throw new RuntimeException("TEST ORDER");
+
+//        return ViewEntity.ok(flag);
     }
 
 
@@ -330,10 +332,13 @@ public class XxxController {
     }
 
 
+    @Transactional
     @RequestMapping("/remote/refreshCondition/test")
     public ViewEntity testRefreshConditionnRemote(@RequestBody RefreshCondition<Cat> refreshCondition) {
         this.catRepository.refresh(refreshCondition);
-        return ViewEntity.ok(refreshCondition);
+
+//        return ViewEntity.ok(refreshCondition);
+        throw new RuntimeException("TEST AOP");
     }
 
     @RequestMapping("/listCriteria")
