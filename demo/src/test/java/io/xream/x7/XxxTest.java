@@ -110,7 +110,11 @@ public class XxxTest {
 
     public void distinct(){
 
-        ViewEntity ve = this.controller.distinct(null);
+        CatRO ro = new CatRO();
+        ro.setOrderBy("catTest.id");
+        ro.setDirection(Direction.DESC);
+        ro.setTotalRowsIgnored(true);
+        ViewEntity ve = this.controller.distinct(ro);
         System.out.println(ve);
     }
 

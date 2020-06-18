@@ -140,7 +140,8 @@ public class XxxController {
                 .reduce(COUNT_DISTINCT, "catTest.id")
                 .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
                 .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(?)","catTest.time")
-                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
+//                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
+                .paged(ro);
         String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
         Criteria.ResultMappedCriteria resultMapped = builder.get();
         resultMapped.setSourceScript(sourceScript);
@@ -156,7 +157,7 @@ public class XxxController {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.distinct("catTest.id");
-        builder.beginSub().gte("dogTest.id", 1000000).endSub();
+        builder.beginSub().gte("dogTest.id", 1000).endSub();
 //		builder.and().in("catTest.catFriendName", inList);
 //		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 
@@ -347,8 +348,10 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
-        builder.in("testBoo", Arrays.asList("BOO"))
-                .ne("type","xxxxxZZZZZ")
+        builder
+                .in("testBoo", Arrays.asList("BOO"))
+                .ne("type",null)
+                .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
 //		builder.paged().orderIn("type",inList);
         builder.forceIndex("IDX_CAT_DOG_ID");

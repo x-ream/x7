@@ -47,10 +47,11 @@ public class AppTest {
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
+        xxxTest.testListCriteria();
 
 
 
-        xxxTest.testRefreshConditionRemote();
+//        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 //        xxxTest.testCriteriaRemote();
 //        xxxTest.testCriteriaRemote();

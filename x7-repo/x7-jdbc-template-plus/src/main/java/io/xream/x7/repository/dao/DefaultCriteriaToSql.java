@@ -694,9 +694,9 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
     }
 
     private void filter0(Criteria criteria) {
+        List<X> xList = criteria.getListX();
+        filter(xList, criteria);
         if (criteria instanceof Criteria.ResultMappedCriteria) {
-            List<X> xList = criteria.getListX();
-            filter(xList, criteria);
 
             for (SourceScript sourceScript : ((Criteria.ResultMappedCriteria) criteria).getSourceScripts()) {
                 filter(sourceScript.getListX(), criteria);
