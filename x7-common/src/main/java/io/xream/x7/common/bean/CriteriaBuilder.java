@@ -103,12 +103,10 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
     };
 
 
-    private CriteriaBuilder() {
-    }
 
     private CriteriaBuilder(Criteria criteria) {
+        super(criteria.getListX());
         this.criteria = criteria;
-        init(this.criteria.getListX(), this);
     }
 
 
@@ -144,7 +142,10 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
     @Deprecated
     public static ResultMappedBuilder buildResultMapped(Fetched ro) {
-        ResultMappedBuilder builder = new CriteriaBuilder().new ResultMappedBuilder();
+
+        Criteria.ResultMappedCriteria resultMappedCriteria = new Criteria.ResultMappedCriteria();
+
+        ResultMappedBuilder builder = new ResultMappedBuilder(resultMappedCriteria);
 
         if (ro != null) {
             builder.xAddResultKey(ro);
@@ -158,7 +159,9 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
     public static ResultMappedBuilder buildResultMapped(MapResult ro) {
 
-        ResultMappedBuilder builder = new CriteriaBuilder().new ResultMappedBuilder();
+        Criteria.ResultMappedCriteria resultMappedCriteria = new Criteria.ResultMappedCriteria();
+
+        ResultMappedBuilder builder = new ResultMappedBuilder(resultMappedCriteria);
 
         if (ro != null) {
 
@@ -174,7 +177,10 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
 
     public static ResultMappedBuilder buildResultMapped() {
-        return new CriteriaBuilder().new ResultMappedBuilder();
+        Criteria.ResultMappedCriteria resultMappedCriteria = new Criteria.ResultMappedCriteria();
+
+        return new ResultMappedBuilder(resultMappedCriteria);
+
     }
 
     public Class<?> getClz() {
@@ -187,7 +193,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
     protected SourceScript sourceScriptTemp;
 
-    public class ResultMappedBuilder extends CriteriaBuilder {
+    public static class ResultMappedBuilder extends CriteriaBuilder {
 
         private SourceScriptBuilder sourceScriptBuilder = new SourceScriptBuilder() {
 
@@ -260,7 +266,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
 
             Criteria.ResultMappedCriteria resultMapped = new Criteria.ResultMappedCriteria();
             super.criteria = resultMapped;
-            init(super.criteria.getListX(), this);
+
         }
 
         private void init(Class<?> clz) {
@@ -270,8 +276,8 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             f.setParsed(parsed);
         }
 
-        public ResultMappedBuilder() {
-            init();
+        public ResultMappedBuilder(Criteria criteria) {
+            super(criteria);
         }
 
         private void xAddResultKey(List<String> xExpressionList) {

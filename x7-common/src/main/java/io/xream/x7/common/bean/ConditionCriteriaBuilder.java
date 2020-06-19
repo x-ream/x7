@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class ConditionCriteriaBuilder {
 
-    private static ConditionCriteriaBuilder instance;
+    private ConditionCriteriaBuilder instance;
 
     private transient List<X> listX;
     private transient boolean isOr;
@@ -34,15 +34,22 @@ public class ConditionCriteriaBuilder {
     private transient List<X> tempList;
     private transient List<List<X>> subsList = new LinkedList<>();
 
-    protected static void init(List<X> listX, ConditionCriteriaBuilder builder) {
-        instance = builder;
-        instance.listX = listX;
+    protected ConditionCriteriaBuilder(){
+        this.instance = this;
+    }
+
+    protected ConditionCriteriaBuilder(List<X> listX){
+        this.instance = this;
+        this.instance.listX = listX;
+    }
+
+
+    protected void init(List<X> listX){
+        this.listX = listX;
     }
 
     public static ConditionCriteriaBuilder build(List<X> listX){
-        ConditionCriteriaBuilder builder = new ConditionCriteriaBuilder();
-        init(listX,builder);
-        return instance;
+        return new ConditionCriteriaBuilder(listX);
     }
 
     public ConditionCriteriaBuilder eq(String property, Object value){

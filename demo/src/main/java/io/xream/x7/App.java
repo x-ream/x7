@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableReadOnly
-@EnableX7L2Caching(timeSeconds = 120)
+//@EnableX7L2Caching(timeSeconds = 120)
 @EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient
 @EnableTracingServlet

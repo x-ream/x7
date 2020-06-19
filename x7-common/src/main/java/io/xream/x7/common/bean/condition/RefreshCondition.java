@@ -93,7 +93,8 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
 
     @Deprecated
     public RefreshCondition(){
-        init(listX,this);
+        super();
+        init(this.listX);
     }
 
 
