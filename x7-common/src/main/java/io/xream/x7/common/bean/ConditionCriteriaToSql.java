@@ -151,7 +151,11 @@ public interface ConditionCriteriaToSql extends KeyMapper{
                         if (BaseTypeFilter.isBaseType_0(arr[1],x.getValue(),parsed)){
                             ite.remove();
                         }else{
-                            TimestampSupport.testNumberValueToDate(parsed.getElement(arr[1]).clz,x);
+                            BeanElement be = parsed.getElement(arr[1]);
+                            if (be == null){
+                                throw new RuntimeException("property of " + parsed.getClz() +" not exists: " + arr[1]);
+                            }
+                            TimestampSupport.testNumberValueToDate(be.clz,x);
                             if (x.getValue() == null)
                                 ite.remove();
                         }
@@ -160,7 +164,11 @@ public interface ConditionCriteriaToSql extends KeyMapper{
                         if (BaseTypeFilter.isBaseType_0(key,x.getValue(),parsed)){
                             ite.remove();
                         }else{
-                            TimestampSupport.testNumberValueToDate(parsed.getElement(x.getKey()).clz,x);
+                            BeanElement be = parsed.getElement(key);
+                            if (be == null){
+                                throw new RuntimeException("property of " + parsed.getClz() +" not exists: " + key);
+                            }
+                            TimestampSupport.testNumberValueToDate(be.clz,x);
                             if (x.getValue() == null)
                                 ite.remove();
                         }

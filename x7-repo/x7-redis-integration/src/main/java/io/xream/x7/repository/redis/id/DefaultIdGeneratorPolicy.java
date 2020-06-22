@@ -59,7 +59,16 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClz().getName();
 
-            this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
+            Object idObj = this.stringRedisTemplate.opsForHash().get(IdGeneratorPolicy.ID_MAP_KEY, name);
+
+            Long currentMaxId = 0L;
+            if (idObj != null) {
+                currentMaxId = Long.valueOf(idObj.toString().trim());
+            }
+            if (maxId > currentMaxId) {
+                this.stringRedisTemplate.opsForHash().put(IdGeneratorPolicy.ID_MAP_KEY, name, String.valueOf(maxId));
+            }
+
         }
     }
 
