@@ -163,7 +163,7 @@ public class ConditionCriteriaBuilder {
         return instance;
     }
     public ConditionCriteriaBuilder endSub(){
-
+        isOr();
         int size = subsList.size();
         if (--size >= 0)
         subsList.remove(size);
