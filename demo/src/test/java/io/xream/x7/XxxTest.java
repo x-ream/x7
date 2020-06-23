@@ -10,15 +10,14 @@ import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
-import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatTest;
-import io.xream.x7.demo.bean.Order;
-import io.xream.x7.demo.bean.TestBoo;
+import io.xream.x7.demo.bean.*;
 import io.xream.x7.demo.controller.CatEggController;
 import io.xream.x7.demo.controller.OrderController;
 import io.xream.x7.demo.controller.XxxController;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.demo.ro.CatRO;
+import io.xream.x7.demo.service.DogService;
 import io.xream.x7.fallback.FallbackOnly;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +29,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
 public class XxxTest {
+
+        private Executor executor = Executors.newFixedThreadPool(2);
+
+    @Autowired
+    private DogService dogService;
 
     @Autowired
     private ReyTemplate reyTemplate;
@@ -206,21 +214,6 @@ public class XxxTest {
         return ViewEntity.ok(result);
     }
 
-    public void testLock(){
-        Cat cat = new Cat();
-        cat.setId(1000L);
-        cat.setType("LOCK--------sss");
-        io.xream.x7.common.bean.X x = new io.xream.x7.common.bean.X();
-//        cat.getListX().add(x);
-        CasualWorker.accept(new Runnable() {
-            @Override
-            public void run() {
-                distributionLockTester.test("_test_cat_");
-            }
-        });
-        distributionLockTester.test("_test_cat_");
-    }
-
 
     public void testList(){
         this.controller.list();
@@ -352,6 +345,32 @@ public class XxxTest {
     public void testTemporaryTable(){
 
         this.catEggController.test();
+
+    }
+
+    public void testLock(){
+        DogTest dogTest = new DogTest();
+        dogTest.setId(3);
+        this.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                dogService.lock5(dogTest);
+            }
+        });
+        this.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                dogService.lock5(dogTest);
+            }
+        });
+
+        try{
+            TimeUnit.MILLISECONDS.sleep(1000);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+//        dogTest.setNumber(BigDecimal.ONE);
+        dogService.lock5(dogTest);
 
     }
 

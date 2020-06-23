@@ -25,7 +25,7 @@ public class AppTest {
     @Autowired
     private DarkRepositoryTest darkRepositoryTest;
 
-    private Executor executor = Executors.newFixedThreadPool(11);
+//    private Executor executor = Executors.newFixedThreadPool(11);
 
     @Test
     public void  testAll(){
@@ -96,7 +96,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-//        xxxTest.testLock();
+        xxxTest.testLock();
 
 //        xxxTest.in();
 //        xxxTest.in();

@@ -17,6 +17,7 @@
 package io.xream.x7.lock;
 
 
+import io.xream.x7.common.util.VerifyUtil;
 import io.xream.x7.exception.DistributionLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,19 +37,20 @@ public class DistributionLock {
         lockProvider = lp;
     }
 
-    private static void lock(String key, int interval, int timeout, boolean abortingIfNoLock) {
+
+    private static void lock(String key, String value, int interval, int timeout, boolean abortingIfNoLock) {
 
         if (lockProvider == null)
             throw new RuntimeException("No implements of LockProvider, like the project x7-repo/x7-redis-integration");
 
         int i = 1;
-        boolean locked = lockProvider.lock(key,timeout);
-        int retryMax = timeout / interval ;
+        boolean locked = lockProvider.lock(key,value,timeout);
+        int retryMax = timeout / interval + 10;
         if (!abortingIfNoLock) {
             while (!locked) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(interval);
-                    locked = lockProvider.lock(key, timeout);
+                    locked = lockProvider.lock(key, value, timeout);
                     i++;
                 } catch (Exception e) {
                     break;
@@ -73,11 +75,14 @@ public class DistributionLock {
     public static Lock by(String key){
         Lock ml = new Lock();
         ml.setKey(key+"~LOCK");
+        String random = VerifyUtil.toMD5("LOCK" + System.nanoTime());
+        ml.setValue(random);
         return ml;
     }
 
     public static class Lock{
         private  String key;
+        private String value;
 
         private Lock(){}
 
@@ -87,6 +92,14 @@ public class DistributionLock {
 
         public String getKey(){
             return this.key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
 
         public <T> T lock(Task<T> obj){
@@ -99,7 +112,7 @@ public class DistributionLock {
                 boolean abortingIfNoLock,
                 Task<T> obj){
 
-            DistributionLock.lock(key,intervalMS,timeoutMS,abortingIfNoLock);
+            DistributionLock.lock(key,value,intervalMS,timeoutMS,abortingIfNoLock);
             T o = null;
             try {
                 o = obj.run(obj);
@@ -117,7 +130,7 @@ public class DistributionLock {
         }
 
         public <T> T lockAsync(Task<T> obj){
-            DistributionLock.lock(key,INTERVAL,TIMEOUT,false);
+            DistributionLock.lock(key,value,INTERVAL,TIMEOUT,false);
             T o = null;
             try {
                 o = obj.run(obj);
