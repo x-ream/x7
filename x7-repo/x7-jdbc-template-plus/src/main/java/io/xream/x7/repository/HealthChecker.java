@@ -46,7 +46,7 @@ public class HealthChecker {
 
 
 
-        System.out.println("-------------------------------------------------");
+        logger.info("-------------------------------------------------");
 
         boolean flag = false;
 
@@ -73,7 +73,7 @@ public class HealthChecker {
             }
         }
 
-        logger.info("x7-repo/x7-jdbc-template-plus " + (flag ? "still " : "") + "started" + (flag ? " OK, wtih some problem" : ""));
+        logger.info("x7-repo/x7-jdbc-template-plus " + (flag ? "still " : "") + "started" + (flag ? " OK, wtih some problem" : "" ) + "\n");
 
     }
 }

@@ -57,6 +57,9 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
         if (repositoryList == null)
             return;
 
+        long startTme = System.currentTimeMillis();
+        logger.info("x7-repo/x7-id-generator starting.... \n");
+
         final String idGeneratorScript = "local hk = KEYS[1] " +
                 "local key = KEYS[2] " +
                 "local id = ARGV[1] " +
@@ -109,6 +112,9 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             logger.info("Redis : " + name + ".maxId = " + result);
 
         }
+        logger.info("..................................................");
+        long endTime = System.currentTimeMillis();
+        logger.info("x7-repo/x7-id-generator started, cost time: " + (endTime-startTme) +"ms\n\n");
     }
 
 }
