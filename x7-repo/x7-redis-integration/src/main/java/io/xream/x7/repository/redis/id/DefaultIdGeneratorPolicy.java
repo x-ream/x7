@@ -48,39 +48,40 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
         return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,clzName,1);
     }
 
-    private RedisScript<Long> redisScript = new DefaultRedisScript<Long>() {
-
-        @Override
-        public String getSha1(){
-            return VerifyUtil.toMD5("id_map_key");
-        }
-
-        @Override
-        public Class<Long> getResultType() {
-            return Long.class;
-        }
-
-        @Override
-        public String getScriptAsString() {
-            return  "local hk = KEYS[1] " +
-                    "local key = KEYS[2] " +
-                    "local id = ARGV[1] " +
-                    "local existId = redis.call('hget',hk,key) " +
-                    "if tonumber(id) > tonumber(existId) " +
-                    "then " +
-                    "redis.call('hset',hk,key,tostring(id)) " +
-                    "return tonumber(id) "+
-                    "end " +
-                    "return tonumber(existId)";
-        }
-    };
-
 
     @Override
     public void onStart(List<BaseRepository> repositoryList) {
         if (repositoryList == null)
             return;
 
+        final String idGeneratorScript = "local hk = KEYS[1] " +
+                "local key = KEYS[2] " +
+                "local id = ARGV[1] " +
+                "local existId = redis.call('hget',hk,key) " +
+                "if tonumber(id) > tonumber(existId) " +
+                "then " +
+                "redis.call('hset',hk,key,tostring(id)) " +
+                "return tonumber(id) "+
+                "end " +
+                "return tonumber(existId)";
+
+        RedisScript<Long> redisScript = new DefaultRedisScript<Long>() {
+
+            @Override
+            public String getSha1(){
+                return VerifyUtil.toMD5("id_map_key");
+            }
+
+            @Override
+            public Class<Long> getResultType() {
+                return Long.class;
+            }
+
+            @Override
+            public String getScriptAsString() {
+                return  idGeneratorScript;
+            }
+        };
 
         for (BaseRepository baseRepository : repositoryList) {
             CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
