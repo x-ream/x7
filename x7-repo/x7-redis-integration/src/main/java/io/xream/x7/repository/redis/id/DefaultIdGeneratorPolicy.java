@@ -28,9 +28,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
+import org.springframework.util.IdGenerator;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
@@ -98,12 +101,12 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClz().getName();
 
-            logger.info("Id in db   : " + name + ", maxId = " + maxId);
+            logger.info("Db    : " + name + ".maxId = " + maxId);
 
             List<String> keys = Arrays.asList(IdGeneratorPolicy.ID_MAP_KEY,name);
             long result = this.stringRedisTemplate.execute(redisScript,keys,String.valueOf(maxId));
 
-            logger.info("Id in redis: " + name + ", maxId = " + result);
+            logger.info("Redis : " + name + ".maxId = " + result);
 
         }
     }
