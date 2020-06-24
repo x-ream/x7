@@ -351,26 +351,28 @@ public class XxxTest {
     public void testLock(){
         DogTest dogTest = new DogTest();
         dogTest.setId(3);
-        this.executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                dogService.lock5(dogTest);
-            }
-        });
-        this.executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                dogService.lock5(dogTest);
-            }
-        });
+//        this.executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                dogService.lock5(dogTest);
+//            }
+//        });
+//        this.executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                dogService.lock5(dogTest);
+//            }
+//        });
+//
+//        try{
+//            TimeUnit.MILLISECONDS.sleep(1000);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//        dogService.lock5(dogTest);
 
-        try{
-            TimeUnit.MILLISECONDS.sleep(1000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-//        dogTest.setNumber(BigDecimal.ONE);
-        dogService.lock5(dogTest);
+        dogService.lock0(dogTest);
 
     }
 
