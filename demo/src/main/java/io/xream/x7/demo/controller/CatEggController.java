@@ -26,19 +26,30 @@ public class CatEggController {
 
     @RequestMapping("/test")
     public ViewEntity test(){
-        boolean flag = this.temporaryRepository.createRepository(CatEgg.class);
-        System.out.println(flag);
+//        boolean flag = this.temporaryRepository.createRepository(CatEgg.class);
+//        System.out.println(flag);
+//
+//        CatEgg catEgg = new CatEgg();
+//        catEgg.setId(1);
+//        catEgg.setDogId(2);
+//        catEgg.setName("test");
+//
+//        this.temporaryRepository.create(catEgg);
 
-        CatEgg catEgg = new CatEgg();
-        catEgg.setId(1);
-        catEgg.setCatId(2);
-        catEgg.setName("test");
+        //test....
+        CriteriaBuilder.ResultMappedBuilder fromBuilder = CriteriaBuilder.buildResultMapped();
+        fromBuilder.resultKey("cat.id","id");
+        fromBuilder.resultKey("cat.name","name");
+        fromBuilder.resultKey("cat.dogId","dog_id");
+        fromBuilder.sourceScript("from cat");
 
-        this.temporaryRepository.create(catEgg);
+        boolean flag = this.temporaryRepository.findToCreate(CatEgg.class, fromBuilder.get());
+
+
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.resultWithDottedKey().resultKey("c.id").resultKey("c.type");
-        builder.withoutOptimization().sourceScript("FROM cat c inner join catEgg e on e.catId = c.id");
+        builder.withoutOptimization().sourceScript("FROM cat c inner join catEgg e on e.dogId = c.id");
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 

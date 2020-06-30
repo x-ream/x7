@@ -7,7 +7,7 @@ public class CatEgg {
     @X.Key
     private long id;
     private String name;
-    private long catId;
+    private long dogId;
 
     public long getId() {
         return id;
@@ -25,12 +25,12 @@ public class CatEgg {
         this.name = name;
     }
 
-    public long getCatId() {
-        return catId;
+    public long getDogId() {
+        return dogId;
     }
 
-    public void setCatId(long catId) {
-        this.catId = catId;
+    public void setDogId(long dogId) {
+        this.dogId = dogId;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CatEgg {
         return "CatEgg{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", catId=" + catId +
+                ", dogId=" + dogId +
                 '}';
     }
 }

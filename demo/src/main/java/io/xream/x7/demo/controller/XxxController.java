@@ -189,7 +189,7 @@ public class XxxController {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
 //        builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
-        builder.resultKeyAssignedAlia("c.dogId","c_id");
+        builder.resultKey("c.dogId","c_id");
         builder.or().in("c.catFriendName", inList);
         builder.or().eq("d.petId", 0);
         builder.or().lt("c.time",System.currentTimeMillis());

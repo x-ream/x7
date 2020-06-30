@@ -320,7 +320,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
          * @return resultKey set by framework, not alia, (temporaryRepository.findToCreate)
          *
          */
-        public ResultMappedBuilder resultKeyAssignedAlia(String resultKey, String alia) {
+        public ResultMappedBuilder resultKey(String resultKey, String alia) {
             if (StringUtil.isNullOrEmpty(resultKey))
                 return this;
             Assert.notNull(alia,"resultKeyAssignedAlia(), alia can not null");

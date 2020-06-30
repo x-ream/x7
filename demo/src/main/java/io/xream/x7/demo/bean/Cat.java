@@ -17,6 +17,7 @@ public class Cat implements Serializable, IdView {
 	private long id;
 	@X.Mapping("cat_type")
 	private String type;
+	private String name;
 	private String taxType;
 	private long dogId;
 	private long test;

@@ -28,7 +28,7 @@ public class AppTest {
 //    private Executor executor = Executors.newFixedThreadPool(11);
 
     @Test
-    public void  testAll(){
+    public void testAll(){
 
 //        xxxTest.testOrder();
 //        xxxTest.testNonPaged();
@@ -38,7 +38,7 @@ public class AppTest {
 
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
+//        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
@@ -50,7 +50,7 @@ public class AppTest {
 
 //        xxxTest.testListCriteria();
 
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 
 
 
@@ -103,7 +103,7 @@ public class AppTest {
 
 //        xxxTest.testLock();
 
-        xxxTest.testLock();
+//        xxxTest.testLock();
 
 
 //        xxxTest.in();
@@ -121,7 +121,7 @@ public class AppTest {
 
 //        xxxTest.testFallbackOnly("test");
 
-//        xxxTest.testTemporaryTable();
+        xxxTest.testTemporaryTable();
 
     }
 
