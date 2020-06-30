@@ -411,14 +411,14 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
         }
 
 
-        List<KV> resultListAssignedAlia = resultMapped.getResultKeyAssignedAlia();
-        if (!resultListAssignedAlia.isEmpty()) {
+        List<KV> resultListAssignedAliaList = resultMapped.getResultKeyAssignedAliaList();
+        if (!resultListAssignedAliaList.isEmpty()) {
             if (flag) {
                 column.append(SqlScript.COMMA);
             }
-            int size = resultListAssignedAlia.size();
+            int size = resultListAssignedAliaList.size();
             for (int i = 0; i < size; i++) {
-                KV kv = resultListAssignedAlia.get(i);
+                KV kv = resultListAssignedAliaList.get(i);
                 sqlBuilder.conditionSet.add(kv.getK());
                 String mapper = mapping(kv.getK(), criteria);
                 propertyMapping.put(kv.getK(), mapper);

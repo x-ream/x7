@@ -324,7 +324,7 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             if (StringUtil.isNullOrEmpty(resultKey))
                 return this;
             Assert.notNull(alia,"resultKeyAssignedAlia(), alia can not null");
-            get().getResultKeyAssignedAlia().add(new KV(resultKey,alia));
+            get().getResultKeyAssignedAliaList().add(new KV(resultKey,alia));
             return this;
         }
 

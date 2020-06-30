@@ -53,7 +53,7 @@ public class CatEggController {
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 
-        this.catRepository.findToHandle(resultMappedCriteria, map -> {
+        this.catService.findToHandle(resultMappedCriteria, map -> {
 
             Long id = MapUtils.getLong(map,"c.id");
             String catType = MapUtils.getString(map,"c.type");

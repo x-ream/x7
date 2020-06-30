@@ -205,7 +205,7 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		private static final long serialVersionUID = -2365612538012282380L;
 		private List<String> resultKeyList = new ArrayList<String>();
 		private List<FunctionResultKey> resultFuntionList = new ArrayList<>();
-		private List<KV> resultKeyAssignedAlia = new ArrayList<>();
+		private List<KV> resultKeyAssignedAliaList = new ArrayList<>();
 		private String groupBy;
 		private Distinct distinct;
 		private String sourceScript;
@@ -286,8 +286,8 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 			return resultKeyList;
 		}
 
-		public List<KV> getResultKeyAssignedAlia() {
-			return resultKeyAssignedAlia;
+		public List<KV> getResultKeyAssignedAliaList() {
+			return resultKeyAssignedAliaList;
 		}
 
 		public List<FunctionResultKey> getResultFuntionList() {
