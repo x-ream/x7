@@ -410,6 +410,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
         }
 
+
         List<KV> resultListAssignedAlia = resultMapped.getResultKeyAssignedAlia();
         if (!resultListAssignedAlia.isEmpty()) {
             if (flag) {

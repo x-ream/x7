@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+
 /**
  *
  * Demo
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableReadOnly
 @EnableX7L2Caching(timeSeconds = 120)
+//@EnableX7L2Caching(timeSeconds = 120)
 @EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient
 @EnableTracingServlet
