@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ io.xream.x7.BootConfiguration
+
+org.springframework.context.ApplicationListener=\
+ io.xream.x7.RepositoryListener,\
+ io.xream.x7.reyc.ReyListener
