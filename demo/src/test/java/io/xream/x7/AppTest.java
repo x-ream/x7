@@ -47,7 +47,7 @@ public class AppTest {
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 
 
 
@@ -96,7 +96,7 @@ public class AppTest {
 //        xxxTest.testList();
 //        xxxTest.testList();
 //        xxxTest.testList();
-        xxxTest.testLock();
+//        xxxTest.testLock();
 
 //        xxxTest.in();
 //        xxxTest.in();

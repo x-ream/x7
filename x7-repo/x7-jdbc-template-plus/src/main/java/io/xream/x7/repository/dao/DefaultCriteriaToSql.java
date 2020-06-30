@@ -410,6 +410,28 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
         }
 
+        List<KV> resultListAssignedAlia = resultMapped.getResultKeyAssignedAlia();
+        if (!resultListAssignedAlia.isEmpty()) {
+            if (flag) {
+                column.append(SqlScript.COMMA);
+            }
+            int size = resultListAssignedAlia.size();
+            for (int i = 0; i < size; i++) {
+                KV kv = resultListAssignedAlia.get(i);
+                sqlBuilder.conditionSet.add(kv.getK());
+                String mapper = mapping(kv.getK(), criteria);
+                propertyMapping.put(kv.getK(), mapper);
+                String alian = kv.getV().toString();
+                resultMapped.getResultKeyAliaMap().put(alian, mapper);
+                column.append(SqlScript.SPACE).append(mapper).append(SqlScript.AS).append(alian);
+                if (i < size - 1) {
+                    column.append(SqlScript.COMMA);
+                }
+                flag = true;
+            }
+
+        }
+
         List<FunctionResultKey> functionList = resultMapped.getResultFuntionList();
         if (!functionList.isEmpty()) {//
             if (flag) {

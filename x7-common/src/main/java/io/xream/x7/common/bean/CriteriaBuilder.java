@@ -313,6 +313,21 @@ public class CriteriaBuilder extends ConditionCriteriaBuilder {
             return this;
         }
 
+        /**
+         *
+         * @param resultKey
+         * @param alia
+         * @return resultKey set by framework, not alia, (temporaryRepository.findToCreate)
+         *
+         */
+        public ResultMappedBuilder resultKeyAssignedAlia(String resultKey, String alia) {
+            if (StringUtil.isNullOrEmpty(resultKey))
+                return this;
+            Assert.notNull(alia,"resultKeyAssignedAlia(), alia can not null");
+            get().getResultKeyAssignedAlia().add(new KV(resultKey,alia));
+            return this;
+        }
+
         public ResultMappedBuilder resultWithDottedKey() {
             get().setResultWithDottedKey(true);
             return this;
