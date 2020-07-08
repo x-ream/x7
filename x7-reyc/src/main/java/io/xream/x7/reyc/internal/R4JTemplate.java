@@ -58,13 +58,13 @@ public class R4JTemplate implements ReyTemplate {
     }
 
     @Override
-    public String support(String circuitBreakerKey, boolean isRetry, BackendService<String> backendService) {
+    public String support(String circuitBreakerName, boolean isRetry, BackendService<String> backendService) {
 
-        if (StringUtil.isNullOrEmpty(circuitBreakerKey)){
-            circuitBreakerKey = "";
+        if (StringUtil.isNullOrEmpty(circuitBreakerName)){
+            circuitBreakerName = "";
         }
 
-        final String backendName = circuitBreakerKey.equals("") ? "default" : circuitBreakerKey;
+        final String backendName = circuitBreakerName.equals("") ? "default" : circuitBreakerName;
 
         CircuitBreakerConfig circuitBreakerConfig = circuitBreakerRegistry.getConfiguration(backendName).orElse(circuitBreakerRegistry.getDefaultConfig());
 
