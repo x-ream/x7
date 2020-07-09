@@ -452,8 +452,8 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                     String mapper = mapping(key, criteria);
                     function = function.replaceFirst("\\?", mapper);
                 }
-                String alian = "c" + resultKeyAliaMap.size();
                 String aliaKey = functionResultKey.getAlia();
+                String alian = aliaKey.replace(".","_");
                 resultKeyAliaMap.put(aliaKey, alian);
                 propertyMapping.put(aliaKey, alian);
                 column.append(SqlScript.SPACE).append(function).append(SqlScript.AS).append(alian);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 
-@ReyClient(value = "http://${web.demo}/xxx", circuitBreaker = "", retry = true, fallback = TestFallback.class, groupRouter = CatServiceGroupRouterForK8S.class)
+@ReyClient(value = "http://${web.demo}/xxx", circuitBreaker = "test", retry = true, fallback = TestFallback.class, groupRouter = CatServiceGroupRouterForK8S.class)
 public interface TestServiceRemote {
 
 

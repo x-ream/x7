@@ -135,7 +135,7 @@ public class XxxController {
     public ViewEntity distinct(@RequestBody CatRO ro) {
 
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
-        builder.distinct("catTest.dogId")
+        builder.resultWithDottedKey().distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
                 .reduce(COUNT_DISTINCT, "catTest.id")
                 .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
@@ -351,7 +351,7 @@ public class XxxController {
 //		builder.resultKey("id").resultKey("type");
         builder
                 .in("testBoo", Arrays.asList("BOO"))
-                .ne("type",null)
+                .eq("type","XXXX")
                 .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
 //		builder.paged().orderIn("type",inList);
