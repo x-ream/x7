@@ -103,7 +103,7 @@ public class DefaultTemporaryRepository implements TemporaryRepository {
             if (parsed == null) {
                 parsed = io.xream.x7.common.bean.Parser.get(clzz);
             }
-            String sql = "DROP TABLE IF EXISTS " + parsed.getTableName();
+            String sql = "DROP TABLE " + parsed.getTableName();
             return temporaryDao.execute(sql);
         });
 
