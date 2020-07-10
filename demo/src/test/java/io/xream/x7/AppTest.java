@@ -36,8 +36,9 @@ public class AppTest {
 //        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
+        xxxTest.testVerify();
 //        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
+        xxxTest.testOrderFind();
 //        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();

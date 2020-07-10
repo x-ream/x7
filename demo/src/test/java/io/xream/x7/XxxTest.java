@@ -15,6 +15,7 @@ import io.xream.x7.demo.bean.*;
 import io.xream.x7.demo.controller.CatEggController;
 import io.xream.x7.demo.controller.OrderController;
 import io.xream.x7.demo.controller.XxxController;
+import io.xream.x7.demo.remote.OrderRemote;
 import io.xream.x7.demo.remote.TestServiceRemote;
 import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.demo.service.DogService;
@@ -64,6 +65,9 @@ public class XxxTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private OrderRemote orderRemote;
 
     public  void refreshByCondition() {
 
@@ -376,5 +380,11 @@ public class XxxTest {
 
     }
 
+
+    public boolean testVerify(){
+        boolean flag = orderRemote.verify();
+        System.out.println("______ " + flag);
+        return flag;
+    }
 
 }

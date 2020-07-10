@@ -10,6 +10,8 @@ import io.xream.x7.demo.OrderRepository;
 import io.xream.x7.demo.bean.Order;
 import io.xream.x7.demo.bean.OrderType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
+
+    @Value("${spring.profiles.active:dev}")
+    private String profile;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -41,6 +46,7 @@ public class OrderController {
 
     @RequestMapping("/find")
     public ViewEntity find(){
+        System.out.println(profile);
         CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.resultWithDottedKey().distinct("o.id");
         builder.resultKeyFunction(ResultKeyAlia.of("o","at"),"YEAR(?)","o.createAt");
@@ -108,4 +114,8 @@ public class OrderController {
         return ViewEntity.ok(list);
     }
 
+    @RequestMapping("/verify")
+    public boolean verify(){
+        return true;
+    }
 }
