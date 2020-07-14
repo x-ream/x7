@@ -30,15 +30,15 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testOrder();
+        xxxTest.orderSharding();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
 //        xxxTest.domain();
 
-        xxxTest.testVerify();
+//        xxxTest.testVerify();
 //        xxxTest.inOrder();
-        xxxTest.testOrderFind();
+//        xxxTest.testOrderFind();
 //        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
@@ -79,7 +79,7 @@ public class AppTest {
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
-        xxxTest.distinct();
+//        xxxTest.distinct();
 //        xxxTest.distinct();
 //
 

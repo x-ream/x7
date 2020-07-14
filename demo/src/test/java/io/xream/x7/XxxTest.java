@@ -329,9 +329,15 @@ public class XxxTest {
 
     public void testOrder(){
         Order order1 = new Order();
-        order1.setId(4);
+        order1.setId(5);
         order1.setName("ds0_TEST");
+        order1.setType(OrderType.SINGLE);
+        order1.setUserId(3);
         this.orderController.create(order1);
+    }
+
+    public Order orderSharding(){
+        return this.orderController.sharding();
     }
 
     public void testOrderFind(){

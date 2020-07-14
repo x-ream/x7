@@ -44,6 +44,17 @@ public class OrderController {
         return id > 0;
     }
 
+    @RequestMapping("/sharding")
+    public Order sharding(){
+
+        CriteriaBuilder builder = CriteriaBuilder.build(Order.class);
+        builder.eq("userId", 5);
+        Order order = this.orderRepository.list(builder.get()).get(0);
+
+        return order;
+
+    }
+
     @RequestMapping("/find")
     public ViewEntity find(){
         System.out.println(profile);

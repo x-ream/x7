@@ -7,6 +7,7 @@ public class OrderItem {
     @X.Key
     private long id;
     private long orderId;
+    private long userId;
     private String name;
     private OrderType type;
     private Long quantity;
@@ -49,6 +50,14 @@ public class OrderItem {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     @Override

@@ -9,6 +9,7 @@ public class Order {
     private String name;
     private long createAt;
     private OrderType type;
+    private long userId;
 
     public long getId() {
         return id;
@@ -40,6 +41,14 @@ public class Order {
 
     public void setType(OrderType type) {
         this.type = type;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     @Override
