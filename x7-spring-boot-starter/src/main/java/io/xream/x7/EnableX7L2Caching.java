@@ -20,6 +20,10 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
+/**
+ *  Default Redis, only support Redis Sentinel, not support Redis Cluster <br>
+ *  microservice, sentinel is enough <br>
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented

@@ -27,6 +27,8 @@ import java.lang.annotation.*;
  *  <br>
  *  for the interrupt of return, the client has to retry about 10 times, 300ms/time suggested <br>
  *  <br>
+ *
+ *  Default Redis, support Redis Cluster
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
