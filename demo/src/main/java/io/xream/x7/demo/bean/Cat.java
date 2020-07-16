@@ -1,5 +1,6 @@
 package io.xream.x7.demo.bean;
 
+import io.xream.x7.common.cache.CacheScope;
 import io.xream.x7.common.repository.X;
 import io.xream.x7.common.web.IdView;
 import org.apache.commons.collections.MapUtils;
@@ -9,12 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Cat implements Serializable, IdView {
+public class Cat implements CacheScope, Serializable {
 
 	private static final long serialVersionUID = 5708147778966785698L;
 
 	@X.Key
 	private long id;
+	private long userId;
 	@X.Mapping("cat_type")
 	private String type;
 	private String name;
@@ -29,10 +31,7 @@ public class Cat implements Serializable, IdView {
 
 
 	private transient Map<Object,Object> viewMap;
-	@Override
-	public void transform(Map<Object,Object> viewMap) {
-		this.viewMap = viewMap;
-	}
+
 
 	public String getName(){
 		return MapUtils.getString(viewMap,""+id);
@@ -45,6 +44,14 @@ public class Cat implements Serializable, IdView {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public String getType() {
@@ -121,6 +128,13 @@ public class Cat implements Serializable, IdView {
 	}
 
 	@Override
+	public String getKeySuffix() {
+		if (userId == 0)
+			return null;
+		return String.valueOf(userId);
+	}
+
+	@Override
 	public String toString() {
 		return "Cat{" +
 				"id=" + id +
@@ -136,4 +150,5 @@ public class Cat implements Serializable, IdView {
 				", viewMap=" + viewMap +
 				'}';
 	}
+
 }

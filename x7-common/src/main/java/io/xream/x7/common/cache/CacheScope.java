@@ -14,23 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7;
+package io.xream.x7.common.cache;
 
-import io.xream.x7.common.cache.CacheScope;
-import org.springframework.context.annotation.Import;
+public interface CacheScope {
 
-import java.lang.annotation.*;
-
-/**
- *  Default Redis, only support Redis Sentinel, not support Redis Cluster <br>
- *  microservice, sentinel is enough <br>
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Import({L2CacheStarter.class})
-public @interface EnableX7L2Caching {
-
-    int timeSeconds() default 60;
-
+    String getKeySuffix();
 }
