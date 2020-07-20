@@ -16,7 +16,7 @@
  */
 package io.xream.x7.common.cache;
 
-public class L2CacheGroup {
+public final class L2CacheGroup {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
