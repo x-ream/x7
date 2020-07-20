@@ -18,7 +18,7 @@ package io.xream.x7.common.cache;
 
 public class L2CacheGroup {
 
-    private static ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
     public static void set(Object groupKey) {
         threadLocal.set(groupKey);
