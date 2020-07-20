@@ -30,7 +30,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.orderSharding();
+//        xxxTest.orderSharding();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
@@ -76,7 +76,7 @@ public class AppTest {
 
 //        xxxTest.testListPlainValue();
 
-//        xxxTest.testAlia();
+        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
@@ -123,6 +123,7 @@ public class AppTest {
 //        xxxTest.testFallbackOnly("test");
 
 //        xxxTest.testTemporaryTable();
+
 
     }
 

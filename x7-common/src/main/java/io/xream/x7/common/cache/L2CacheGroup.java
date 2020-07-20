@@ -16,7 +16,19 @@
  */
 package io.xream.x7.common.cache;
 
-public interface CacheScope {
+public class L2CacheGroup {
 
-    String getKeySuffix();
+    private static ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+
+    public static void set(Object groupKey) {
+        threadLocal.set(groupKey);
+    }
+
+    protected static Object get() {
+        return threadLocal.get();
+    }
+
+    protected static void remove() {
+        threadLocal.remove();
+    }
 }

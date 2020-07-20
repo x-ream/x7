@@ -43,8 +43,8 @@ public class DownloadController {
 //        }
 
         List<String> urlList = new ArrayList<>();
-        urlList.add("https://file-ruhr.oss-cn-shanghai.aliyuncs.com/ruhr_file/康德乐Y0004841温度记录15686227541568789883.pdf");
-        urlList.add("https://file-ruhr.oss-cn-shanghai.aliyuncs.com/ruhr_file/威士达Y00041MX温度记录15705354101570686560.pdf");
+        urlList.add("https://contract-ruhr.oss-cn-beijing.aliyuncs.com/QT_1594888410296446.pdf");
+        urlList.add("https://contract-ruhr.oss-cn-beijing.aliyuncs.com/QT_1594893635289440.pdf");
 
         String title = "";
         try {

@@ -1,8 +1,6 @@
 package io.xream.x7.demo.bean;
 
-import io.xream.x7.common.cache.CacheScope;
 import io.xream.x7.common.repository.X;
-import io.xream.x7.common.web.IdView;
 import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;
@@ -10,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Cat implements CacheScope, Serializable {
+public class Cat implements Serializable {
 
 	private static final long serialVersionUID = 5708147778966785698L;
 
@@ -127,12 +125,6 @@ public class Cat implements CacheScope, Serializable {
 		this.testObj = testObj;
 	}
 
-	@Override
-	public String getKeySuffix() {
-		if (userId == 0)
-			return null;
-		return String.valueOf(userId);
-	}
 
 	@Override
 	public String toString() {

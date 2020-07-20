@@ -238,4 +238,6 @@ public class RefreshCondition<T> extends ConditionCriteriaBuilder implements Cri
         this.sourceScript = sourceScript;
         return this;
     }
+
+
 }

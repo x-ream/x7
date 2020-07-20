@@ -16,7 +16,6 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.common.cache.CacheScope;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

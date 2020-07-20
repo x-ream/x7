@@ -51,4 +51,10 @@ public interface L2CacheResolver extends Protection{
 	<T> T getUnderProtection(Class<T> clz, Object conditonObj,Callable<T> callable);
 	<T> Page<T> findUnderProtection(Criteria criteria, QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable);
 
+	static Object getGroupKey(){
+		Object obj = L2CacheGroup.get();
+		L2CacheGroup.remove();
+		return obj;
+	}
+
 }

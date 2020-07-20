@@ -2,7 +2,6 @@ package io.xream.x7;
 
 //import io.seata.spring.annotation.GlobalTransactional;
 
-import io.xream.x7.common.async.CasualWorker;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.ReduceType;
@@ -30,13 +29,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -392,6 +389,7 @@ public class XxxTest {
         System.out.println("______ " + flag);
         return flag;
     }
+
 
 
 }
