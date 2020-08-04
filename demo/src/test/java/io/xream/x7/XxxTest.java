@@ -115,7 +115,7 @@ public class XxxTest {
 
         ViewEntity ve = this.controller.nonPaged(ro);
 
-        System.out.println("\n______Result: " + ve);
+//        System.out.println("\n______Result: " + ve);
     }
 
     public void testNonPaged(){
@@ -124,7 +124,7 @@ public class XxxTest {
 
         ViewEntity ve = this.controller.nonPaged(ro);
 
-        System.out.println("\n______Result: " + ve);
+//        System.out.println("\n______Result: " + ve);
     }
 
     public void create(){
@@ -263,7 +263,7 @@ public class XxxTest {
         L2CacheFilter.contain("BL");
 
         Cat cat = new Cat();
-        cat.setId(458L);
+        cat.setId(471L);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);

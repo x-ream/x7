@@ -32,7 +32,9 @@ public final class L2CacheFilter {
         return threadLocal.get();
     }
 
-    protected static void remove() {
+    protected static void close() {
+        Object str = get();
+        System.out.println("____________"+str == null? "":get());
         threadLocal.remove();
     }
 

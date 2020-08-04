@@ -138,7 +138,6 @@ public class ConditionCriteriaBuilder {
         return instance;
     }
 
-    @Deprecated
     public ConditionCriteriaBuilder and(){
         this.isOr = false;
         return this.instance;

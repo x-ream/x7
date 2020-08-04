@@ -19,4 +19,8 @@ package io.xream.x7.common.cache;
 public interface Protection {
     String DEFAULT_VALUE = "NULL";
     int DEFAULT_NUM = Integer.MIN_VALUE;
+
+    default void close(){
+        L2CacheFilter.close();
+    }
 }

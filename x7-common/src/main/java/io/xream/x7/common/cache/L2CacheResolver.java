@@ -54,9 +54,7 @@ public interface L2CacheResolver extends Protection{
 	<T> Page<T> findUnderProtection(Criteria criteria, QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable);
 
 	default Object getGroupFactor(){
-		Object obj = L2CacheFilter.get();
-		L2CacheFilter.remove();
-		return obj;
+		return L2CacheFilter.get();
 	}
 
 }

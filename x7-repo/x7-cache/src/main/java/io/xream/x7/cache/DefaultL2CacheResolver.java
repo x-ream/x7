@@ -30,6 +30,7 @@ import io.xream.x7.exception.L2CacheException;
 import io.xream.x7.exception.NoResultUnderProtectionException;
 import io.xream.x7.exception.NotQueryUnderProtectionException;
 import io.xream.x7.repository.QueryForCache;
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,22 +91,33 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 	/**
 	 * 标记缓存要更新
-	 * @param clz
+	 * @param clzz
 	 * @return nanuTime_String
 	 */
 	@SuppressWarnings("rawtypes")
-	public String markForRefresh(Class clz){
+	public String markForRefresh(Class clzz){
 
-        if (this.l2CacheConsistency != null){
-            this.l2CacheConsistency.markForRefresh(clz);
-        }
+        String str = markForRefresh0(clzz);
+        close();
+        return str;
+	}
+
+	public String markForRefresh0(Class clz){
+
+		if (this.l2CacheConsistency != null){
+			this.l2CacheConsistency.markForRefresh(clz);
+		}
 
 		String key = getNSKey(clz);
 		String time = String.valueOf(System.nanoTime());
 		getCachestorage().set(key, time);
+		logger.info("NSKey MARK SET: " + key);
+		logger.info("NS MARK SET: " + time);
 
 		if (getGroupFactor() != null) {
-			String groupedKey = key + getGroupedKey(key);
+			String groupedKey = getGroupedKey(key);
+			logger.info("NSKey_G MARK SET: " + groupedKey);
+			logger.info("NS_G MARK SET: " + time);
 			getCachestorage().set(groupedKey, time);
 		}
 
@@ -119,7 +131,8 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		}else{
 			remove(clz, key);
 		}
-		markForRefresh(clz);
+		markForRefresh0(clz);
+		close();
 		return true;
 	}
 
@@ -159,10 +172,12 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	}
 
-	private String getNSKeyReadable(Class clz){
+	private String _getNSKeyReadable(Class clz){
 		if (getGroupFactor() == null)
 			return clz.getName()+ NANO_SECOND;
-		return clz.getName() + NANO_SECOND + getGroupFactor();
+		String str = clz.getName() + NANO_SECOND + getGroupFactor();
+		logger.info("_______NSKeyReadable: " + str);
+		return str;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -173,6 +188,22 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	@SuppressWarnings("unused")
 	private String getNS(String nsKey){
 		return getCachestorage().get(nsKey);
+	}
+
+	private String getNSReadable(Class clzz){
+		final String nsKey = _getNSKeyReadable(clzz);
+		String ns = getCachestorage().get(nsKey);
+		logger.info("nsKey: " + nsKey);
+		logger.info("NS GET: " + ns);
+		if (StringUtils.isBlank(ns)){
+			ns = String.valueOf(System.nanoTime());
+			getCachestorage().set(nsKey,ns);
+			logger.info("NS SET: " + ns);
+		}
+		if (getGroupFactor() == null){
+			return ns;
+		}
+		return getGroupFactor() + ns;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -203,12 +234,12 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	private String getTotalRowsKey(Class clz, String condition){
 		condition = VerifyUtil.toMD5(condition) + "~TR";
-		return getNSKeyReadable(clz) + "." + condition;
+		return "{"+clz.getName()+"}." + getNSReadable(clz) + "." + condition;
 	}
 
 	private String getConditionedKey(Class clz, String condition){
 		condition = VerifyUtil.toMD5(condition) + "~C";
-		return getNSKeyReadable(clz)  + condition;
+		return "{"+clz.getName()+"}." + getNSReadable(clz)  + condition;
 	}
 
 	private String getSimpleKeyLike(Class clz){
@@ -240,10 +271,10 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	 */
 	@SuppressWarnings("rawtypes")
 	private String getPrefix(Class clz){
-		String key = getNSKeyReadable(clz);
+		String key = _getNSKeyReadable(clz);
 		String nsStr = getCachestorage().get(key);
 		if (nsStr == null){
-			String str = markForRefresh(clz);
+			String str = markForRefresh0(clz);
 			return "{"+clz.getName()+"}." + str;
 		}
 		return "{"+clz.getName()+"}."  + nsStr;
@@ -251,15 +282,13 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	private String getPrefixForOneObject(Class clz){
 		String key = getNSKey(clz);
-		String nsStr = getCachestorage().get(key);
+		String nsStr = getNS(key);
 		if (nsStr == null){
-			String str = markForRefresh(clz);
+			String str = markForRefresh0(clz);
 			return "{"+clz.getName()+"}." + str;
 		}
 		return "{"+clz.getName()+"}."  + nsStr;
 	}
-
-
 
 	private void setTotalRows(Class clz, String key, long obj) {
 		key = getTotalRowsKey(clz, key);
@@ -301,6 +330,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	
 	private Page<String> getResultKeyListPaginated(Class clz, Object condition) {
 		String key = getConditionedKey(clz, condition.toString());
+		logger.info("Resolver key: " + key);
 		String json = getCachestorage().get(key);
 		
 		if (StringUtil.isNullOrEmpty(json))
@@ -418,6 +448,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			try {
 				list = callable.call();
 			} catch (Exception e) {
+				close();
 				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 
@@ -429,22 +460,26 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			}
 
 			setResultKeyList(clz, conditionObj, keyList);
-
+			close();
 			return list;
 		}
 
-		if (keyList.isEmpty())
+		if (keyList.isEmpty()) {
+			close();
 			return new ArrayList<>();
+		}
 
 		List<T> list = list(clz, keyList);
 
-		if (keyList.size() == list.size())
+		if (keyList.size() == list.size()) {
+			close();
 			return list;
+		}
 
 		replenishAndRefreshCache(keyList, list, clz, parsed,queryForCache);
 
 		List<T> sortedList = sort(keyList, list, parsed);
-
+		close();
 		return sortedList;
 	}
 
@@ -465,6 +500,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			try {
 				list = callable.call();
 			} catch (Exception e) {
+				close();
 				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 
@@ -476,22 +512,27 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			}
 
 			setResultKeyList(clz, criteriaKey, keyList);
-
+			close();
 			return list;
 		}
 
-		if (keyList.isEmpty())
+		if (keyList.isEmpty()) {
+			close();
 			return new ArrayList<>();
+		}
 
 		List<T> list = list(clz, keyList);
 
-		if (keyList.size() == list.size())
+		if (keyList.size() == list.size()) {
+			close();
 			return list;
+		}
 
 		replenishAndRefreshCache(keyList, list, clz, parsed,queryForCache);
 
 		List<T> sortedList = sort(keyList, list, parsed);
 
+		close();
 		return sortedList;
 	}
 
@@ -502,6 +543,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		try{
 			obj = get(clz,conditionObj);
 		}catch (NoResultUnderProtectionException e){
+			close();
 			return null;
 		}
 
@@ -509,11 +551,12 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			try {
 				obj = callable.call();
 			}catch (Exception e){
+				close();
 				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 			set(clz, conditionObj, obj);
 		}
-
+		close();
 		return obj;
 	}
 
@@ -524,6 +567,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		try{
 			obj = getOne(clz,conditionObj);
 		}catch (NoResultUnderProtectionException e){
+			close();
 			return null;
 		}
 
@@ -531,13 +575,16 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			try {
 				obj = callable.call();
 			}catch (Exception e){
+				close();
 				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 			setOne(clz, conditionObj, obj);
 		}
 
+		close();
 		return obj;
 	}
+
 
 	@Override
 	public <T> Page<T> findUnderProtection(Criteria criteria,QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable){
@@ -557,6 +604,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 					try {
 						p = findCallable.call();
 					}catch (Exception e){
+						close();
 						throw new RuntimeException(ExceptionUtil.getMessage(e));
 					}
 
@@ -567,6 +615,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 					try {
 						list = listCallable.call();
 					} catch (Exception e) {
+						close();
 						throw new RuntimeException(ExceptionUtil.getMessage(e));
 					}
 					p = new Page<>();
@@ -579,6 +628,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				try {
 					p = findCallable.call();
 				}catch (Exception e){
+					close();
 					throw new RuntimeException(ExceptionUtil.getMessage(e));
 				}
 			}
@@ -599,12 +649,14 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			p.setKeyList(null);
 			p.reSetList(list);
 
+			close();
 			return p;
 		}
 
 		List<String> keyList = p.getKeyList();
 
 		if (keyList == null || keyList.isEmpty()) {
+			close();
 			return p;
 		}
 
@@ -612,6 +664,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 		if (keyList.size() == list.size()) {
 			p.reSetList(list);
+			close();
 			return p;
 		}
 
@@ -620,7 +673,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		List<T> sortedList = sort(keyList, list, parsed);
 
 		p.reSetList(sortedList);
-
+		close();
 		return p;
 	}
 
@@ -657,7 +710,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		List<T> objList = queryForCache.in(inCondition);
 
 		if (objList.isEmpty()) {
-			markForRefresh(clz);
+			markForRefresh0(clz);
 			return;
 		}
 
