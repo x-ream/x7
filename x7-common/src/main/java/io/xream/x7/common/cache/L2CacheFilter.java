@@ -22,7 +22,7 @@ public final class L2CacheFilter {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
-    public static void contain(Object partialKey) {
+    public static void filter(Object partialKey) {
         if (StringUtil.isNullOrEmpty(partialKey))
             return;
         threadLocal.set(partialKey);

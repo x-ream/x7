@@ -109,7 +109,7 @@ public class XxxTest {
 
     public void testNonPagedCacheGrouped(){
 
-        L2CacheFilter.contain("BL");
+        L2CacheFilter.filter("BL");
 
         CatRO ro = new CatRO();
 
@@ -128,7 +128,7 @@ public class XxxTest {
     }
 
     public void create(){
-        L2CacheFilter.contain("BL");
+        L2CacheFilter.filter("BL");
         this.controller.create();
     }
 
@@ -260,7 +260,7 @@ public class XxxTest {
 
     public void testCreate() {
 
-        L2CacheFilter.contain("BL");
+        L2CacheFilter.filter("BL");
 
         Cat cat = new Cat();
         cat.setId(471L);
