@@ -18,14 +18,14 @@ package io.xream.x7.common.cache;
 
 import io.xream.x7.common.util.StringUtil;
 
-public final class L2CacheGroup {
+public final class L2CacheFilter {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
-    public static void set(Object groupKey) {
-        if (StringUtil.isNullOrEmpty(groupKey))
+    public static void contain(Object partialKey) {
+        if (StringUtil.isNullOrEmpty(partialKey))
             return;
-        threadLocal.set(groupKey);
+        threadLocal.set(partialKey);
     }
 
     protected static Object get() {

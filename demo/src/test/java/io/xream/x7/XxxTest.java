@@ -7,8 +7,7 @@ import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.ReduceType;
 import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.cache.L2CacheGroup;
-import io.xream.x7.common.util.HttpClientUtil;
+import io.xream.x7.common.cache.L2CacheFilter;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
@@ -110,7 +109,7 @@ public class XxxTest {
 
     public void testNonPagedCacheGrouped(){
 
-        L2CacheGroup.set("BL");
+        L2CacheFilter.contain("BL");
 
         CatRO ro = new CatRO();
 
@@ -129,7 +128,7 @@ public class XxxTest {
     }
 
     public void create(){
-        L2CacheGroup.set("BL");
+        L2CacheFilter.contain("BL");
         this.controller.create();
     }
 
@@ -261,7 +260,7 @@ public class XxxTest {
 
     public void testCreate() {
 
-        L2CacheGroup.set("BL");
+        L2CacheFilter.contain("BL");
 
         Cat cat = new Cat();
         cat.setId(458L);
