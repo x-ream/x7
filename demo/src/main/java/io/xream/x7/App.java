@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableDistributionLock
 @EnableFallbackOnly
 @EnableCorsConfig("${access.domain}")
+@EnableRateLimiter
 public class App {
 
     public static void main( String[] args )

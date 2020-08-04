@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 @Aspect
-@Configuration
+//@Configuration
 @Order(-1)
 public class WebAop {
 

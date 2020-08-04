@@ -84,6 +84,10 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			throw new RuntimeException("No implements of L2CacheStorage, like the project x7-repo/x7-redis-integration");
 		return this.cacheStorage;
 	}
+
+	private String getGroupedKey(String nsKey) {
+		return nsKey + getGroupFactor();
+	}
 	/**
 	 * 标记缓存要更新
 	 * @param clz
@@ -99,6 +103,11 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		String key = getNSKey(clz);
 		String time = String.valueOf(System.nanoTime());
 		getCachestorage().set(key, time);
+
+		if (getGroupFactor() != null) {
+			String groupedKey = key + getGroupedKey(key);
+			getCachestorage().set(groupedKey, time);
+		}
 
 		return time;
 	}
@@ -149,6 +158,12 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		}
 
 	}
+
+	private String getNSKeyReadable(Class clz){
+		if (getGroupFactor() == null)
+			return clz.getName()+ NANO_SECOND;
+		return clz.getName() + NANO_SECOND + getGroupFactor();
+	}
 	
 	@SuppressWarnings("rawtypes")
 	private String getNSKey(Class clz){
@@ -188,13 +203,23 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	private String getTotalRowsKey(Class clz, String condition){
 		condition = VerifyUtil.toMD5(condition) + "~TR";
-		return getSimpleKey(clz, condition);
+		return getNSKeyReadable(clz) + "." + condition;
+	}
+
+	private String getConditionedKey(Class clz, String condition){
+		condition = VerifyUtil.toMD5(condition) + "~C";
+		return getNSKeyReadable(clz)  + condition;
 	}
 
 	private String getSimpleKeyLike(Class clz){
 		return "{"+clz.getName()+"}.*" ;
 	}
-	
+
+	private String getKeyForOneObject(Class clz, Object condition){
+		if (condition == null)
+			throw new RuntimeException("getKeyForOneObject, id = " + condition);
+		return  getPrefixForOneObject(clz) +"."+VerifyUtil.toMD5(""+condition);
+	}
 	
 	@SuppressWarnings("rawtypes")
 	private String getKey(Class clz, Object conditionObj){
@@ -215,6 +240,16 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	 */
 	@SuppressWarnings("rawtypes")
 	private String getPrefix(Class clz){
+		String key = getNSKeyReadable(clz);
+		String nsStr = getCachestorage().get(key);
+		if (nsStr == null){
+			String str = markForRefresh(clz);
+			return "{"+clz.getName()+"}." + str;
+		}
+		return "{"+clz.getName()+"}."  + nsStr;
+	}
+
+	private String getPrefixForOneObject(Class clz){
 		String key = getNSKey(clz);
 		String nsStr = getCachestorage().get(key);
 		if (nsStr == null){
@@ -235,7 +270,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 
 	private void setResultKeyList(Class clz, Object condition, List<String> keyList) {
-		String key = getKey(clz, condition);
+		String key = getConditionedKey(clz, condition.toString());
 		try{
 			int validSecond = getValidSecondAdjusted();
 			getCachestorage().set(key, JsonX.toJson(keyList), validSecond,TimeUnit.SECONDS);
@@ -246,7 +281,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	
 	private  <T> void setResultKeyListPaginated(Class<T> clz, Object condition, Page<T> pagination) {
-		String key = getKey(clz, condition);
+		String key = getConditionedKey(clz,condition.toString());
 		try{
 			int validSecond = getValidSecondAdjusted();
 			getCachestorage().set(key, JsonX.toJson(pagination), validSecond, TimeUnit.SECONDS);
@@ -256,7 +291,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	private List<String> getResultKeyList(Class clz, Object condition) throws NotQueryUnderProtectionException{
-		String key = getKey(clz, condition);
+		String key = getConditionedKey(clz,condition.toString());
 		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			throw new NotQueryUnderProtectionException();
@@ -265,7 +300,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 	
 	private Page<String> getResultKeyListPaginated(Class clz, Object condition) {
-		String key = getKey(clz, condition);
+		String key = getConditionedKey(clz, condition.toString());
 		String json = getCachestorage().get(key);
 		
 		if (StringUtil.isNullOrEmpty(json))
@@ -293,55 +328,69 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		return list;
 	}
 
-	/**
-	 * FIXME {hash tag}
-	 */
-	private void set(Class clz, String key, Object obj) {
-		key = getSimpleKey(clz, key);
-		doSet(key,obj);
+	private <T> T get(Class<T> clz, Object key) throws NoResultUnderProtectionException{
+		String k = getSimpleKey(clz, key.toString());
+		String str = getCachestorage().get(k);
+		if (StringUtil.isNullOrEmpty(str))
+			return null;
+		if (str.trim().equals(DEFAULT_VALUE))
+			throw new NoResultUnderProtectionException();
+		return JsonX.toObject(str,clz);
 	}
 
 	/**
 	 * FIXME {hash tag}
 	 */
-	private void set(Class clz, Object objKey, Object obj) {
-		String key = getKey(clz, objKey);
-		doSet(key,obj);
+	private void set(Class clz, Object key, Object obj) {
+		String k = getSimpleKey(clz, key.toString());
+		String v = JsonX.toJson(obj);
+		getCachestorage().set(k, v, validSecond,TimeUnit.SECONDS);
 	}
 
-	private void doSet(String key, Object obj) {
+	/**
+	 * FIXME {hash tag}
+	 */
+	private void setOne(Class clz, Object condition, Object obj) {
+
+		String key = getKeyForOneObject(clz, condition);
+		Object objKey = null;
+		if (obj != null) {
+			Parsed parsed = Parser.get(clz);
+			Field field = parsed.getKeyField(X.KEY_ONE);
+			field.setAccessible(true);
+			try {
+				objKey = field.get(obj);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		doSetKeyOne(key,objKey);
+	}
+
+	private void doSetKeyOne(String key, Object objKey) {
 
 		int validSecond =  getValidSecondAdjusted();
-		String value;
-		if (obj == null){
-			value = DEFAULT_VALUE;
-		}else {
-			value = JsonX.toJson(obj);
-		}
-		getCachestorage().set(key, value, validSecond,TimeUnit.SECONDS);
+
+		getCachestorage().set(key, objKey == null ? DEFAULT_VALUE : objKey.toString(), validSecond,TimeUnit.SECONDS);
 	}
 
-	/**
-	 * FIXME {hash tag}
-	 */
-	private  <T> T get(Class<T> clz, String key) throws NoResultUnderProtectionException{
-		key = getSimpleKey(clz,key);
-		return doGet(clz,key);
+
+	private  <T> T getOne(Class<T> clz, Object condition) throws NoResultUnderProtectionException{
+		String key = getKeyForOneObject(clz,condition);
+		String keyOne = doGetKeyOne(clz,key);
+		if (keyOne == null)
+			return null;
+		return get(clz, keyOne);
 	}
 
-	private  <T> T get(Class<T> clz, Object objKey) throws NoResultUnderProtectionException{
-		String key = getKey(clz,objKey);
-		return doGet(clz,key);
-	}
-
-	private <T> T doGet(Class<T> clz, String key) throws NoResultUnderProtectionException{
+	private <T> String doGetKeyOne(Class<T> clz, String key) throws NoResultUnderProtectionException{
 		String str = getCachestorage().get(key);
 		if (StringUtil.isNullOrEmpty(str))
 			return null;
 		if (str.trim().equals(DEFAULT_VALUE))
 			throw new NoResultUnderProtectionException();
-		T obj = JsonX.toObject(str,clz);
-		return obj;
+		return str;
 	}
 
 	private  <T> long getTotalRows(Class<T> clz, String key) {
@@ -372,7 +421,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 
-			keyList = new ArrayList<String>();
+			keyList = new ArrayList<>();
 
 			for (T t : list) {
 				String key = BeanUtilX.getCacheKey(t, parsed);
@@ -380,6 +429,53 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			}
 
 			setResultKeyList(clz, conditionObj, keyList);
+
+			return list;
+		}
+
+		if (keyList.isEmpty())
+			return new ArrayList<>();
+
+		List<T> list = list(clz, keyList);
+
+		if (keyList.size() == list.size())
+			return list;
+
+		replenishAndRefreshCache(keyList, list, clz, parsed,queryForCache);
+
+		List<T> sortedList = sort(keyList, list, parsed);
+
+		return sortedList;
+	}
+
+	@Override
+	public <T> List<T> listUnderProtection(Criteria criteria, QueryForCache queryForCache, Callable<List<T>> callable) {
+		final String criteriaKey = criteria.getCacheKey();
+		final Class clz = criteria.getClz();
+		List<String> keyList = null;
+		try {
+			keyList = getResultKeyList(clz, criteriaKey);
+		}catch (NotQueryUnderProtectionException upe) {
+
+		}
+		Parsed parsed = Parser.get(clz);
+		if (keyList == null) {
+
+			List<T> list = null;
+			try {
+				list = callable.call();
+			} catch (Exception e) {
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
+			}
+
+			keyList = new ArrayList<>();
+
+			for (T t : list) {
+				String key = BeanUtilX.getCacheKey(t, parsed);
+				keyList.add(key);
+			}
+
+			setResultKeyList(clz, criteriaKey, keyList);
 
 			return list;
 		}
@@ -422,10 +518,33 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	@Override
+	public <T> T getOneUnderProtection(Class<T> clz, Object conditionObj, Callable<T> callable) {
+
+		T obj;
+		try{
+			obj = getOne(clz,conditionObj);
+		}catch (NoResultUnderProtectionException e){
+			return null;
+		}
+
+		if (obj == null) {
+			try {
+				obj = callable.call();
+			}catch (Exception e){
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
+			}
+			setOne(clz, conditionObj, obj);
+		}
+
+		return obj;
+	}
+
+	@Override
 	public <T> Page<T> findUnderProtection(Criteria criteria,QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable){
 		Class clz = criteria.getClz();
 		Parsed parsed = Parser.get(clz);
-		Page p = getResultKeyListPaginated(clz, criteria);// FIXME
+		final String criteriaKey = criteria.getCacheKey();
+		Page p = getResultKeyListPaginated(clz, criteriaKey);// FIXME
 
 		if (p == null) {
 
@@ -475,7 +594,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 			p.reSetList(null);
 
-			setResultKeyListPaginated(clz, criteria, p);
+			setResultKeyListPaginated(clz, criteriaKey, p);
 
 			p.setKeyList(null);
 			p.reSetList(list);
@@ -573,7 +692,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	private String getTotalRowsString(Criteria criteria) {
 		int page = criteria.getPage();
 		criteria.setPage(0);
-		String str = JsonX.toJson(criteria);
+		String str = criteria.getCacheKey();
 		criteria.setPage(page);
 		return str;
 	}

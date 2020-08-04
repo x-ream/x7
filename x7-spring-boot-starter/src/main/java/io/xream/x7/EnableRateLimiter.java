@@ -16,14 +16,15 @@
  */
 package io.xream.x7;
 
-import org.springframework.context.annotation.Import;
+import io.github.resilience4j.ratelimiter.configure.RateLimiterAspect;
 import io.xream.x7.repository.config.datasource.DataSourceAspect;
+import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({DataSourceAspect.class})
-public @interface EnableReadOnly {
+@Import({RateLimiterAspect.class})
+public @interface EnableRateLimiter {
 }

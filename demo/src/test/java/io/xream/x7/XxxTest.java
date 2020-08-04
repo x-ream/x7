@@ -8,6 +8,7 @@ import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.ReduceType;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.cache.L2CacheGroup;
+import io.xream.x7.common.util.HttpClientUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
