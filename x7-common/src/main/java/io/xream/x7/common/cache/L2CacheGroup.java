@@ -16,11 +16,15 @@
  */
 package io.xream.x7.common.cache;
 
+import io.xream.x7.common.util.StringUtil;
+
 public final class L2CacheGroup {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
     public static void set(Object groupKey) {
+        if (StringUtil.isNullOrEmpty(groupKey))
+            return;
         threadLocal.set(groupKey);
     }
 
@@ -31,4 +35,5 @@ public final class L2CacheGroup {
     protected static void remove() {
         threadLocal.remove();
     }
+
 }

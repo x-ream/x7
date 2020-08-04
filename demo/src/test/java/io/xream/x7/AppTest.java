@@ -76,7 +76,7 @@ public class AppTest {
 
 //        xxxTest.testListPlainValue();
 
-        xxxTest.testAlia();
+//        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
@@ -124,7 +124,10 @@ public class AppTest {
 
 //        xxxTest.testTemporaryTable();
 
-
+        xxxTest.testNonPaged();
+        xxxTest.testCreate();
+        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
     }
 
 }

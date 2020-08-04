@@ -82,7 +82,7 @@ public class XxxController {
     public ViewEntity create() {
 
         Cat cat = new Cat();
-        cat.setId(352L);
+        cat.setId(353L);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);

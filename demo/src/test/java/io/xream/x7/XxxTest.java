@@ -2,10 +2,12 @@ package io.xream.x7;
 
 //import io.seata.spring.annotation.GlobalTransactional;
 
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.xream.x7.common.bean.Criteria;
 import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.ReduceType;
 import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.x7.common.cache.L2CacheGroup;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
@@ -39,7 +41,7 @@ import java.util.concurrent.Executors;
 @Component
 public class XxxTest {
 
-        private Executor executor = Executors.newFixedThreadPool(2);
+    private Executor executor = Executors.newFixedThreadPool(2);
 
     @Autowired
     private DogService dogService;
@@ -67,6 +69,7 @@ public class XxxTest {
     private OrderRemote orderRemote;
 
     public  void refreshByCondition() {
+        RateLimiterConfig config;
 
         controller.refreshByCondition();
 
@@ -104,6 +107,17 @@ public class XxxTest {
 
     }
 
+    public void testNonPagedCacheGrouped(){
+
+        L2CacheGroup.set("BL");
+
+        CatRO ro = new CatRO();
+
+        ViewEntity ve = this.controller.nonPaged(ro);
+
+        System.out.println("\n______Result: " + ve);
+    }
+
     public void testNonPaged(){
 
         CatRO ro = new CatRO();
@@ -114,6 +128,7 @@ public class XxxTest {
     }
 
     public void create(){
+        L2CacheGroup.set("BL");
         this.controller.create();
     }
 
@@ -245,8 +260,10 @@ public class XxxTest {
 
     public void testCreate() {
 
+        L2CacheGroup.set("BL");
+
         Cat cat = new Cat();
-        cat.setId(451L);
+        cat.setId(458L);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);

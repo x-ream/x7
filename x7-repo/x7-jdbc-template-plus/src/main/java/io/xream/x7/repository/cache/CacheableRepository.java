@@ -204,10 +204,10 @@ public final class CacheableRepository implements Repository, Manuable {
         if (!isCacheEnabled(parsed))
             return dataTransform.list(criteria);
 
-        return cacheResolver.listUnderProtection(clz,
+        return cacheResolver.listUnderProtection(
                 criteria,
                 dataTransform,
-                (Callable<List<T>>) () -> dataTransform.list(criteria));
+                () -> dataTransform.list(criteria));
 
     }
 
@@ -292,7 +292,7 @@ public final class CacheableRepository implements Repository, Manuable {
         if (!isCacheEnabled(parsed))
             return dataTransform.getOne(condition);
 
-        return cacheResolver.getUnderProtection(clz, condition, () -> dataTransform.getOne(condition));
+        return cacheResolver.getOneUnderProtection(clz, condition, () -> dataTransform.getOne(condition));
     }
 
     @Override

@@ -186,6 +186,26 @@ public class Criteria implements CriteriaCondition, Paged, Routeable,Serializabl
 		this.sortList = paged.getSortList();
 	}
 
+	public String getCacheKey(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(isTotalRowsIgnored).append(page).append(rows);
+		if (sortList != null) {
+			for (Sort sort : sortList) {
+				sb.append(sort.getOrderBy()).append(sort.getDirection());
+			}
+		}
+		for (KV kv : fixedSortList){
+			sb.append(kv.k).append(kv.v);
+		}
+		for (X x : listX){
+			sb.append(x.getConjunction()).append(x.getPredicate()).append(x.getKey()).append(x.getValue());
+		}
+		sb.append(forceIndex);
+		sb.append(clz);
+		sb.append(routeKey);
+
+		return sb.toString();
+	}
 
 	@Override
 	public String toString() {
