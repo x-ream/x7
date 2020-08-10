@@ -22,6 +22,10 @@ public final class L2CacheFilter {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
+    /**
+     * partialKey maybe is userId
+     * @param partialKey
+     */
     public static void filter(Object partialKey) {
         if (StringUtil.isNullOrEmpty(partialKey))
             return;
@@ -33,8 +37,6 @@ public final class L2CacheFilter {
     }
 
     protected static void close() {
-        Object str = get();
-        System.out.println("____________"+str == null? "":get());
         threadLocal.remove();
     }
 

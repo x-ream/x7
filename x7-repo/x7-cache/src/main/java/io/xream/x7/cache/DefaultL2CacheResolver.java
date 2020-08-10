@@ -111,13 +111,9 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		String key = getNSKey(clz);
 		String time = String.valueOf(System.nanoTime());
 		getCachestorage().set(key, time);
-		logger.info("NSKey MARK SET: " + key);
-		logger.info("NS MARK SET: " + time);
 
 		if (getGroupFactor() != null) {
 			String groupedKey = getGroupedKey(key);
-			logger.info("NSKey_G MARK SET: " + groupedKey);
-			logger.info("NS_G MARK SET: " + time);
 			getCachestorage().set(groupedKey, time);
 		}
 
@@ -176,7 +172,6 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		if (getGroupFactor() == null)
 			return clz.getName()+ NANO_SECOND;
 		String str = clz.getName() + NANO_SECOND + getGroupFactor();
-		logger.info("_______NSKeyReadable: " + str);
 		return str;
 	}
 	
@@ -193,12 +188,9 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	private String getNSReadable(Class clzz){
 		final String nsKey = _getNSKeyReadable(clzz);
 		String ns = getCachestorage().get(nsKey);
-		logger.info("nsKey: " + nsKey);
-		logger.info("NS GET: " + ns);
 		if (StringUtils.isBlank(ns)){
 			ns = String.valueOf(System.nanoTime());
 			getCachestorage().set(nsKey,ns);
-			logger.info("NS SET: " + ns);
 		}
 		if (getGroupFactor() == null){
 			return ns;
@@ -249,7 +241,8 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	private String getKeyForOneObject(Class clz, Object condition){
 		if (condition == null)
 			throw new RuntimeException("getKeyForOneObject, id = " + condition);
-		return  getPrefixForOneObject(clz) +"."+VerifyUtil.toMD5(""+condition);
+		String key = getPrefixForOneObject(clz) +"."+VerifyUtil.toMD5(""+condition);
+		return key;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -281,8 +274,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	private String getPrefixForOneObject(Class clz){
-		String key = getNSKey(clz);
-		String nsStr = getNS(key);
+		String nsStr = getNSReadable(clz);
 		if (nsStr == null){
 			String str = markForRefresh0(clz);
 			return "{"+clz.getName()+"}." + str;
@@ -330,7 +322,6 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	
 	private Page<String> getResultKeyListPaginated(Class clz, Object condition) {
 		String key = getConditionedKey(clz, condition.toString());
-		logger.info("Resolver key: " + key);
 		String json = getCachestorage().get(key);
 		
 		if (StringUtil.isNullOrEmpty(json))
@@ -395,14 +386,15 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			}
 		}
 
-		doSetKeyOne(key,objKey);
+		doSetKeyOne(clz,key,objKey,obj);
 	}
 
-	private void doSetKeyOne(String key, Object objKey) {
+	private void doSetKeyOne(Class clz,String key, Object objKey,Object obj) {
 
 		int validSecond =  getValidSecondAdjusted();
 
 		getCachestorage().set(key, objKey == null ? DEFAULT_VALUE : objKey.toString(), validSecond,TimeUnit.SECONDS);
+		set(clz,objKey,obj);
 	}
 
 

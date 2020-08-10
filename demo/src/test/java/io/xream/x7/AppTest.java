@@ -124,14 +124,6 @@ public class AppTest {
 
 //        xxxTest.testTemporaryTable();
 
-//        xxxTest.testNonPaged();
-//        xxxTest.testCreate();
-        xxxTest.testNonPagedCacheGrouped();
-        xxxTest.testNonPagedCacheGrouped();
-        xxxTest.testNonPaged();
-        xxxTest.testNonPaged();
-
-        xxxTest.testNonPaged();
 
     }
 

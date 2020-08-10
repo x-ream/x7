@@ -400,13 +400,10 @@ public class XxxTest {
 
     }
 
-
     public boolean testVerify(){
         boolean flag = orderRemote.verify();
         System.out.println("______ " + flag);
         return flag;
     }
-
-
 
 }
