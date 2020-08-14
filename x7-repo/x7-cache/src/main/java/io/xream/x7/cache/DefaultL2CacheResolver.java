@@ -363,8 +363,10 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	 * FIXME {hash tag}
 	 */
 	private void set(Class clz, Object key, Object obj) {
+		if (key == null )
+			return;
 		String k = getSimpleKey(clz, key.toString());
-		String v = JsonX.toJson(obj);
+		String v = JsonX.toJson(obj == null ? DEFAULT_VALUE : obj);
 		getCachestorage().set(k, v, validSecond,TimeUnit.SECONDS);
 	}
 

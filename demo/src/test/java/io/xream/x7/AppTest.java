@@ -83,8 +83,8 @@ public class AppTest {
 //        xxxTest.distinct();
 //
 
-//        xxxTest.testOne();
-//        xxxTest.testListCriteria();
+        xxxTest.testOne();
+        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
@@ -107,22 +107,22 @@ public class AppTest {
 //        xxxTest.testLock();
 
 
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.get();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.get();
+        xxxTest.get();
+        xxxTest.get();
 //        xxxTest.testOneKeyRemote();
 //        xxxTest.testEnum();
 
 //        xxxTest.removeRefreshCreate();
 //
-//        xxxTest.testCacheGet();
+        xxxTest.testCacheGet();
 
-//        xxxTest.testFallbackOnly("test");
+        xxxTest.testFallbackOnly("test");
 
-//        xxxTest.testTemporaryTable();
+        xxxTest.testTemporaryTable();
 
 
     }

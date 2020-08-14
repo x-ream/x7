@@ -335,9 +335,9 @@ public class XxxTest {
         System.out.println("testFallbackOnly");
 
         boolean b = true;
-        if (b){
-            throw new RuntimeException("testFallbackOnly");
-        }
+//        if (b){
+//            throw new RuntimeException("testFallbackOnly");
+//        }
     }
 
 
