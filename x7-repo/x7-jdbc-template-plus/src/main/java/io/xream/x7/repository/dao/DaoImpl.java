@@ -59,10 +59,14 @@ public class DaoImpl implements Dao {
     private CriteriaToSql criteriaToSql;
     @Autowired
     private Dialect dialect;
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
 
     private Logger logger = LoggerFactory.getLogger(DaoImpl.class);
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public boolean createBatch(List<? extends Object> objList) {

@@ -29,6 +29,8 @@ import io.xream.x7.lock.customizer.LockProviderCustomizer;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
 import io.xream.x7.repository.cache.CacheableRepository;
+import io.xream.x7.repository.dao.Dao;
+import io.xream.x7.repository.dao.DaoImpl;
 import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
@@ -37,6 +39,7 @@ import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 
 
@@ -54,6 +57,8 @@ public class RepositoryListener implements
 
         if (!X7Data.isEnabled)
             return;
+
+        customizeJdbcTemplate(applicationStartedEvent);
 
         customizeCacheStorage(applicationStartedEvent);
 
@@ -171,6 +176,24 @@ public class RepositoryListener implements
         if (repository == null)
             return;
         ((CacheableRepository) repository).setDataTransform(dataTransform);
+    }
+
+    private void customizeJdbcTemplate(ApplicationStartedEvent applicationStartedEvent) {
+
+        JdbcTemplate jdbcTemplate = null;
+        try {
+            jdbcTemplate = applicationStartedEvent.getApplicationContext().getBean(JdbcTemplate.class);
+        }catch (Exception e) {
+
+        }
+        Dao dao = null;
+        try{
+            dao = applicationStartedEvent.getApplicationContext().getBean(Dao.class);
+            DaoImpl daoImpl = (DaoImpl) dao;
+            daoImpl.setJdbcTemplate(jdbcTemplate);
+        }catch (Exception e) {
+
+        }
     }
 
     private void customizeCacheStorage(ApplicationStartedEvent applicationStartedEvent) {
