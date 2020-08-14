@@ -2,6 +2,7 @@ package io.xream.x7;
 
 import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.Cat;
+import io.xream.x7.demo.controller.CatEggController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import io.xream.x7.common.bean.CriteriaBuilder;
@@ -17,6 +18,9 @@ public class CatTest {
 
     @Autowired
     private CatRepository repository;
+    @Autowired
+    private CatEggController catEggController;
+
     public void create(){
 
         Cat cat = new Cat();

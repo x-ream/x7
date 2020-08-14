@@ -55,7 +55,7 @@ import java.util.*;
  */
 public class DaoImpl implements Dao {
 
-    @Autowired
+//    @Autowired
     private CriteriaToSql criteriaToSql;
     @Autowired
     private Dialect dialect;
@@ -63,6 +63,14 @@ public class DaoImpl implements Dao {
     private JdbcTemplate jdbcTemplate;
 
     private Logger logger = LoggerFactory.getLogger(DaoImpl.class);
+
+    public void setDialect(Dialect dialect) {
+        this.dialect = dialect;
+    }
+
+    public void setCriteriaToSql(CriteriaToSql criteriaToSql) {
+        this.criteriaToSql = criteriaToSql;
+    }
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

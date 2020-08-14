@@ -13,4 +13,5 @@ public interface CatService {
     boolean refresh(RefreshCondition<Cat> refreshCondition);
 
     void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> rowHandler);
+
 }

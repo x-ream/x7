@@ -26,6 +26,7 @@ import io.xream.x7.common.cache.L2CacheStorage;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
+import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
 import io.xream.x7.repository.cache.CacheableRepository;
@@ -35,6 +36,7 @@ import io.xream.x7.repository.dao.TxConfig;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
+import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -58,7 +60,7 @@ public class RepositoryListener implements
         if (!X7Data.isEnabled)
             return;
 
-        customizeJdbcTemplate(applicationStartedEvent);
+        customizeDao(applicationStartedEvent);
 
         customizeCacheStorage(applicationStartedEvent);
 
@@ -178,7 +180,7 @@ public class RepositoryListener implements
         ((CacheableRepository) repository).setDataTransform(dataTransform);
     }
 
-    private void customizeJdbcTemplate(ApplicationStartedEvent applicationStartedEvent) {
+    private void customizeDao(ApplicationStartedEvent applicationStartedEvent) {
 
         JdbcTemplate jdbcTemplate = null;
         try {
@@ -186,10 +188,27 @@ public class RepositoryListener implements
         }catch (Exception e) {
 
         }
+
+        CriteriaToSql criteriaToSql = null;
+        try {
+            criteriaToSql = applicationStartedEvent.getApplicationContext().getBean(CriteriaToSql.class);
+        }catch (Exception e) {
+
+        }
+
+        Dialect dialect = null;
+        try{
+            dialect = applicationStartedEvent.getApplicationContext().getBean(Dialect.class);
+        }catch (Exception e){
+
+        }
+
         Dao dao = null;
         try{
             dao = applicationStartedEvent.getApplicationContext().getBean(Dao.class);
             DaoImpl daoImpl = (DaoImpl) dao;
+            daoImpl.setDialect(dialect);
+            daoImpl.setCriteriaToSql(criteriaToSql);
             daoImpl.setJdbcTemplate(jdbcTemplate);
         }catch (Exception e) {
 

@@ -16,6 +16,7 @@ public class CatServiceImpl implements CatService{
 
     @Autowired
     private CatRepository catRepository;
+
     @Override
     @FallbackOnly(exceptions = {RuntimeException.class}, fallback = CatServiceFallback.class)
     public boolean refresh(RefreshCondition<Cat> refreshCondition) {
@@ -29,4 +30,6 @@ public class CatServiceImpl implements CatService{
     public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String, Object>> rowHandler) {
         this.catRepository.findToHandle(resultMappedCriteria,rowHandler);
     }
+
+
 }

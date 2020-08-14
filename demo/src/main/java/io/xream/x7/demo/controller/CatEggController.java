@@ -5,11 +5,13 @@ import io.xream.x7.common.bean.CriteriaBuilder;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRepository;
+import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatEgg;
 import io.xream.x7.demo.service.CatService;
 import io.xream.x7.repository.TemporaryRepository;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,4 +75,6 @@ public class CatEggController {
 
         return ViewEntity.ok();
     }
+
+
 }
