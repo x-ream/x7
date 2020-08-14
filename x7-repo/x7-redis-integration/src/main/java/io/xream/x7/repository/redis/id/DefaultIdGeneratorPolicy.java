@@ -64,6 +64,7 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
                 "local key = KEYS[2] " +
                 "local id = ARGV[1] " +
                 "local existId = redis.call('hget',hk,key) " +
+                "if tonumber(existId) == nil then existId = '0' end " +
                 "if tonumber(id) > tonumber(existId) " +
                 "then " +
                 "redis.call('hset',hk,key,tostring(id)) " +
