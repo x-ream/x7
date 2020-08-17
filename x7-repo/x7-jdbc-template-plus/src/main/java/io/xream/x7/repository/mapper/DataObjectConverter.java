@@ -31,7 +31,6 @@ import java.util.*;
 
 public class DataObjectConverter {
 
-
     public static Map<String,Object> dataToPropertyObjectMap(Class clz,Map<String,Object> dataMap, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
         Map<String, Object> propertyMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
@@ -71,33 +70,28 @@ public class DataObjectConverter {
         return propertyMap;
     }
 
-    public static List<Map<String, Object>> dataToPropertyObjectMapList(Class clz, List<Map<String, Object>> dataMapList, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
-        List<Map<String, Object>> propertyMapList = new ArrayList<>();
 
-        for (Map<String, Object> dataMap : dataMapList) {
-
-            Map<String, Object> propertyMap = dataToPropertyObjectMap(clz, dataMap, resultMapped, dialect);
-            propertyMapList.add(propertyMap);
-        }
-
-        return propertyMapList;
-    }
-
-    public static <T> void initObj(T obj, Map<String, Object> map, List<BeanElement> eles) throws Exception {
+    public static <T> void initObj(T obj, Map<String, Object> map, List<BeanElement> eles,Dialect dialect) throws Exception {
 
         for (BeanElement ele : eles) {
 
             Method method = ele.setMethod;
-            String property = ele.getProperty();
+            String mapper = ele.mapper;
 
-            Object value = map.get(property);
-            if (value != null) {
+            Object value = map.get(mapper);
+
+            if (value == null) {
+                if (BeanUtil.isEnum(ele.clz))
+                    throw new PersistenceException(
+                            "ENUM CAN NOT NULL, property:" + obj.getClass().getName() + "." + ele.getProperty());
+            } else {
                 value = filter(value);
-                method.invoke(obj, value);
+                Object v = dialect.mappingToObject(value,ele);
+                method.invoke(obj, v);
             }
+
         }
     }
-
 
     public static List<Object> objectToListForCreate(Object obj, List<BeanElement> eles, Dialect dialect) {
 

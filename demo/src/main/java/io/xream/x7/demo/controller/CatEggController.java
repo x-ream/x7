@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/categg")
 public class CatEggController {
@@ -41,7 +43,7 @@ public class CatEggController {
         //test....
         CriteriaBuilder.ResultMappedBuilder fromBuilder = CriteriaBuilder.buildResultMapped();
         fromBuilder.resultKey("cat.id","id");
-        fromBuilder.resultKey("cat.name","name");
+        fromBuilder.resultKey("cat.taxType","name");
         fromBuilder.resultKey("cat.dogId","dog_id");
         fromBuilder.sourceScript("from cat");
 
@@ -77,4 +79,28 @@ public class CatEggController {
     }
 
 
+    public void testFindToHanle(){
+        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        builder.eq("id",2);
+
+        Criteria criteria = builder.get();
+
+        this.catService.findToHandleC(criteria, obj -> {
+
+            Long id = obj.getId();
+            String catType = obj.getType();
+            List<String> list = obj.getTestList();
+
+            try {
+                //service | fallback, not suggest to use transaction
+                this.catService.refresh(
+                        RefreshCondition.build().refresh("type", "NNLL").eq("id", id)
+                );
+            }catch (Exception e){
+
+            }
+
+        });
+
+    }
 }

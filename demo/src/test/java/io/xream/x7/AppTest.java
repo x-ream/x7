@@ -25,6 +25,9 @@ public class AppTest {
     @Test
     public void testAll(){
 
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
+
 //        catTest.testFindById();
 
 //        xxxTest.orderSharding();
@@ -34,7 +37,7 @@ public class AppTest {
 //        xxxTest.domain();
 
 //        xxxTest.testVerify();
-        xxxTest.inOrder();
+//        xxxTest.inOrder();
         xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
 
@@ -71,55 +74,55 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-        xxxTest.testListPlainValue();
+//        xxxTest.testListPlainValue();
 
-        xxxTest.testAlia();
-        xxxTest.testAlia();
-        xxxTest.testAlia();
-        xxxTest.distinct();
-        xxxTest.distinct();
+//        xxxTest.testAlia();
+//        xxxTest.testAlia();
+//        xxxTest.testAlia();
+//        xxxTest.distinct();
+//        xxxTest.distinct();
 //
 
-        xxxTest.testOne();
-        xxxTest.testListCriteria();
+//        xxxTest.testOne();
+//        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.testCreate();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.testCreateOrReplace();
-        xxxTest.testListCriteria();
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
-        xxxTest.testList();
-        xxxTest.testList();
-        xxxTest.testList();
+//        xxxTest.testList();
+//        xxxTest.testList();
+//        xxxTest.testList();
 
 //        xxxTest.testLock();
 
 //        xxxTest.testLock();
 
 
-        xxxTest.in();
-        xxxTest.in();
-        xxxTest.in();
-        xxxTest.get();
-        xxxTest.get();
-        xxxTest.get();
+//        xxxTest.in();
+//        xxxTest.in();
+//        xxxTest.in();
+//        xxxTest.get();
+//        xxxTest.get();
+//        xxxTest.get();
 //        xxxTest.testOneKeyRemote();
 //        xxxTest.testEnum();
 
 //        xxxTest.removeRefreshCreate();
 //
-        xxxTest.testCacheGet();
-
-        xxxTest.testFallbackOnly("test");
-
-        xxxTest.testTemporaryTable();
+//        xxxTest.testCacheGet();
+//
+//        xxxTest.testFallbackOnly("test");
+//
+//        xxxTest.testTemporaryTable();
 
 
     }

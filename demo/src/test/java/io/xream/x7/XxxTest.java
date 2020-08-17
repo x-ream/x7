@@ -372,6 +372,10 @@ public class XxxTest {
 
     }
 
+    public void testFindToHandle(){
+        this.catEggController.testFindToHanle();
+    }
+
     public void testLock(){
         DogTest dogTest = new DogTest();
         dogTest.setId(3);

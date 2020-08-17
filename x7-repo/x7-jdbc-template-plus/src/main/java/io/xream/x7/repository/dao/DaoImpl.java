@@ -36,7 +36,6 @@ import io.xream.x7.repository.util.ResultSortUtil;
 import io.xream.x7.repository.util.SqlParserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -48,21 +47,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Sim
  */
 public class DaoImpl implements Dao {
 
-//    @Autowired
+    private Logger logger = LoggerFactory.getLogger(Dao.class);
+
     private CriteriaToSql criteriaToSql;
-    @Autowired
+
     private Dialect dialect;
 
     private JdbcTemplate jdbcTemplate;
 
-    private Logger logger = LoggerFactory.getLogger(DaoImpl.class);
 
     public void setDialect(Dialect dialect) {
         this.dialect = dialect;
@@ -291,9 +293,7 @@ public class DaoImpl implements Dao {
      */
     private long getCount(Class clz, String sql, Collection<Object> list) {
         LoggerProxy.debug(clz, sql);
-
-        Object obj = this.queryForMapList(sql, list, dialect, jdbcTemplate).get(0).get("count");
-        return Long.valueOf(obj.toString());
+        return this.queryForPlainValueList(Long.class,sql,list,this.dialect,jdbcTemplate).get(0);
     }
 
 
@@ -409,7 +409,7 @@ public class DaoImpl implements Dao {
 
         LoggerProxy.debug(resultMapped.getClz(), sql);
 
-        List<K> list = queryForPlainValueList(clzz,sql,resultMapped,this.dialect,jdbcTemplate);
+        List<K> list = queryForPlainValueList(clzz,sql,resultMapped.getValueList(),this.dialect,jdbcTemplate);
         return list;
     }
 
@@ -493,17 +493,17 @@ public class DaoImpl implements Dao {
 
             Map<String, Object> dataMap = rowMapper.mapRow(resultSet, 0);
 
-            Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, resultMappedCriteria, dialect);
-
             T t = null;
             if (resultMappedCriteria == null) {
                 try {
                     t = (T) clzz.newInstance();
-                    DataObjectConverter.initObj(t, objectMap, parsed.getBeanElementList());
+                    DataObjectConverter.initObj(t, dataMap, parsed.getBeanElementList(),dialect);
                 } catch (Exception e) {
                     throw DaoExceptionTranslator.onQuery(e, logger);
                 }
             } else {
+                Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, resultMappedCriteria, dialect);
+
                 if(!resultMappedCriteria.isResultWithDottedKey()){
                     objectMap = BeanMapUtil.toJsonableMap(objectMap);
                 }
@@ -529,9 +529,7 @@ public class DaoImpl implements Dao {
         }
     }
 
-    private <K> List<K> queryForPlainValueList(Class<K> clzz, String sql, Criteria.ResultMappedCriteria resultMappedCriteria, Dialect dialect, JdbcTemplate jdbcTemplate) {
-
-        List<Object> valueList = resultMappedCriteria.getValueList();
+    private <K> List<K> queryForPlainValueList(Class<K> clzz, String sql, Collection<Object> valueList, Dialect dialect, JdbcTemplate jdbcTemplate) {
 
         if (valueList == null || valueList.isEmpty()) {
             return this.jdbcTemplate.query(sql, new SingleColumnRowMapper<>(clzz));
@@ -542,39 +540,58 @@ public class DaoImpl implements Dao {
         }
     }
 
-    private List<Map<String, Object>> queryForMapList(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Criteria.ResultMappedCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
+
+        final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
+        final RowMapper<Map<String,Object>> rowMapper = (resultSet, i) -> {
+
+            Map<String,Object> map = columnMapRowMapper.mapRow(resultSet,i);
+            try {
+                return DataObjectConverter.dataToPropertyObjectMap(resultMapped.getClz(), map,resultMapped,dialect);
+            }catch (Exception e) {
+                throw DaoExceptionTranslator.onQuery(e, logger);
+            }
+        };
+
+        Collection<Object> list = resultMapped.getValueList();
+
         if (list == null || list.isEmpty()) {
-            return jdbcTemplate.queryForList(sql);
+            return jdbcTemplate.query(sql, rowMapper);
         } else {
             Object[] arr = dialect.toArr(list);
-            return jdbcTemplate.queryForList(sql, arr);
+            return jdbcTemplate.query(sql, arr, rowMapper);
         }
     }
 
     private <T> List<T> queryForList(String sql, Class<T> clz, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate) {
-        List<Map<String, Object>> dataMapList = this.queryForMapList(sql, list, dialect, jdbcTemplate);
-        List<Map<String, Object>> propertyMapList = DataObjectConverter.dataToPropertyObjectMapList(clz, dataMapList, null, dialect);
-        List<T> tList = new ArrayList<>();
-        Parsed parsed = Parser.get(clz);
-        try {
-            for (Map<String, Object> map : propertyMapList) {
-                T t = clz.newInstance();
-                DataObjectConverter.initObj(t, map, parsed.getBeanElementList());
-                tList.add(t);
-            }
-        } catch (Exception e) {
-            throw DaoExceptionTranslator.onQuery(e, logger);
-        }
-        return tList;
-    }
 
+        Parsed parsed = Parser.get(clz);
+        final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
+        final RowMapper<T> rowMapper = (resultSet, i) -> {
+
+            Map<String,Object> map = columnMapRowMapper.mapRow(resultSet,i);
+            try {
+                T t = clz.newInstance();
+                DataObjectConverter.initObj(t, map, parsed.getBeanElementList(),dialect);
+                return t;
+            }catch (Exception e) {
+                throw DaoExceptionTranslator.onQuery(e, logger);
+            }
+
+        };
+
+        if (list == null || list.isEmpty()) {
+            return jdbcTemplate.query(sql, rowMapper);
+        } else {
+            Object[] arr = dialect.toArr(list);
+            return jdbcTemplate.query(sql, arr, rowMapper);
+        }
+
+    }
 
     private List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMappedCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
 
-        List<Object> list = resultMapped.getValueList();
-        List<Map<String, Object>> dataMapList = queryForMapList(sql, list, dialect, jdbcTemplate);
-        List<Map<String, Object>> propertyMapList = DataObjectConverter.dataToPropertyObjectMapList(resultMapped.getClz(), dataMapList, resultMapped, dialect);
-
+        List<Map<String, Object>> propertyMapList = queryForMapList0(sql,resultMapped,dialect,jdbcTemplate);
         if (resultMapped.isResultWithDottedKey())
             return propertyMapList;
 

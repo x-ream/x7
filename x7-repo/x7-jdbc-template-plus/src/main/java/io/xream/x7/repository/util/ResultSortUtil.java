@@ -72,36 +72,4 @@ public class ResultSortUtil {
 
     }
 
-    public static void sort(List<Map<String, Object>> list, Criteria.ResultMappedCriteria criteria) {
-
-        if (list.isEmpty())
-            return;
-
-        List<KV> fixedSortList = criteria.getFixedSortList();
-
-        if (fixedSortList.isEmpty())
-            return;
-
-        KV kv0 = fixedSortList.get(0);
-        String property = kv0.k;
-
-        Map<String,Object> test = list.get(0);
-        if (!test.containsKey(property))
-            return;
-
-        List<Map<String, Object>> tempList = new ArrayList<>();
-        tempList.addAll(list);
-
-        list.clear();
-
-        for (Object para : (List<Object>)kv0.v){
-            for (Map<String,Object> mapResult: tempList){
-                Object o = mapResult.get(property);
-                if (String.valueOf(para).equals(String.valueOf(o))){
-                    list.add(mapResult);
-                }
-            }
-        }
-
-    }
 }

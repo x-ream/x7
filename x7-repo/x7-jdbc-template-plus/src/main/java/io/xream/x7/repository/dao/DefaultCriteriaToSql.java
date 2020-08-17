@@ -381,7 +381,7 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 if (h != null) {
                     h.setKey(alianName);
                     if (!criteria.isTotalRowsIgnored()) {
-                        throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to build.paged().ignoreTotalRows()");
+                        throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to builder.paged().ignoreTotalRows()");
                     }
                 }
 

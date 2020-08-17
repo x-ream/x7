@@ -200,55 +200,6 @@ public class BeanMapUtil {
 
 		return map;
 	}
-
-	public static Map<String, Object> toObjectMapForPersistence(Object obj) {
-
-		List<Field> fl = new ArrayList<Field>();
-
-		@SuppressWarnings("rawtypes")
-		Class clz = obj.getClass();
-
-		if (clz.getSuperclass() != Object.class) {
-			fl.addAll(Arrays.asList(clz.getSuperclass().getDeclaredFields()));
-		}
-		fl.addAll(Arrays.asList(clz.getDeclaredFields()));
-
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		try {
-
-			for (Field f : fl) {
-
-				int modifiers = f.getModifiers();
-				String key = f.getName();
-
-				System.out.println(key + "_" + modifiers);
-
-
-				if (Modifier.isTransient(modifiers))
-					continue;
-				
-				if (Modifier.isStatic(modifiers))
-					continue;
-
-				if (Modifier.isFinal(modifiers))
-					continue;
-
-
-				f.setAccessible(true);
-				Object value = f.get(obj);
-				
-				map.put(key, value);
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return map;
-	}
-	
 	
 	public static Map<String,Object> toJsonableMap(Map<String,Object> stringKeyMap){
 		Map<String,Object> jsonableMap = new HashMap<String,Object>();

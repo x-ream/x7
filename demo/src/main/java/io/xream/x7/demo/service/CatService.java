@@ -14,4 +14,5 @@ public interface CatService {
 
     void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String,Object>> rowHandler);
 
+    void findToHandleC(Criteria criteria, RowHandler<Cat> rowHandler);
 }

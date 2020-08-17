@@ -31,5 +31,10 @@ public class CatServiceImpl implements CatService{
         this.catRepository.findToHandle(resultMappedCriteria,rowHandler);
     }
 
+    @Override
+    public void findToHandleC(Criteria criteria, RowHandler<Cat> rowHandler) {
+        this.catRepository.findToHandle(criteria,rowHandler);
+    }
+
 
 }
