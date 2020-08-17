@@ -404,11 +404,6 @@ public class XxxTest {
 
     }
 
-    public boolean testVerify(){
-        boolean flag = orderRemote.verify();
-        System.out.println("______ " + flag);
-        return flag;
-    }
 
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());

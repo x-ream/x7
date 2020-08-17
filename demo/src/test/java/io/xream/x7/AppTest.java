@@ -28,15 +28,12 @@ public class AppTest {
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
 
-//        catTest.testFindById();
-
 //        xxxTest.orderSharding();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
 //        xxxTest.testNonPaged();
-//        xxxTest.domain();
 
-//        xxxTest.testVerify();
+
 //        xxxTest.inOrder();
         xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
@@ -45,14 +42,13 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 
-//        xxxTest.testListCriteria();
-
+        xxxTest.testListCriteria();
 
 
 
@@ -67,20 +63,20 @@ public class AppTest {
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testListPlainValue();
+        xxxTest.testListPlainValue();
 
-//        xxxTest.testAlia();
-//        xxxTest.testAlia();
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.testAlia();
+        xxxTest.testAlia();
+        xxxTest.distinct();
+        xxxTest.distinct();
 //
 
 //        xxxTest.testOne();
@@ -98,27 +94,23 @@ public class AppTest {
 //        xxxTest.createBatch();
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
-//        xxxTest.testList();
-//        xxxTest.testList();
-//        xxxTest.testList();
+
 
 //        xxxTest.testLock();
 
 //        xxxTest.testLock();
 
 
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.testOneKeyRemote();
-//        xxxTest.testEnum();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.in();
+        xxxTest.get();
+        xxxTest.get();
+        xxxTest.get();
 
 //        xxxTest.removeRefreshCreate();
 //
-//        xxxTest.testCacheGet();
+        xxxTest.testCacheGet();
 //
 //        xxxTest.testFallbackOnly("test");
 //

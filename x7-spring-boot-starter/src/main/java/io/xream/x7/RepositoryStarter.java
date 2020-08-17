@@ -31,6 +31,7 @@ import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.SqlDataTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -44,6 +45,7 @@ public class RepositoryStarter  {
     @Bean
     @Order(2)
     public Dialect dialect(Environment environment){
+
         String driverClassName = getDbDriverKey(environment);
 
         Dialect dialect = null;
@@ -81,7 +83,6 @@ public class RepositoryStarter  {
         return temporaryTableParser;
     }
 
-
     @Bean
     @Order(5)
     public Dao dao(Environment environment){
@@ -101,7 +102,6 @@ public class RepositoryStarter  {
     public L2CacheResolver cacheResolver(){
         return new DefaultL2CacheResolver();
     }
-
 
     @Bean
     @Order(7)
