@@ -6,7 +6,6 @@ import io.xream.x7.common.bean.condition.InCondition;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
 import io.xream.x7.common.cache.CacheableL3;
-import io.xream.x7.common.cache.L2CacheFilter;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.web.Page;
 import io.xream.x7.common.web.ViewEntity;

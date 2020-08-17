@@ -20,7 +20,10 @@ import io.xream.x7.common.bean.*;
 import io.xream.x7.common.bean.condition.RefreshCondition;
 import io.xream.x7.common.filter.BaseTypeFilter;
 import io.xream.x7.common.support.TimestampSupport;
-import io.xream.x7.common.util.*;
+import io.xream.x7.common.util.BeanUtil;
+import io.xream.x7.common.util.BeanUtilX;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.web.Direction;
 import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.SqlParsed;
@@ -188,13 +191,8 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                 isNotFirst = true;
 
                 Object key = x.getKey();
-
                 String str = key.toString();
-
                 String sql = BeanUtilX.normalizeSql(str);
-
-//                sql = SqlParserUtil.mapper(sql, parsed);
-//               sb.append(sql);
                 mapping(sql, refreshCondition, sb);
 
             } else {
@@ -206,10 +204,8 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                     }
 
                     isNotFirst = true;
-
                     String sql = BeanUtilX.normalizeSql(key);
-//                    sql = SqlParserUtil.mapper(sql, parsed);
-//                    sb.append(sql);
+
                     mapping(sql, refreshCondition, sb);
                 } else {
 
@@ -243,11 +239,9 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
                     isNotFirst = true;
 
-
                     String mapper = mapping(key,refreshCondition);
                     sb.append(mapper);
                     sb.append(SqlScript.EQ_PLACE_HOLDER);
-
 
                     if (BeanUtil.testEnumConstant(be.clz, x.getValue())) {
                     } else if (be.isJson) {
@@ -342,8 +336,6 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
 
         if (!reduceList.isEmpty()) {
 
-//            if (!flag) resultMapped.getResultKeyList().clear();//去掉构造方法里设置的返回key
-
             for (Reduce reduce : reduceList) {
                 if (flag) {
                     column.append(SqlScript.COMMA);
@@ -384,7 +376,6 @@ public class DefaultCriteriaToSql implements CriteriaToSql, ConditionCriteriaToS
                         throw new CriteriaSyntaxException("Reduce with having not support totalRows query, try to builder.paged().ignoreTotalRows()");
                     }
                 }
-
                 flag = true;
             }
         }
