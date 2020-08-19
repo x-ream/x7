@@ -2,6 +2,7 @@
 
     x7-repo/x7-lock
     x7-repo/x7-cache
+    x7-repo/x7-sqli
     x7-repo/x7-jdbc-template-plus
     
 ## x7-lock  分布式锁框架
@@ -71,7 +72,7 @@
          1. 报表
          2. 耗性能的远程请求, 且远程数据很少更新，更新时间间隔可预计
          
-##  x7-jdbc-template-plus 数据库ORM框架
+##  x7-sqli SQL的简单编程接口(SQL INTERFACE)
 
 ####    使用方法
     @EnableX7Repostory  
