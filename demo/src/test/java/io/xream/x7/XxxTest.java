@@ -3,13 +3,13 @@ package io.xream.x7;
 //import io.seata.spring.annotation.GlobalTransactional;
 
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import io.xream.sqli.common.web.Direction;
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.CriteriaBuilder;
 import io.xream.sqli.core.builder.ReduceType;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.sqli.core.cache.L2CacheFilter;
 import io.xream.x7.common.util.JsonX;
-import io.xream.sqli.core.web.Direction;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.bean.CatTest;
 import io.xream.x7.demo.bean.*;
@@ -314,7 +314,7 @@ public class XxxTest {
         builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 //        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
-        builder.paged().page(1).rows(10).sort("id",Direction.DESC);
+        builder.paged().page(1).rows(10).sort("id", Direction.DESC);
 
         Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
 

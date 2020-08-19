@@ -16,14 +16,15 @@
  */
 package io.xream.x7.repository.jdbctemplate;
 
+import io.xream.sqli.common.util.BeanMapUtil;
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.Parsed;
 import io.xream.sqli.core.builder.Parser;
 import io.xream.sqli.core.builder.RowHandler;
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
-import io.xream.sqli.core.util.BeanMapUtil;
 import io.xream.sqli.exception.ExceptionTranslator;
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ColumnMapRowMapper;

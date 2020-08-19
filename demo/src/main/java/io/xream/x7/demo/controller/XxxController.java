@@ -1,13 +1,13 @@
 package io.xream.x7.demo.controller;
 
 
+import io.xream.sqli.common.web.Page;
 import io.xream.sqli.core.builder.*;
 import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
 import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.util.JsonX;
-import io.xream.sqli.core.web.Page;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.*;
 import io.xream.x7.demo.bean.*;
@@ -20,11 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static io.xream.sqli.common.web.Direction.DESC;
 import static io.xream.sqli.core.builder.JoinType.INNER_JOIN;
 import static io.xream.sqli.core.builder.Op.GT;
 import static io.xream.sqli.core.builder.ReduceType.COUNT_DISTINCT;
 import static io.xream.sqli.core.builder.ReduceType.SUM;
-import static io.xream.sqli.core.web.Direction.DESC;
+
 
 
 @RestController
@@ -134,14 +135,14 @@ public class XxxController {
     @RequestMapping("/distinct")
     public ViewEntity distinct(@RequestBody CatRO ro) {
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(ro);
+        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
         builder.resultWithDottedKey().distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
                 .reduce(COUNT_DISTINCT, "catTest.id")
                 .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
                 .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(?)","catTest.time")
 //                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
-                .paged(ro);
+                .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows()).sort(ro.getOrderBy(),ro.getDirection());
         String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
         Criteria.ResultMappedCriteria resultMapped = builder.get();
         resultMapped.setSourceScript(sourceScript);

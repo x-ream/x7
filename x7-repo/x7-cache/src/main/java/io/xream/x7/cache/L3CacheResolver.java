@@ -17,8 +17,9 @@
 package io.xream.x7.cache;
 
 
+import io.xream.sqli.common.util.SqliExceptionUtil;
 import io.xream.sqli.core.cache.Protection;
-import io.xream.sqli.core.util.SqliExceptionUtil;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.exception.L3CacheException;
@@ -46,7 +47,7 @@ public interface L3CacheResolver extends Protection {
                 }
             } catch (Exception e) {
                 PeriodCounter.reset(key);
-                throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+                throw new RuntimeException(ExceptionUtil.getMessage(e));
             }
 
             final String lockKey = key + "~LOCK";

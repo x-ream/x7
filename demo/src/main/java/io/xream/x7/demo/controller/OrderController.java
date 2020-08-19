@@ -1,9 +1,9 @@
 package io.xream.x7.demo.controller;
 
+import io.xream.sqli.common.web.Direction;
+import io.xream.sqli.common.web.Page;
 import io.xream.sqli.core.builder.*;
 import io.xream.sqli.core.builder.condition.InCondition;
-import io.xream.sqli.core.web.Direction;
-import io.xream.sqli.core.web.Page;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.OrderItemRepository;
 import io.xream.x7.demo.OrderRepository;

@@ -18,6 +18,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>io.xream.sqli</groupId>
+            <artifactId>sqli-common</artifactId>
+            <version>1.0.0.RELEASE</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>

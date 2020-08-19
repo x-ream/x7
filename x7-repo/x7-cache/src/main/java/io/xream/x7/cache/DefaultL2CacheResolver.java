@@ -17,6 +17,8 @@
 package io.xream.x7.cache;
 
 import io.xream.sqli.api.QueryForCache;
+import io.xream.sqli.common.util.SqliExceptionUtil;
+import io.xream.sqli.common.web.Page;
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.Parsed;
 import io.xream.sqli.core.builder.Parser;
@@ -25,9 +27,8 @@ import io.xream.sqli.core.cache.L2CacheConsistency;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.core.cache.L2CacheStorage;
 import io.xream.sqli.annotation.X;
-import io.xream.sqli.core.util.BeanUtilX;
-import io.xream.sqli.core.util.SqliExceptionUtil;
-import io.xream.sqli.core.web.Page;
+import io.xream.sqli.util.BeanUtilX;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 import io.xream.x7.common.util.VerifyUtil;
@@ -447,7 +448,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 
 			keyList = new ArrayList<>();

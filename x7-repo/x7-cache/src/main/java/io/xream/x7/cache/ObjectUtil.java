@@ -16,7 +16,7 @@
  */
 package io.xream.x7.cache;
 
-import io.xream.sqli.core.web.Page;
+import io.xream.sqli.common.web.Page;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
 

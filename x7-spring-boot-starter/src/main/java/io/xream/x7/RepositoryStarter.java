@@ -16,6 +16,7 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.api.Dialect;
@@ -27,7 +28,6 @@ import io.xream.x7.repository.dao.*;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.internal.DefaultTemporaryRepository;
-import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import io.xream.x7.repository.mapper.DefaultTemporaryTableParser;
 import io.xream.x7.repository.mapper.MapperFactory;
 import io.xream.x7.repository.transform.DataTransform;

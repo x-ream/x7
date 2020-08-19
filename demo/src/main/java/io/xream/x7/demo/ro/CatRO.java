@@ -1,7 +1,8 @@
 package io.xream.x7.demo.ro;
 
-import io.xream.sqli.core.web.TokenedAndPagedRo;
-import io.xream.sqli.core.web.MapResult;
+
+import io.xream.sqli.common.web.MapResult;
+import io.xream.x7.common.web.TokenedAndPagedRo;
 
 import java.util.Arrays;
 import java.util.HashMap;
