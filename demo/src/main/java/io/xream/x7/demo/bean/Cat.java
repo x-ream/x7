@@ -1,7 +1,7 @@
 package io.xream.x7.demo.bean;
 
 
-import io.xream.sqli.core.repository.X;
+import io.xream.sqli.annotation.X;
 import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;

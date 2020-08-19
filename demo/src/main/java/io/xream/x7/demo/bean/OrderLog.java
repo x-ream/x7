@@ -1,6 +1,6 @@
 package io.xream.x7.demo.bean;
 
-import io.xream.sqli.core.repository.X;
+import io.xream.sqli.annotation.X;
 
 public class OrderLog {
 

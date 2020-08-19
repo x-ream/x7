@@ -1,7 +1,7 @@
 package io.xream.x7.demo.controller;
 
+
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;

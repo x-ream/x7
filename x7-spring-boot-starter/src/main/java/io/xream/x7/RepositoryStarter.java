@@ -18,8 +18,8 @@ package io.xream.x7;
 
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.core.cache.L2CacheResolver;
-import io.xream.sqli.core.repository.Dialect;
-import io.xream.sqli.core.repository.JdbcWrapper;
+import io.xream.sqli.api.Dialect;
+import io.xream.sqli.api.JdbcWrapper;
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.repository.*;
 import io.xream.x7.repository.cache.CacheableRepository;
@@ -54,14 +54,14 @@ public class RepositoryStarter  {
         try {
             if (driverClassName.contains(DbType.MYSQL)) {
                 DbType.value = DbType.MYSQL;
-                dialect = (Dialect) Class.forName("io.xream.x7.repository.dialect.MySqlDialect").newInstance();
+                dialect = (Dialect) Class.forName("io.xream.sqli.repository.dialect.MySqlDialect").newInstance();
             } else if (driverClassName.contains(DbType.ORACLE)) {
                 DbType.value = DbType.ORACLE;
-                dialect = (Dialect) Class.forName("io.xream.x7.repository.dialect.OracleDialect").newInstance();
+                dialect = (Dialect) Class.forName("io.xream.sqli.repository.dialect.OracleDialect").newInstance();
             }
             initDialect(dialect);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
         return dialect;

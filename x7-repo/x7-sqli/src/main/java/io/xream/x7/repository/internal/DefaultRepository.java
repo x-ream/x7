@@ -22,7 +22,7 @@ import io.xream.sqli.core.builder.*;
 import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
-import io.xream.sqli.core.repository.X;
+import io.xream.sqli.annotation.X;
 import io.xream.sqli.core.web.Page;
 import io.xream.sqli.exception.PersistenceException;
 import io.xream.x7.common.util.StringUtil;

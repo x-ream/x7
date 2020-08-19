@@ -19,13 +19,19 @@
 		<dependency>
 			<groupId>io.xream.sqli</groupId>
 			<artifactId>sqli-core</artifactId>
-			<version>2.4.0.RELEASE</version>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.xream.sqli</groupId>
 			<artifactId>sqli</artifactId>
-			<version>2.4.0.RELEASE</version>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.xream.sqli</groupId>
+			<artifactId>sqli-dialect</artifactId>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -51,28 +57,6 @@
 			<artifactId>HikariCP</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<version>12.2.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.apache.commons</groupId>-->
-<!--			<artifactId>commons-lang3</artifactId>-->
-<!--			<version>3.4</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.commons</groupId>-->
-<!--			<artifactId>commons-pool2</artifactId>-->
-<!--		</dependency>-->
 
 	</dependencies>
 

@@ -24,7 +24,7 @@ import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.cache.L2CacheConsistency;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.core.cache.L2CacheStorage;
-import io.xream.sqli.core.repository.X;
+import io.xream.sqli.annotation.X;
 import io.xream.sqli.core.util.BeanUtilX;
 import io.xream.sqli.core.util.SqliExceptionUtil;
 import io.xream.sqli.core.web.Page;
