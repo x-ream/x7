@@ -7,10 +7,10 @@
 		<version>2.3.12.RELEASE</version>
 	</parent>
 
-	<artifactId>x7-jdbc</artifactId>
+	<artifactId>x7-sqli</artifactId>
 	<packaging>jar</packaging>
 
-	<name>x7-jdbc</name>
+	<name>x7-sqli</name>
 	<description>http://x7.xream.io</description>
 	<url>http://x7.xream.io</url>
 
