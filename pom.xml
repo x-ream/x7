@@ -67,6 +67,9 @@
         <module>x7-repo</module>
         <module>x7-reyc</module>
         <module>x7-spring-boot-starter</module>
+        <module>x7-jdbc</module>
+        <module>x7-jdbc</module>
+        <module>x7-repo/x7-jdbc</module>
     </modules>
 
     <dependencyManagement>

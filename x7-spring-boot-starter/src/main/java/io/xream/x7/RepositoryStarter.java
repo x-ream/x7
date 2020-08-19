@@ -18,20 +18,21 @@ package io.xream.x7;
 
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.common.cache.L2CacheResolver;
+import io.xream.x7.common.repository.Dialect;
+import io.xream.x7.common.repository.JdbcWrapper;
 import io.xream.x7.repository.*;
 import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.*;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.internal.DefaultTemporaryRepository;
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import io.xream.x7.repository.mapper.DefaultTemporaryTableParser;
-import io.xream.x7.repository.mapper.Dialect;
 import io.xream.x7.repository.mapper.MapperFactory;
 import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.SqlDataTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -149,7 +150,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(11)
-    public TemporaryRepository temporaryRepository(Dao dao,Environment environment){
+    public TemporaryRepository temporaryRepository(Dao dao,TemporaryDao temporaryDao,TemporaryRepository.Parser temporaryTableParser,Environment environment){
         String driverClassName = getDbDriverKey(environment);
         DefaultTemporaryRepository temporaryRepository = new DefaultTemporaryRepository();
         DataTransform dataTransform = null;
@@ -159,8 +160,16 @@ public class RepositoryStarter  {
             ((SqlDataTransform) dataTransform).setDao(dao);
         }
         temporaryRepository.setDataTransform(dataTransform);
+        temporaryRepository.setTemporaryDao(temporaryDao);
+        temporaryRepository.setTemporaryRepositoryParser(temporaryTableParser);
 
         return temporaryRepository;
+    }
+
+    @Bean
+    @Order(12)
+    public JdbcWrapper jdbcWrapper(){
+        return new JdbcTemplateWrapper();
     }
 
     /**

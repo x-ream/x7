@@ -23,6 +23,8 @@ import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
 import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.common.cache.L2CacheResolver;
 import io.xream.x7.common.cache.L2CacheStorage;
+import io.xream.x7.common.repository.Dialect;
+import io.xream.x7.common.repository.JdbcWrapper;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
@@ -30,19 +32,16 @@ import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.Repository;
 import io.xream.x7.repository.RepositoryBootListener;
 import io.xream.x7.repository.cache.CacheableRepository;
-import io.xream.x7.repository.dao.Dao;
-import io.xream.x7.repository.dao.DaoImpl;
-import io.xream.x7.repository.dao.TxConfig;
+import io.xream.x7.repository.dao.*;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
-import io.xream.x7.repository.mapper.Dialect;
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import io.xream.x7.repository.transform.DataTransform;
 import io.xream.x7.repository.transform.customizer.DataTransformCustomizer;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.PlatformTransactionManager;
 
 
 public class RepositoryListener implements
@@ -69,8 +68,6 @@ public class RepositoryListener implements
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
         customizeDataTransform(applicationStartedEvent);
-
-        txConfig(applicationStartedEvent);
 
         RepositoryBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
@@ -203,13 +200,31 @@ public class RepositoryListener implements
 
         }
 
-        Dao dao = null;
+        JdbcWrapper jdbcWrapper = null;
         try{
-            dao = applicationStartedEvent.getApplicationContext().getBean(Dao.class);
+            jdbcWrapper = applicationStartedEvent.getApplicationContext().getBean(JdbcWrapper.class);
+            JdbcTemplateWrapper jtw = (JdbcTemplateWrapper) jdbcWrapper;
+            jtw.setJdbcTemplate(jdbcTemplate);
+        }catch (Exception e){
+
+        }
+
+        try{
+            Dao dao = applicationStartedEvent.getApplicationContext().getBean(Dao.class);
             DaoImpl daoImpl = (DaoImpl) dao;
             daoImpl.setDialect(dialect);
             daoImpl.setCriteriaToSql(criteriaToSql);
-            daoImpl.setJdbcTemplate(jdbcTemplate);
+            daoImpl.setJdbcWrapper(jdbcWrapper);
+        }catch (Exception e) {
+
+        }
+
+        try{
+            TemporaryDao temporaryDao = applicationStartedEvent.getApplicationContext().getBean(TemporaryDao.class);
+            TemporaryDaoImpl daoImpl = (TemporaryDaoImpl) temporaryDao;
+            daoImpl.setDialect(dialect);
+            daoImpl.setCriteriaToSql(criteriaToSql);
+            daoImpl.setJdbcWrapper(jdbcWrapper);
         }catch (Exception e) {
 
         }
@@ -289,14 +304,4 @@ public class RepositoryListener implements
 
     }
 
-    private void txConfig(ApplicationStartedEvent event){
-        try {
-            PlatformTransactionManager platformTransactionManager = event.getApplicationContext().getBean(PlatformTransactionManager.class);
-            if (platformTransactionManager == null)
-                return;
-            new TxConfig(platformTransactionManager);
-        }catch (Exception e){
-
-        }
-    }
 }

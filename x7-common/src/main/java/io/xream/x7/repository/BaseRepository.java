@@ -40,7 +40,7 @@ public interface BaseRepository<T> extends Typed<T> {
 
     boolean createBatch(List<T> objList);
 
-    long create(T obj);
+    boolean create(T obj);
 
     /**
      * replace: clear all the value of the row, and insert the new value </>

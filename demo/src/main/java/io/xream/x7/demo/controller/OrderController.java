@@ -40,8 +40,8 @@ public class OrderController {
     @RequestMapping("/create")
     public boolean create(@RequestBody Order order) {
 
-        long id = this.orderRepository.create(order);
-        return id > 0;
+        return this.orderRepository.create(order);
+
     }
 
     @RequestMapping("/sharding")
