@@ -16,8 +16,7 @@
  */
 package io.xream.x7.cache.customizer;
 
-
-import io.xream.x7.common.cache.L2CacheStorage;
+import io.xream.sqli.core.cache.L2CacheStorage;
 
 public interface L2CacheStorageCustomizer {
     L2CacheStorage customize();

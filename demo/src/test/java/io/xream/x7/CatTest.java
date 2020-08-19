@@ -5,9 +5,9 @@ import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.controller.CatEggController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.xream.x7.common.bean.CriteriaBuilder;
-import io.xream.x7.common.bean.condition.InCondition;
-import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.sqli.core.builder.CriteriaBuilder;
+import io.xream.sqli.core.builder.condition.InCondition;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 
 import java.util.ArrayList;
 import java.util.List;

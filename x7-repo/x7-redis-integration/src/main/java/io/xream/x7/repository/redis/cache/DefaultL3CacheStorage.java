@@ -16,8 +16,8 @@
  */
 package io.xream.x7.repository.redis.cache;
 
+import io.xream.sqli.core.cache.Protection;
 import io.xream.x7.cache.L3CacheStorage;
-import io.xream.x7.common.cache.Protection;
 import io.xream.x7.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

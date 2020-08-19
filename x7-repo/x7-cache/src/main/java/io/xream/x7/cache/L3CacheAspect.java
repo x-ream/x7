@@ -17,8 +17,8 @@
 package io.xream.x7.cache;
 
 import com.alibaba.fastjson.JSON;
+import io.xream.sqli.core.util.SqliExceptionUtil;
 import io.xream.x7.common.cache.CacheableL3;
-import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.KeyUtil;
 import io.xream.x7.common.util.StringUtil;
@@ -105,7 +105,7 @@ public class L3CacheAspect {
                 return null;
             }
         } catch (Throwable e) {
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
+            throw new RuntimeException(SqliExceptionUtil.getMessage(e));
         }
 
         Object[] argArr = proceedingJoinPoint.getArgs();
@@ -130,7 +130,7 @@ public class L3CacheAspect {
                     try {
                         return proceedingJoinPoint.proceed();
                     } catch (Throwable e) {
-                        throw new RuntimeException(ExceptionUtil.getMessage(e));
+                        throw new RuntimeException(SqliExceptionUtil.getMessage(e));
                     }
                 });
 

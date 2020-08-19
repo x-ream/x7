@@ -1,7 +1,7 @@
 package io.xream.x7;
 
-import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.common.web.IdView;
+import io.xream.x7.demo.bean.Cat;
 
 import java.util.List;
 import java.util.Map;

@@ -19,5 +19,5 @@ package io.xream.x7.common.web;
 import java.util.Map;
 
 public interface IdView {
-    void transform(Map<Object,Object> viewMap);
+    void transform(Map<Object, Object> viewMap);
 }

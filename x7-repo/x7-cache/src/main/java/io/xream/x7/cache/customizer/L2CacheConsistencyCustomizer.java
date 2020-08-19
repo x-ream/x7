@@ -16,7 +16,7 @@
  */
 package io.xream.x7.cache.customizer;
 
-import io.xream.x7.common.cache.L2CacheConsistency;
+import io.xream.sqli.core.cache.L2CacheConsistency;
 
 public interface L2CacheConsistencyCustomizer {
 

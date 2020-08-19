@@ -16,10 +16,31 @@
  */
 package io.xream.x7.repository;
 
+import io.xream.x7.repository.id.IdGeneratorPolicy;
+import org.springframework.context.ConfigurableApplicationContext;
 
-public class DbType {
 
-    public static final String MYSQL = "mysql";
-    public static final String ORACLE = "oracle";
-    public static String value = "mysql";
+public class IdGeneratorBootListener {
+
+    public static void onStarted(ConfigurableApplicationContext applicationContext) {
+
+        IdGeneratorPolicy idGeneratorPolicy = null;
+        try {
+            idGeneratorPolicy = applicationContext.getBean(IdGeneratorPolicy.class);
+        } catch (Exception e) {
+
+        }
+
+
+        try {
+            Thread.sleep(1000);
+            if (idGeneratorPolicy != null) {
+                idGeneratorPolicy.onStart(HealthChecker.getRepositoryList());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
 }

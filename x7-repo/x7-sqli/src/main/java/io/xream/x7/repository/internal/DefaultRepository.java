@@ -16,15 +16,16 @@
  */
 package io.xream.x7.repository.internal;
 
-import io.xream.x7.common.bean.*;
-import io.xream.x7.common.bean.condition.InCondition;
-import io.xream.x7.common.bean.condition.RefreshCondition;
-import io.xream.x7.common.bean.condition.RemoveRefreshCreate;
-import io.xream.x7.common.repository.X;
+
+import io.xream.sqli.api.BaseRepository;
+import io.xream.sqli.core.builder.*;
+import io.xream.sqli.core.builder.condition.InCondition;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
+import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
+import io.xream.sqli.core.repository.X;
+import io.xream.sqli.core.web.Page;
+import io.xream.sqli.exception.PersistenceException;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.common.web.Page;
-import io.xream.x7.exception.PersistenceException;
-import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.HealthChecker;
 import io.xream.x7.repository.KeyOne;
 import io.xream.x7.repository.Repository;
@@ -137,8 +138,8 @@ public abstract class DefaultRepository<T> implements BaseRepository<T> {
 
         if (unSafe) {
             String key = parsed.getKey(X.KEY_ONE);
-            List<io.xream.x7.common.bean.X> listX = refreshCondition.getListX();
-            for (io.xream.x7.common.bean.X x : listX) {
+            List<io.xream.sqli.core.builder.X> listX = refreshCondition.getListX();
+            for (io.xream.sqli.core.builder.X x : listX) {
                 String k = x.getKey();
                 boolean b = k.contains(".") ? k.endsWith("."+key) : key.equals(k);
                 if (b) {

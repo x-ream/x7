@@ -16,7 +16,7 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.common.bean.Parser;
+import io.xream.sqli.core.builder.Parser;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;

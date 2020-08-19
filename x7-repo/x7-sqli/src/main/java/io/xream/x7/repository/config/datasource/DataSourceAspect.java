@@ -16,7 +16,7 @@
  */
 package io.xream.x7.repository.config.datasource;
 
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.sqli.core.util.SqliExceptionUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -51,7 +51,7 @@ public class DataSourceAspect implements Ordered {
                 return proceedingJoinPoint.proceed();
             }
         } catch (Throwable e) {
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
+            throw new RuntimeException(SqliExceptionUtil.getMessage(e));
         }finally {
             DataSourceContextHolder.remove();
         }

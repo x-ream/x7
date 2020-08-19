@@ -1,7 +1,7 @@
 package io.xream.x7;
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.X;
+import io.xream.sqli.core.builder.Criteria;
+import io.xream.sqli.core.builder.X;
 import io.xream.x7.common.util.JsonX;
 
 public class CriteriaTest {

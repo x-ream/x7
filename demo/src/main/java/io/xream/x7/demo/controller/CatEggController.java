@@ -1,14 +1,14 @@
 package io.xream.x7.demo.controller;
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.CriteriaBuilder;
-import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.sqli.api.TemporaryRepository;
+import io.xream.sqli.core.builder.Criteria;
+import io.xream.sqli.core.builder.CriteriaBuilder;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.bean.CatEgg;
 import io.xream.x7.demo.service.CatService;
-import io.xream.x7.repository.TemporaryRepository;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

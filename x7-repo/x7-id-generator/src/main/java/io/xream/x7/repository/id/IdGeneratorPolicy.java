@@ -17,15 +17,14 @@
 package io.xream.x7.repository.id;
 
 
-import io.xream.x7.repository.BaseRepository;
+import io.xream.sqli.api.BaseRepository;
+import io.xream.sqli.api.IdGenerator;
 
 import java.util.List;
 
-public interface IdGeneratorPolicy {
+public interface IdGeneratorPolicy extends IdGenerator {
 
     String ID_MAP_KEY = "ID_MAP_KEY";
-
-    long createId(String clzName);
 
     void onStart(List<BaseRepository> repositoryList);
 }

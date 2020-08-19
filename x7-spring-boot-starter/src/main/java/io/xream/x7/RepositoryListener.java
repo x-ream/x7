@@ -16,21 +16,22 @@
  */
 package io.xream.x7;
 
+import io.xream.sqli.core.cache.L2CacheResolver;
+import io.xream.sqli.core.cache.L2CacheStorage;
+import io.xream.sqli.core.repository.Dialect;
+import io.xream.sqli.core.repository.JdbcWrapper;
 import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
 import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
 import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
 import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
-import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.cache.L2CacheStorage;
-import io.xream.x7.common.repository.Dialect;
-import io.xream.x7.common.repository.JdbcWrapper;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
+import io.xream.x7.repository.BootListener;
 import io.xream.x7.repository.CriteriaToSql;
 import io.xream.x7.repository.Repository;
-import io.xream.x7.repository.RepositoryBootListener;
+import io.xream.x7.repository.IdGeneratorBootListener;
 import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.*;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
@@ -69,7 +70,9 @@ public class RepositoryListener implements
 
         customizeDataTransform(applicationStartedEvent);
 
-        RepositoryBootListener.onStarted(applicationStartedEvent.getApplicationContext());
+        BootListener.onStarted();
+
+        IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
     }
 

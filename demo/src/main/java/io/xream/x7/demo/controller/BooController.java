@@ -2,7 +2,7 @@ package io.xream.x7.demo.controller;
 
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
-import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.service.CatService;

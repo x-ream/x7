@@ -16,9 +16,9 @@
  */
 package io.xream.x7.cache;
 
+import io.xream.sqli.core.web.Page;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.common.web.Page;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

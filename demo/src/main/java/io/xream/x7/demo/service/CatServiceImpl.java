@@ -1,8 +1,8 @@
 package io.xream.x7.demo.service;
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.RowHandler;
-import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.sqli.core.builder.Criteria;
+import io.xream.sqli.core.builder.RowHandler;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.fallback.FallbackOnly;

@@ -16,10 +16,10 @@
  */
 package io.xream.x7.repository.jdbctemplate;
 
-import io.xream.x7.common.bean.*;
-import io.xream.x7.common.repository.Dialect;
-import io.xream.x7.common.util.BeanUtil;
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.sqli.core.builder.*;
+import io.xream.sqli.core.repository.Dialect;
+import io.xream.sqli.core.util.BeanUtil;
+import io.xream.sqli.core.util.SqliExceptionUtil;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.LoggerProxy;
 
@@ -31,7 +31,7 @@ import java.util.*;
 
 public class DataObjectConverter {
 
-    public static Map<String,Object> dataToPropertyObjectMap(Class clz,Map<String,Object> dataMap, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
+    public static Map<String,Object> dataToPropertyObjectMap(Class clz, Map<String,Object> dataMap, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
         Map<String, Object> propertyMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
             String mapper = entry.getKey();
@@ -125,7 +125,7 @@ public class DataObjectConverter {
         } catch (Exception e) {
             if (e instanceof RuntimeException)
                 throw (RuntimeException) e;
-            throw new RuntimeException(ExceptionUtil.getMessage(e));
+            throw new RuntimeException(SqliExceptionUtil.getMessage(e));
         }
 
         return list;

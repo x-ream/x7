@@ -1,8 +1,8 @@
 package io.xream.x7.demo.remote;
 
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.condition.RefreshCondition;
+import io.xream.sqli.core.builder.Criteria;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import io.xream.x7.demo.ro.CatRO;
 import io.xream.x7.demo.bean.Cat;

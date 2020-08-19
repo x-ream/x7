@@ -16,20 +16,24 @@
  */
 package io.xream.x7.cache;
 
-import io.xream.x7.common.bean.Criteria;
-import io.xream.x7.common.bean.Parsed;
-import io.xream.x7.common.bean.Parser;
-import io.xream.x7.common.bean.condition.InCondition;
-import io.xream.x7.common.cache.L2CacheConsistency;
-import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.cache.L2CacheStorage;
-import io.xream.x7.common.repository.X;
-import io.xream.x7.common.util.*;
-import io.xream.x7.common.web.Page;
+import io.xream.sqli.api.QueryForCache;
+import io.xream.sqli.core.builder.Criteria;
+import io.xream.sqli.core.builder.Parsed;
+import io.xream.sqli.core.builder.Parser;
+import io.xream.sqli.core.builder.condition.InCondition;
+import io.xream.sqli.core.cache.L2CacheConsistency;
+import io.xream.sqli.core.cache.L2CacheResolver;
+import io.xream.sqli.core.cache.L2CacheStorage;
+import io.xream.sqli.core.repository.X;
+import io.xream.sqli.core.util.BeanUtilX;
+import io.xream.sqli.core.util.SqliExceptionUtil;
+import io.xream.sqli.core.web.Page;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.StringUtil;
+import io.xream.x7.common.util.VerifyUtil;
 import io.xream.x7.exception.L2CacheException;
 import io.xream.x7.exception.NoResultUnderProtectionException;
 import io.xream.x7.exception.NotQueryUnderProtectionException;
-import io.xream.x7.repository.QueryForCache;
 import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -443,7 +447,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 			}
 
 			keyList = new ArrayList<>();
@@ -495,7 +499,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 			}
 
 			keyList = new ArrayList<>();
@@ -546,7 +550,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 			}
 			set(clz, conditionObj, obj);
 		}
@@ -570,7 +574,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 			}
 			setOne(clz, conditionObj, obj);
 		}
@@ -599,7 +603,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						p = findCallable.call();
 					}catch (Exception e){
 						close();
-						throw new RuntimeException(ExceptionUtil.getMessage(e));
+						throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 					}
 
 					setTotalRows(clz, totalRowsString, p.getTotalRows());
@@ -610,7 +614,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						list = listCallable.call();
 					} catch (Exception e) {
 						close();
-						throw new RuntimeException(ExceptionUtil.getMessage(e));
+						throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 					}
 					p = new Page<>();
 					p.setTotalRows(totalRows);
@@ -623,7 +627,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 					p = findCallable.call();
 				}catch (Exception e){
 					close();
-					throw new RuntimeException(ExceptionUtil.getMessage(e));
+					throw new RuntimeException(SqliExceptionUtil.getMessage(e));
 				}
 			}
 

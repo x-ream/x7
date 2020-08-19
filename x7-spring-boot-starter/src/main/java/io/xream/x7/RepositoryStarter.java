@@ -16,10 +16,11 @@
  */
 package io.xream.x7;
 
+import io.xream.sqli.api.TemporaryRepository;
+import io.xream.sqli.core.cache.L2CacheResolver;
+import io.xream.sqli.core.repository.Dialect;
+import io.xream.sqli.core.repository.JdbcWrapper;
 import io.xream.x7.cache.DefaultL2CacheResolver;
-import io.xream.x7.common.cache.L2CacheResolver;
-import io.xream.x7.common.repository.Dialect;
-import io.xream.x7.common.repository.JdbcWrapper;
 import io.xream.x7.repository.*;
 import io.xream.x7.repository.cache.CacheableRepository;
 import io.xream.x7.repository.dao.*;

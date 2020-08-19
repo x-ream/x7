@@ -1,6 +1,5 @@
 package io.xream.x7.demo.controller;
 
-import io.xream.x7.common.web.ViewEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Arrays;
 import org.slf4j.Logger;

@@ -16,10 +16,10 @@
  */
 package io.xream.x7.repository.redis.id;
 
-import io.xream.x7.common.bean.*;
-import io.xream.x7.common.repository.X;
+import io.xream.sqli.api.BaseRepository;
+import io.xream.sqli.core.builder.*;
+import io.xream.sqli.core.repository.X;
 import io.xream.x7.common.util.VerifyUtil;
-import io.xream.x7.repository.BaseRepository;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
-import org.springframework.util.IdGenerator;
 
 import java.util.Arrays;
 import java.util.HashMap;
