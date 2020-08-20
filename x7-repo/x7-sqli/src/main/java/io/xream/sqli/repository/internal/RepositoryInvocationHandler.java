@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.internal;
+package io.xream.sqli.repository.internal;
 
 import io.xream.x7.common.util.LoggerProxy;
 

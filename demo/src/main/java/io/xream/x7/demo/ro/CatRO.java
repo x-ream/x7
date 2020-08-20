@@ -1,33 +1,19 @@
 package io.xream.x7.demo.ro;
 
 
-import io.xream.sqli.common.web.MapResult;
 import io.xream.x7.common.web.TokenedAndPagedRo;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-public class CatRO extends TokenedAndPagedRo implements MapResult {
+public class CatRO extends TokenedAndPagedRo  {
 
 	private String catFriendName;
-	
-	private Map<String, Object> resultKeyMap = new HashMap<String,Object>();
-	
 	
 	public String getCatFriendName() {
 		return catFriendName;
 	}
 	public void setCatFriendName(String catFriendName) {
 		this.catFriendName = catFriendName;
-	}
-	public void setResultKeyMap(Map<String, Object> resultKeyMap) {
-		this.resultKeyMap = resultKeyMap;
-	}
-
-
-	public Map<String, Object> getResultKeyMap() {
-		return resultKeyMap;
 	}
 
 	private String[] resultKeys;
@@ -44,7 +30,6 @@ public class CatRO extends TokenedAndPagedRo implements MapResult {
 	public String toString() {
 		return "CatRO{" +
 				"catFriendName='" + catFriendName + '\'' +
-				", resultKeyMap=" + resultKeyMap +
 				", resultKeys=" + Arrays.toString(resultKeys) +
 				'}';
 	}

@@ -16,6 +16,7 @@
  */
 package io.xream.x7.repository;
 
+import io.xream.sqli.repository.HealthChecker;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.context.ConfigurableApplicationContext;
 

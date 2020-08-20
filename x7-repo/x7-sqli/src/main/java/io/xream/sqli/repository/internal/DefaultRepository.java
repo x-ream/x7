@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.internal;
+package io.xream.sqli.repository.internal;
 
 
 import io.xream.sqli.api.BaseRepository;
@@ -25,11 +25,12 @@ import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.exception.PersistenceException;
+import io.xream.sqli.repository.internal.RemoveRefreshCreateBiz;
 import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.repository.HealthChecker;
-import io.xream.x7.repository.KeyOne;
-import io.xream.x7.repository.Repository;
-import io.xream.x7.repository.exception.CriteriaSyntaxException;
+import io.xream.sqli.repository.HealthChecker;
+import io.xream.sqli.repository.KeyOne;
+import io.xream.sqli.repository.Repository;
+import io.xream.sqli.repository.exception.CriteriaSyntaxException;
 import io.xream.x7.repository.id.IdGeneratorService;
 
 import java.lang.reflect.Field;

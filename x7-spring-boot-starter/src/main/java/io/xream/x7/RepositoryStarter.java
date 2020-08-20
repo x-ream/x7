@@ -16,22 +16,25 @@
  */
 package io.xream.x7;
 
+import io.xream.sqli.repository.CriteriaToSql;
+import io.xream.sqli.repository.DbType;
+import io.xream.sqli.repository.ManuRepositoryStarter;
+import io.xream.sqli.repository.Repository;
+import io.xream.sqli.repository.dao.*;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
 import io.xream.x7.cache.DefaultL2CacheResolver;
-import io.xream.x7.repository.*;
-import io.xream.x7.repository.cache.CacheableRepository;
-import io.xream.x7.repository.dao.*;
+import io.xream.sqli.repository.cache.CacheableRepository;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
-import io.xream.x7.repository.internal.DefaultTemporaryRepository;
-import io.xream.x7.repository.mapper.DefaultTemporaryTableParser;
-import io.xream.x7.repository.mapper.MapperFactory;
-import io.xream.x7.repository.transform.DataTransform;
-import io.xream.x7.repository.transform.SqlDataTransform;
+import io.xream.sqli.repository.internal.DefaultTemporaryRepository;
+import io.xream.sqli.repository.mapper.DefaultTemporaryTableParser;
+import io.xream.sqli.repository.mapper.MapperFactory;
+import io.xream.sqli.repository.transform.DataTransform;
+import io.xream.sqli.repository.transform.SqlDataTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -114,7 +117,7 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(8)
-    public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver,Environment environment){
+    public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver, Environment environment){
 
         String driverClassName = getDbDriverKey(environment);
 

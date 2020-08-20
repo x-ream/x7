@@ -17,7 +17,6 @@
 package io.xream.x7;
 
 import io.github.resilience4j.ratelimiter.configure.RateLimiterAspect;
-import io.xream.x7.repository.config.datasource.DataSourceAspect;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
