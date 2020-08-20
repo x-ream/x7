@@ -57,10 +57,10 @@ public class RepositoryStarter  {
         try {
             if (driverClassName.contains(DbType.MYSQL)) {
                 DbType.value = DbType.MYSQL;
-                dialect = (Dialect) Class.forName("io.xream.sqli.repository.dialect.MySqlDialect").newInstance();
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             } else if (driverClassName.contains(DbType.ORACLE)) {
                 DbType.value = DbType.ORACLE;
-                dialect = (Dialect) Class.forName("io.xream.sqli.repository.dialect.OracleDialect").newInstance();
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
             }
             initDialect(dialect);
         }catch (Exception e){
