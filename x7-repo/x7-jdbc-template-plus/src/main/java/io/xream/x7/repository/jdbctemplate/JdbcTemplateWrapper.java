@@ -18,7 +18,8 @@ package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
-import io.xream.sqli.common.util.BeanMapUtil;
+
+import io.xream.sqli.common.util.JsonStyleMapUtil;
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.Parsed;
 import io.xream.sqli.core.builder.Parser;
@@ -179,7 +180,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             return propertyMapList;
 
         if (!propertyMapList.isEmpty())
-            return BeanMapUtil.toJsonableMapList(propertyMapList);
+            return JsonStyleMapUtil.toJsonableMapList(propertyMapList);
 
         return propertyMapList;
     }
@@ -248,7 +249,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
                 Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, resultMappedCriteria, dialect);
 
                 if(!resultMappedCriteria.isResultWithDottedKey()){
-                    objectMap = BeanMapUtil.toJsonableMap(objectMap);
+                    objectMap = JsonStyleMapUtil.toJsonableMap(objectMap);
                 }
                 t = (T) objectMap;
             }

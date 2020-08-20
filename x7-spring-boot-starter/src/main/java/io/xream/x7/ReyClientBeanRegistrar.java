@@ -16,7 +16,8 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.common.util.ClassFileReader;
+
+import io.xream.x7.common.util.ClassFileReader;
 import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.internal.ClientParser;
 import io.xream.x7.reyc.internal.HttpClientProxy;

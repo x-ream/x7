@@ -18,7 +18,7 @@ package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.common.util.BeanUtil;
-import io.xream.sqli.common.util.SqliExceptionUtil;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.sqli.core.builder.*;
 import io.xream.x7.common.util.JsonX;
 import io.xream.x7.common.util.LoggerProxy;
@@ -128,7 +128,7 @@ public class DataObjectConverter {
         } catch (Exception e) {
             if (e instanceof RuntimeException)
                 throw (RuntimeException) e;
-            throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+            throw new RuntimeException(ExceptionUtil.getMessage(e));
         }
 
         return list;

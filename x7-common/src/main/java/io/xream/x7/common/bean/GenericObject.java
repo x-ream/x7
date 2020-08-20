@@ -17,8 +17,8 @@
 package io.xream.x7.common.bean;
 
 
-import io.xream.sqli.common.util.JsonWrapper;
-import io.xream.sqli.common.util.SqliExceptionUtil;
+import io.xream.x7.common.util.JsonX;
+import io.xream.x7.common.util.ExceptionUtil;
 
 public class GenericObject<T> {
 
@@ -57,9 +57,9 @@ public class GenericObject<T> {
 			throw new RuntimeException("clzz is null");
 		try {
 			Class<T> clz = (Class<T>)Class.forName(this.clzz);
-			return JsonWrapper.toObject(this.obj,clz);
+			return JsonX.toObject(this.obj,clz);
 		}catch (Exception e) {
-			throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+			throw new RuntimeException(ExceptionUtil.getMessage(e));
 		}
 
 	}

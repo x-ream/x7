@@ -17,7 +17,7 @@
 package io.xream.x7.cache;
 
 
-import io.xream.sqli.common.util.SqliExceptionUtil;
+import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.sqli.core.cache.Protection;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;
@@ -64,7 +64,7 @@ public interface L3CacheResolver extends Protection {
                         return str;//锁住资源的人，等待至同步返回查询结果
                     }
                 } catch (Throwable e) {
-                    throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+                    throw new RuntimeException(ExceptionUtil.getMessage(e));
                 } finally {
                     PeriodCounter.reset(key);
                     getStorage().unLock(lockKey);
@@ -75,7 +75,7 @@ public interface L3CacheResolver extends Protection {
                     Thread.sleep(L3CacheConfig.waitTimeMills);
                 } catch (InterruptedException e) {
                     PeriodCounter.reset(key);
-                    throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+                    throw new RuntimeException(ExceptionUtil.getMessage(e));
                 }
             }
         }

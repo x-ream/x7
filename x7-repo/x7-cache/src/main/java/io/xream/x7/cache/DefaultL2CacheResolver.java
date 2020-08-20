@@ -18,7 +18,6 @@ package io.xream.x7.cache;
 
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.QueryForCache;
-import io.xream.sqli.common.util.SqliExceptionUtil;
 import io.xream.sqli.common.web.Page;
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.Parsed;
@@ -500,7 +499,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 
 			keyList = new ArrayList<>();
@@ -551,7 +550,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 			set(clz, conditionObj, obj);
 		}
@@ -575,7 +574,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+				throw new RuntimeException(ExceptionUtil.getMessage(e));
 			}
 			setOne(clz, conditionObj, obj);
 		}
@@ -604,7 +603,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						p = findCallable.call();
 					}catch (Exception e){
 						close();
-						throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+						throw new RuntimeException(ExceptionUtil.getMessage(e));
 					}
 
 					setTotalRows(clz, totalRowsString, p.getTotalRows());
@@ -615,7 +614,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						list = listCallable.call();
 					} catch (Exception e) {
 						close();
-						throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+						throw new RuntimeException(ExceptionUtil.getMessage(e));
 					}
 					p = new Page<>();
 					p.setTotalRows(totalRows);
@@ -628,7 +627,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 					p = findCallable.call();
 				}catch (Exception e){
 					close();
-					throw new RuntimeException(SqliExceptionUtil.getMessage(e));
+					throw new RuntimeException(ExceptionUtil.getMessage(e));
 				}
 			}
 
