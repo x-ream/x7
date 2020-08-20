@@ -20,9 +20,9 @@ import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.core.cache.L2CacheStorage;
-import io.xream.sqli.repository.BootListener;
-import io.xream.sqli.repository.CriteriaToSql;
-import io.xream.sqli.repository.Repository;
+import io.xream.sqli.starter.SqliListener;
+import io.xream.sqli.repository.api.CriteriaToSql;
+import io.xream.sqli.repository.api.Repository;
 import io.xream.sqli.repository.cache.CacheableRepository;
 import io.xream.sqli.repository.dao.Dao;
 import io.xream.sqli.repository.dao.DaoImpl;
@@ -73,7 +73,7 @@ public class RepositoryListener implements
 
         customizeDataTransform(applicationStartedEvent);
 
-        BootListener.onStarted();
+        SqliListener.onStarted();
 
         IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
