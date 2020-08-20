@@ -23,6 +23,12 @@
 
 		<dependency>
 			<groupId>io.xream.sqli</groupId>
+			<artifactId>sqli-common</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.xream.sqli</groupId>
 			<artifactId>sqli-core</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
@@ -30,6 +36,12 @@
 		<dependency>
 			<groupId>io.xream.sqli</groupId>
 			<artifactId>sqli-repo</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.xream.sqli</groupId>
+			<artifactId>sqli-dialect</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
 

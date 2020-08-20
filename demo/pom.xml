@@ -194,7 +194,7 @@
 
                 </executions>
                 <configuration>
-                    <mainClass>io.xream.x7.App</mainClass>
+                    <mainClass>x7.App</mainClass>
                 </configuration>
             </plugin>
 

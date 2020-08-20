@@ -16,7 +16,7 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.config.JacksonConfig;
+import x7.config.JacksonConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

@@ -14,34 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository;
+package x7.config;
 
-import io.xream.sqli.api.RepositoryManagement;
-import io.xream.x7.repository.id.IdGeneratorPolicy;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
-
-public class IdGeneratorBootListener {
-
-    public static void onStarted(ConfigurableApplicationContext applicationContext) {
-
-        IdGeneratorPolicy idGeneratorPolicy = null;
-        try {
-            idGeneratorPolicy = applicationContext.getBean(IdGeneratorPolicy.class);
-        } catch (Exception e) {
-
-        }
+import java.io.IOException;
+import java.util.Date;
 
 
-        try {
-            Thread.sleep(1000);
-            if (idGeneratorPolicy != null) {
-                idGeneratorPolicy.onStart(RepositoryManagement.REPOSITORY_LIST);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+public class DateToLongSerializer extends JsonSerializer<Date> {
+    @Override
+    public void serialize(Date date, JsonGenerator jsonGenerator,
+                          SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeNumber(date.getTime() );
     }
-    
+
 }
