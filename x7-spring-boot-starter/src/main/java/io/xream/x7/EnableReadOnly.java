@@ -16,8 +16,8 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.sqli.repository.config.datasource.DataSourceAspect;
 import org.springframework.context.annotation.Import;
-import io.xream.sqli.repository.config.datasource.DataSourceAspect;
 
 import java.lang.annotation.*;
 

@@ -16,8 +16,8 @@
  */
 package io.xream.x7.common.web;
 
-import org.springframework.beans.factory.annotation.Value;
 import io.xream.x7.common.util.StringUtil;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;

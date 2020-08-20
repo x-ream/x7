@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.sqli.repository.config.datasource;
+package io.xream.x7.sqli.repository.config.datasource;
 
 public class DataSourceContextHolder {
 

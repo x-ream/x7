@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.sqli.repository.internal;
+package io.xream.x7.sqli.repository.proxy;
 
-import io.xream.x7.common.util.LoggerProxy;
 import io.xream.sqli.repository.Repository;
+import io.xream.sqli.repository.internal.DefaultRepository;
+import io.xream.x7.common.util.LoggerProxy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
@@ -46,7 +47,7 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public RepositoryProxy(){
     }
 
-    @Override
+
     public void setIdGeneratorService(IdGeneratorService service){
         super.setIdGeneratorService(service);
     }

@@ -3,6 +3,7 @@ package io.xream.x7.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.xream.x7.EnableX7L3Caching;
 import io.xream.x7.cache.L3CacheStorage;
 import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.repository.redis.cache.DefaultL3CacheStorage;
@@ -14,7 +15,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import io.xream.x7.EnableX7L3Caching;
 
 
 @Configuration

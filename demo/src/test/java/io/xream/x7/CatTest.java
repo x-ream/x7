@@ -1,13 +1,13 @@
 package io.xream.x7;
 
+import io.xream.sqli.core.builder.CriteriaBuilder;
+import io.xream.sqli.core.builder.condition.InCondition;
+import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.demo.CatRepository;
 import io.xream.x7.demo.bean.Cat;
 import io.xream.x7.demo.controller.CatEggController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.xream.sqli.core.builder.CriteriaBuilder;
-import io.xream.sqli.core.builder.condition.InCondition;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,8 @@
 package io.xream.x7.demo.bean;
 
+import io.xream.sqli.annotation.X;
 import io.xream.x7.common.web.IdView;
 import org.apache.commons.collections.MapUtils;
-import io.xream.sqli.annotation.X;
-
 
 import java.io.Serializable;
 import java.util.Date;

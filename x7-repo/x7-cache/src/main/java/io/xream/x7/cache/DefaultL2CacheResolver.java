@@ -16,6 +16,7 @@
  */
 package io.xream.x7.cache;
 
+import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.QueryForCache;
 import io.xream.sqli.common.util.SqliExceptionUtil;
 import io.xream.sqli.common.web.Page;
@@ -26,7 +27,6 @@ import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.cache.L2CacheConsistency;
 import io.xream.sqli.core.cache.L2CacheResolver;
 import io.xream.sqli.core.cache.L2CacheStorage;
-import io.xream.sqli.annotation.X;
 import io.xream.sqli.util.BeanUtilX;
 import io.xream.x7.common.util.ExceptionUtil;
 import io.xream.x7.common.util.JsonX;

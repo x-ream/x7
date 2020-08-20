@@ -17,10 +17,10 @@
 package io.xream.x7.common.web;
 
 
-import io.xream.sqli.common.util.SqlStringUtil;
 import io.xream.sqli.common.web.Direction;
 import io.xream.sqli.common.web.Paged;
 import io.xream.sqli.common.web.Sort;
+import io.xream.x7.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class PagedRo implements Paged {
 	public List<Sort> getSortList() {
 		if (sortList != null && !sortList.isEmpty())
 			return sortList;
-		if (SqlStringUtil.isNotNull(orderBy)){
+		if (StringUtil.isNotNull(orderBy)){
 			if(sortList == null){
 				sortList = new ArrayList<>();
 			}

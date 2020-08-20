@@ -4,7 +4,6 @@ import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.RowHandler;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.x7.demo.bean.Cat;
-import io.xream.x7.fallback.FallbackOnly;
 
 import java.util.Map;
 

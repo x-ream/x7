@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.sqli.repository.config.datasource;
+package io.xream.x7.sqli.repository.config.datasource;
 
 import io.xream.x7.common.util.ExceptionUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -32,7 +32,7 @@ public class DataSourceAspect implements Ordered {
         return 0;
     }
 
-    @Pointcut("@annotation(io.xream.sqli.repository.config.datasource.ReadOnly))")
+    @Pointcut("@annotation(io.xream.x7.sqli.repository.config.datasource.ReadOnly))")
     public void cut() {
 
     }

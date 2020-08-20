@@ -16,11 +16,10 @@
  */
 package io.xream.x7.common.web;
 
-import io.xream.sqli.common.util.SqlStringUtil;
 import io.xream.sqli.common.web.Direction;
 import io.xream.sqli.common.web.Paged;
 import io.xream.sqli.common.web.Sort;
-
+import io.xream.x7.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 	private Direction direction;
 	private List<Sort> sortList;
 	public long getPassportId() {
-		if (SqlStringUtil.isNullOrEmpty(passportId))
+		if (StringUtil.isNullOrEmpty(passportId))
 			return 0;
 		return Long.valueOf(passportId);
 	}
@@ -95,7 +94,7 @@ public class TokenedAndPagedRo implements Paged, Tokened{
 	public List<Sort> getSortList() {
 		if (sortList != null && !sortList.isEmpty())
 			return sortList;
-		if (SqlStringUtil.isNotNull(orderBy)){
+		if (StringUtil.isNotNull(orderBy)){
 			if(sortList == null){
 				sortList = new ArrayList<>();
 			}

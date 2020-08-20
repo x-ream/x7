@@ -1,6 +1,8 @@
 package io.xream.x7.config;
 
 
+import io.xream.x7.sqli.repository.config.datasource.DataSourceContextHolder;
+import io.xream.x7.sqli.repository.config.datasource.DataSourceType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.transaction.PlatformTransactionManagerCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,8 +12,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import io.xream.sqli.repository.config.datasource.DataSourceContextHolder;
-import io.xream.sqli.repository.config.datasource.DataSourceType;
 
 import javax.sql.DataSource;
 import java.util.HashMap;

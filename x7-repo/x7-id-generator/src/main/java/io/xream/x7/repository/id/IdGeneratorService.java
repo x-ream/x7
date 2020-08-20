@@ -1,8 +1,9 @@
 package io.xream.x7.repository.id;
 
 
-public interface IdGeneratorService {
+import io.xream.sqli.api.IdGenerator;
+
+public interface IdGeneratorService extends IdGenerator {
     void setIdGeneratorPolicy(IdGeneratorPolicy policy);
-    long createId(String clzName);
     IdGeneratorPolicy getIdGeneratorPolicy();
 }
