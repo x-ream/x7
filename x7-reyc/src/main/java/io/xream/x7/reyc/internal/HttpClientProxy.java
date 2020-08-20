@@ -22,6 +22,9 @@ import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * @Author Sim
+ */
 public class HttpClientProxy implements FactoryBean {
 
     private Class<?> objectType;

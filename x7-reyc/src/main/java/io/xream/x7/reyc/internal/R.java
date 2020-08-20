@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @Author Sim
+ */
 public class R {
     private String url;
     private Class<?> returnType;

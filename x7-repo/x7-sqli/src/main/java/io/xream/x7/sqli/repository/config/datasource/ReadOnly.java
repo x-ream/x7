@@ -18,6 +18,9 @@ package io.xream.x7.sqli.repository.config.datasource;
 
 import java.lang.annotation.*;
 
+/**
+ * @Author Sim
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Documented

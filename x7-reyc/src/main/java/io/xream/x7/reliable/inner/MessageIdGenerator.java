@@ -18,6 +18,9 @@ package io.xream.x7.reliable.inner;
 
 import java.util.UUID;
 
+/**
+ * @Author Sim
+ */
 public class MessageIdGenerator {
 
     protected static String get(){

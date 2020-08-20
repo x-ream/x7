@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
+/**
+ * @Author Sim
+ */
 public class MethodParsed {
 
     private String requestMapping;

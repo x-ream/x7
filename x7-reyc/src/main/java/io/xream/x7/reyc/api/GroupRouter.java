@@ -18,6 +18,7 @@ package io.xream.x7.reyc.api;
 
 /**
  * route to service grouped, like k8s namespace with suffix of sharding key
+ * @Author Sim
  */
 public interface GroupRouter {
     String replaceHolder();

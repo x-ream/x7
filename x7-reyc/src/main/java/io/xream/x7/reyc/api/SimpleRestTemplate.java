@@ -20,6 +20,9 @@ import io.xream.x7.common.bean.KV;
 
 import java.util.List;
 
+/**
+ * @Author Sim
+ */
 public interface SimpleRestTemplate {
 
 

@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @Author Sim
+ */
 public class ClientParser {
 
     private static Logger logger = LoggerFactory.getLogger(ClientParser.class);

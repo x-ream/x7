@@ -22,6 +22,9 @@ import io.xream.sqli.api.IdGenerator;
 
 import java.util.List;
 
+/**
+ * @Author Sim
+ */
 public interface IdGeneratorPolicy extends IdGenerator {
 
     String ID_MAP_KEY = "ID_MAP_KEY";

@@ -32,6 +32,8 @@ import java.lang.annotation.Target;
  * 1. create orderBean: (useTcc=true) or (retryMax=0,useTcc=false,async=false)
  * 2. pay:  preparing(retryMax=0,useTcc=false,async=false), paid callback(retryMax=3,async=true)
  * 3. logistics warehousing: (retryMax=3), and client ui vision compensation
+ *
+ * @Author Sim
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})

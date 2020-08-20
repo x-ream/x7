@@ -23,6 +23,9 @@ import io.xream.x7.common.util.LoggerProxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * @Author Sim
+ */
 public class HttpClientInvocationHandler implements InvocationHandler {
 
     private HttpClientProxy httpClientProxy;

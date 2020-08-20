@@ -16,6 +16,9 @@
  */
 package io.xream.x7.reyc;
 
+/**
+ * @Author Sim
+ */
 public interface Url {
 
     String value();

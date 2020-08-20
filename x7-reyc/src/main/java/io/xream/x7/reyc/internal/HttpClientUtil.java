@@ -36,6 +36,9 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 
+/**
+ * @Author Sim
+ */
 public class HttpClientUtil {
 
 

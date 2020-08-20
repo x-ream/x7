@@ -18,6 +18,9 @@ package io.xream.x7.reyc.api;
 
 import io.xream.x7.common.bean.KV;
 
+/**
+ * @Author Sim
+ */
 public interface HeaderInterceptor {
 
     KV apply(SimpleRestTemplate template);

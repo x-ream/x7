@@ -18,6 +18,9 @@ package io.xream.x7.repository.id.customizer;
 
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 
+/**
+ * @Author Sim
+ */
 public interface IdGeneratorPolicyCustomizer {
 
     IdGeneratorPolicy customize();

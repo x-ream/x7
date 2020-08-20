@@ -27,6 +27,9 @@ import org.apache.http.impl.client.HttpClients;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Sim
+ */
 public class DefaultRestTemplate implements SimpleRestTemplate {
 
     private BraveHttpRequestInterceptor requestInterceptor;

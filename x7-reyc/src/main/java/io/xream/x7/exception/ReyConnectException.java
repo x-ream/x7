@@ -16,6 +16,9 @@
  */
 package io.xream.x7.exception;
 
+/**
+ * @Author Sim
+ */
 public class ReyConnectException extends RuntimeException {
 
     public ReyConnectException(String message){

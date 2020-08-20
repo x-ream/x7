@@ -18,6 +18,9 @@ package io.xream.x7.reyc.api.custom;
 
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 
+/**
+ * @Author Sim
+ */
 public interface RestTemplateCustomizer {
 
     SimpleRestTemplate customize();

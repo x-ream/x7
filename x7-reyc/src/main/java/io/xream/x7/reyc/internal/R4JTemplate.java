@@ -41,6 +41,8 @@ import java.util.function.Supplier;
  *  wrapped resilience4j: Retry,CircuitBreaker</br>
  *  Retry>CircuitBreaker>RateLimiter>Bulkhead  </br>
  *  but connection problem will retry immediately
+ *
+ * @Author Sim
  */
 public class R4JTemplate implements ReyTemplate {
 

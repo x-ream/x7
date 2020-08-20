@@ -21,6 +21,9 @@ import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.context.ConfigurableApplicationContext;
 
 
+/**
+ * @Author Sim
+ */
 public class IdGeneratorBootListener {
 
     public static void onStarted(ConfigurableApplicationContext applicationContext) {

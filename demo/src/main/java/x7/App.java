@@ -7,11 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-/**
- *
- * Demo
- *
- */
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableReadOnly
@@ -25,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableFallbackOnly
 @EnableCorsConfig("${access.domain}")
 @EnableRateLimiter
+
 public class App {
 
     public static void main( String[] args )
