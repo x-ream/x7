@@ -16,7 +16,7 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.base.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

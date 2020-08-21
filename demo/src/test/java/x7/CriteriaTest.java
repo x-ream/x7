@@ -2,7 +2,7 @@ package x7;
 
 import io.xream.sqli.core.builder.Criteria;
 import io.xream.sqli.core.builder.X;
-import io.xream.x7.common.util.JsonX;
+import io.xream.x7.base.util.JsonX;
 
 public class CriteriaTest {
     public static void main(String[] args) {

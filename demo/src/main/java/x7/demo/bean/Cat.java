@@ -26,7 +26,6 @@ public class Cat implements Serializable {
 	private Date createAt;
 	private TestBoo testBoo;
 	private List<String> testList;
-	private Dark testObj;
 
 
 	private transient Map<Object,Object> viewMap;
@@ -118,13 +117,6 @@ public class Cat implements Serializable {
 		this.testList = testList;
 	}
 
-	public Dark getTestObj() {
-		return testObj;
-	}
-
-	public void setTestObj(Dark testObj) {
-		this.testObj = testObj;
-	}
 
 
 	@Override
@@ -139,7 +131,6 @@ public class Cat implements Serializable {
 				", createAt=" + createAt +
 				", testBoo=" + testBoo +
 				", testList=" + testList +
-				", testObj=" + testObj +
 				", viewMap=" + viewMap +
 				'}';
 	}

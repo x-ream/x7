@@ -18,10 +18,10 @@ package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.common.util.BeanUtil;
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.sqli.core.builder.*;
-import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.base.util.JsonX;
+import io.xream.x7.base.util.LoggerProxy;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;

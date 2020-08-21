@@ -44,7 +44,11 @@
 			<artifactId>sqli-dialect</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-
+		<dependency>
+			<groupId>io.xream.x7</groupId>
+			<artifactId>x7-base</artifactId>
+			<version>2.4.0.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-id-generator</artifactId>

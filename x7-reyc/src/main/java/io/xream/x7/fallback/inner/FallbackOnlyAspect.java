@@ -16,7 +16,7 @@
  */
 package io.xream.x7.fallback.inner;
 
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.fallback.FallbackOnly;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;

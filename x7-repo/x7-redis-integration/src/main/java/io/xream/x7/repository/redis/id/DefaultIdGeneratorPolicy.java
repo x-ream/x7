@@ -19,7 +19,7 @@ package io.xream.x7.repository.redis.id;
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.BaseRepository;
 import io.xream.sqli.core.builder.*;
-import io.xream.x7.common.util.VerifyUtil;
+import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

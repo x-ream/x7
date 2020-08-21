@@ -3,7 +3,7 @@ package x7;
 import io.xream.sqli.core.builder.CriteriaBuilder;
 import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
-import x7.demo.CatRepository;
+import x7.demo.repository.CatRepository;
 import x7.demo.bean.Cat;
 import x7.demo.controller.CatEggController;
 import org.springframework.beans.factory.annotation.Autowired;

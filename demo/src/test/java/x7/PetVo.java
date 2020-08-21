@@ -1,12 +1,11 @@
 package x7;
 
-import io.xream.x7.common.web.IdView;
 import x7.demo.bean.Cat;
 
 import java.util.List;
 import java.util.Map;
 
-public class PetVo implements IdView {
+public class PetVo  {
 
     private Cat cat;
     private List<Cat> catList;
@@ -27,9 +26,4 @@ public class PetVo implements IdView {
         this.catList = catList;
     }
 
-
-    @Override
-    public void transform(Map<Object, Object> viewMap) {
-
-    }
 }

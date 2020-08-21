@@ -16,7 +16,7 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.common.bean.KV;
+import io.xream.x7.base.KV;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;

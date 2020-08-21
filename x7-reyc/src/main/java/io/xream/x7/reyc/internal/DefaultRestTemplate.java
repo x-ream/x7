@@ -18,7 +18,7 @@ package io.xream.x7.reyc.internal;
 
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
-import io.xream.x7.common.bean.KV;
+import io.xream.x7.base.KV;
 import io.xream.x7.reyc.api.HeaderInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;

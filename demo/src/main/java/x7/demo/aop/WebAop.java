@@ -1,7 +1,7 @@
 package x7.demo.aop;
 
 
-import io.xream.x7.common.util.ExceptionUtil;
+import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.common.web.ViewEntity;
 import x7.util.TimeUtil;
 import org.aspectj.lang.ProceedingJoinPoint;

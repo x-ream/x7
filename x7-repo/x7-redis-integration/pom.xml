@@ -13,11 +13,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>io.xream.x7</groupId>
-            <artifactId>x7-common</artifactId>
-            <version>${x7.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>io.xream.x7</groupId>

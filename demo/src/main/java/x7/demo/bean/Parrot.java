@@ -1,15 +1,12 @@
 package x7.demo.bean;
 
 import io.xream.sqli.annotation.X;
-import io.xream.x7.common.web.IdView;
-import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-public class Parrot implements Serializable, IdView {
+public class Parrot implements Serializable{
 
     private static final long serialVersionUID = 5708147778967785698L;
 
@@ -22,18 +19,7 @@ public class Parrot implements Serializable, IdView {
     private Date createAt;
     private TestBoo testBoo;
     private List<String> testList;
-    private Dark testObj;
 
-    private transient Map<Object,Object> viewMap;
-    @Override
-    public void transform(Map<Object,Object> viewMap) {
-        this.viewMap = viewMap;
-    }
-
-    public String getName(){
-        return MapUtils.getString(viewMap,""+id);
-
-    }
 
     public Long getId() {
         return id;
@@ -92,14 +78,6 @@ public class Parrot implements Serializable, IdView {
         this.testList = testList;
     }
 
-    public Dark getTestObj() {
-        return testObj;
-    }
-
-    public void setTestObj(Dark testObj) {
-        this.testObj = testObj;
-    }
-
     @Override
     public String toString() {
         return "Cat{" +
@@ -110,8 +88,6 @@ public class Parrot implements Serializable, IdView {
                 ", createAt=" + createAt +
                 ", testBoo=" + testBoo +
                 ", testList=" + testList +
-                ", testObj=" + testObj +
-                ", viewMap=" + viewMap +
                 '}';
     }
 }

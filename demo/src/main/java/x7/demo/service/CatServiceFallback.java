@@ -1,7 +1,7 @@
 package x7.demo.service;
 
 import io.xream.sqli.core.builder.condition.RefreshCondition;
-import io.xream.x7.common.util.JsonX;
+import io.xream.x7.base.util.JsonX;
 import x7.demo.bean.Cat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

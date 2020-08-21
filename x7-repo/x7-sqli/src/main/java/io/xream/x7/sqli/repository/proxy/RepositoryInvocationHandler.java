@@ -16,7 +16,7 @@
  */
 package io.xream.x7.sqli.repository.proxy;
 
-import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.base.util.LoggerProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

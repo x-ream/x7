@@ -1,16 +1,17 @@
 package x7.demo.controller;
 
 
-import io.xream.sqli.common.web.Page;
+import io.xream.sqli.page.Page;
 import io.xream.sqli.core.builder.*;
 import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.sqli.core.builder.condition.RefreshCondition;
 import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
 import io.xream.x7.common.cache.CacheableL3;
-import io.xream.x7.common.util.JsonX;
+import io.xream.x7.base.util.JsonX;
 import io.xream.x7.common.web.ViewEntity;
 import x7.demo.*;
 import x7.demo.bean.*;
+import x7.demo.repository.*;
 import x7.demo.ro.CatRO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static io.xream.sqli.common.web.Direction.DESC;
 import static io.xream.sqli.core.builder.JoinType.INNER_JOIN;
 import static io.xream.sqli.core.builder.Op.GT;
 import static io.xream.sqli.core.builder.ReduceType.COUNT_DISTINCT;
 import static io.xream.sqli.core.builder.ReduceType.SUM;
-
+import static io.xream.sqli.page.Direction.DESC;
 
 
 @RestController
@@ -109,15 +109,11 @@ public class XxxController {
     @RequestMapping("/refreshByCondition")
     public ViewEntity refreshByCondition() {
 
-        Dark dark = new Dark();
-        dark.setTest("REFRESHED");
-        dark.setId("666");
 
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
                         .refresh("testBoo", "TEST")
                         .refresh("testList", Arrays.asList("8989","2222"))
-                        .refresh("testObj", dark)
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)

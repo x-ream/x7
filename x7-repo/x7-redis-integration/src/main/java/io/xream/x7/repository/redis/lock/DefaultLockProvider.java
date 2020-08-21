@@ -16,8 +16,8 @@
  */
 package io.xream.x7.repository.redis.lock;
 
-import io.xream.x7.common.util.ExceptionUtil;
-import io.xream.x7.common.util.VerifyUtil;
+import io.xream.x7.base.util.ExceptionUtil;
+import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import org.slf4j.Logger;

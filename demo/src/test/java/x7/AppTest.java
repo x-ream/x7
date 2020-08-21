@@ -17,8 +17,6 @@ public class AppTest {
     @Autowired
     private CatTest catTest;
 
-    @Autowired
-    private DarkRepositoryTest darkRepositoryTest;
 
 //    private Executor executor = Executors.newFixedThreadPool(11);
 

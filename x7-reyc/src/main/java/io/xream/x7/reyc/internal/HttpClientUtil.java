@@ -16,10 +16,10 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.common.bean.KV;
-import io.xream.x7.common.util.ExceptionUtil;
-import io.xream.x7.common.util.JsonX;
-import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.base.KV;
+import io.xream.x7.base.util.ExceptionUtil;
+import io.xream.x7.base.util.JsonX;
+import io.xream.x7.base.util.LoggerProxy;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;

@@ -16,9 +16,9 @@
  */
 package io.xream.x7.reliable.inner;
 
-import io.xream.x7.common.util.ExceptionUtil;
-import io.xream.x7.common.util.StringUtil;
-import io.xream.x7.common.util.VerifyUtil;
+import io.xream.x7.base.util.ExceptionUtil;
+import io.xream.x7.base.util.StringUtil;
+import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.reliable.ReliableOnConsumed;
 import io.xream.x7.reliable.api.ReliableBackend;
 import org.aspectj.lang.ProceedingJoinPoint;

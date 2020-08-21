@@ -17,8 +17,8 @@
 package io.xream.x7.lock;
 
 
-import io.xream.x7.common.util.VerifyUtil;
-import io.xream.x7.exception.DistributionLockException;
+import io.xream.x7.base.util.VerifyUtil;
+import io.xream.x7.base.exception.DistributionLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

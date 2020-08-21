@@ -16,9 +16,9 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.api.BackendService;
-import io.xream.x7.common.util.ExceptionUtil;
-import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.base.api.BackendService;
+import io.xream.x7.base.util.ExceptionUtil;
+import io.xream.x7.base.util.LoggerProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

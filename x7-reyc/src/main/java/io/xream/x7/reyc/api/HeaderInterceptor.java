@@ -16,7 +16,7 @@
  */
 package io.xream.x7.reyc.api;
 
-import io.xream.x7.common.bean.KV;
+import io.xream.x7.base.KV;
 
 /**
  * @Author Sim

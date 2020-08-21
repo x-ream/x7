@@ -18,7 +18,7 @@ package io.xream.x7.sqli.repository.proxy;
 
 import io.xream.sqli.repository.api.Repository;
 import io.xream.sqli.repository.internal.DefaultRepository;
-import io.xream.x7.common.util.LoggerProxy;
+import io.xream.x7.base.util.LoggerProxy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;

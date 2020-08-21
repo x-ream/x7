@@ -1,12 +1,10 @@
 package x7.demo.controller;
 
-import io.xream.sqli.common.web.Direction;
-import io.xream.sqli.common.web.Page;
+import io.xream.sqli.page.Direction;
+import io.xream.sqli.page.Page;
 import io.xream.sqli.core.builder.*;
 import io.xream.sqli.core.builder.condition.InCondition;
 import io.xream.x7.common.web.ViewEntity;
-import x7.demo.OrderItemRepository;
-import x7.demo.OrderRepository;
 import x7.demo.bean.Order;
 import x7.demo.bean.OrderType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import x7.demo.repository.OrderItemRepository;
+import x7.demo.repository.OrderRepository;
 
 import java.util.Arrays;
 import java.util.List;

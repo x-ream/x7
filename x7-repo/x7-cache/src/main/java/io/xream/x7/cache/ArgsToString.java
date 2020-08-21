@@ -16,7 +16,7 @@
  */
 package io.xream.x7.cache;
 
-import io.xream.x7.common.util.VerifyUtil;
+import io.xream.x7.base.util.VerifyUtil;
 
 public interface ArgsToString<T> {
 

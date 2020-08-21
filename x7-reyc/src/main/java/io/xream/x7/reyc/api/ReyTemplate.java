@@ -16,7 +16,7 @@
  */
 package io.xream.x7.reyc.api;
 
-import io.xream.x7.api.BackendService;
+import io.xream.x7.base.api.BackendService;
 
 /**
  * @Author Sim
