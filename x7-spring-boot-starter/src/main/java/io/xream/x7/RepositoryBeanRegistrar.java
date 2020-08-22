@@ -49,8 +49,8 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
 
         Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7Repository.class.getName());
 
-        Object beanWithoutBaseType = attributes.get("beanWithoutBaseType");
-        BaseTypeFilter.beanWithoutBaseType = Boolean.valueOf(String.valueOf(beanWithoutBaseType));
+        Object supported = attributes.get("baseTypeSupported");
+        BaseTypeFilter.baseTypeSupported = Boolean.valueOf(String.valueOf(supported));
 
         Object obj = attributes.get("basePackages");
         if (obj != null){

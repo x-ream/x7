@@ -29,7 +29,7 @@ public @interface EnableX7Repository {
     /**
      * Spring JdbcTemplate support baseType bean, while ORM framework not support baseType bean
      */
-    boolean beanWithoutBaseType() default false;
+    boolean baseTypeSupported() default false;
     /**
      * t_
      */
