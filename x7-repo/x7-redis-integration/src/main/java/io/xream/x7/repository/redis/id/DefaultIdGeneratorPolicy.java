@@ -18,7 +18,10 @@ package io.xream.x7.repository.redis.id;
 
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.BaseRepository;
-import io.xream.sqli.core.builder.*;
+import io.xream.sqli.builder.*;
+import io.xream.sqli.parser.BeanElement;
+import io.xream.sqli.parser.Parsed;
+import io.xream.sqli.parser.Parser;
 import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.slf4j.Logger;
@@ -88,7 +91,7 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
         };
 
         for (BaseRepository baseRepository : repositoryList) {
-            CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+            CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
             Class clzz = baseRepository.getClz();
             Parsed parsed = Parser.get(clzz);
             String key = parsed.getKey(X.KEY_ONE);
@@ -96,9 +99,9 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             if (be.clz == String.class)
                 continue;
             builder.reduce(ReduceType.MAX, be.property).paged().ignoreTotalRows();
-            Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
+            Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
 
-            List<Long> idList = baseRepository.listPlainValue(Long.class,resultMappedCriteria);
+            List<Long> idList = baseRepository.listPlainValue(Long.class,ResultMapCriteria);
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClz().getName();
 

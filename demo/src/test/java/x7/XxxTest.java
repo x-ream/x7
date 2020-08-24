@@ -4,11 +4,11 @@ package x7;
 
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.xream.sqli.page.Direction;
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.CriteriaBuilder;
-import io.xream.sqli.core.builder.ReduceType;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
-import io.xream.sqli.core.cache.L2CacheFilter;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.builder.CriteriaBuilder;
+import io.xream.sqli.builder.ReduceType;
+import io.xream.sqli.builder.RefreshCondition;
+import io.xream.sqli.cache.L2CacheFilter;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.common.web.ViewEntity;
 import x7.demo.bean.CatTest;
@@ -181,9 +181,9 @@ public class XxxTest {
 
     public ViewEntity testCriteria(){
 
-        CriteriaBuilder builder = CriteriaBuilder.build(CatTest.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(CatTest.class);
         builder.paged().sort("id", Direction.DESC).page(1).rows(10);
-        Criteria criteria = builder.get();
+        Criteria criteria = builder.build();
         return controller.testCriteria(criteria);
     }
 
@@ -292,7 +292,7 @@ public class XxxTest {
 
     public void testCriteriaRemote(){
 
-        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
         List<Object> inList = new ArrayList<>();
@@ -302,30 +302,30 @@ public class XxxTest {
         builder.and().in("type",inList);
         builder.paged().orderIn("type",inList);
 
-//		Criteria.ResultMappedCriteria criteria = builder.get();
-        Criteria criteria = builder.get();
+//		Criteria.ResultMapCriteria criteria = builder.build();
+        Criteria criteria = builder.build();
 
         this.testServiceRemote.testCriteriaRemote(criteria);
     }
     
     public void testResultMappedRemote(){
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 //        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
         builder.paged().page(1).rows(10).sort("id", Direction.DESC);
 
-        Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
+        Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
 
-        String json = JsonX.toJson(resultMappedCriteria);
+        String json = JsonX.toJson(ResultMapCriteria);
         System.out.println(json);
-        System.out.println(resultMappedCriteria.getDistinct());
-        resultMappedCriteria = JsonX.toObject(json, Criteria.ResultMappedCriteria.class);
-        System.out.println(resultMappedCriteria);
-        System.out.println(resultMappedCriteria.getDistinct());
+        System.out.println(ResultMapCriteria.getDistinct());
+        ResultMapCriteria = JsonX.toObject(json, Criteria.ResultMapCriteria.class);
+        System.out.println(ResultMapCriteria);
+        System.out.println(ResultMapCriteria.getDistinct());
 
-        this.testServiceRemote.testResultMappedRemote(resultMappedCriteria);
+        this.testServiceRemote.testResultMappedRemote(ResultMapCriteria);
 
     }
 

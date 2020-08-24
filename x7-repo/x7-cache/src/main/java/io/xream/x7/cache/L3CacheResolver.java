@@ -18,7 +18,7 @@ package io.xream.x7.cache;
 
 
 import io.xream.x7.base.util.ExceptionUtil;
-import io.xream.sqli.core.cache.Protection;
+import io.xream.sqli.cache.Protection;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.StringUtil;
 import io.xream.x7.base.exception.L3CacheException;

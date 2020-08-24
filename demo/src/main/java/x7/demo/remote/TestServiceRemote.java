@@ -1,8 +1,8 @@
 package x7.demo.remote;
 
 
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import x7.demo.bean.Cat;
 import x7.demo.ro.CatRO;
@@ -30,7 +30,7 @@ public interface TestServiceRemote {
     ViewEntity testCriteriaRemote(Criteria criteria);
 
     @RequestMapping("/remote/resultmapped/test")
-    ViewEntity testResultMappedRemote(Criteria.ResultMappedCriteria criteria);
+    ViewEntity testResultMappedRemote(Criteria.ResultMapCriteria criteria);
 
     @RequestMapping("/remote/refreshCondition/test")
     ViewEntity testRefreshConditionnRemote( RefreshCondition refreshCondition);

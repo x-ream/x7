@@ -20,10 +20,10 @@ import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
 
 import io.xream.sqli.common.util.JsonStyleMapUtil;
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.Parsed;
-import io.xream.sqli.core.builder.Parser;
-import io.xream.sqli.core.builder.RowHandler;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.parser.Parsed;
+import io.xream.sqli.parser.Parser;
+import io.xream.sqli.api.RowHandler;
 import io.xream.sqli.exception.ExceptionTranslator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,7 +173,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
+    public List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMapCriteria resultMapped, Dialect dialect) {
 
         List<Map<String, Object>> propertyMapList = queryForMapList0(sql,resultMapped,dialect,jdbcTemplate);
         if (resultMapped.isResultWithDottedKey())
@@ -185,7 +185,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
         return propertyMapList;
     }
 
-    private List<Map<String, Object>> queryForMapList0(String sql, Criteria.ResultMappedCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Criteria.ResultMapCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<Map<String,Object>> rowMapper = (resultSet, i) -> {
@@ -209,7 +209,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public <T> void queryForMapToHandle(Class clzz, String sql, Collection<Object> valueList, Dialect dialect, Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<T> handler) {
+    public <T> void queryForMapToHandle(Class clzz, String sql, Collection<Object> valueList, Dialect dialect, Criteria.ResultMapCriteria ResultMapCriteria, RowHandler<T> handler) {
 
         Parsed parsed = Parser.get(clzz);
         RowMapper<Map<String, Object>> rowMapper = new ColumnMapRowMapper();
@@ -238,7 +238,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             Map<String, Object> dataMap = rowMapper.mapRow(resultSet, 0);
 
             T t = null;
-            if (resultMappedCriteria == null) {
+            if (ResultMapCriteria == null) {
                 try {
                     t = (T) clzz.newInstance();
                     DataObjectConverter.initObj(t, dataMap, parsed.getBeanElementList(),dialect);
@@ -246,9 +246,9 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
                     throw ExceptionTranslator.onQuery(e, logger);
                 }
             } else {
-                Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, resultMappedCriteria, dialect);
+                Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, ResultMapCriteria, dialect);
 
-                if(!resultMappedCriteria.isResultWithDottedKey()){
+                if(!ResultMapCriteria.isResultWithDottedKey()){
                     objectMap = JsonStyleMapUtil.toJsonableMap(objectMap);
                 }
                 t = (T) objectMap;

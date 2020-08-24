@@ -1,8 +1,8 @@
 package x7;
 
-import io.xream.sqli.core.builder.CriteriaBuilder;
-import io.xream.sqli.core.builder.condition.InCondition;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
+import io.xream.sqli.builder.CriteriaBuilder;
+import io.xream.sqli.builder.InCondition;
+import io.xream.sqli.builder.RefreshCondition;
 import x7.demo.repository.CatRepository;
 import x7.demo.bean.Cat;
 import x7.demo.controller.CatEggController;
@@ -70,10 +70,10 @@ public class CatTest {
 
 
     public List<Cat> listByCriteria(){
-        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
         builder.and().eq("type","MMM");
 
-        List<Cat> list = this.repository.list(builder.get());
+        List<Cat> list = this.repository.list(builder.build());
 
         System.out.println(list);
 

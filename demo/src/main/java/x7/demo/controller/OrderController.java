@@ -1,9 +1,9 @@
 package x7.demo.controller;
 
+import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Direction;
 import io.xream.sqli.page.Page;
-import io.xream.sqli.core.builder.*;
-import io.xream.sqli.core.builder.condition.InCondition;
+import io.xream.sqli.builder.*;
 import io.xream.x7.common.web.ViewEntity;
 import x7.demo.bean.Order;
 import x7.demo.bean.OrderType;
@@ -46,9 +46,9 @@ public class OrderController {
     @RequestMapping("/sharding")
     public Order sharding(){
 
-        CriteriaBuilder builder = CriteriaBuilder.build(Order.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Order.class);
         builder.eq("userId", 5);
-        Order order = this.orderRepository.list(builder.get()).get(0);
+        Order order = this.orderRepository.list(builder.build()).get(0);
 
         return order;
 
@@ -57,7 +57,7 @@ public class OrderController {
     @RequestMapping("/find")
     public ViewEntity find(){
         System.out.println(profile);
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.resultWithDottedKey().distinct("o.id");
         builder.resultKeyFunction(ResultKeyAlia.of("o","at"),"YEAR(?)","o.createAt");
         builder.resultKeyFunction(ResultKeyAlia.of("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
@@ -77,7 +77,7 @@ public class OrderController {
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
 
-        Criteria.ResultMappedCriteria criteria = builder.get();
+        Criteria.ResultMapCriteria criteria = builder.build();
 
         Page<Map<String,Object>> page = this.orderRepository.find(criteria);
 
@@ -87,8 +87,8 @@ public class OrderController {
 
     @RequestMapping("/findByAlia")
     public ViewEntity findBuAlia(){
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
-        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity",Having.of(Op.LT,10));
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
+        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity", Having.of(Op.LT,10));
         builder.resultWithDottedKey();
         builder.resultKey("o.name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity",Having.of(Op.LT,10));
         builder.beginSub().eq("o.name",null).endSub();
@@ -110,7 +110,7 @@ public class OrderController {
 
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
 
-        Criteria.ResultMappedCriteria criteria = builder.get();
+        Criteria.ResultMapCriteria criteria = builder.build();
 
         Page<Map<String,Object>> page = this.orderRepository.find(criteria);
 

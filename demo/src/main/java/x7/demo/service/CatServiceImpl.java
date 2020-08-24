@@ -1,8 +1,8 @@
 package x7.demo.service;
 
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.RowHandler;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.api.RowHandler;
+import io.xream.sqli.builder.RefreshCondition;
 import x7.demo.bean.Cat;
 import io.xream.x7.fallback.FallbackOnly;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class CatServiceImpl implements CatService{
     }
 
     @Override
-    public void findToHandle(Criteria.ResultMappedCriteria resultMappedCriteria, RowHandler<Map<String, Object>> rowHandler) {
-        this.catRepository.findToHandle(resultMappedCriteria,rowHandler);
+    public void findToHandle(Criteria.ResultMapCriteria ResultMapCriteria, RowHandler<Map<String, Object>> rowHandler) {
+        this.catRepository.findToHandle(ResultMapCriteria,rowHandler);
     }
 
     @Override

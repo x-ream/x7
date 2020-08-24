@@ -18,8 +18,8 @@ package io.xream.x7;
 
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
-import io.xream.sqli.core.cache.L2CacheResolver;
-import io.xream.sqli.core.cache.L2CacheStorage;
+import io.xream.sqli.cache.L2CacheResolver;
+import io.xream.sqli.cache.L2CacheStorage;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.sqli.repository.api.CriteriaToSql;
 import io.xream.sqli.repository.api.Repository;

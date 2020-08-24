@@ -21,7 +21,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.vavr.control.Try;
-import io.xream.sqli.core.cache.L2CacheStorage;
+import io.xream.sqli.cache.L2CacheStorage;
 import io.xream.x7.base.api.BackendService;
 import io.xream.x7.base.util.ExceptionUtil;
 import org.slf4j.Logger;

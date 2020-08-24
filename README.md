@@ -1,10 +1,10 @@
 # x7
    [http://x7.xream.io](http://x7.xream.io) 
    
-[![license](https://img.shields.io/github/license/x-ream/x7.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![license](https://img.shields.io/github/license/buildingBlock-ream/x7.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![maven](https://img.shields.io/maven-central/v/io.xream.x7/x7-parent.svg)](https://search.maven.org/search?q=io.xream)
 
-   x7/x7-repo [DETAILED README](https://github.com/x-ream/x7/blob/master/x7-repo/README.md)
+   x7/x7-repo [DETAILED README](https://github.com/buildingBlock-ream/x7/blob/master/x7-repo/README.md)
 
 
 ### GLIMPSE

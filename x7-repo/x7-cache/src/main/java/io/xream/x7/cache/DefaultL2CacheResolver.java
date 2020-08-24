@@ -19,13 +19,13 @@ package io.xream.x7.cache;
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.QueryForCache;
 import io.xream.sqli.page.Page;
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.Parsed;
-import io.xream.sqli.core.builder.Parser;
-import io.xream.sqli.core.builder.condition.InCondition;
-import io.xream.sqli.core.cache.L2CacheConsistency;
-import io.xream.sqli.core.cache.L2CacheResolver;
-import io.xream.sqli.core.cache.L2CacheStorage;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.parser.Parsed;
+import io.xream.sqli.parser.Parser;
+import io.xream.sqli.builder.InCondition;
+import io.xream.sqli.cache.L2CacheConsistency;
+import io.xream.sqli.cache.L2CacheResolver;
+import io.xream.sqli.cache.L2CacheStorage;
 import io.xream.sqli.util.BeanUtilX;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.JsonX;
@@ -91,7 +91,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	private String getGroupedKey(String nsKey) {
-		return nsKey + getGroupFactor();
+		return nsKey + getFilterFactor();
 	}
 	/**
 	 * 标记缓存要更新
@@ -116,7 +116,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		String time = String.valueOf(System.nanoTime());
 		getCachestorage().set(key, time);
 
-		if (getGroupFactor() != null) {
+		if (getFilterFactor() != null) {
 			String groupedKey = getGroupedKey(key);
 			getCachestorage().set(groupedKey, time);
 		}
@@ -173,9 +173,9 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	}
 
 	private String _getNSKeyReadable(Class clz){
-		if (getGroupFactor() == null)
+		if (getFilterFactor() == null)
 			return clz.getName()+ NANO_SECOND;
-		String str = clz.getName() + NANO_SECOND + getGroupFactor();
+		String str = clz.getName() + NANO_SECOND + getFilterFactor();
 		return str;
 	}
 	
@@ -196,10 +196,10 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			ns = String.valueOf(System.nanoTime());
 			getCachestorage().set(nsKey,ns);
 		}
-		if (getGroupFactor() == null){
+		if (getFilterFactor() == null){
 			return ns;
 		}
-		return getGroupFactor() + ns;
+		return getFilterFactor() + ns;
 	}
 	
 	@SuppressWarnings("rawtypes")

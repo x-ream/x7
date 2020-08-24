@@ -1,9 +1,9 @@
 package x7.demo.controller;
 
 import io.xream.sqli.api.TemporaryRepository;
-import io.xream.sqli.core.builder.Criteria;
-import io.xream.sqli.core.builder.CriteriaBuilder;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.builder.CriteriaBuilder;
+import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
 import x7.demo.bean.Cat;
 import x7.demo.bean.CatEgg;
@@ -40,23 +40,23 @@ public class CatEggController {
 //        this.temporaryRepository.create(catEgg);
 
         //test....
-        CriteriaBuilder.ResultMappedBuilder fromBuilder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder fromBuilder = CriteriaBuilder.resultMapBuilder();
         fromBuilder.resultKey("cat.id","id");
         fromBuilder.resultKey("cat.taxType","name");
         fromBuilder.resultKey("cat.dogId","dog_id");
         fromBuilder.sourceScript("from cat");
 
-        boolean flag = this.temporaryRepository.findToCreate(CatEgg.class, fromBuilder.get());
+        boolean flag = this.temporaryRepository.findToCreate(CatEgg.class, fromBuilder.build());
 
 
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.resultWithDottedKey().resultKey("c.id").resultKey("c.type");
         builder.withoutOptimization().sourceScript("FROM cat c inner join catEgg e on e.dogId = c.id");
 
-        Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
+        Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
 
-        this.catService.findToHandle(resultMappedCriteria, map -> {
+        this.catService.findToHandle(ResultMapCriteria, map -> {
 
             Long id = MapUtils.getLong(map,"c.id");
             String catType = MapUtils.getString(map,"c.type");
@@ -79,10 +79,10 @@ public class CatEggController {
 
 
     public void testFindToHanle(){
-        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
         builder.eq("id",2);
 
-        Criteria criteria = builder.get();
+        Criteria criteria = builder.build();
 
         this.catService.findToHandleC(criteria, obj -> {
 

@@ -1,15 +1,12 @@
 package x7.demo.controller;
 
 
+import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
-import io.xream.sqli.core.builder.*;
-import io.xream.sqli.core.builder.condition.InCondition;
-import io.xream.sqli.core.builder.condition.RefreshCondition;
-import io.xream.sqli.core.builder.condition.RemoveRefreshCreate;
+import io.xream.sqli.builder.*;
 import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.common.web.ViewEntity;
-import x7.demo.*;
 import x7.demo.bean.*;
 import x7.demo.repository.*;
 import x7.demo.ro.CatRO;
@@ -21,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static io.xream.sqli.core.builder.JoinType.INNER_JOIN;
-import static io.xream.sqli.core.builder.Op.GT;
-import static io.xream.sqli.core.builder.ReduceType.COUNT_DISTINCT;
-import static io.xream.sqli.core.builder.ReduceType.SUM;
+import static io.xream.sqli.builder.JoinType.INNER_JOIN;
+import static io.xream.sqli.builder.Op.GT;
+import static io.xream.sqli.builder.ReduceType.COUNT_DISTINCT;
+import static io.xream.sqli.builder.ReduceType.SUM;
 import static io.xream.sqli.page.Direction.DESC;
 
 
@@ -131,7 +128,7 @@ public class XxxController {
     @RequestMapping("/distinct")
     public ViewEntity distinct(@RequestBody CatRO ro) {
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.resultWithDottedKey().distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
                 .reduce(COUNT_DISTINCT, "catTest.id")
@@ -140,7 +137,7 @@ public class XxxController {
 //                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
                 .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows()).sort(ro.getOrderBy(),ro.getDirection());
         String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
-        Criteria.ResultMappedCriteria resultMapped = builder.get();
+        Criteria.ResultMapCriteria resultMapped = builder.build();
         resultMapped.setSourceScript(sourceScript);
         Page<Map<String, Object>> page = repository.find(resultMapped);
 
@@ -152,7 +149,7 @@ public class XxxController {
     @RequestMapping("/listPlainValue")
     public ViewEntity testListPlainValue(@RequestBody CatRO ro) {
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("catTest.id");
         builder.beginSub().gte("dogTest.id", 1000).endSub();
 //		builder.and().in("catTest.catFriendName", inList);
@@ -163,7 +160,7 @@ public class XxxController {
         builder.sourceScript().source("catTest");
         builder.sourceScript().source("dogTest").joinType(INNER_JOIN).on("id", JoinFrom.of("catTest", "dogId"));
 
-        Criteria.ResultMappedCriteria resultMapped = builder.get();
+        Criteria.ResultMapCriteria resultMapped = builder.build();
 
         List<Long> idList = repository.listPlainValue(Long.class, resultMapped);
 
@@ -184,7 +181,7 @@ public class XxxController {
 
 //		ro.setSortList(sortList);
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
         builder.resultKey("c.dogId","c_id");
         builder.or().in("c.catFriendName", inList);
@@ -193,7 +190,7 @@ public class XxxController {
         builder.and().in("c.dogId", Arrays.asList(0));
         builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
-        Criteria.ResultMappedCriteria resultMapped = builder.get();
+        Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
 
         return ViewEntity.ok(page);
@@ -217,13 +214,13 @@ public class XxxController {
         inList.add("WHITE");
         inList.add("BLACK");
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
         builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.paged().orderIn("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.sourceScript().source("catTest").alia("c");
 
-        Criteria.ResultMappedCriteria resultMapped = builder.get();
+        Criteria.ResultMapCriteria resultMapped = builder.build();
 
         Page<Map<String, Object>> pagination = repository.find(resultMapped);
 
@@ -236,7 +233,7 @@ public class XxxController {
     public ViewEntity nonPaged(@RequestBody CatRO ro) {
 
 //		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
-        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
 
@@ -244,8 +241,8 @@ public class XxxController {
         builder.and().in("type", Arrays.asList("BL","NL"));
         builder.paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
 
-//		Criteria.ResultMappedCriteria criteria = builder.get();
-        Criteria criteria = builder.get();
+//		Criteria.ResultMapCriteria criteria = builder.build();
+        Criteria criteria = builder.build();
         Page p = catRepository.find(criteria);
 
         return ViewEntity.ok(p);
@@ -304,7 +301,7 @@ public class XxxController {
     }
 
     @RequestMapping("/remote/resultmapped/test")
-    ViewEntity testResultMappedRemote(@RequestBody Criteria.ResultMappedCriteria criteria) {
+    ViewEntity testResultMappedRemote(@RequestBody Criteria.ResultMapCriteria criteria) {
 
         System.out.println(criteria);
         Page<Map<String, Object>> page = this.catRepository.find(criteria);
@@ -315,7 +312,7 @@ public class XxxController {
     @RequestMapping("/resultmap/test")
     public ViewEntity testResultMap() {
 
-        CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped();
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder
                 .distinct("id")
                 .reduce(COUNT_DISTINCT, "dogId")
@@ -324,8 +321,8 @@ public class XxxController {
         builder.and().eq("type", "NL");
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("id", DESC);
 
-        Criteria.ResultMappedCriteria resultMappedCriteria = builder.get();
-        Page<Map<String, Object>> page = this.catRepository.find(resultMappedCriteria);
+        Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
+        Page<Map<String, Object>> page = this.catRepository.find(ResultMapCriteria);
 
         return ViewEntity.ok(page);
     }
@@ -343,7 +340,7 @@ public class XxxController {
     @RequestMapping("/listCriteria")
     public ViewEntity listCriteria() {
         //		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
-        CriteriaBuilder builder = CriteriaBuilder.build(Cat.class);
+        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");
         builder
@@ -356,8 +353,8 @@ public class XxxController {
         builder.paged().ignoreTotalRows().orderIn("testBoo",Arrays.asList("BOO"));
 
 
-//		Criteria.ResultMappedCriteria criteria = builder.get();
-        Criteria criteria = builder.get();
+//		Criteria.ResultMapCriteria criteria = builder.build();
+        Criteria criteria = builder.build();
 
         String str = JsonX.toJson(criteria);
         criteria = JsonX.toObject(str, Criteria.class);

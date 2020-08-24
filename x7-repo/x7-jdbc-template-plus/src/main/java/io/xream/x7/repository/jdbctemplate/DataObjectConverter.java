@@ -17,9 +17,12 @@
 package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
+import io.xream.sqli.builder.*;
 import io.xream.sqli.common.util.BeanUtil;
+import io.xream.sqli.parser.BeanElement;
+import io.xream.sqli.parser.Parsed;
+import io.xream.sqli.parser.Parser;
 import io.xream.x7.base.util.ExceptionUtil;
-import io.xream.sqli.core.builder.*;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.LoggerProxy;
 
@@ -34,7 +37,7 @@ import java.util.*;
  */
 public class DataObjectConverter {
 
-    public static Map<String,Object> dataToPropertyObjectMap(Class clz, Map<String,Object> dataMap, Criteria.ResultMappedCriteria resultMapped, Dialect dialect) {
+    public static Map<String,Object> dataToPropertyObjectMap(Class clz, Map<String,Object> dataMap, Criteria.ResultMapCriteria resultMapped, Dialect dialect) {
         Map<String, Object> propertyMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
             String mapper = entry.getKey();
