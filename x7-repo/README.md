@@ -129,7 +129,7 @@
             }
         
             {
-                CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.ResultMapBuilder();
+                CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
                 builder.resultKey("o.id);
                 builder.eq("o.status","PAID");
                 builder.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
@@ -181,7 +181,7 @@
         连表构建API  (ResultMapBuilder)
             25. sourceScript(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
             26. sourceScript("order").alia("o") //连表里的主表
-            27. sourceScript().source("orderItem").alia("i").joinType(JoinType.INNER_JOIN)
+            27. sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
                                               .on("orderId", JoinFrom.of("o","id")) //fluent构建连表sql
             28.               .more().[1~18] // LEFT JOIN等, 更多条件
             
