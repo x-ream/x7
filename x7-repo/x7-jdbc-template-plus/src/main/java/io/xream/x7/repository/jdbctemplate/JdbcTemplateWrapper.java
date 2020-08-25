@@ -19,7 +19,7 @@ package io.xream.x7.repository.jdbctemplate;
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
 
-import io.xream.sqli.common.util.JsonStyleMapUtil;
+import io.xream.sqli.util.JsonStyleMapUtil;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;

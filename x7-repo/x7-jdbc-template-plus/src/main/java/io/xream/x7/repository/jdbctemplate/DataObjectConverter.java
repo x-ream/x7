@@ -18,7 +18,7 @@ package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.builder.*;
-import io.xream.sqli.common.util.BeanUtil;
+import io.xream.sqli.util.BeanUtil;
 import io.xream.sqli.parser.BeanElement;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;
