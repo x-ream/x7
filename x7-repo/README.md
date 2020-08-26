@@ -130,7 +130,7 @@
         
             {
                 CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
-                builder.resultKey("o.id);
+                builder.resultKey("o.id");
                 builder.eq("o.status","PAID");
                 builder.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
                 builder.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
