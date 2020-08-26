@@ -32,6 +32,8 @@ import x7.demo.remote.OrderRemote;
 import x7.demo.remote.TestServiceRemote;
 import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
+import x7.demo.bean.OrderType;
+import x7.demo.bean.DogTest;
 
 import java.util.ArrayList;
 import java.util.Date;
