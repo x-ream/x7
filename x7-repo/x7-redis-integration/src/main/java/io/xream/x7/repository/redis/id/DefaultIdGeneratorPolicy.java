@@ -18,7 +18,9 @@ package io.xream.x7.repository.redis.id;
 
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.BaseRepository;
-import io.xream.sqli.builder.*;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.builder.CriteriaBuilder;
+import io.xream.sqli.builder.ReduceType;
 import io.xream.sqli.parser.BeanElement;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;

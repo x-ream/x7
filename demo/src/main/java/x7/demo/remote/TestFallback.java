@@ -1,7 +1,7 @@
 package x7.demo.remote;
 
-import x7.demo.ro.CatRO;
 import io.xream.x7.reyc.Url;
+import x7.demo.ro.CatRO;
 
 public class TestFallback {
 

@@ -1,12 +1,12 @@
 package x7.demo.service;
 
-import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.api.RowHandler;
+import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.RefreshCondition;
-import x7.demo.bean.Cat;
 import io.xream.x7.fallback.FallbackOnly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import x7.demo.bean.Cat;
 import x7.demo.repository.CatRepository;
 
 import java.util.Map;

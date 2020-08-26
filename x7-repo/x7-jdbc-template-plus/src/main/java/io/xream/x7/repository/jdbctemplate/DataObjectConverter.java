@@ -17,11 +17,12 @@
 package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.api.Dialect;
-import io.xream.sqli.builder.*;
-import io.xream.sqli.util.BeanUtil;
+import io.xream.sqli.builder.Criteria;
+import io.xream.sqli.builder.SqlScript;
 import io.xream.sqli.parser.BeanElement;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;
+import io.xream.sqli.util.BeanUtil;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.LoggerProxy;

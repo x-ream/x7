@@ -3,11 +3,11 @@ package x7;
 import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.InCondition;
 import io.xream.sqli.builder.RefreshCondition;
-import x7.demo.repository.CatRepository;
-import x7.demo.bean.Cat;
-import x7.demo.controller.CatEggController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import x7.demo.bean.Cat;
+import x7.demo.controller.CatEggController;
+import x7.demo.repository.CatRepository;
 
 import java.util.ArrayList;
 import java.util.List;

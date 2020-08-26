@@ -3,16 +3,18 @@ package x7.demo.controller;
 
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
-import io.xream.sqli.builder.*;
-import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.base.util.JsonX;
+import io.xream.x7.common.cache.CacheableL3;
 import io.xream.x7.common.web.ViewEntity;
-import x7.demo.bean.*;
-import x7.demo.repository.*;
-import x7.demo.ro.CatRO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import x7.demo.bean.Cat;
+import x7.demo.bean.CatTest;
+import x7.demo.bean.Pig;
+import x7.demo.bean.TestBoo;
+import x7.demo.repository.*;
+import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

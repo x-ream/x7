@@ -2,9 +2,9 @@ package x7.demo.service;
 
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.base.util.JsonX;
-import x7.demo.bean.Cat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import x7.demo.bean.Cat;
 
 public class CatServiceFallback {
 

@@ -5,13 +5,13 @@ import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.common.web.ViewEntity;
-import x7.demo.service.CatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import x7.demo.service.CatService;
 
 import java.util.concurrent.Callable;
 

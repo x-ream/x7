@@ -4,11 +4,11 @@ package x7.demo.remote;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.common.web.ViewEntity;
-import x7.demo.bean.Cat;
-import x7.demo.ro.CatRO;
 import io.xream.x7.reyc.ReyClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import x7.demo.bean.Cat;
+import x7.demo.ro.CatRO;
 
 import java.util.List;
 
