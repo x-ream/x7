@@ -18,7 +18,7 @@ package io.xream.x7.sqli.repository.proxy;
 
 import io.xream.sqli.repository.api.Repository;
 import io.xream.sqli.repository.internal.DefaultRepository;
-import io.xream.x7.base.util.LoggerProxy;
+import io.xream.sqli.util.SqliLoggerProxy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
@@ -41,7 +41,7 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public void setClz(Class<T> clz) {
         super.setClz(clz);
         super.hook();
-        LoggerProxy.put(clz, LoggerFactory.getLogger(objectType));
+        SqliLoggerProxy.put(clz, LoggerFactory.getLogger(objectType));
     }
 
     public RepositoryProxy(){

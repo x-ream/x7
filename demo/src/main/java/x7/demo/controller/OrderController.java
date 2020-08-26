@@ -87,7 +87,7 @@ public class OrderController {
     @RequestMapping("/findByAlia")
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
-        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity", Having.of(Op.LT,10));
+//        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity", Having.of(Op.LT,10));
         builder.resultWithDottedKey();
         builder.resultKey("o.name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity",Having.of(Op.LT,10));
         builder.beginSub().eq("o.name",null).endSub();

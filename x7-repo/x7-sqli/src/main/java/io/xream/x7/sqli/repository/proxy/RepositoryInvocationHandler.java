@@ -16,7 +16,8 @@
  */
 package io.xream.x7.sqli.repository.proxy;
 
-import io.xream.x7.base.util.LoggerProxy;
+
+import io.xream.sqli.util.SqliLoggerProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -43,18 +44,18 @@ public class RepositoryInvocationHandler implements InvocationHandler {
 
             Class clz = repository.getClz();
 
-            LoggerProxy.debug(clz, () -> {
+            SqliLoggerProxy.debug(clz, () -> {
                 String argStr = (args != null && args.length > 0) ? args[0].getClass().getSimpleName() : "";
                 return method.getName() + "(" +  argStr + ")";
             });
 
-            final long startTime = LoggerProxy.getTimeMills(clz);
+            final long startTime = SqliLoggerProxy.getTimeMills(clz);
 
             Object obj =  method.invoke(repository,args);
 
-            final long endTime = LoggerProxy.getTimeMills(clz);
+            final long endTime = SqliLoggerProxy.getTimeMills(clz);
 
-            LoggerProxy.debug(clz, () ->
+            SqliLoggerProxy.debug(clz, () ->
                  obj +"\n________" + method.getName() + ", cost time: "+ (endTime - startTime) + "ms"
             );
 

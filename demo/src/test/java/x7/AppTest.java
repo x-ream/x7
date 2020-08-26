@@ -23,30 +23,28 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.testFindToHandle();
-        xxxTest.testTemporaryTable();
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
-//        xxxTest.testNonPaged();
-//        xxxTest.testNonPaged();
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 
 
 //        xxxTest.inOrder();
-        xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
+//        xxxTest.testOrderFind();
+//        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-        xxxTest.testCriteria();
-        xxxTest.testCriteria();
-        xxxTest.testCriteria();
+//        xxxTest.testCriteria();
+//        xxxTest.testCriteria();
+//        xxxTest.testCriteria();
 
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 
 
 
@@ -68,13 +66,10 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-        xxxTest.testListPlainValue();
+//        xxxTest.testListPlainValue();
 
-        xxxTest.testAlia();
-        xxxTest.testAlia();
-        xxxTest.testAlia();
-        xxxTest.distinct();
-        xxxTest.distinct();
+//        xxxTest.testAlia();
+//        xxxTest.distinct();
 //
 
 //        xxxTest.testOne();
@@ -99,16 +94,16 @@ public class AppTest {
 //        xxxTest.testLock();
 
 
-        xxxTest.in();
-        xxxTest.in();
-        xxxTest.in();
-        xxxTest.get();
-        xxxTest.get();
-        xxxTest.get();
+//        xxxTest.in();
+//        xxxTest.in();
+//        xxxTest.in();
+//        xxxTest.get();
+//        xxxTest.get();
+//        xxxTest.get();
 
 //        xxxTest.removeRefreshCreate();
 //
-        xxxTest.testCacheGet();
+//        xxxTest.testCacheGet();
 //
 //        xxxTest.testFallbackOnly("test");
 //

@@ -239,6 +239,7 @@ public class XxxController {
 
 //		builder.resultKey("id").resultKey("type");
 
+        builder.and().eq("testBoo",TestBoo.TEST);
         builder.and().eq("taxType", null);
         builder.and().in("type", Arrays.asList("BL","NL"));
         builder.paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
