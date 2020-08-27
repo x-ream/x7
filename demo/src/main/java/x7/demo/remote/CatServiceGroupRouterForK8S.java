@@ -4,7 +4,7 @@ import io.xream.sqli.api.Routeable;
 import io.xream.x7.base.util.StringUtil;
 import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.reyc.api.GroupRouter;
-import x7.demo.bean.Cat;
+import x7.demo.entity.Cat;
 import x7.demo.ro.CatRO;
 
 import java.util.Objects;

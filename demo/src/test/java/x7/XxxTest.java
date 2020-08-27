@@ -21,12 +21,11 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import x7.demo.bean.CatTest;
-import x7.demo.bean.*;
+import x7.demo.entity.CatTest;
+import x7.demo.entity.*;
 import x7.demo.controller.CatEggController;
 import x7.demo.controller.OrderController;
 import x7.demo.controller.XxxController;
-import x7.demo.remote.OrderRemote;
 import x7.demo.remote.TestServiceRemote;
 import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
@@ -64,9 +63,6 @@ public class XxxTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private OrderRemote orderRemote;
 
     public  void refreshByCondition() {
         RateLimiterConfig config;

@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import x7.demo.bean.Order;
-import x7.demo.bean.OrderType;
+import x7.demo.entity.Order;
+import x7.demo.entity.OrderType;
 import x7.demo.repository.OrderItemRepository;
 import x7.demo.repository.OrderRepository;
 

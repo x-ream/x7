@@ -54,7 +54,7 @@ public class AppTest {
 //        xxxTest.testCriteriaRemote();
 
 
-        xxxTest.testResultMappedRemote();
+//        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();

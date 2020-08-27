@@ -6,7 +6,7 @@ import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.fallback.FallbackOnly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import x7.demo.bean.Cat;
+import x7.demo.entity.Cat;
 import x7.demo.repository.CatRepository;
 
 import java.util.Map;

@@ -7,7 +7,7 @@ import io.xream.x7.base.web.ViewEntity;
 import io.xream.x7.reyc.ReyClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import x7.demo.bean.Cat;
+import x7.demo.entity.Cat;
 import x7.demo.ro.CatRO;
 
 import java.util.List;

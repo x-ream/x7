@@ -1,16 +1,15 @@
-package x7.demo.bean;
+package x7.demo.entity;
 
 import io.xream.sqli.annotation.X;
 
-public class OrderItem {
+public class Order {
 
     @X.Key
     private long id;
-    private long orderId;
-    private long userId;
     private String name;
+    private long createAt;
     private OrderType type;
-    private Long quantity;
+    private long userId;
 
     public long getId() {
         return id;
@@ -18,14 +17,6 @@ public class OrderItem {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
     }
 
     public String getName() {
@@ -36,20 +27,20 @@ public class OrderItem {
         this.name = name;
     }
 
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
+    }
+
     public OrderType getType() {
         return type;
     }
 
     public void setType(OrderType type) {
         this.type = type;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
     }
 
     public long getUserId() {
@@ -62,11 +53,9 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        return "OrderItem{" +
+        return "Order{" +
                 "id=" + id +
-                ", orderId=" + orderId +
                 ", name='" + name + '\'' +
-                ", quantity='" + quantity + '\'' +
                 '}';
     }
 }

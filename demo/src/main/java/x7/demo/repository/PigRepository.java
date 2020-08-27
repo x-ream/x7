@@ -2,7 +2,7 @@ package x7.demo.repository;
 
 import io.xream.sqli.api.BaseRepository;
 import org.springframework.stereotype.Repository;
-import x7.demo.bean.Pig;
+import x7.demo.entity.Pig;
 
 @Repository
 public interface PigRepository extends BaseRepository<Pig> {

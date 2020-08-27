@@ -2,7 +2,7 @@ package x7.demo.service;
 
 import io.xream.x7.lock.Lock;
 import org.springframework.stereotype.Service;
-import x7.demo.bean.DogTest;
+import x7.demo.entity.DogTest;
 
 import java.util.concurrent.TimeUnit;
 

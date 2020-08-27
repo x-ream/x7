@@ -9,10 +9,10 @@ import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import x7.demo.bean.Cat;
-import x7.demo.bean.CatTest;
-import x7.demo.bean.Pig;
-import x7.demo.bean.TestBoo;
+import x7.demo.entity.Cat;
+import x7.demo.entity.CatTest;
+import x7.demo.entity.Pig;
+import x7.demo.entity.TestBoo;
 import x7.demo.repository.*;
 import x7.demo.ro.CatRO;
 

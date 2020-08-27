@@ -9,8 +9,8 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import x7.demo.bean.Cat;
-import x7.demo.bean.CatEgg;
+import x7.demo.entity.Cat;
+import x7.demo.entity.CatEgg;
 import x7.demo.repository.CatRepository;
 import x7.demo.service.CatService;
 

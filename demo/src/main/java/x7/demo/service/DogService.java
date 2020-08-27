@@ -1,6 +1,6 @@
 package x7.demo.service;
 
-import x7.demo.bean.DogTest;
+import x7.demo.entity.DogTest;
 
 public interface DogService {
 

@@ -1,6 +1,6 @@
 package x7;
 
-import x7.demo.bean.Cat;
+import x7.demo.entity.Cat;
 
 import java.util.List;
 

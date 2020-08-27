@@ -1,4 +1,4 @@
-package x7.demo.bean;
+package x7.demo.entity;
 
 
 import io.xream.sqli.annotation.X;
