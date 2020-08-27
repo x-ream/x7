@@ -4,8 +4,8 @@ package x7.demo.controller;
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
 import io.xream.x7.base.util.JsonX;
-import io.xream.x7.common.cache.CacheableL3;
-import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.base.cache.CacheableL3;
+import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,7 @@ import x7.demo.repository.*;
 import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -51,6 +52,14 @@ public class XxxController {
 
         return ViewEntity.ok("test_rest_ok_" + xid);
     }
+    @RequestMapping(value = "/header",method = RequestMethod.GET)
+    public ViewEntity testHeader(HttpServletResponse response) {
+
+        response.setHeader("xxxxx","test");
+
+        return ViewEntity.ok(".............");
+    }
+
 
     @RequestMapping("/get")
 //	@Transactional
@@ -322,7 +331,7 @@ public class XxxController {
                 .groupBy("id")
         ;
         builder.and().eq("type", "NL");
-        builder.paged().ignoreTotalRows().page(1).rows(10).sort("id", DESC);
+        builder.paged().page(2).rows(2).sort("id", DESC);
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
         Page<Map<String, Object>> page = this.catRepository.find(ResultMapCriteria);

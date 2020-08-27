@@ -2,7 +2,7 @@ package x7.demo.aop;
 
 
 import io.xream.x7.base.util.ExceptionUtil;
-import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.base.web.ViewEntity;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,7 +11,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
-import x7.util.TimeUtil;
+
 
 @Aspect
 //@Configuration
@@ -35,7 +35,7 @@ public class WebAop {
 
 		{
 
-			long startTime = TimeUtil.now();
+			long startTime = System.currentTimeMillis();
 
 			try {
 				Object obj = null;
@@ -49,7 +49,7 @@ public class WebAop {
 				}
 
 
-				long endTime = TimeUtil.now();
+				long endTime = System.currentTimeMillis();
 				long handledTimeMillis = endTime - startTime;
 				System.out.println("________Transaction end, cost time: " + (handledTimeMillis) + "ms");
 				if (obj instanceof ViewEntity){

@@ -4,7 +4,7 @@ import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.base.util.ExceptionUtil;
-import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.base.web.ViewEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

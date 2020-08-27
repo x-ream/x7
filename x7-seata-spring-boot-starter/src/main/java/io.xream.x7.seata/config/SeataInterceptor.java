@@ -18,17 +18,17 @@ package io.xream.x7.seata.config;
 
 import io.seata.core.context.RootContext;
 import io.xream.x7.base.KV;
-import io.xream.x7.reyc.api.HeaderInterceptor;
+import io.xream.x7.reyc.api.HeaderRequestInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 
 
-public class SeataInterceptor implements HeaderInterceptor {
+public class SeataInterceptor implements HeaderRequestInterceptor {
     @Override
-    public KV apply(SimpleRestTemplate template) {
+    public KV apply() {
 
         String xid = RootContext.getXID();
         if (xid != null && !xid.trim().equals("")) {
-            return template.header(RootContext.KEY_XID, xid);
+            return new KV(RootContext.KEY_XID, xid);
         }
         return null;
     }

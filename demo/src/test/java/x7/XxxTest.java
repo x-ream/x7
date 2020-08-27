@@ -10,7 +10,7 @@ import io.xream.sqli.builder.RefreshCondition;
 import io.xream.sqli.cache.L2CacheFilter;
 import io.xream.sqli.page.Direction;
 import io.xream.x7.base.util.JsonX;
-import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.base.web.ViewEntity;
 import io.xream.x7.fallback.FallbackOnly;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,8 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import x7.demo.bean.Cat;
 import x7.demo.bean.CatTest;
-import x7.demo.bean.Order;
-import x7.demo.bean.TestBoo;
+import x7.demo.bean.*;
 import x7.demo.controller.CatEggController;
 import x7.demo.controller.OrderController;
 import x7.demo.controller.XxxController;
@@ -32,8 +30,6 @@ import x7.demo.remote.OrderRemote;
 import x7.demo.remote.TestServiceRemote;
 import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
-import x7.demo.bean.OrderType;
-import x7.demo.bean.DogTest;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -329,8 +325,8 @@ public class XxxTest {
         System.out.println(ResultMapCriteria);
         System.out.println(ResultMapCriteria.getDistinct());
 
-        this.testServiceRemote.testResultMappedRemote(ResultMapCriteria);
-
+        ViewEntity ve = this.testServiceRemote.testResultMappedRemote(ResultMapCriteria);
+        System.out.println(ve);
     }
 
     @FallbackOnly(exceptions = {RuntimeException.class}, fallback = FallbackOnlyTest.class)

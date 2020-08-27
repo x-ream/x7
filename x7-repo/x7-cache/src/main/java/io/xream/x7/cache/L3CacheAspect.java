@@ -21,7 +21,7 @@ import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.KeyUtil;
 import io.xream.x7.base.util.StringUtil;
-import io.xream.x7.common.cache.CacheableL3;
+import io.xream.x7.base.cache.CacheableL3;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -87,7 +87,7 @@ public class L3CacheAspect {
         this.resolver = resolver;
     }
 
-    @Pointcut("@annotation(io.xream.x7.common.cache.CacheableL3))")
+    @Pointcut("@annotation(io.xream.x7.base.cache.CacheableL3))")
     public void cut() {
 
     }

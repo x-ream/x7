@@ -16,13 +16,11 @@
  */
 package io.xream.x7.reyc.api;
 
-import io.xream.x7.base.KV;
-
 /**
  * @Author Sim
  */
-public interface HeaderInterceptor {
+public interface HeaderResponseInterceptor {
 
-    KV apply(SimpleRestTemplate template);
+    String getKey();
 
 }

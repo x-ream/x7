@@ -25,6 +25,8 @@ import io.xream.x7.reyc.Url;
 import io.xream.x7.reyc.api.GroupRouter;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
+import io.xream.x7.reyc.api.SimpleResult;
+import org.apache.http.HttpResponseInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -106,7 +109,7 @@ public class HttpClientResolver {
         return r;
     }
 
-    protected static String resolve(R r, Class clz) {
+    protected static SimpleResult resolve(R r, Class clz) {
 
         RequestMethod requestMethod = r.getRequestMethod();
         Object[] args = r.getArgs();
@@ -122,7 +125,7 @@ public class HttpClientResolver {
             url = url.replace(router.replaceHolder(),router.replaceValue(arg));
         }
 
-        String result = null;
+        SimpleResult result = null;
         if (requestMethod == RequestMethod.POST) {
 
             if (args != null && args.length > 0) {
@@ -139,16 +142,13 @@ public class HttpClientResolver {
             result = restTemplate.get(clz,url,headerList);
         }
 
-        if (StringUtil.isNullOrEmpty(result))
-            return null;
-
 
         return result;
     }
 
     protected static Object toObject(Class<?> returnType, Class<?> geneType, String result) {
 
-        if (result == null)
+        if (StringUtil.isNullOrEmpty(result))
             return null;
 
         if (returnType == null || returnType == void.class) {

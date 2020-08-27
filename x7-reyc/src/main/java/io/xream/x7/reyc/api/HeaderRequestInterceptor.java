@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.base.web;
+package io.xream.x7.reyc.api;
+
+import io.xream.x7.base.KV;
 
 /**
- * Created by Sim on 2018/1/31.
+ * @Author Sim
  */
-public enum ViewStatus {
-    OK,
-    FAIL,
-    LOGOUT
-    ;
+public interface HeaderRequestInterceptor {
+
+    KV apply();
+
 }

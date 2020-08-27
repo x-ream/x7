@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.web;
+package io.xream.x7.starter.web;
 
 import io.xream.x7.EnableCorsConfig;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

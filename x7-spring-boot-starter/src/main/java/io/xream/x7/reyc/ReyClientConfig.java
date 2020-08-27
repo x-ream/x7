@@ -32,10 +32,9 @@ import org.springframework.context.annotation.Import;
 @Import({HttpProperties.class, ReyProperties.class})
 public class ReyClientConfig {
 
-
     @Bean
     public SimpleRestTemplate simpleRestTemplate(HttpProperties properies, ReyTemplate reyTemplate) {
-        SimpleRestTemplate simpleRestTemplate = new DefaultRestTemplate(properies,null,null);
+        DefaultRestTemplate simpleRestTemplate = new DefaultRestTemplate(properies,null,null);
         HttpClientResolver.init(reyTemplate, simpleRestTemplate);
         return simpleRestTemplate;
     }

@@ -20,6 +20,7 @@ import io.xream.x7.base.KV;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.LoggerProxy;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -42,7 +43,7 @@ import java.util.List;
 public class HttpClientUtil {
 
 
-    protected static String post(Class clz, String url, Object param, List<KV> hearderList, int connectTimeoutMS, int socketTimeoutMS, CloseableHttpClient httpclient) {
+    protected static String post(Class clz, String url, Object param, int connectTimeoutMS, int socketTimeoutMS, CloseableHttpClient httpclient) {
 
         HttpPost httpPost = new HttpPost(url);
 
@@ -53,12 +54,6 @@ public class HttpClientUtil {
                 .build();//设置请求和传输超时时间
 
         httpPost.setConfig(requestConfig);
-
-        if (hearderList != null) {
-            for (KV kv : hearderList) {
-                httpPost.addHeader(kv.getK(), kv.getV().toString());
-            }
-        }
 
         String json = "";
         if (param != null) {
@@ -77,8 +72,8 @@ public class HttpClientUtil {
                 if (entity != null) {
                     result = EntityUtils.toString(entity, "UTF-8");
                     LoggerProxy.info(clz,"Response: " + result);
-
                 }
+
             } finally {
                 response.close();
             }
@@ -110,7 +105,7 @@ public class HttpClientUtil {
 
 
 
-    protected static String get(Class clz, String url,  List<KV> hearderList, int connectTimeoutMS, int socketTimeoutMS, CloseableHttpClient httpclient) {
+    protected static String get(Class clz, String url, int connectTimeoutMS, int socketTimeoutMS, CloseableHttpClient httpclient) {
 
         HttpGet httpGet = new HttpGet(url);
 
@@ -119,14 +114,6 @@ public class HttpClientUtil {
                 .setConnectTimeout(connectTimeoutMS)
                 .setConnectionRequestTimeout(1000)
                 .build();//设置请求和传输超时时间
-
-        httpGet.setConfig(requestConfig);
-
-        if (hearderList != null) {
-            for (KV kv : hearderList) {
-                httpGet.addHeader(kv.getK(), kv.getV().toString());
-            }
-        }
 
 
         HttpEntity entity = null;

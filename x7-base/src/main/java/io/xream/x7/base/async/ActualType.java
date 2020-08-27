@@ -1,4 +1,4 @@
-package io.xream.x7.common.async;
+package io.xream.x7.base.async;
 
 /**
  * Created by Sim on 2018/7/18.

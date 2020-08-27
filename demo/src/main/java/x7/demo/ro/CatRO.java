@@ -1,7 +1,7 @@
 package x7.demo.ro;
 
 
-import io.xream.x7.common.web.TokenedAndPagedRo;
+import io.xream.x7.base.web.TokenedAndPagedRo;
 
 import java.util.Arrays;
 

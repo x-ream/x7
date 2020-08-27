@@ -26,11 +26,12 @@ import java.util.List;
 public interface SimpleRestTemplate {
 
 
-    void add(HeaderInterceptor headerInterceptor);
+    void add(HeaderRequestInterceptor headerRequestInterceptor);
+    void add(HeaderResponseInterceptor headerResponseInterceptor);
 
-    KV header(String key, String value);
+    SimpleResult post(Class clz, String url, Object request, List<KV> headerList);
 
-    String post(Class clz, String url, Object request, List<KV> headerList);
+    SimpleResult get(Class clz, String url, List<KV> headerList);
 
-    String get(Class clz, String url, List<KV> headerList);
+
 }

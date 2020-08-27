@@ -4,7 +4,7 @@ import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.RefreshCondition;
-import io.xream.x7.common.web.ViewEntity;
+import io.xream.x7.base.web.ViewEntity;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

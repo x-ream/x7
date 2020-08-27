@@ -1,7 +1,7 @@
 package x7.demo.bean;
 
 
-import io.xream.x7.common.web.Viewable;
+import io.xream.x7.base.web.Viewable;
 
 public enum TestBoo implements Viewable<String> {
 

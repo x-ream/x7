@@ -19,13 +19,21 @@ package io.xream.x7.reyc.internal;
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
 import io.xream.x7.base.KV;
-import io.xream.x7.reyc.api.HeaderInterceptor;
+import io.xream.x7.reyc.api.HeaderRequestInterceptor;
+import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
+import io.xream.x7.reyc.api.SimpleResult;
+import org.apache.http.*;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HttpContext;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Sim
@@ -36,9 +44,13 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
     private BraveHttpResponseInterceptor responseInterceptor;
     private HttpProperties properties;
 
-    private List<HeaderInterceptor> headerInterceptorList = new ArrayList<>();
-    public void add(HeaderInterceptor headerInterceptor) {
-        this.headerInterceptorList.add(headerInterceptor);
+    private List<HeaderRequestInterceptor> headerRequestInterceptorList = new ArrayList<>();
+    private List<HeaderResponseInterceptor> headerResponseInterceptorList = new ArrayList<>();
+    public void add(HeaderRequestInterceptor headerInterceptor) {
+        this.headerRequestInterceptorList.add(headerInterceptor);
+    }
+    public void add(HeaderResponseInterceptor headerResponseInterceptor) {
+        this.headerResponseInterceptorList.add(headerResponseInterceptor);
     }
 
     public DefaultRestTemplate(){
@@ -70,62 +82,85 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         this.responseInterceptor = responseInterceptor;
     }
 
-    public KV header(String key, String value){
-        return new KV(key, value);
+
+    @Override
+    public SimpleResult post(Class clz, String url, Object request, List<KV> headerList) {
+
+        HttpClientBuilder builder = builder();
+        if (requestInterceptor != null && responseInterceptor != null) {
+
+            builder.addInterceptorFirst(requestInterceptor)
+                    .addInterceptorFirst(responseInterceptor);
+        }
+        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> {
+            if (headerList != null) {
+                for (KV kv1 : headerList) {
+                    httpRequest.addHeader(kv1.k, String.valueOf(kv1.v));
+                }
+            }
+            for (HeaderRequestInterceptor headerInterceptor : headerRequestInterceptorList){
+                KV kv = headerInterceptor.apply();
+                httpRequest.addHeader(kv.k,String.valueOf(kv.v));
+            }
+        });
+
+        Map<String,String> responseHeaderMap = new HashMap<>();
+
+        builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
+            for (HeaderResponseInterceptor headerResponseInterceptor : headerResponseInterceptorList) {
+                Header header = httpResponse.getFirstHeader(headerResponseInterceptor.getKey());
+                responseHeaderMap.put(header.getName(),header.getValue());
+            }
+        });
+
+        CloseableHttpClient httpclient  = builder.build();
+
+        String body = HttpClientUtil.post(clz,url,request,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+
+        return new SimpleResult(body,responseHeaderMap);
     }
 
     @Override
-    public String post(Class clz, String url, Object request, List<KV> headerList) {
+    public SimpleResult get(Class clz, String url, List<KV> headerList) {
 
-        CloseableHttpClient httpclient = null;
+        HttpClientBuilder builder = builder();
         if (requestInterceptor != null && responseInterceptor != null) {
-            httpclient = httpClient(requestInterceptor, responseInterceptor);
-        } else {
-            httpclient = HttpClients.createDefault();
-        }
 
-        List<KV> tempHeaderList = new ArrayList<>();
-        for (HeaderInterceptor headerInterceptor : headerInterceptorList){
-            KV kv = headerInterceptor.apply(this);
-            tempHeaderList.add(kv);
+            builder.addInterceptorFirst(requestInterceptor)
+                    .addInterceptorFirst(responseInterceptor);
         }
+        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> {
+            if (headerList != null) {
+                for (KV kv1 : headerList) {
+                    httpRequest.addHeader(kv1.k, String.valueOf(kv1.v));
+                }
+            }
+            for (HeaderRequestInterceptor headerInterceptor : headerRequestInterceptorList){
+                KV kv = headerInterceptor.apply();
+                httpRequest.addHeader(kv.k,String.valueOf(kv.v));
+            }
+        });
 
-        if (headerList!=null && !tempHeaderList.isEmpty()) {
-            tempHeaderList.addAll(headerList);
-        }
-        String result = HttpClientUtil.post(clz,url,request,tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+        Map<String,String> responseHeaderMap = new HashMap<>();
 
-        return result;
-    }
+        builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
+            for (HeaderResponseInterceptor headerResponseInterceptor : headerResponseInterceptorList) {
+                Header header = httpResponse.getFirstHeader(headerResponseInterceptor.getKey());
+                responseHeaderMap.put(header.getName(),header.getValue());
+            }
+        });
 
-    @Override
-    public String get(Class clz, String url, List<KV> headerList) {
+        CloseableHttpClient httpclient =  builder.build();
 
-        CloseableHttpClient httpclient = null;
-        if (requestInterceptor != null && responseInterceptor != null) {
-            httpclient = httpClient(requestInterceptor, responseInterceptor);
-        } else {
-            httpclient = HttpClients.createDefault();
-        }
-        List<KV> tempHeaderList = new ArrayList<>();
-        for (HeaderInterceptor headerInterceptor : headerInterceptorList){
-            KV kv = headerInterceptor.apply(this);
-            tempHeaderList.add(kv);
-        }
+        String body = HttpClientUtil.get(clz,url, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
 
-        if (headerList!=null && !tempHeaderList.isEmpty()) {
-            tempHeaderList.addAll(headerList);
-        }
-        return HttpClientUtil.get(clz,url, tempHeaderList,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+        return new SimpleResult(body,responseHeaderMap);
     }
 
 
-    private  CloseableHttpClient httpClient(BraveHttpRequestInterceptor requestInterceptor,
-                                                 BraveHttpResponseInterceptor responseInterceptor) {
-        CloseableHttpClient httpclient = HttpClients.custom()
-                .addInterceptorFirst(requestInterceptor)
-                .addInterceptorFirst(responseInterceptor).build();
-        return httpclient;
+    private  HttpClientBuilder builder() {
+        HttpClientBuilder builder = HttpClients.custom();
+        return builder;
     }
 
 }

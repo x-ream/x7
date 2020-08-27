@@ -27,7 +27,7 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
-        xxxTest.testNonPaged();
+//        xxxTest.testNonPaged();
 
 
 //        xxxTest.inOrder();
@@ -54,7 +54,7 @@ public class AppTest {
 //        xxxTest.testCriteriaRemote();
 
 
-//        xxxTest.testResultMappedRemote();
+        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
@@ -108,7 +108,6 @@ public class AppTest {
 //        xxxTest.testFallbackOnly("test");
 //
 //        xxxTest.testTemporaryTable();
-
 
     }
 

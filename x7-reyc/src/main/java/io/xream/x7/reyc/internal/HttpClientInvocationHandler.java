@@ -17,11 +17,15 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.base.api.BackendService;
+import io.xream.x7.base.api.HttpHeaderSupport;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.LoggerProxy;
+import io.xream.x7.reyc.api.SimpleResult;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author Sim
@@ -49,14 +53,25 @@ public class HttpClientInvocationHandler implements InvocationHandler {
             R r = HttpClientResolver.r(clzz.getName(),methodName,args);
 
             if (httpClientProxy.getBackend() == null) {
-                String result = HttpClientResolver.resolve(r,clzz);
-                return HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result);
+                SimpleResult result = HttpClientResolver.resolve(r,clzz);
+                Object obj = HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result.getBody());
+                if (obj instanceof HttpHeaderSupport) {
+                    HttpHeaderSupport hds = ((HttpHeaderSupport)obj);
+                    hds.set(hds.getHeadName(),result.getHeaderMap().get(hds.getHeadName()));
+                }
+                return obj;
             }
+
+            Map<String,String> headerMap = new HashMap<>();
 
             String result = HttpClientResolver.wrap(httpClientProxy, new BackendService<String>() {
                 @Override
                 public String handle() {
-                    return HttpClientResolver.resolve(r,clzz);
+                    SimpleResult simpleResult = HttpClientResolver.resolve(r,clzz);
+                    if (simpleResult.getHeaderMap() != null){
+                        headerMap.putAll(simpleResult.getHeaderMap());
+                    }
+                    return simpleResult.getBody();
                 }
 
                 @Override
@@ -65,7 +80,12 @@ public class HttpClientInvocationHandler implements InvocationHandler {
                 }
             });
 
-            return HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result);
+            Object obj = HttpClientResolver.toObject(r.getReturnType(),r.getGeneType(),result);
+            if (obj instanceof HttpHeaderSupport) {
+                HttpHeaderSupport hds = ((HttpHeaderSupport)obj);
+                hds.set(hds.getHeadName(),headerMap.get(hds.getHeadName()));
+            }
+            return obj;
 
         } catch (RuntimeException re){
             throw re;

@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.common.web;
+package io.xream.x7.base.web;
+
+import io.xream.x7.base.api.ApiVersion;
 
 /**
  * 
@@ -23,12 +25,12 @@ package io.xream.x7.common.web;
  * @author Sim
  *
  */
-public class ViewEntity {
+public class ViewEntity implements ApiVersion {
 
 	private ViewStatus status;
 	private Object body;
+	private String version;
 	private long handledTimeMillis;
-
 
 	public void setStatus(ViewStatus status) {
 		this.status = status;
@@ -44,6 +46,20 @@ public class ViewEntity {
 
 	public Object getBody() {
 		return body;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	@Override
+	public void set(String key, String version) {
+		this.version = version;
+	}
+
+	@Override
+	public String getHeadName() {
+		return KEY;
 	}
 
 	public void setHandledTimeMillis(long handledTimeMillis) {
@@ -77,7 +93,11 @@ public class ViewEntity {
 
 	@Override
 	public String toString() {
-		return "ViewEntity [status=" + status + ", body=" + body + ", handledTimeMillis=" + handledTimeMillis + "]";
+		return "ViewEntity{" +
+				"status=" + status +
+				", body=" + body +
+				", version='" + version + '\'' +
+				", handledTimeMillis=" + handledTimeMillis +
+				'}';
 	}
-
 }

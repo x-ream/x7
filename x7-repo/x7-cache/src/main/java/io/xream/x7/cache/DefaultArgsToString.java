@@ -17,7 +17,7 @@
 package io.xream.x7.cache;
 
 import io.xream.x7.base.util.JsonX;
-import io.xream.x7.common.web.Tokened;
+import io.xream.x7.base.web.Tokened;
 
 /**
  *  Tokened
