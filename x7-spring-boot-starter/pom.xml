@@ -15,6 +15,10 @@
 		<version>2.4.0.RELEASE</version>
 	</parent>
 
+	<properties>
+		<brave.version>3.9.0</brave.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,6 +81,27 @@
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-reyc</artifactId>
 			<version>2.4.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-core</artifactId>
+			<version>${brave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-spancollector-http</artifactId>
+			<version>${brave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-web-servlet-filter</artifactId>
+			<version>${brave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-apache-http-interceptors</artifactId>
+			<version>${brave.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -16,20 +16,18 @@
  */
 package io.xream.x7.reyc.internal;
 
-import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
-import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
 import io.xream.x7.base.KV;
 import io.xream.x7.reyc.api.HeaderRequestInterceptor;
 import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import io.xream.x7.reyc.api.SimpleResult;
-import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HttpContext;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,9 +38,10 @@ import java.util.Map;
  */
 public class DefaultRestTemplate implements SimpleRestTemplate {
 
-    private BraveHttpRequestInterceptor requestInterceptor;
-    private BraveHttpResponseInterceptor responseInterceptor;
     private HttpProperties properties;
+
+    private List<HttpRequestInterceptor> httpRequestInterceptorList = new ArrayList<>();
+    private List<HttpResponseInterceptor> httpResponseInterceptorList = new ArrayList<>();
 
     private List<HeaderRequestInterceptor> headerRequestInterceptorList = new ArrayList<>();
     private List<HeaderResponseInterceptor> headerResponseInterceptorList = new ArrayList<>();
@@ -52,45 +51,50 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
     public void add(HeaderResponseInterceptor headerResponseInterceptor) {
         this.headerResponseInterceptorList.add(headerResponseInterceptor);
     }
-
-    public DefaultRestTemplate(){
+    public void add(HttpRequestInterceptor httpRequestInterceptor) {
+        this.httpRequestInterceptorList.add(httpRequestInterceptor);
+    }
+    public void add(HttpResponseInterceptor httpResponseInterceptor){
+        this.httpResponseInterceptorList.add(httpResponseInterceptor);
     }
 
     public DefaultRestTemplate(
-            HttpProperties properties,
-            BraveHttpRequestInterceptor requestInterceptor,
-            BraveHttpResponseInterceptor responseInterceptor){
+            HttpProperties properties){
         this.properties = properties;
-        this.requestInterceptor = requestInterceptor;
-        this.responseInterceptor = responseInterceptor;
     }
 
-
-    public BraveHttpRequestInterceptor getRequestInterceptor() {
-        return requestInterceptor;
-    }
-
-    public void setRequestInterceptor(BraveHttpRequestInterceptor requestInterceptor) {
-        this.requestInterceptor = requestInterceptor;
-    }
-
-    public BraveHttpResponseInterceptor getResponseInterceptor() {
-        return responseInterceptor;
-    }
-
-    public void setResponseInterceptor(BraveHttpResponseInterceptor responseInterceptor) {
-        this.responseInterceptor = responseInterceptor;
-    }
 
 
     @Override
-    public SimpleResult post(Class clz, String url, Object request, List<KV> headerList) {
+    public SimpleResult post(Class clz, String url, Object requestObject, List<KV> headerList) {
+
+        return execute(clz,url,requestObject,headerList,
+                (httpclient) -> HttpClientUtil.post(clz,url, requestObject, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
+        );
+    }
+
+    @Override
+    public SimpleResult get(Class clz, String url, List<KV> headerList) {
+        return execute(clz,url,null,headerList,
+                    (httpclient) -> HttpClientUtil.get(clz,url, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
+                );
+    }
+
+
+    private  HttpClientBuilder builder() {
+        HttpClientBuilder builder = HttpClients.custom();
+        return builder;
+    }
+
+
+    private SimpleResult execute(Class clz, String url, Object request, List<KV> headerList, Client client) {
 
         HttpClientBuilder builder = builder();
-        if (requestInterceptor != null && responseInterceptor != null) {
-
-            builder.addInterceptorFirst(requestInterceptor)
-                    .addInterceptorFirst(responseInterceptor);
+        for (HttpRequestInterceptor httpRequestInterceptor : httpRequestInterceptorList) {
+            builder.addInterceptorFirst(httpRequestInterceptor);
+        }
+        for (HttpResponseInterceptor httpResponseInterceptor : httpResponseInterceptorList) {
+            builder.addInterceptorFirst(httpResponseInterceptor);
         }
         builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> {
             if (headerList != null) {
@@ -115,52 +119,10 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
 
         CloseableHttpClient httpclient  = builder.build();
 
-        String body = HttpClientUtil.post(clz,url,request,properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
+        String body = client.execute(httpclient);
 
         return new SimpleResult(body,responseHeaderMap);
     }
 
-    @Override
-    public SimpleResult get(Class clz, String url, List<KV> headerList) {
-
-        HttpClientBuilder builder = builder();
-        if (requestInterceptor != null && responseInterceptor != null) {
-
-            builder.addInterceptorFirst(requestInterceptor)
-                    .addInterceptorFirst(responseInterceptor);
-        }
-        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> {
-            if (headerList != null) {
-                for (KV kv1 : headerList) {
-                    httpRequest.addHeader(kv1.k, String.valueOf(kv1.v));
-                }
-            }
-            for (HeaderRequestInterceptor headerInterceptor : headerRequestInterceptorList){
-                KV kv = headerInterceptor.apply();
-                httpRequest.addHeader(kv.k,String.valueOf(kv.v));
-            }
-        });
-
-        Map<String,String> responseHeaderMap = new HashMap<>();
-
-        builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
-            for (HeaderResponseInterceptor headerResponseInterceptor : headerResponseInterceptorList) {
-                Header header = httpResponse.getFirstHeader(headerResponseInterceptor.getKey());
-                responseHeaderMap.put(header.getName(),header.getValue());
-            }
-        });
-
-        CloseableHttpClient httpclient =  builder.build();
-
-        String body = HttpClientUtil.get(clz,url, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient);
-
-        return new SimpleResult(body,responseHeaderMap);
-    }
-
-
-    private  HttpClientBuilder builder() {
-        HttpClientBuilder builder = HttpClients.custom();
-        return builder;
-    }
 
 }

@@ -34,7 +34,7 @@ public class ReyClientConfig {
 
     @Bean
     public SimpleRestTemplate simpleRestTemplate(HttpProperties properies, ReyTemplate reyTemplate) {
-        DefaultRestTemplate simpleRestTemplate = new DefaultRestTemplate(properies,null,null);
+        DefaultRestTemplate simpleRestTemplate = new DefaultRestTemplate(properies);
         HttpClientResolver.init(reyTemplate, simpleRestTemplate);
         return simpleRestTemplate;
     }
@@ -44,8 +44,8 @@ public class ReyClientConfig {
     @Bean
     public ReyTracing enableReyTracing(BraveHttpRequestInterceptor req,BraveHttpResponseInterceptor rep,SimpleRestTemplate simpleRestTemplate){
 
-        ((DefaultRestTemplate) simpleRestTemplate).setRequestInterceptor(req);
-        ((DefaultRestTemplate) simpleRestTemplate).setResponseInterceptor(rep);
+        simpleRestTemplate.add(req);
+        simpleRestTemplate.add(rep);
 
         return new ReyTracing(){};
     }

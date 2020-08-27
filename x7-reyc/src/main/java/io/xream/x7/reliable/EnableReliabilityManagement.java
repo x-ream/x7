@@ -31,6 +31,4 @@ import java.lang.annotation.*;
 @Import({ReliableProducerAspect.class, ReliableOnConsumedAspect.class})
 public @interface EnableReliabilityManagement {
 
-
-
 }

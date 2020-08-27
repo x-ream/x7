@@ -17,6 +17,9 @@
 package io.xream.x7.reyc.api;
 
 import io.xream.x7.base.KV;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.util.List;
 
@@ -25,13 +28,16 @@ import java.util.List;
  */
 public interface SimpleRestTemplate {
 
-
     void add(HeaderRequestInterceptor headerRequestInterceptor);
     void add(HeaderResponseInterceptor headerResponseInterceptor);
+    void add(HttpRequestInterceptor httpRequestInterceptor);
+    void add(HttpResponseInterceptor httpResponseInterceptor);
 
     SimpleResult post(Class clz, String url, Object request, List<KV> headerList);
 
     SimpleResult get(Class clz, String url, List<KV> headerList);
 
-
+    interface Client {
+        String execute(CloseableHttpClient httpclient);
+    }
 }
