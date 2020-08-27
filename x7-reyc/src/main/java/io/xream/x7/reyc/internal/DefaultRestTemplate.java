@@ -17,6 +17,7 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.base.KV;
+import io.xream.x7.base.util.LoggerProxy;
 import io.xream.x7.reyc.api.HeaderRequestInterceptor;
 import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
@@ -24,6 +25,7 @@ import io.xream.x7.reyc.api.SimpleResult;
 import org.apache.http.Header;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -113,7 +115,10 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
             for (HeaderResponseInterceptor headerResponseInterceptor : headerResponseInterceptorList) {
                 Header header = httpResponse.getFirstHeader(headerResponseInterceptor.getKey());
+                if (header == null)
+                    continue;
                 responseHeaderMap.put(header.getName(),header.getValue());
+                LoggerProxy.info(clz,header.toString());
             }
         });
 

@@ -16,11 +16,9 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.base.KV;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.LoggerProxy;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,7 +32,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.List;
 
 
 /**
