@@ -17,15 +17,12 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.base.KV;
-import io.xream.x7.base.util.LoggerProxy;
 import io.xream.x7.reyc.api.HeaderRequestInterceptor;
 import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
-import io.xream.x7.reyc.api.SimpleResult;
 import org.apache.http.Header;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -45,13 +42,13 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
     private List<HttpRequestInterceptor> httpRequestInterceptorList = new ArrayList<>();
     private List<HttpResponseInterceptor> httpResponseInterceptorList = new ArrayList<>();
 
-    private List<HeaderRequestInterceptor> headerRequestInterceptorList = new ArrayList<>();
     private List<HeaderResponseInterceptor> headerResponseInterceptorList = new ArrayList<>();
-    public void add(HeaderRequestInterceptor headerInterceptor) {
-        this.headerRequestInterceptorList.add(headerInterceptor);
-    }
+    private List<HeaderRequestInterceptor> headerRequestInterceptorList = new ArrayList<>();
     public void add(HeaderResponseInterceptor headerResponseInterceptor) {
         this.headerResponseInterceptorList.add(headerResponseInterceptor);
+    }
+    public void add(HeaderRequestInterceptor headerRequestInterceptor) {
+        this.headerRequestInterceptorList.add(headerRequestInterceptor);
     }
     public void add(HttpRequestInterceptor httpRequestInterceptor) {
         this.httpRequestInterceptorList.add(httpRequestInterceptor);
@@ -65,31 +62,25 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
         this.properties = properties;
     }
 
-
-
     @Override
-    public SimpleResult post(Class clz, String url, Object requestObject, List<KV> headerList) {
-
+    public String post(Class clz, String url, Object requestObject, List<KV> headerList) {
         return execute(clz,url,requestObject,headerList,
                 (httpclient) -> HttpClientUtil.post(clz,url, requestObject, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
         );
     }
 
     @Override
-    public SimpleResult get(Class clz, String url, List<KV> headerList) {
+    public String get(Class clz, String url, List<KV> headerList) {
         return execute(clz,url,null,headerList,
                     (httpclient) -> HttpClientUtil.get(clz,url, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
                 );
     }
 
-
     private  HttpClientBuilder builder() {
-        HttpClientBuilder builder = HttpClients.custom();
-        return builder;
+        return HttpClients.custom();
     }
 
-
-    private SimpleResult execute(Class clz, String url, Object request, List<KV> headerList, Client client) {
+    private String execute(Class clz, String url, Object request, List<KV> headerList, Client client) {
 
         HttpClientBuilder builder = builder();
         for (HttpRequestInterceptor httpRequestInterceptor : httpRequestInterceptorList) {
@@ -104,29 +95,29 @@ public class DefaultRestTemplate implements SimpleRestTemplate {
                     httpRequest.addHeader(kv1.k, String.valueOf(kv1.v));
                 }
             }
-            for (HeaderRequestInterceptor headerInterceptor : headerRequestInterceptorList){
+            for (HeaderResponseInterceptor headerInterceptor : headerResponseInterceptorList){
                 KV kv = headerInterceptor.apply();
                 httpRequest.addHeader(kv.k,String.valueOf(kv.v));
             }
         });
 
-        Map<String,String> responseHeaderMap = new HashMap<>();
 
         builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
-            for (HeaderResponseInterceptor headerResponseInterceptor : headerResponseInterceptorList) {
-                Header header = httpResponse.getFirstHeader(headerResponseInterceptor.getKey());
-                if (header == null)
-                    continue;
-                responseHeaderMap.put(header.getName(),header.getValue());
-                LoggerProxy.info(clz,header.toString());
+            for (HeaderRequestInterceptor headerRequestInterceptor : headerRequestInterceptorList) {
+
+                Map<String,String> map = new HashMap<>();
+                Header[] arr = httpResponse.getAllHeaders();
+                for (Header header : arr){
+                    map.put(header.getName(),header.getValue());
+                }
+                headerRequestInterceptor.handle(clz,map);
             }
         });
 
         CloseableHttpClient httpclient  = builder.build();
 
-        String body = client.execute(httpclient);
+        return client.execute(httpclient);
 
-        return new SimpleResult(body,responseHeaderMap);
     }
 
 

@@ -16,8 +16,6 @@
  */
 package io.xream.x7.base.web;
 
-import io.xream.x7.base.api.ApiVersion;
-
 /**
  * 
  * Simple Rest Response PROTOCAL
@@ -25,11 +23,10 @@ import io.xream.x7.base.api.ApiVersion;
  * @author Sim
  *
  */
-public class ViewEntity implements ApiVersion {
+public class ViewEntity {
 
 	private ViewStatus status;
 	private Object body;
-	private String version;
 	private long handledTimeMillis;
 
 	public void setStatus(ViewStatus status) {
@@ -46,20 +43,6 @@ public class ViewEntity implements ApiVersion {
 
 	public Object getBody() {
 		return body;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	@Override
-	public void set(String key, String version) {
-		this.version = version;
-	}
-
-	@Override
-	public String getHeadName() {
-		return KEY;
 	}
 
 	public void setHandledTimeMillis(long handledTimeMillis) {
@@ -96,7 +79,6 @@ public class ViewEntity implements ApiVersion {
 		return "ViewEntity{" +
 				"status=" + status +
 				", body=" + body +
-				", version='" + version + '\'' +
 				", handledTimeMillis=" + handledTimeMillis +
 				'}';
 	}

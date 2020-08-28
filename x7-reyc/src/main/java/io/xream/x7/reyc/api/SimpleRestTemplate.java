@@ -28,14 +28,14 @@ import java.util.List;
  */
 public interface SimpleRestTemplate {
 
-    void add(HeaderRequestInterceptor headerRequestInterceptor);
-    void add(HeaderResponseInterceptor headerResponseInterceptor);
+    void add(HeaderResponseInterceptor headerRequestInterceptor);
+    void add(HeaderRequestInterceptor headerResponseInterceptor);
     void add(HttpRequestInterceptor httpRequestInterceptor);
     void add(HttpResponseInterceptor httpResponseInterceptor);
 
-    SimpleResult post(Class clz, String url, Object request, List<KV> headerList);
+    String post(Class clz, String url, Object request, List<KV> headerList);
 
-    SimpleResult get(Class clz, String url, List<KV> headerList);
+    String get(Class clz, String url, List<KV> headerList);
 
     interface Client {
         String execute(CloseableHttpClient httpclient);

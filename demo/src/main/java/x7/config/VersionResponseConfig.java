@@ -1,6 +1,6 @@
 package x7.config;
 
-import io.xream.x7.base.api.ApiVersion;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @Configuration
-public class VersionInterceptorConfig implements WebMvcConfigurer {
+public class VersionResponseConfig implements WebMvcConfigurer {
 
     @Value("project.version")
     private String version;
@@ -30,7 +30,7 @@ public class VersionInterceptorConfig implements WebMvcConfigurer {
 
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-            response.setHeader(ApiVersion.KEY, version);
+            response.setHeader("VERSION", version);
             return true;
         }
     }

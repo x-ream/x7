@@ -18,11 +18,10 @@ package io.xream.x7.seata.config;
 
 import io.seata.core.context.RootContext;
 import io.xream.x7.base.KV;
-import io.xream.x7.reyc.api.HeaderRequestInterceptor;
-import io.xream.x7.reyc.api.SimpleRestTemplate;
+import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 
 
-public class SeataInterceptor implements HeaderRequestInterceptor {
+public class SeataInterceptor implements HeaderResponseInterceptor {
     @Override
     public KV apply() {
 

@@ -109,7 +109,7 @@ public class HttpClientResolver {
         return r;
     }
 
-    protected static SimpleResult resolve(R r, Class clz) {
+    protected static String resolve(R r, Class clz) {
 
         RequestMethod requestMethod = r.getRequestMethod();
         Object[] args = r.getArgs();
@@ -125,7 +125,7 @@ public class HttpClientResolver {
             url = url.replace(router.replaceHolder(),router.replaceValue(arg));
         }
 
-        SimpleResult result = null;
+        String result = null;
         if (requestMethod == RequestMethod.POST) {
 
             if (args != null && args.length > 0) {
@@ -141,7 +141,6 @@ public class HttpClientResolver {
             }
             result = restTemplate.get(clz,url,headerList);
         }
-
 
         return result;
     }

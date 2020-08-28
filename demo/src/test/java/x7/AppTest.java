@@ -48,7 +48,7 @@ public class AppTest {
 
 
 
-//        xxxTest.testRefreshConditionRemote();
+        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 //        xxxTest.testCriteriaRemote();
 //        xxxTest.testCriteriaRemote();
