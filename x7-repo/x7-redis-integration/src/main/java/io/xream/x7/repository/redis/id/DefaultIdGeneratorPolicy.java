@@ -98,9 +98,9 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             Parsed parsed = Parser.get(clzz);
             String key = parsed.getKey(X.KEY_ONE);
             BeanElement be = parsed.getElement(key);
-            if (be.clz == String.class)
+            if (be.getClz() == String.class)
                 continue;
-            builder.reduce(ReduceType.MAX, be.property).paged().ignoreTotalRows();
+            builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
             Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
 
             List<Long> idList = baseRepository.listPlainValue(Long.class,ResultMapCriteria);

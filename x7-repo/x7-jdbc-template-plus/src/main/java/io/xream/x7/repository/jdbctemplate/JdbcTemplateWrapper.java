@@ -16,14 +16,10 @@
  */
 package io.xream.x7.repository.jdbctemplate;
 
-import io.xream.sqli.api.Dialect;
-import io.xream.sqli.api.JdbcWrapper;
-import io.xream.sqli.api.RowHandler;
+import io.xream.sqli.api.*;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.exception.ExceptionTranslator;
 import io.xream.sqli.parser.Parsed;
-import io.xream.sqli.parser.Parser;
-import io.xream.sqli.util.JsonStyleMapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -56,12 +52,10 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public <T> boolean createBatch(Class<T> clzz, String sql, Collection<T> objList, int batchSize, Dialect dialect) {
-        Parsed parsed = Parser.get(clzz);
-        this.jdbcTemplate.batchUpdate(sql, objList, batchSize, (pstmt, o) -> {
-            List<Object> valueList = DataObjectConverter.objectToListForCreate(o, parsed.getBeanElementList(), dialect);
+    public <T> boolean createBatch(Class<T> clzz, String sql, BatchObjectValues batchObjectValues, int batchSize, Dialect dialect) {
+        this.jdbcTemplate.batchUpdate(sql, batchObjectValues.valuesList(), batchSize, (pstmt, o) -> {
             int i = 1;
-            for (Object value : valueList) {
+            for (Object value : o) {
                 pstmt.setObject(i++, value);
             }
         });
@@ -133,18 +127,30 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public <T> List<T> queryForList(String sql, Class<T> clz, Collection<Object> list, Dialect dialect) {
+    public <T> List<T> queryForList(String sql, Collection<Object> list, Parsed parsed, Dialect dialect) {
 
-        Parsed parsed = Parser.get(clz);
+        return  toObjectList(
+                fixedObjectBuilder -> queryForList0(
+                        sql,
+                        list,
+                        parsed,
+                        dialect,
+                        fixedObjectBuilder)) ;
+
+    }
+
+    private  <T> List<T> queryForList0(String sql, Collection<Object> list, Parsed parsed, Dialect dialect, ObjectFinder.FixedRowMapper fixedRowMapper) {
+
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<T> rowMapper = (resultSet, i) -> {
 
-            Map<String,Object> map = columnMapRowMapper.mapRow(resultSet,i);
+            Map<String, Object> map = columnMapRowMapper.mapRow(resultSet, i);
             try {
+                Class<T> clz = parsed.getClz();
                 T t = clz.newInstance();
-                DataObjectConverter.initObj(t, map, parsed.getBeanElementList(),dialect);
+                fixedRowMapper.mapRow(t,map,parsed.getBeanElementList(),dialect);
                 return t;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw ExceptionTranslator.onQuery(e, logger);
             }
 
@@ -159,12 +165,13 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
 
     }
 
+
     @Override
     public <K> List<K> queryForPlainValueList(Class<K> clzz, String sql, Collection<Object> valueList, Dialect dialect) {
 
         if (valueList == null || valueList.isEmpty()) {
             return this.jdbcTemplate.query(sql, new SingleColumnRowMapper<>(clzz));
-        }else {
+        } else {
             Object[] arr = dialect.toArr(valueList);
             return this.jdbcTemplate.query(sql, arr,
                     new SingleColumnRowMapper<>(clzz));
@@ -172,32 +179,34 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public List<Map<String, Object>> queryForMapList(String sql, Criteria.ResultMapCriteria resultMapped, Dialect dialect) {
+    public List<Map<String, Object>> queryForResultMapList(String sql, Criteria.ResultMapCriteria resultMapped, Dialect dialect) {
 
-        List<Map<String, Object>> propertyMapList = queryForMapList0(sql,resultMapped,dialect,jdbcTemplate);
-        if (resultMapped.isResultWithDottedKey())
-            return propertyMapList;
+        return toResultMapList(
+                resultMapped.isResultWithDottedKey(),
+                fixedRowMapper -> queryForMapList0(
+                        sql,
+                        resultMapped.getClz(),
+                        resultMapped.getValueList(),
+                        dialect,
+                        jdbcTemplate,
+                        resultMapped,
+                        fixedRowMapper));
 
-        if (!propertyMapList.isEmpty())
-            return JsonStyleMapUtil.toJsonableMapList(propertyMapList);
-
-        return propertyMapList;
     }
 
-    private List<Map<String, Object>> queryForMapList0(String sql, Criteria.ResultMapCriteria resultMapped, Dialect dialect, JdbcTemplate jdbcTemplate) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Class clzz, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, Criteria.ResultMapCriteria resultMapped, ResultMapFinder.FixedRowMapper fixedRowMapper) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
-        final RowMapper<Map<String,Object>> rowMapper = (resultSet, i) -> {
+        final RowMapper<Map<String, Object>> rowMapper = (resultSet, i) -> {
 
-            Map<String,Object> map = columnMapRowMapper.mapRow(resultSet,i);
+            Map<String, Object> map = columnMapRowMapper.mapRow(resultSet, i);
             try {
-                return DataObjectConverter.dataToPropertyObjectMap(resultMapped.getClz(), map,resultMapped,dialect);
-            }catch (Exception e) {
+                return fixedRowMapper.mapRow(map, clzz, resultMapped, dialect);
+            } catch (Exception e) {
                 throw ExceptionTranslator.onQuery(e, logger);
             }
         };
 
-        Collection<Object> list = resultMapped.getValueList();
 
         if (list == null || list.isEmpty()) {
             return jdbcTemplate.query(sql, rowMapper);
@@ -208,9 +217,8 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public <T> void queryForMapToHandle(Class clzz, String sql, Collection<Object> valueList, Dialect dialect, Criteria.ResultMapCriteria ResultMapCriteria, RowHandler<T> handler) {
+    public <T> void queryForMapToHandle(String sql, Collection<Object> valueList, Dialect dialect, Criteria.ResultMapCriteria resultMapCriteria, Parsed orParsed, RowHandler<T> handler) {
 
-        Parsed parsed = Parser.get(clzz);
         RowMapper<Map<String, Object>> rowMapper = new ColumnMapRowMapper();
 
         jdbcTemplate.query(connection -> {
@@ -221,7 +229,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             preparedStatement.setFetchSize(50);
             try {
                 preparedStatement.setFetchDirection(ResultSet.FETCH_FORWARD);
-            }catch (SQLException e){
+            } catch (SQLException e) {
             }
 
             if (valueList != null) {
@@ -237,20 +245,16 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             Map<String, Object> dataMap = rowMapper.mapRow(resultSet, 0);
 
             T t = null;
-            if (ResultMapCriteria == null) {
+            if (resultMapCriteria == null) {
                 try {
+                    Class<T> clzz = orParsed.getClz();
                     t = (T) clzz.newInstance();
-                    DataObjectConverter.initObj(t, dataMap, parsed.getBeanElementList(),dialect);
+                    toObject(t, dataMap, orParsed.getBeanElementList(), dialect);
                 } catch (Exception e) {
                     throw ExceptionTranslator.onQuery(e, logger);
                 }
             } else {
-                Map<String, Object> objectMap = DataObjectConverter.dataToPropertyObjectMap(clzz, dataMap, ResultMapCriteria, dialect);
-
-                if(!ResultMapCriteria.isResultWithDottedKey()){
-                    objectMap = JsonStyleMapUtil.toJsonableMap(objectMap);
-                }
-                t = (T) objectMap;
+                 t = (T) toResultMap(resultMapCriteria,dialect,dataMap);
             }
             if (t != null) {
                 handler.handle(t);

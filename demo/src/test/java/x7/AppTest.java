@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import x7.demo.entity.CatTest;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -13,9 +14,6 @@ public class AppTest {
 
     @Autowired
     private XxxTest xxxTest;
-
-    @Autowired
-    private CatTest catTest;
 
 
 //    private Executor executor = Executors.newFixedThreadPool(11);
@@ -31,46 +29,36 @@ public class AppTest {
 
 
 //        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFind();
+        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 
 //        xxxTest.testListCriteria();
 
-//        xxxTest.testListCriteria();
-
-
-
-        xxxTest.testRefreshConditionRemote();
-//        xxxTest.testCriteriaRemote();
-//        xxxTest.testCriteriaRemote();
+//        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 
-
-//        xxxTest.testResultMappedRemote();
-//        xxxTest.testResultMappedRemote();
-//        xxxTest.testResultMappedRemote();
 //        xxxTest.testResultMappedRemote();
 
-        xxxTest.testResultMapped();
+//        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 
 
 //        repositoryTest.refresh();
 
-//        xxxTest.testListPlainValue();
+        xxxTest.testListPlainValue();
 
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
-//
+
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
@@ -92,7 +80,6 @@ public class AppTest {
 //        xxxTest.testLock();
 
 //        xxxTest.testLock();
-
 
 //        xxxTest.in();
 //        xxxTest.in();

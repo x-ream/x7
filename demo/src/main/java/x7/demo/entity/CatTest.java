@@ -9,7 +9,7 @@ public class CatTest {
 	@X.Key
 	private long id;
 	private long dogId;
-	private String catFriendName;
+	public String catFriendName;
 	private Timestamp time;
 	private String type;
 	private Boolean isCat;

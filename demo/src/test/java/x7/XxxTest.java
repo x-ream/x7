@@ -178,6 +178,7 @@ public class XxxTest {
     public ViewEntity testCriteria(){
 
         CriteriaBuilder builder = CriteriaBuilder.builder(CatTest.class);
+        builder.nonNull("type");
         builder.paged().sort("id", Direction.DESC).page(1).rows(10);
         Criteria criteria = builder.build();
         return controller.testCriteria(criteria);

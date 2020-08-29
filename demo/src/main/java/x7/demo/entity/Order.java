@@ -6,6 +6,7 @@ public class Order {
 
     @X.Key
     private long id;
+    @X(length = 500)
     private String name;
     private long createAt;
     private OrderType type;
