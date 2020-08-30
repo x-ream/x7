@@ -120,7 +120,7 @@ public class XxxController {
 
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
-                        .refresh("testBoo", "TEST")
+                        .refresh("testBoo", TestBoo.TEST)
                         .refresh("testList", Arrays.asList("8989","2222"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
@@ -130,9 +130,8 @@ public class XxxController {
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
 
-        throw new RuntimeException("TEST ORDER");
 
-//        return ViewEntity.ok(flag);
+        return ViewEntity.ok(flag);
     }
 
 

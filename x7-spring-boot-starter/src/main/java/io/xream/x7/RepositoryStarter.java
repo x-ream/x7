@@ -82,10 +82,8 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(4)
-    public TemporaryRepository.Parser temporaryTableParser(Dialect dialect){
-        DefaultTemporaryTableParser temporaryTableParser = new DefaultTemporaryTableParser();
-        temporaryTableParser.setDialect(dialect);
-        return temporaryTableParser;
+    public TemporaryRepository.Parser temporaryTableParser(){
+        return new DefaultTemporaryTableParser();
     }
 
     @Bean
