@@ -21,8 +21,8 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testFindToHandle();
-//        xxxTest.testTemporaryTable();
+        xxxTest.testFindToHandle();
+        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
 //        xxxTest.testNonPaged();

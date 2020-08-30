@@ -26,7 +26,7 @@ import io.xream.sqli.cache.L2CacheStorage;
 import io.xream.sqli.page.Page;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;
-import io.xream.sqli.util.BeanUtilX;
+import io.xream.sqli.util.ParserUtil;
 import io.xream.x7.base.exception.L2CacheException;
 import io.xream.x7.base.exception.NoResultUnderProtectionException;
 import io.xream.x7.base.exception.NotQueryUnderProtectionException;
@@ -453,7 +453,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			keyList = new ArrayList<>();
 
 			for (T t : list) {
-				String key = BeanUtilX.getCacheKey(t, parsed);
+				String key = ParserUtil.getCacheKey(t, parsed);
 				keyList.add(key);
 			}
 
@@ -505,7 +505,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			keyList = new ArrayList<>();
 
 			for (T t : list) {
-				String key = BeanUtilX.getCacheKey(t, parsed);
+				String key = ParserUtil.getCacheKey(t, parsed);
 				keyList.add(key);
 			}
 
@@ -636,7 +636,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			List<String> keyList = p.getKeyList();
 
 			for (T t : list) {
-				String key = BeanUtilX.getCacheKey(t, parsed);
+				String key = ParserUtil.getCacheKey(t, parsed);
 				keyList.add(key);
 			}
 
@@ -679,7 +679,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 		Set<String> keySet = new HashSet<String>();
 		for (T t : list) {
-			String key = BeanUtilX.getCacheKey(t, parsed);
+			String key = ParserUtil.getCacheKey(t, parsed);
 			keySet.add(key);
 		}
 
@@ -730,7 +730,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			Iterator<T> ite = list.iterator();
 			while (ite.hasNext()) {
 				T t = ite.next();
-				if (key.equals(BeanUtilX.getCacheKey(t, parsed))) {
+				if (key.equals(ParserUtil.getCacheKey(t, parsed))) {
 					ite.remove();
 					sortedList.add(t);
 					break;
