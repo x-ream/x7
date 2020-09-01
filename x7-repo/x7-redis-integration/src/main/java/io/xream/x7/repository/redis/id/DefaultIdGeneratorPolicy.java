@@ -18,6 +18,7 @@ package io.xream.x7.repository.redis.id;
 
 import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.BaseRepository;
+import io.xream.sqli.api.ResultMapRepository;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.ReduceType;
@@ -44,9 +45,6 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
 
     @Override
     public long createId(String clzName) {
@@ -102,8 +100,12 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
                 continue;
             builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
             Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
+            List<Long> idList = null;
+            if (baseRepository instanceof ResultMapRepository){
+                ResultMapRepository resultMapRepository = (ResultMapRepository) baseRepository;
+                idList = resultMapRepository.listPlainValue(Long.class,ResultMapCriteria);
+            }
 
-            List<Long> idList = baseRepository.listPlainValue(Long.class,ResultMapCriteria);
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClz().getName();
 

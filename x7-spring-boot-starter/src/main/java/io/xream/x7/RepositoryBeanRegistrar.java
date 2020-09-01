@@ -17,6 +17,7 @@
 package io.xream.x7;
 
 import io.xream.sqli.api.BaseRepository;
+import io.xream.sqli.api.ResultMapRepository;
 import io.xream.sqli.filter.BaseTypeFilter;
 import io.xream.x7.base.util.ClassFileReader;
 import io.xream.x7.sqli.repository.proxy.RepositoryProxy;
@@ -72,7 +73,8 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
             Type[] types = clz.getGenericInterfaces();
             if (types.length == 0)
                 continue;
-            if (! (types[0].getTypeName().startsWith(BaseRepository.class.getName())))
+            if (! ((types[0].getTypeName().startsWith(BaseRepository.class.getName()))
+                    || (types[0].getTypeName().startsWith(ResultMapRepository.class.getName()))))
                 continue;
 
             list.add(clz);
@@ -82,8 +84,13 @@ public class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
 
             Type[] types = clz.getGenericInterfaces();
 
-            ParameterizedType parameterized = (ParameterizedType) types[0];
-            Class clazz = (Class) parameterized.getActualTypeArguments()[0];
+            Class clazz = Void.class;
+            try {
+                ParameterizedType parameterized = (ParameterizedType) types[0];
+                clazz = (Class) parameterized.getActualTypeArguments()[0];
+            }catch (Exception e){
+
+            }
 
             String beanName = clz.getName();
             beanNameList.add(beanName);

@@ -20,10 +20,10 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.testLock();
-
-        xxxTest.testFindToHandle();
-        xxxTest.testTemporaryTable();
+//        xxxTest.testLock();
+//
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
 //        xxxTest.testNonPaged();
@@ -37,7 +37,7 @@ public class AppTest {
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-        xxxTest.testCriteria();
+//        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 
@@ -55,7 +55,7 @@ public class AppTest {
 
 //        repositoryTest.refresh();
 
-        xxxTest.testListPlainValue();
+//        xxxTest.testListPlainValue();
 
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
@@ -63,7 +63,7 @@ public class AppTest {
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-        xxxTest.refreshByCondition();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();

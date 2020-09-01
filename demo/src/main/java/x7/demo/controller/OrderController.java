@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.Order;
 import x7.demo.entity.OrderType;
+import x7.demo.repository.OmsRepository;
 import x7.demo.repository.OrderItemRepository;
 import x7.demo.repository.OrderRepository;
 
@@ -27,9 +28,8 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private OmsRepository omsRepository;
 
     @RequestMapping("/create")
     public boolean create(@RequestBody Order order) {
@@ -74,7 +74,7 @@ public class OrderController {
 
         Criteria.ResultMapCriteria criteria = builder.build();
 
-        Page<Map<String,Object>> page = this.orderRepository.find(criteria);
+        Page<Map<String,Object>> page = this.omsRepository.find(criteria);
 
         return ViewEntity.ok(page);
     }
@@ -84,7 +84,7 @@ public class OrderController {
     public ViewEntity findBuAlia(){
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity", Having.of(Op.LT,10));
-        builder.resultWithDottedKey();
+//        builder.resultWithDottedKey();
         builder.resultKey("o.name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity",Having.of(Op.LT,10));
         builder.beginSub().eq("o.name",null).endSub();
         builder.in("i.name", Arrays.asList("test"));
@@ -107,7 +107,7 @@ public class OrderController {
 
         Criteria.ResultMapCriteria criteria = builder.build();
 
-        Page<Map<String,Object>> page = this.orderRepository.find(criteria);
+        Page<Map<String,Object>> page = this.omsRepository.find(criteria);
 
         return ViewEntity.ok(page);
     }
