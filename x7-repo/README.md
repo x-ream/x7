@@ -44,7 +44,7 @@
         5. get(Id)
         6. getOne(Object)
         
-    不含二级缓存的BaseRepository的API:
+    不含二级缓存的BaseRepository, ResultMapRepository的API:
         1. list()
         2. find(ResultMapCriteria)
         3. list(ResultMapCriteria)
@@ -82,6 +82,8 @@
     代码片段:
     @Repository
     public interface FooRepository extends BaseRepository<Foo> {}
+    @Repository
+    public interface BarRepository extends ResultMapRepository {}
     
 ###    实体类注解
     @X.Key //主键, 必须
@@ -125,7 +127,7 @@
             {
                 CriteriaBuilder builder = CriteriaBuilder.builder(Order.class); 
                 builder.eq("userId",obj.getUserId()).eq("status","PAID");
-                Criteria criteria = builer.get();
+                Criteria criteria = builer.build();
                 orderRepository.find(criteria);
             }
         
