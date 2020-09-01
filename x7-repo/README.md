@@ -23,7 +23,7 @@
 
 ## x7-cache 缓存框架
    
-#### 二级缓存 
+### 二级缓存 
 
     注解使用
         @EnableX7L2Caching
@@ -58,7 +58,7 @@
         listPlainValue(ResultMapCriteria)
         
         
-####  三级缓存 + 一级缓存  
+###  三级缓存 + 一级缓存  
 
      注解使用
         @EnableX7L3Caching(waitTimeMills = 1000)
@@ -74,7 +74,7 @@
          
 ##  x7-sqli SQL的简单编程接口(SQL INTERFACE)
 
-####    使用方法
+###    使用方法
     @EnableX7Repostory  
     public class App{
         main()
@@ -83,7 +83,7 @@
     @Repository
     public interface FooRepository extends BaseRepository<Foo> {}
     
-####    实体类注解
+###    实体类注解
     @X.Key //主键, 必须
     private Long id;
     
@@ -94,7 +94,7 @@
     private String name;
     
     
-####    BaseRepository API
+###    BaseRepository API
     
             1. in(InCondition) //in查询, 例如: 页面上需要的主表ID或记录已经查出后，补充查询其他表的文本说明数据时使用
             2. list(Object) //对象查列表
@@ -103,19 +103,20 @@
             5. get(Id) //根据主键查询记录
             6. getOne(Object) //数据库只有一条记录时，就返回那条记录
             7. list() //无条件查全表, 几乎没使用场景
-            8. find(ResultMapCriteria) //标准拼接查询，返回Map形式记录，返回分页对象
-            9. list(ResultMapCriteria) //标准拼接查询，返回Map形式记录，不返回分页对象
-            10. listPlainValue(Class<K>, ResultMapCriteria)//返回没有key的单列数据列表 (结果优化1)
-            11. findToHandle(ResultMapCriteria, RowHandler<Map<String,Object>>) //流处理API
-            12. creaet(Object) //插入一条
-            13. createBatch(List<Object>) //批量插入
-            14. refresh(RefreshCondition) //根据主键更新
-            15. refreshUnSafe(RefreshCondition)//不根据主键更新
-            16. remove(Id)//根据主键删除
-            17. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
+            8. creaet(Object) //插入一条
+            9. createBatch(List<Object>) //批量插入
+            10. refresh(RefreshCondition) //根据主键更新
+            11. refreshUnSafe(RefreshCondition)//不根据主键更新
+            12. remove(Id)//根据主键删除
+            13. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
             
+### ResultMapRepository API
+            14. find(ResultMapCriteria) //标准拼接查询，返回Map形式记录，返回分页对象
+            15. list(ResultMapCriteria) //标准拼接查询，返回Map形式记录，不返回分页对象
+            16. listPlainValue(Class<K>, ResultMapCriteria)//返回没有key的单列数据列表 (结果优化1)
+            17. findToHandle(ResultMapCriteria, RowHandler<Map<String,Object>>) //流处理API
             
-####    标准拼接API
+###    标准拼接API
         CriteriaBuilder // 返回Criteria, 查出对象形式记录
         CriteriaBuilder.ResultMapBuilder //返回ResultMapCriteria, 查出Map形式记录，支持连表查询
         RefreshCondition //构建要更新的字段和条件
