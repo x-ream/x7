@@ -376,6 +376,7 @@ public class XxxTest {
     public void testLock(){
         DogTest dogTest = new DogTest();
         dogTest.setId(3);
+        dogTest.setUserName("XXXX");
 //        this.executor.execute(new Runnable() {
 //            @Override
 //            public void run() {
@@ -397,7 +398,7 @@ public class XxxTest {
 //
 //        dogService.lock5(dogTest);
 
-        dogService.lock0(dogTest);
+        dogService.lock5("xxxx","zzzz");
 
     }
 

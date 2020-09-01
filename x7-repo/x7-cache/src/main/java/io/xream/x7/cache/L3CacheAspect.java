@@ -115,7 +115,7 @@ public class L3CacheAspect {
         if (StringUtil.isNullOrEmpty(condition)) {
             key = argsToString.get(methodName, argArr);
         }else {
-            key = KeyUtil.makeKey(methodName,"~L3Cache", condition, argArr);
+            key = KeyUtil.makeKey(methodName,"~L3Cache", condition, ms.getMethod(),argArr);
         }
         long expireTime = cacheableL3.expireTime();
         TimeUnit timeUnit = cacheableL3.timeUnit();

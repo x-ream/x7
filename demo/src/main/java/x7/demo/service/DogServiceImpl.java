@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DogServiceImpl implements DogService{
 
-    @Lock(timeout = 2000)
+    @Lock(timeout = 2000, condition = "#userName")
     @Override
-    public boolean lock5(DogTest dogTest) {
+    public boolean lock5(String test,String userName) {
 
         try{
             TimeUnit.MILLISECONDS.sleep(5000);

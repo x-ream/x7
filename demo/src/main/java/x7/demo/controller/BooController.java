@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import x7.demo.entity.DogTest;
 import x7.demo.service.CatService;
+import x7.demo.service.DogService;
 
 import java.util.concurrent.Callable;
 
@@ -26,6 +28,8 @@ public class BooController {
 
     @Autowired
     private CatService catService;
+    @Autowired
+    private DogService dogService;
 
 
     public BooController(RateLimiterRegistry rateLimiterRegistry){
@@ -60,5 +64,13 @@ public class BooController {
     public ViewEntity testFallback(Throwable throwable){
         logger.info("fallback....." + throwable == null? "null" : throwable.getMessage());
         return ViewEntity.ok("FALLBACK");
+    }
+
+
+    public ViewEntity lock(){
+        DogTest dogTest = new DogTest();
+        dogTest.setUserName("XXXX");
+        this.dogService.lock0(dogTest);
+        return ViewEntity.ok();
     }
 }
