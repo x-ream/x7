@@ -484,7 +484,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	@Override
 	public <T> List<T> listUnderProtection(Criteria criteria, QueryForCache queryForCache, Callable<List<T>> callable) {
 		final String criteriaKey = criteria.getCacheKey();
-		final Class clz = criteria.getClz();
+		final Class clz = criteria.getClzz();
 		List<String> keyList = null;
 		try {
 			keyList = getResultKeyList(clz, criteriaKey);
@@ -586,7 +586,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 
 	@Override
 	public <T> Page<T> findUnderProtection(Criteria criteria,QueryForCache queryForCache, Callable<Page<T>> findCallable, Callable<List<T>> listCallable){
-		Class clz = criteria.getClz();
+		Class clz = criteria.getClzz();
 		Parsed parsed = Parser.get(clz);
 		final String criteriaKey = criteria.getCacheKey();
 		Page p = getResultKeyListPaginated(clz, criteriaKey);// FIXME

@@ -185,7 +185,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
                 resultMapped.isResultWithDottedKey(),
                 fixedRowMapper -> queryForMapList0(
                         sql,
-                        resultMapped.getClz(),
+                        resultMapped.getClzz(),
                         resultMapped.getValueList(),
                         dialect,
                         jdbcTemplate,
