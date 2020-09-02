@@ -34,8 +34,8 @@ import java.lang.reflect.Proxy;
 public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryBean {
 
     @Override
-    public Class<T> getClz() {
-        return super.getClz();
+    public Class<T> getClzz() {
+        return super.getClzz();
     }
 
     public void setClz(Class<T> clz) {

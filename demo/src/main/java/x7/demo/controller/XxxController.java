@@ -120,7 +120,7 @@ public class XxxController {
 
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
-                        .refresh("testBoo", TestBoo.TEST)
+                        .refresh("testBoo", TestBoo.BOO)
                         .refresh("testList", Arrays.asList("8989","2222"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())

@@ -26,12 +26,13 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
+        xxxTest.testNonPaged();
+
+
+        xxxTest.inOrder();
+//        xxxTest.testOrderFind();
+//        xxxTest.testOrderFindByAlia();
 //        xxxTest.testNonPaged();
-
-
-//        xxxTest.inOrder();
-        xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
@@ -63,7 +64,7 @@ public class AppTest {
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-//        xxxTest.refreshByCondition();
+        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();

@@ -92,7 +92,9 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
 
         for (BaseRepository baseRepository : repositoryList) {
             CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
-            Class clzz = baseRepository.getClz();
+            Class clzz = baseRepository.getClzz();
+            if (clzz == Void.class)
+                continue;
             Parsed parsed = Parser.get(clzz);
             String key = parsed.getKey(X.KEY_ONE);
             BeanElement be = parsed.getElement(key);
@@ -107,7 +109,7 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             }
 
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
-            String name = baseRepository.getClz().getName();
+            String name = baseRepository.getClzz().getName();
 
             logger.info("Db    : " + name + ".maxId = " + maxId);
 

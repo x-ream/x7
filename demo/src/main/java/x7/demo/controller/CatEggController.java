@@ -29,17 +29,7 @@ public class CatEggController {
 
     @RequestMapping("/test")
     public ViewEntity test(){
-//        boolean flag = this.temporaryRepository.createRepository(CatEgg.class);
-//        System.out.println(flag);
-//
-//        CatEgg catEgg = new CatEgg();
-//        catEgg.setId(1);
-//        catEgg.setDogId(2);
-//        catEgg.setName("test");
-//
-//        this.temporaryRepository.create(catEgg);
 
-        //test....
         CriteriaBuilder.ResultMapBuilder fromBuilder = CriteriaBuilder.resultMapBuilder();
         fromBuilder.resultKey("cat.id","id");
         fromBuilder.resultKey("cat.taxType","name");
@@ -47,7 +37,6 @@ public class CatEggController {
         fromBuilder.sourceScript("from cat");
 
         boolean flag = this.temporaryRepository.findToCreate(CatEgg.class, fromBuilder.build());
-
 
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
