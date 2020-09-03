@@ -34,15 +34,10 @@ public final class DefaultL3CacheStorage implements L3CacheStorage {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private L3CacheStorage fallbackStorage;
 
     @Value("${circuitbreaker.l3cache.name:l3cache}")
     private String circuitBreakerL3cacheName;
 
-    @Override
-    public void setFallbackStorage(L3CacheStorage fallbackStorage) {
-        this.fallbackStorage = fallbackStorage;
-    }
 
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;

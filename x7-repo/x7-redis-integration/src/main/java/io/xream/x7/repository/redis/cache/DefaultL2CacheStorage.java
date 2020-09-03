@@ -23,9 +23,6 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.vavr.control.Try;
 import io.xream.sqli.cache.L2CacheStorage;
 import io.xream.x7.base.api.BackendService;
-import io.xream.x7.base.util.ExceptionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,12 +36,8 @@ import java.util.function.Supplier;
 @Component
 public final class DefaultL2CacheStorage implements L2CacheStorage {
 
-    private final static Logger logger = LoggerFactory.getLogger(DefaultL2CacheStorage.class);
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
-    private L2CacheStorage fallbackStorage;
 
     @Autowired
     private CircuitBreakerRegistry circuitBreakerRegistry;
@@ -54,10 +47,6 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
     private CircuitBreakerConfig circuitBreakerConfig = null;
 
-    @Autowired
-    public void setFallbackStorage(L2CacheStorage l2CacheStorage) {
-        this.fallbackStorage = l2CacheStorage;
-    }
 
     public <T> T handle(BackendService<T> backendService) {
 
@@ -68,16 +57,10 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerL2cacheName,this.circuitBreakerConfig);
         Supplier<T> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker, backendService::handle);
-        if (fallbackStorage == null)
-            return Try.ofSupplier(decoratedSupplier).get();
-        return Try.ofSupplier(decoratedSupplier).recover(e -> handleException(e,backendService)).get();
+        return Try.ofSupplier(decoratedSupplier).get();
     }
 
 
-    private <T> T handleException(Throwable e, BackendService<T> backendService){
-        logger.info(ExceptionUtil.getMessage(e));
-        return backendService.fallback();
-    }
 
     public boolean set(String key, String value) {
 
@@ -92,9 +75,8 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public Boolean fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.set(key,value);
-                return null;
+
+                return true;
             }
         });
 
@@ -113,9 +95,7 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public Boolean fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.set(key,value,validSeconds,timeUnit);
-                return null;
+                return true;
             }
         });
     }
@@ -134,8 +114,6 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public String fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.get(key);
                 return null;
             }
         });
@@ -156,8 +134,6 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public List<String> fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.multiGet(keyList);
                 return null;
             }
         });
@@ -174,8 +150,6 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public Boolean fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.delete(key);
                 return null;
             }
         });
@@ -190,8 +164,6 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
             @Override
             public Set<String> fallback() {
-                if (fallbackStorage != null)
-                    return fallbackStorage.keys(pattern);
                 return null;
             }
         });
