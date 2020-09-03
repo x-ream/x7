@@ -22,23 +22,23 @@ public class AppTest {
 
 //        xxxTest.testLock();
 //
-//        xxxTest.testFindToHandle();
-//        xxxTest.testTemporaryTable();
+        xxxTest.testFindToHandle();
+        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
         xxxTest.testNonPaged();
 
 
         xxxTest.inOrder();
-//        xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
-//        xxxTest.testNonPaged();
+        xxxTest.testOrderFind();
+        xxxTest.testOrderFindByAlia();
+        xxxTest.testNonPaged();
 
 //        xxxTest.testReyClient();
 //        xxxTest.testTime();
 //        xxxTest.getBase();
 
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 

@@ -254,6 +254,9 @@ public class XxxController {
 
 //		Criteria.ResultMapCriteria criteria = builder.build();
         Criteria criteria = builder.build();
+
+        String str = JsonX.toJson(criteria);
+        criteria = JsonX.toObject(str, Criteria.class);
         Page p = catRepository.find(criteria);
 
         return ViewEntity.ok(p);
