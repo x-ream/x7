@@ -164,13 +164,10 @@ public class XxxTest {
     }
 
     public ViewEntity get(){
-        ViewEntity ve = this.controller.get();
-        System.out.println(ve.getBody());
-        return ve;
+        return this.controller.get();
     }
 
     public int getBase(){
-
         return testServiceRemote.getBase();
     }
 
@@ -260,7 +257,7 @@ public class XxxTest {
         L2CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(471L);
+        cat.setId(472L);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);

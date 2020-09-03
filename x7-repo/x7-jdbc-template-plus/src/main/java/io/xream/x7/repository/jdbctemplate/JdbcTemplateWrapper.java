@@ -139,7 +139,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
 
     }
 
-    private  <T> List<T> queryForList0(String sql, Collection<Object> list, Parsed parsed, Dialect dialect, ObjectFinder.FixedRowMapper fixedRowMapper) {
+    private  <T> List<T> queryForList0(String sql, Collection<Object> list, Parsed parsed, Dialect dialect, BaseFinder.FixedRowMapper fixedRowMapper) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<T> rowMapper = (resultSet, i) -> {

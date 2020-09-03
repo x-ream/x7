@@ -397,7 +397,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(256L);
+        cat.setId(501L);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -406,10 +406,10 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(257L);
+        cat1.setId(502L);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
-        cat1.setTestBoo(TestBoo.TEST);
+        cat1.setTestBoo(TestBoo.BOO);
         cat1.setList(Arrays.asList(1L, 2L));
         cat1.setTestList(Arrays.asList("THR CAT", "moo cat"));
 
@@ -430,8 +430,6 @@ public class XxxController {
         List<Cat> catList = this.catRepository.in(
                 InCondition.wrap("testBoo", Arrays.asList(TestBoo.BOO, TestBoo.TEST))
         );
-        System.out.println(catList);
-        catList.forEach(cat -> System.out.println(cat.getTestBoo()));
 
         return ViewEntity.ok(catList);
     }

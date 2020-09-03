@@ -21,51 +21,45 @@ public class AppTest {
     public void testAll(){
 
 //        xxxTest.testLock();
-//
-        xxxTest.testFindToHandle();
-        xxxTest.testTemporaryTable();
+
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
 
 //        xxxTest.orderSharding();
-        xxxTest.testNonPaged();
+//        xxxTest.testNonPaged();
 
 
-        xxxTest.inOrder();
+//        xxxTest.inOrder();
         xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
         xxxTest.testNonPaged();
 
-//        xxxTest.testReyClient();
-//        xxxTest.testTime();
-//        xxxTest.getBase();
-
         xxxTest.testCriteria();
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 
 //        xxxTest.testResultMappedRemote();
 
-//        xxxTest.testResultMapped();
+        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 //        xxxTest.testResultMapped();
 
-
-//        repositoryTest.refresh();
 
 //        xxxTest.testListPlainValue();
-
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
+//
+        xxxTest.testAlia();
+        xxxTest.distinct();
 
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-        xxxTest.refreshByCondition();
-//        xxxTest.testListCriteria();
+//        xxxTest.refreshByCondition();
+        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
 //        xxxTest.testCreate();
@@ -83,10 +77,10 @@ public class AppTest {
 
 //        xxxTest.testLock();
 
+        xxxTest.in();
 //        xxxTest.in();
 //        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.get();
+        xxxTest.get();
 //        xxxTest.get();
 //        xxxTest.get();
 
