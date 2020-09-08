@@ -41,7 +41,11 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public void setClz(Class<T> clz) {
         super.setClz(clz);
         super.hook();
-        SqliLoggerProxy.put(clz, LoggerFactory.getLogger(objectType));
+        if (clz == Void.class) {
+            SqliLoggerProxy.put(objectType, LoggerFactory.getLogger(objectType));
+        }else{
+            SqliLoggerProxy.put(clz, LoggerFactory.getLogger(objectType));
+        }
     }
 
     public RepositoryProxy(){
@@ -59,6 +63,7 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     private Class<?> objectType;
     public void setObjectType(Class<?> objectType) {
         this.objectType = objectType;
+        super.setChildClzz(objectType);
     }
 
     @Override

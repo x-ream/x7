@@ -16,11 +16,11 @@
  */
 package io.xream.x7;
 
+import io.xream.sqli.api.CriteriaToSql;
 import io.xream.sqli.api.Dialect;
 import io.xream.sqli.api.JdbcWrapper;
 import io.xream.sqli.cache.L2CacheResolver;
 import io.xream.sqli.cache.L2CacheStorage;
-import io.xream.sqli.repository.api.CriteriaToSql;
 import io.xream.sqli.repository.api.Repository;
 import io.xream.sqli.repository.cache.CacheableRepository;
 import io.xream.sqli.repository.dao.Dao;

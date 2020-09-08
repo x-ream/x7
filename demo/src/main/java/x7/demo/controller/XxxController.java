@@ -167,8 +167,8 @@ public class XxxController {
 
         builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
         //或者如下
-        builder.sourceScript().source("catTest");
-        builder.sourceScript().source("dogTest").joinType(INNER_JOIN).on("id", JoinFrom.of("catTest", "dogId"));
+        builder.sourceBuilder().source("catTest");
+        builder.sourceBuilder().source("dogTest").joinType(INNER_JOIN).on("id", JoinFrom.of("catTest", "dogId"));
 
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
@@ -228,7 +228,7 @@ public class XxxController {
         builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
         builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.paged().orderIn("c.type", Arrays.asList("WHITE", "BLACK"));
-        builder.sourceScript().source("catTest").alia("c");
+        builder.sourceBuilder().source("catTest").alia("c");
 
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
@@ -428,7 +428,7 @@ public class XxxController {
     public ViewEntity in() {
 
         List<Cat> catList = this.catRepository.in(
-                InCondition.wrap("testBoo", Arrays.asList(TestBoo.BOO, TestBoo.TEST))
+                "testBoo", Arrays.asList(TestBoo.BOO, TestBoo.TEST)
         );
 
         return ViewEntity.ok(catList);

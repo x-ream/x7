@@ -41,8 +41,7 @@ public class RepositoryInvocationHandler implements InvocationHandler {
             String methodName = method.getName();
             if (methodName.equals("toString"))
                 return null;
-
-            Class clz = repository.getClzz();
+            final Class clz = repository.getClzz() == Void.class ? repository.getObjectType() : repository.getClzz();
 
             SqliLoggerProxy.debug(clz, () -> {
                 String argStr = (args != null && args.length > 0) ? args[0].getClass().getSimpleName() : "";

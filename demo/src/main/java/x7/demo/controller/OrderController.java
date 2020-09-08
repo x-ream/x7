@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.Order;
+import x7.demo.entity.OrderLog;
 import x7.demo.entity.OrderType;
 import x7.demo.repository.OmsRepository;
-import x7.demo.repository.OrderItemRepository;
 import x7.demo.repository.OrderRepository;
 
 import java.util.Arrays;
@@ -89,8 +89,8 @@ public class OrderController {
         builder.beginSub().eq("o.name",null).endSub();
         builder.in("i.name", Arrays.asList("test"));
         builder.nonNull("i.name").nonNull("l.log");
-        builder.sourceScript().source("order").alia("o");
-        builder.sourceScript().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
+        builder.sourceBuilder().source("order").alia("o");
+        builder.sourceBuilder().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
                 .on("orderId", JoinFrom.of("o","id"))
                 .more().or()
                     .beginSub()
@@ -99,8 +99,20 @@ public class OrderController {
                         .or().eq("i.type", null)
                             .beginSub().eq("o.type",OrderType.SINGLE).endSub().or()
                     .endSub().x("i.orderId > 1");
-        builder.sourceScript().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
-                .on("orderId", JoinFrom.of("o","id"));
+//        builder.sourceBuilder().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
+//                .on("orderId", JoinFrom.of("o","id"));
+
+        builder.sourceBuilder().sub(//demo for clickhouse
+                subBuilder -> {
+                    subBuilder
+                            .resultKey("orderLog.orderId", "orderId")
+                            .resultKey("orderLog.log","log")
+                            .sourceScript("FROM orderLog INNER JOIN cat ON cat.id = orderLog.orderId")
+                            .gt("orderLog.orderId",1)
+                            .groupBy("orderLog.orderId");
+                }
+        ).alia("l").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.of("o","id"));
+
         builder.groupBy("o.id");
 
         builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
@@ -114,7 +126,7 @@ public class OrderController {
 
     public ViewEntity in(){
         List<Order> list = this.orderRepository.in(
-                InCondition.wrap("name",Arrays.asList("xxx"))
+                "name",Arrays.asList("xxx")
         );
         return ViewEntity.ok(list);
     }
