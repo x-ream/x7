@@ -47,6 +47,12 @@ public class RepositoryStarter  {
 
     private Logger logger = LoggerFactory.getLogger(RepositoryStarter.class);
 
+    private boolean isSupported(String driverClassName){
+        return driverClassName.toLowerCase().contains("mysql")
+                ||driverClassName.toLowerCase().contains("clickhouse")
+                || driverClassName.toLowerCase().contains("oracle");
+    }
+
     @Bean
     @Order(2)
     public Dialect dialect(Environment environment){
@@ -55,11 +61,13 @@ public class RepositoryStarter  {
 
         Dialect dialect = null;
         try {
-            if (driverClassName.contains(DbType.MYSQL)) {
-                DbType.value = DbType.MYSQL;
+            if (driverClassName.contains(DbType.MYSQL)
+                ||driverClassName.contains(DbType.CLICKHOUSE)
+            ) {
+                DbType.setValue(DbType.MYSQL);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             } else if (driverClassName.contains(DbType.ORACLE)) {
-                DbType.value = DbType.ORACLE;
+                DbType.setValue(DbType.ORACLE);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
             }
             initDialect(dialect);
@@ -93,8 +101,7 @@ public class RepositoryStarter  {
         String driverClassName = getDbDriverKey(environment);
 
         Dao dao =  null;
-        if (driverClassName.toLowerCase().contains("mysql")
-                || driverClassName.toLowerCase().contains("oracle")) {
+        if (isSupported(driverClassName)) {
             dao = new DaoImpl();
         }
         return dao;
@@ -120,8 +127,7 @@ public class RepositoryStarter  {
         String driverClassName = getDbDriverKey(environment);
 
         DataTransform dataTransform = null;
-        if (driverClassName.toLowerCase().contains("mysql")
-                || driverClassName.toLowerCase().contains("oracle")) {
+        if (isSupported(driverClassName)) {
             dataTransform = new SqlDataTransform();
             ((SqlDataTransform) dataTransform).setDao(dao);
         }
@@ -156,8 +162,7 @@ public class RepositoryStarter  {
         String driverClassName = getDbDriverKey(environment);
         DefaultTemporaryRepository temporaryRepository = new DefaultTemporaryRepository();
         DataTransform dataTransform = null;
-        if (driverClassName.toLowerCase().contains("mysql")
-                || driverClassName.toLowerCase().contains("oracle")) {
+        if (isSupported(driverClassName)) {
             dataTransform = new SqlDataTransform();
             ((SqlDataTransform) dataTransform).setDao(dao);
         }

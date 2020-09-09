@@ -85,7 +85,7 @@ public class OrderController {
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.resultKey("o.name","o_name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity", Having.of(Op.LT,10));
 //        builder.resultWithDottedKey();
-        builder.resultKey("o.name").distinct("o.id").reduce(ReduceType.SUM,"i.quantity",Having.of(Op.LT,10));
+        builder.resultKey("o.name");
         builder.beginSub().eq("o.name",null).endSub();
         builder.in("i.name", Arrays.asList("test"));
         builder.nonNull("i.name").nonNull("l.log");
@@ -99,23 +99,24 @@ public class OrderController {
                         .or().eq("i.type", null)
                             .beginSub().eq("o.type",OrderType.SINGLE).endSub().or()
                     .endSub().x("i.orderId > 1");
-//        builder.sourceBuilder().source("orderLog").alia("l").joinType(JoinType.INNER_JOIN)
-//                .on("orderId", JoinFrom.of("o","id"));
 
         builder.sourceBuilder().sub(//demo for clickhouse
                 subBuilder -> {
                     subBuilder
-                            .resultKey("orderLog.orderId", "orderId")
-                            .resultKey("orderLog.log","log")
-                            .sourceScript("FROM orderLog INNER JOIN cat ON cat.id = orderLog.orderId")
-                            .gt("orderLog.orderId",1)
-                            .groupBy("orderLog.orderId");
+                            .resultKey("ol.orderId", "orderId")
+                            .resultKey("ol.log","log").gt("ol.orderId",1).groupBy("ol.orderId");
+                    subBuilder.sourceBuilder().sub(subBuilder1 -> {
+                                subBuilder1.resultKey("ot.orderId","orderId")
+                                        .resultKey("ot.log","log")
+                                        .sourceScript("FROM orderLog ot INNER JOIN cat c ON c.id = ot.id")
+                                        .withoutOptimization();
+                            } ).alia("ol");
                 }
-        ).alia("l").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.of("o","id"));
+        ).alia("l").join("INNER JOIN").on("orderId",JoinFrom.of("o","id"));
 
         builder.groupBy("o.id");
 
-        builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
+        builder.paged().page(1).rows(10).sort("o.id", Direction.DESC);
 
         Criteria.ResultMapCriteria criteria = builder.build();
 
