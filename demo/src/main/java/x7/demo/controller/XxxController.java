@@ -352,7 +352,7 @@ public class XxxController {
 
     @RequestMapping("/listCriteria")
     public ViewEntity listCriteria() {
-        //		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
+     
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
 //		builder.resultKey("id").resultKey("type");

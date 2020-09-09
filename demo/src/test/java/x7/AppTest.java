@@ -49,7 +49,7 @@ public class AppTest {
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-//        xxxTest.refreshByCondition();
+        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
