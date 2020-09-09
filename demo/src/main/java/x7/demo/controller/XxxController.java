@@ -3,8 +3,8 @@ package x7.demo.controller;
 
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
-import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.cache.CacheableL3;
+import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +91,7 @@ public class XxxController {
     public ViewEntity create() {
 
         Cat cat = new Cat();
-        cat.setId(353L);
+        cat.setId(354L);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -109,9 +109,8 @@ public class XxxController {
         cat.setTestList(Arrays.asList("THR CAT", "moo cat"));
 
         this.catRepository.create(cat);
-        throw new RuntimeException("-----------------------------> test wawawawa");
 
-//		return ViewEntity.ok();
+		return ViewEntity.ok();
     }
 
     @RequestMapping("/refreshByCondition")
@@ -388,7 +387,7 @@ public class XxxController {
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(251);
+        boolean flag = this.catRepository.remove(354);
         return ViewEntity.ok(flag);
     }
 

@@ -14,13 +14,8 @@ public class AppTest {
     @Autowired
     private XxxTest xxxTest;
 
-
-//    private Executor executor = Executors.newFixedThreadPool(11);
-
     @Test
     public void testAll(){
-
-//        xxxTest.testLock();
 
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
@@ -31,7 +26,7 @@ public class AppTest {
 
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
+//        xxxTest.testOrderFindByAlia();
 //        xxxTest.testNonPaged();
 //
 //        xxxTest.testCriteria();
@@ -46,15 +41,11 @@ public class AppTest {
 //        xxxTest.testResultMappedRemote();
 
 //        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
-//        xxxTest.testResultMapped();
-
 
 //        xxxTest.testListPlainValue();
-//
+
 //        xxxTest.testAlia();
 //        xxxTest.distinct();
-
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
@@ -72,25 +63,10 @@ public class AppTest {
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
 
-
 //        xxxTest.testLock();
 
 //        xxxTest.testLock();
 
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.in();
-//        xxxTest.get();
-//        xxxTest.get();
-//        xxxTest.get();
-
-//        xxxTest.removeRefreshCreate();
-//
-//        xxxTest.testCacheGet();
-//
-//        xxxTest.testFallbackOnly("test");
-//
-//        xxxTest.testTemporaryTable();
 
     }
 

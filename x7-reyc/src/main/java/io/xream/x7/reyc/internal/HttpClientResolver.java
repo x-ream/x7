@@ -25,8 +25,6 @@ import io.xream.x7.reyc.Url;
 import io.xream.x7.reyc.api.GroupRouter;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
-import io.xream.x7.reyc.api.SimpleResult;
-import org.apache.http.HttpResponseInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**

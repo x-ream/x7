@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.Order;
-import x7.demo.entity.OrderLog;
 import x7.demo.entity.OrderType;
 import x7.demo.repository.OmsRepository;
 import x7.demo.repository.OrderRepository;

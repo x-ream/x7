@@ -47,11 +47,6 @@ public class RepositoryStarter  {
 
     private Logger logger = LoggerFactory.getLogger(RepositoryStarter.class);
 
-    private boolean isSupported(String driverClassName){
-        return driverClassName.toLowerCase().contains("mysql")
-                ||driverClassName.toLowerCase().contains("clickhouse")
-                || driverClassName.toLowerCase().contains("oracle");
-    }
 
     @Bean
     @Order(2)
@@ -196,8 +191,14 @@ public class RepositoryStarter  {
 
         }
         if (driverClassName == null)
-            return "mysql";
+            return DbType.MYSQL;
         return driverClassName.toLowerCase();
+    }
+
+    private boolean isSupported(String driverClassName){
+        return driverClassName.toLowerCase().contains(DbType.MYSQL)
+                ||driverClassName.toLowerCase().contains(DbType.CLICKHOUSE)
+                || driverClassName.toLowerCase().contains(DbType.ORACLE);
     }
 
 }
