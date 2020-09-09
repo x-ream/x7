@@ -26,7 +26,7 @@ public class AppTest {
 
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
 //        xxxTest.testNonPaged();
 //
 //        xxxTest.testCriteria();

@@ -167,7 +167,7 @@ public class XxxController {
         builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
         //或者如下
         builder.sourceBuilder().source("catTest");
-        builder.sourceBuilder().source("dogTest").joinType(INNER_JOIN).on("id", JoinFrom.of("catTest", "dogId"));
+        builder.sourceBuilder().source("dogTest").join(INNER_JOIN).on("id", JoinFrom.of("catTest", "dogId"));
 
         Criteria.ResultMapCriteria resultMapped = builder.build();
 

@@ -89,7 +89,7 @@ public class OrderController {
         builder.in("i.name", Arrays.asList("test"));
         builder.nonNull("i.name").nonNull("l.log");
         builder.sourceBuilder().source("order").alia("o");
-        builder.sourceBuilder().source("orderItem").alia("i").joinType(JoinType.LEFT_JOIN)
+        builder.sourceBuilder().source("orderItem").alia("i").join(JoinType.LEFT_JOIN)
                 .on("orderId", JoinFrom.of("o","id"))
                 .more().or()
                     .beginSub()
@@ -111,7 +111,7 @@ public class OrderController {
                                         .withoutOptimization();
                             } ).alia("ol");
                 }
-        ).alia("l").join("INNER JOIN").on("orderId",JoinFrom.of("o","id"));
+        ).alia("l").join(JoinType.LEFT_JOIN).on("orderId",JoinFrom.of("o","id"));
 
         builder.groupBy("o.id");
 
