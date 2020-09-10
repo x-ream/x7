@@ -92,17 +92,17 @@ public class XxxController {
     public ViewEntity create() {
 
         Cat cat = new Cat();
-        cat.setId(354L);
-        cat.setDogId(2);
+        cat.setId(355L);
+        cat.setDogId(3);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
-        cat.setList(Arrays.asList(6L, 8L));
-        cat.setTestList(Arrays.asList("BIG CAT", "small cat"));
+        cat.setList(Arrays.asList(7L, 8L));
+        cat.setTestList(Arrays.asList("BIG xx CAT", "small cat"));
 
         this.catRepository.create(cat);
 
         cat = new Cat();
-        cat.setId(353L);
+        cat.setId(356L);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -121,7 +121,7 @@ public class XxxController {
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
                         .refresh("testBoo", TestBoo.BOO)
-                        .refresh("testList", Arrays.asList("8989","2222"))
+                        .refresh("testList", Arrays.asList("238989","112222"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
@@ -384,7 +384,7 @@ public class XxxController {
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(354);
+        boolean flag = this.catRepository.remove(5013);
         return ViewEntity.ok(flag);
     }
 
@@ -393,7 +393,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(501L);
+        cat.setId(503);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -402,7 +402,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(502L);
+        cat1.setId(504);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);

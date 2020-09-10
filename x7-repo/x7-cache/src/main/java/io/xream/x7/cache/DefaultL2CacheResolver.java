@@ -17,7 +17,7 @@
 package io.xream.x7.cache;
 
 import io.xream.sqli.annotation.X;
-import io.xream.sqli.api.QueryForCache;
+import io.xream.sqli.core.QueryForCache;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.InCondition;
 import io.xream.sqli.cache.L2CacheConsistency;

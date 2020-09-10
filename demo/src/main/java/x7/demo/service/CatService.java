@@ -1,6 +1,6 @@
 package x7.demo.service;
 
-import io.xream.sqli.api.RowHandler;
+import io.xream.sqli.core.RowHandler;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.RefreshCondition;
 import x7.demo.entity.Cat;

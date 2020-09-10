@@ -1,7 +1,7 @@
 package io.xream.x7.repository.id;
 
 
-import io.xream.sqli.api.IdGenerator;
+import io.xream.sqli.core.IdGenerator;
 
 /**
  * @Author Sim

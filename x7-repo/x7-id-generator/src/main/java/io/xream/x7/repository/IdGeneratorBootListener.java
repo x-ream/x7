@@ -16,7 +16,7 @@
  */
 package io.xream.x7.repository;
 
-import io.xream.sqli.api.RepositoryManagement;
+import io.xream.sqli.core.RepositoryManagement;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.context.ConfigurableApplicationContext;
 
