@@ -23,9 +23,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:https://github.com/buildingBlock-ream/x7</connection>
-        <developerConnection>scm:git:https://github.com/buildingBlock-ream/x7</developerConnection>
-        <url>scm:git:https://github.com/buildingBlock-ream/x7</url>
+        <connection>scm:git:https://github.com/x-ream/x7</connection>
+        <developerConnection>scm:git:https://github.com/x-ream/x7</developerConnection>
+        <url>scm:git:https://github.com/x-ream/x7</url>
         <tag>2.4.0.RELEASE</tag>
     </scm>
 
