@@ -63,12 +63,13 @@ public class OrderController {
 //        builder.and().beginSub().gt("o.createAt",System.currentTimeMillis() - 1000000)
 //                .and().lt("o.createAt",System.currentTimeMillis()).endSub();
 //        builder.sourceScript().source("order").alia("o");
-//        builder.sourceScript().source("orderItem").joinType(JoinType.INNER_JOIN).on("orderId",JoinFrom.of("order","id"))
+//        builder.sourceScript().source("orderItem").join(JoinType.INNER_JOIN).on("orderId",JoinFrom.of("order","id"))
 //                .more().x("orderItem.name = order.name");
         builder.sourceScript("FROM order o INNER JOIN orderItem i ON o.id = i.orderId" +
                 " INNER JOIN orderLog l ON o.id = l.orderId");
         builder.withoutOptimization();
-        builder.paged().ignoreTotalRows().page(1).rows(10).sort("o.id", Direction.DESC);
+        builder.sort("o.id", Direction.DESC);
+        builder.paged().ignoreTotalRows().page(1).rows(10);
 
 
         Criteria.ResultMapCriteria criteria = builder.build();
@@ -108,14 +109,14 @@ public class OrderController {
                                 subBuilder1.resultKey("ot.orderId","orderId")
                                         .resultKey("ot.log","log")
                                         .sourceScript("FROM orderLog ot INNER JOIN cat c ON c.id = ot.id")
-                                        .withoutOptimization();
+                                        .withoutOptimization()
+                                        .sort("ot.id",Direction.ASC);
                             } ).alia("ol");
                 }
         ).alia("l").join(JoinType.LEFT_JOIN).on("orderId",JoinFrom.of("o","id"));
 
-        builder.groupBy("o.id");
-
-        builder.paged().page(1).rows(10).sort("o.id", Direction.DESC);
+        builder.groupBy("o.id").sort("o.id", Direction.DESC);
+        builder.paged().page(1).rows(10);
 
         Criteria.ResultMapCriteria criteria = builder.build();
 

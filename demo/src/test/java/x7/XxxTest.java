@@ -175,7 +175,7 @@ public class XxxTest {
 
         CriteriaBuilder builder = CriteriaBuilder.builder(CatTest.class);
         builder.nonNull("type");
-        builder.paged().sort("id", Direction.DESC).page(1).rows(10);
+        builder.sort("id", Direction.DESC).paged().ignoreTotalRows().page(1).rows(10);
         Criteria criteria = builder.build();
         return controller.testCriteria(criteria);
     }
@@ -307,7 +307,7 @@ public class XxxTest {
         builder.distinct("id").reduce(ReduceType.COUNT,"dogId").groupBy("id");
 //        builder.resultKey("id").resultKey("dogId");
         builder.and().eq("type","NL");
-        builder.paged().page(1).rows(10).sort("id", Direction.DESC);
+        builder.sort("id", Direction.DESC).paged().page(1).rows(10);
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
 

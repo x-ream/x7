@@ -2,6 +2,7 @@ package x7.demo.controller;
 
 
 import io.xream.sqli.builder.*;
+import io.xream.sqli.page.Direction;
 import io.xream.sqli.page.Page;
 import io.xream.x7.base.cache.CacheableL3;
 import io.xream.x7.base.util.JsonX;
@@ -143,11 +144,11 @@ public class XxxController {
                 .reduce(COUNT_DISTINCT, "catTest.id")
                 .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
                 .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(?)","catTest.time")
-//                .paged().ignoreTotalRows().page(1).rows(2).sort("catTest.dogId", DESC);
-                .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows()).sort(ro.getOrderBy(),ro.getDirection());
-        String sourceScript = "FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id";
+                .sourceScript("FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id")
+                .sort(ro.getOrderBy(),ro.getDirection())
+                .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows());
         Criteria.ResultMapCriteria resultMapped = builder.build();
-        resultMapped.setSourceScript(sourceScript);
+
         Page<Map<String, Object>> page = repository.find(resultMapped);
 
         return ViewEntity.ok(page);
@@ -161,8 +162,6 @@ public class XxxController {
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("catTest.id");
         builder.beginSub().gte("dogTest.id", 1000).endSub();
-//		builder.and().in("catTest.catFriendName", inList);
-//		builder.paged().ignoreTotalRows().orderIn("catTest.catFriendName",inList);//按IN查询条件排序，有值，就过滤掉orderBy
 
         builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
         //或者如下
@@ -197,7 +196,7 @@ public class XxxController {
         builder.or().eq("d.petId", 0);
         builder.or().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(0));
-        builder.paged().orderIn("c.catFriendName", inList).sort("c.id", DESC);
+        builder.paged().orderIn("c.catFriendName", inList);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
@@ -241,15 +240,13 @@ public class XxxController {
 
     public ViewEntity nonPaged(@RequestBody CatRO ro) {
 
-//		CriteriaBuilder.ResultMappedBuilder builder = CriteriaBuilder.buildResultMapped(Cat.class);
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
-//		builder.resultKey("id").resultKey("type");
 
         builder.and().eq("testBoo",TestBoo.TEST);
         builder.and().eq("taxType", null);
         builder.and().in("type", Arrays.asList("BL","NL"));
-        builder.paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
+        builder.sort("id", DESC).paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
 
 //		Criteria.ResultMapCriteria criteria = builder.build();
         Criteria criteria = builder.build();
@@ -332,7 +329,7 @@ public class XxxController {
                 .groupBy("id")
         ;
         builder.and().eq("type", "NL");
-        builder.paged().page(2).rows(2).sort("id", DESC);
+        builder.sort("id", DESC).paged().page(2).rows(2);
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
         Page<Map<String, Object>> page = this.catRepository.find(ResultMapCriteria);

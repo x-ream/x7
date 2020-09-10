@@ -20,20 +20,20 @@ public class AppTest {
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
 
-//        xxxTest.orderSharding();
-//        xxxTest.testNonPaged();
+        xxxTest.orderSharding();
+        xxxTest.testNonPaged();
 
 
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 //
-//        xxxTest.testCriteria();
+        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 //        xxxTest.testCriteria();
 
-//        xxxTest.testListCriteria();
+        xxxTest.testListCriteria();
 
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
@@ -42,10 +42,10 @@ public class AppTest {
 
 //        xxxTest.testResultMapped();
 
-//        xxxTest.testListPlainValue();
+        xxxTest.testListPlainValue();
 
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
+        xxxTest.testAlia();
+        xxxTest.distinct();
 
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
