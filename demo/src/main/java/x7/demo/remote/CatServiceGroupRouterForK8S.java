@@ -1,6 +1,6 @@
 package x7.demo.remote;
 
-import io.xream.sqli.api.Routeable;
+import io.xream.sqli.api.Routable;
 import io.xream.x7.base.util.StringUtil;
 import io.xream.x7.base.util.VerifyUtil;
 import io.xream.x7.reyc.api.GroupRouter;
@@ -43,8 +43,8 @@ public class CatServiceGroupRouterForK8S implements GroupRouter {
                 return null;
             String str = VerifyUtil.toMD5(ro.getCatFriendName());
             return str.substring(0, 2);
-        } else if (obj instanceof Routeable) {
-            Object keyObj = ((Routeable) obj).getRouteKey();
+        } else if (obj instanceof Routable) {
+            Object keyObj = ((Routable) obj).getRouteKey();
             if (Objects.isNull(keyObj))
                 return null;
             if (keyObj instanceof String) {
