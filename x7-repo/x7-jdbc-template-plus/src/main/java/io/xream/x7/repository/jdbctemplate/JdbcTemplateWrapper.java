@@ -145,7 +145,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
 
             Map<String, Object> map = columnMapRowMapper.mapRow(resultSet, i);
             try {
-                Class<T> clz = parsed.getClz();
+                Class<T> clz = parsed.getClzz();
                 T t = clz.newInstance();
                 fixedRowMapper.mapRow(t,map,parsed.getBeanElementList(),dialect);
                 return t;
@@ -246,7 +246,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             T t = null;
             if (resultMapHelpful == null) {
                 try {
-                    Class<T> clzz = orParsed.getClz();
+                    Class<T> clzz = orParsed.getClzz();
                     t = (T) clzz.newInstance();
                     toObject(t, dataMap, orParsed.getBeanElementList(), dialect);
                 } catch (Exception e) {
