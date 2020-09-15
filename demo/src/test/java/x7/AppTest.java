@@ -17,36 +17,30 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testFindToHandle();
-//        xxxTest.testTemporaryTable();
+        xxxTest.testFindToHandle();
+        xxxTest.testTemporaryTable();
 
-//        xxxTest.orderSharding();
-//        xxxTest.testNonPaged();
-
-
-//        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
+        xxxTest.inOrder();
+        xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
-//        xxxTest.testNonPaged();
-//
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
-//        xxxTest.testCriteria();
+        xxxTest.testNonPaged();
 
-//        xxxTest.testListCriteria();
+        xxxTest.testCriteria();
 
+        xxxTest.testListCriteria();
+
+        xxxTest.testResultMapped();
+        xxxTest.testListPlainValue();
+        xxxTest.testAlia();
+        xxxTest.distinct();
+        {
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 
 //        xxxTest.testResultMappedRemote();
+        }
 
-//        xxxTest.testResultMapped();
-
-//        xxxTest.testListPlainValue();
-
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
-
+        {
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
 //        xxxTest.refreshByCondition();
@@ -63,9 +57,7 @@ public class AppTest {
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
 
-//        xxxTest.testLock();
-
-//        xxxTest.testLock();
+        }
 
 
     }

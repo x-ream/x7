@@ -178,29 +178,29 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, ResultMapHelper resultMapHelper, Class orClzz, Dialect dialect) {
+    public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, ResultMapHelpful resultMapHelpful, Class orClzz, Dialect dialect) {
 
         return toResultMapList(
-                resultMapHelper.isResultWithDottedKey(),
+                resultMapHelpful.isResultWithDottedKey(),
                 fixedRowMapper -> queryForMapList0(
                         sql,
                         valueList,
                         dialect,
                         jdbcTemplate,
-                        resultMapHelper,
+                        resultMapHelpful,
                         orClzz,
                         fixedRowMapper));
 
     }
 
-    private List<Map<String, Object>> queryForMapList0(String sql,Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, ResultMapHelper resultMapHelper,  Class orClzz, ResultMapFinder.FixedRowMapper fixedRowMapper) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, ResultMapHelpful resultMapHelpful, Class orClzz, ResultMapFinder.FixedRowMapper fixedRowMapper) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<Map<String, Object>> rowMapper = (resultSet, i) -> {
 
             Map<String, Object> map = columnMapRowMapper.mapRow(resultSet, i);
             try {
-                return fixedRowMapper.mapRow(map, orClzz, resultMapHelper, dialect);
+                return fixedRowMapper.mapRow(map, orClzz, resultMapHelpful, dialect);
             } catch (Exception e) {
                 throw ExceptionTranslator.onQuery(e, logger);
             }
@@ -216,7 +216,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     }
 
     @Override
-    public <T> void queryForMapToHandle(String sql, Collection<Object> valueList, Dialect dialect, ResultMapHelper resultMapHelper, Parsed orParsed, RowHandler<T> handler) {
+    public <T> void queryForMapToHandle(String sql, Collection<Object> valueList, Dialect dialect, ResultMapHelpful resultMapHelpful, Parsed orParsed, RowHandler<T> handler) {
 
         RowMapper<Map<String, Object>> rowMapper = new ColumnMapRowMapper();
 
@@ -244,7 +244,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
             Map<String, Object> dataMap = rowMapper.mapRow(resultSet, 0);
 
             T t = null;
-            if (resultMapHelper == null) {
+            if (resultMapHelpful == null) {
                 try {
                     Class<T> clzz = orParsed.getClz();
                     t = (T) clzz.newInstance();
@@ -253,7 +253,7 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
                     throw ExceptionTranslator.onQuery(e, logger);
                 }
             } else {
-                 t = (T) toResultMap(resultMapHelper,dialect,dataMap);
+                 t = (T) toResultMap(resultMapHelpful,dialect,dataMap);
             }
             if (t != null) {
                 handler.handle(t);

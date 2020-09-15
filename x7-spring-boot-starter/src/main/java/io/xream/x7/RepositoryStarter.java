@@ -21,12 +21,13 @@ import io.xream.sqli.core.Dialect;
 import io.xream.sqli.core.JdbcWrapper;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.cache.L2CacheResolver;
-import io.xream.sqli.repository.api.Repository;
+import io.xream.sqli.repository.builder.DefaultCriteriaToSql;
 import io.xream.sqli.repository.cache.CacheableRepository;
+import io.xream.sqli.repository.core.Repository;
 import io.xream.sqli.repository.dao.*;
 import io.xream.sqli.repository.internal.DefaultTemporaryRepository;
-import io.xream.sqli.repository.mapper.DefaultTemporaryTableParser;
-import io.xream.sqli.repository.mapper.MapperFactory;
+import io.xream.sqli.repository.init.DefaultTemporaryTableParser;
+import io.xream.sqli.repository.init.SqlInitFactory;
 import io.xream.sqli.repository.transform.DataTransform;
 import io.xream.sqli.repository.transform.SqlDataTransform;
 import io.xream.sqli.starter.DbType;
@@ -77,10 +78,8 @@ public class RepositoryStarter  {
     @Order(3)
     public CriteriaToSql criteriaParser(Dialect dialect) {
 
-        CriteriaToSql criteriaParser =  new DefaultCriteriaToSql();
-        criteriaParser.setDialect(dialect);
+        return  new DefaultCriteriaToSql();
 
-        return criteriaParser;
     }
 
     @Bean
@@ -180,7 +179,7 @@ public class RepositoryStarter  {
      * @param dialect
      */
     private void initDialect(Dialect dialect) {
-        MapperFactory.Dialect = dialect;
+        SqlInitFactory.Dialect = dialect;
     }
 
     private String getDbDriverKey(Environment environment) {
