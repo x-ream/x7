@@ -2,7 +2,6 @@ package x7.demo.controller;
 
 
 import io.xream.sqli.builder.*;
-import io.xream.sqli.page.Direction;
 import io.xream.sqli.page.Page;
 import io.xream.x7.base.cache.CacheableL3;
 import io.xream.x7.base.util.JsonX;
@@ -460,7 +459,7 @@ public class XxxController {
 
         List<Cat> list = Arrays.asList(cat1, cat2);
 
-        RemoveRefreshCreate<Cat> wrapper = RemoveRefreshCreate.wrap(list, new Object[]{1, 251});
+        RemoveRefreshCreate<Cat> wrapper = RemoveRefreshCreate.of(list, new Object[]{1, 251});
 
         String str = JsonX.toJson(wrapper);
         wrapper = JsonX.toObject(str, RemoveRefreshCreate.class);
