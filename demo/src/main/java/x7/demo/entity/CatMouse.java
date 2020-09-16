@@ -8,6 +8,8 @@ public class CatMouse {
     private long id;
     private long catId;
     private long mouseId;
+    @X.Mapping("t_cat")
+    private String cat;
 
     public long getId() {
         return id;
@@ -31,6 +33,14 @@ public class CatMouse {
 
     public void setMouseId(long mouseId) {
         this.mouseId = mouseId;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
     }
 
     @Override
