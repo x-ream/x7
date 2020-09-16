@@ -25,7 +25,7 @@ import static io.xream.sqli.builder.JoinType.INNER_JOIN;
 import static io.xream.sqli.builder.Op.GT;
 import static io.xream.sqli.builder.ReduceType.COUNT_DISTINCT;
 import static io.xream.sqli.builder.ReduceType.SUM;
-import static io.xream.sqli.page.Direction.DESC;
+import static io.xream.sqli.builder.Direction.DESC;
 
 
 @RestController

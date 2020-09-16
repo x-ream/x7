@@ -8,7 +8,7 @@ import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.ReduceType;
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.sqli.cache.L2CacheFilter;
-import io.xream.sqli.page.Direction;
+import io.xream.sqli.builder.Direction;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import io.xream.x7.fallback.FallbackOnly;

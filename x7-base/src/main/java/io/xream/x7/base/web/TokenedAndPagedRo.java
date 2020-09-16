@@ -16,9 +16,9 @@
  */
 package io.xream.x7.base.web;
 
-import io.xream.sqli.page.Direction;
+import io.xream.sqli.builder.Direction;
 import io.xream.sqli.page.Paged;
-import io.xream.sqli.page.Sort;
+import io.xream.sqli.builder.Sort;
 import io.xream.x7.base.util.StringUtil;
 
 import java.util.ArrayList;
