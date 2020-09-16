@@ -93,6 +93,9 @@ public class ReliableOnConsumedAspect {
                             }
                         }
                     } catch (Throwable e) {
+                        if (e instanceof RuntimeException){
+                            throw (RuntimeException) e;
+                        }
                         throw new RuntimeException(ExceptionUtil.getMessage(e));
                     }
                 }

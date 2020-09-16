@@ -338,7 +338,7 @@ public class XxxController {
         builder.sourceBuilder().source("catTest");
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
-        Page<Map<String, Object>> page = this.catTestRepository.find(ResultMapCriteria); //un workable
+        Page<Map<String, Object>> page = this.petRepository.find(ResultMapCriteria); //un workable
 
         return ViewEntity.ok(page);
     }

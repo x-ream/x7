@@ -130,6 +130,9 @@ public class L3CacheAspect {
                     try {
                         return proceedingJoinPoint.proceed();
                     } catch (Throwable e) {
+                        if (e instanceof RuntimeException){
+                            throw (RuntimeException)e;
+                        }
                         throw new RuntimeException(ExceptionUtil.getMessage(e));
                     }
                 });

@@ -63,6 +63,9 @@ public interface L3CacheResolver extends Protection {
                         return str;//锁住资源的人，等待至同步返回查询结果
                     }
                 } catch (Throwable e) {
+                    if (e instanceof RuntimeException){
+                        throw (RuntimeException)e;
+                    }
                     throw new RuntimeException(ExceptionUtil.getMessage(e));
                 } finally {
                     PeriodCounter.reset(key);

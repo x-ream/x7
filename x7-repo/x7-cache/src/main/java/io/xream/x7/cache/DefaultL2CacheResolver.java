@@ -245,8 +245,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 	private String getKeyForOneObject(Class clz, Object condition){
 		if (condition == null)
 			throw new RuntimeException("getKeyForOneObject, id = " + condition);
-		String key = getPrefixForOneObject(clz) +"."+VerifyUtil.toMD5(""+condition);
-		return key;
+		return getPrefixForOneObject(clz) +"."+VerifyUtil.toMD5(""+condition);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -300,7 +299,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			int validSecond = getValidSecondAdjusted();
 			getCachestorage().set(key, JsonX.toJson(keyList), validSecond,TimeUnit.SECONDS);
 		}catch (Exception e) {
-			throw new L2CacheException(e.getMessage());
+			throwException(e);
 		}
 	}
 
@@ -311,7 +310,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 			int validSecond = getValidSecondAdjusted();
 			getCachestorage().set(key, JsonX.toJson(pagination), validSecond, TimeUnit.SECONDS);
 		}catch (Exception e) {
-			throw new L2CacheException(e.getMessage());
+			throwException(e);
 		}
 	}
 
@@ -447,7 +446,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throwException(e);
 			}
 
 			keyList = new ArrayList<>();
@@ -499,7 +498,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				list = callable.call();
 			} catch (Exception e) {
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throwException(e);
 			}
 
 			keyList = new ArrayList<>();
@@ -550,7 +549,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throwException(e);
 			}
 			set(clz, conditionObj, obj);
 		}
@@ -574,7 +573,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 				obj = callable.call();
 			}catch (Exception e){
 				close();
-				throw new RuntimeException(ExceptionUtil.getMessage(e));
+				throwException(e);
 			}
 			setOne(clz, conditionObj, obj);
 		}
@@ -603,7 +602,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						p = findCallable.call();
 					}catch (Exception e){
 						close();
-						throw new RuntimeException(ExceptionUtil.getMessage(e));
+						throwException(e);
 					}
 
 					setTotalRows(clz, totalRowsString, p.getTotalRows());
@@ -614,7 +613,10 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 						list = listCallable.call();
 					} catch (Exception e) {
 						close();
-						throw new RuntimeException(ExceptionUtil.getMessage(e));
+						if (e instanceof RuntimeException){
+							throw (RuntimeException) e;
+						}
+						throw new L2CacheException(ExceptionUtil.getMessage(e));
 					}
 					p = new Page<>();
 					p.setTotalRows(totalRows);
@@ -627,7 +629,7 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 					p = findCallable.call();
 				}catch (Exception e){
 					close();
-					throw new RuntimeException(ExceptionUtil.getMessage(e));
+					throwException(e);
 				}
 			}
 
@@ -746,6 +748,13 @@ public final class DefaultL2CacheResolver implements L2CacheResolver {
 		String str = criteria.getCacheKey();
 		criteria.setPage(page);
 		return str;
+	}
+
+	private void throwException(Exception e) {
+		if (e instanceof RuntimeException){
+			throw (RuntimeException) e;
+		}
+		throw new L2CacheException(ExceptionUtil.getMessage(e));
 	}
 
 }
