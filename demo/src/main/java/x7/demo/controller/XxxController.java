@@ -45,6 +45,12 @@ public class XxxController {
     @Autowired
     private TimeJackRepository timeJackRepository;
 
+    @Autowired
+    private PetRepository petRepository;
+
+    @Autowired
+    private CatTestRepository catTestRepository;
+
     @RequestMapping("/test/rest")
     public ViewEntity testRest(@RequestBody CatTest catTest, HttpServletRequest request) {
 
@@ -329,9 +335,10 @@ public class XxxController {
         ;
         builder.and().eq("type", "NL");
         builder.sort("id", DESC).paged().page(2).rows(2);
+        builder.sourceBuilder().source("catTest");
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
-        Page<Map<String, Object>> page = this.catRepository.find(ResultMapCriteria);
+        Page<Map<String, Object>> page = this.catTestRepository.find(ResultMapCriteria); //un workable
 
         return ViewEntity.ok(page);
     }

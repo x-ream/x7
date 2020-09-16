@@ -16,7 +16,7 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.core.CriteriaToSql;
+import io.xream.sqli.builder.CriteriaToSql;
 import io.xream.sqli.core.Dialect;
 import io.xream.sqli.core.JdbcWrapper;
 import io.xream.sqli.api.TemporaryRepository;

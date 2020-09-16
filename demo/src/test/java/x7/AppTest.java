@@ -27,12 +27,13 @@ public class AppTest {
 
         xxxTest.testCriteria();
 
-        xxxTest.testListCriteria();
+//        xxxTest.testListCriteria();
 
         xxxTest.testResultMapped();
         xxxTest.testListPlainValue();
         xxxTest.testAlia();
         xxxTest.distinct();
+        xxxTest.refreshByCondition();
         {
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
