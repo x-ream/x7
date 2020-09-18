@@ -16,14 +16,13 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.repository.api.TemporaryRepository;
+import io.xream.sqli.api.NativeRepository;
+import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.builder.CriteriaToSql;
-import io.xream.sqli.builder.internal.DefaultCriteriaToSql;
-import io.xream.sqli.repository.cache.L2CacheResolver;
-import io.xream.sqli.repository.core.Dialect;
-import io.xream.sqli.repository.core.JdbcWrapper;
-import io.xream.sqli.repository.api.NativeRepository;
-import io.xream.sqli.repository.core.Repository;
+import io.xream.sqli.cache.L2CacheResolver;
+import io.xream.sqli.internal.Dialect;
+import io.xream.sqli.internal.JdbcWrapper;
+import io.xream.sqli.internal.Repository;
 import io.xream.sqli.repository.init.SqlInitFactory;
 import io.xream.sqli.starter.DbType;
 import io.xream.sqli.starter.SqliStarter;
@@ -40,8 +39,8 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(1)
-    public CriteriaToSql criteriaParser() {
-        return  DefaultCriteriaToSql.newInstance();
+    public CriteriaToSql criteriaToSql() {
+        return  SqliStarter.getInstance().criteriaToSql();
     }
 
     @Bean
@@ -104,8 +103,8 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(8)
-    public NativeRepository nativeRepository(Repository repository){
-        return SqliStarter.getInstance().nativeRepository(repository);
+    public NativeRepository nativeRepository(Repository dataRepository){
+        return SqliStarter.getInstance().nativeRepository(dataRepository);
     }
 
 

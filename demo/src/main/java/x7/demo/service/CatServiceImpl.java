@@ -1,6 +1,6 @@
 package x7.demo.service;
 
-import io.xream.sqli.repository.core.RowHandler;
+import io.xream.sqli.internal.RowHandler;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.RefreshCondition;
 import io.xream.x7.fallback.FallbackOnly;

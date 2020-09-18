@@ -18,8 +18,8 @@ package io.xream.x7.repository.id;
 
 
 
-import io.xream.sqli.repository.core.IdGenerator;
-import io.xream.sqli.repository.api.BaseRepository;
+import io.xream.sqli.internal.IdGenerator;
+import io.xream.sqli.api.BaseRepository;
 
 import java.util.List;
 
