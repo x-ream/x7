@@ -1,6 +1,6 @@
 package x7.demo.controller;
 
-import io.xream.sqli.api.TemporaryRepository;
+import io.xream.sqli.repository.api.TemporaryRepository;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.RefreshCondition;

@@ -7,11 +7,10 @@ import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.CriteriaBuilder;
 import io.xream.sqli.builder.ReduceType;
 import io.xream.sqli.builder.RefreshCondition;
-import io.xream.sqli.cache.L2CacheFilter;
+import io.xream.sqli.repository.api.CacheFilter;
 import io.xream.sqli.builder.Direction;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
-import io.xream.x7.fallback.FallbackOnly;
 import io.xream.x7.reyc.api.ReyTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -101,7 +100,7 @@ public class XxxTest {
 
     public void testNonPagedCacheGrouped(){
 
-        L2CacheFilter.filter("BL");
+        CacheFilter.filter("BL");
 
         CatRO ro = new CatRO();
 
@@ -120,7 +119,7 @@ public class XxxTest {
     }
 
     public void create(){
-        L2CacheFilter.filter("BL");
+        CacheFilter.filter("BL");
         this.controller.create();
     }
 
@@ -250,7 +249,7 @@ public class XxxTest {
 
     public void testCreate() {
 
-        L2CacheFilter.filter("BL");
+        CacheFilter.filter("BL");
 
         Cat cat = new Cat();
         cat.setId(472L);

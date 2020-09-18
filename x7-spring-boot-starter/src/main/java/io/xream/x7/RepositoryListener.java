@@ -16,9 +16,9 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.cache.L2CacheResolver;
-import io.xream.sqli.cache.L2CacheStorage;
-import io.xream.sqli.core.JdbcWrapper;
+import io.xream.sqli.repository.cache.L2CacheResolver;
+import io.xream.sqli.repository.cache.L2CacheStorage;
+import io.xream.sqli.repository.core.JdbcWrapper;
 import io.xream.sqli.repository.api.NativeRepository;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.x7.cache.*;

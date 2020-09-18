@@ -16,13 +16,13 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.api.TemporaryRepository;
+import io.xream.sqli.repository.api.TemporaryRepository;
 import io.xream.sqli.builder.CriteriaToSql;
-import io.xream.sqli.cache.L2CacheResolver;
-import io.xream.sqli.core.Dialect;
-import io.xream.sqli.core.JdbcWrapper;
+import io.xream.sqli.builder.internal.DefaultCriteriaToSql;
+import io.xream.sqli.repository.cache.L2CacheResolver;
+import io.xream.sqli.repository.core.Dialect;
+import io.xream.sqli.repository.core.JdbcWrapper;
 import io.xream.sqli.repository.api.NativeRepository;
-import io.xream.sqli.repository.builder.DefaultCriteriaToSql;
 import io.xream.sqli.repository.core.Repository;
 import io.xream.sqli.repository.init.SqlInitFactory;
 import io.xream.sqli.starter.DbType;
@@ -41,7 +41,7 @@ public class RepositoryStarter  {
     @Bean
     @Order(1)
     public CriteriaToSql criteriaParser() {
-        return  new DefaultCriteriaToSql();
+        return  DefaultCriteriaToSql.newInstance();
     }
 
     @Bean
