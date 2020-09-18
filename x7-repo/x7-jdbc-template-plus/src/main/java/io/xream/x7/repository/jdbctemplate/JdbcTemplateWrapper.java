@@ -180,8 +180,9 @@ public class JdbcTemplateWrapper implements JdbcWrapper {
     @Override
     public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, ResultMapHelpful resultMapHelpful, Class orClzz, Dialect dialect) {
 
+        boolean isResultWithDottedKey = resultMapHelpful == null? false: resultMapHelpful.isResultWithDottedKey();
         return toResultMapList(
-                resultMapHelpful.isResultWithDottedKey(),
+                isResultWithDottedKey,
                 fixedRowMapper -> queryForMapList0(
                         sql,
                         valueList,

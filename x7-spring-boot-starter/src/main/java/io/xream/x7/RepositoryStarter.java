@@ -16,29 +16,21 @@
  */
 package io.xream.x7;
 
+import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.builder.CriteriaToSql;
+import io.xream.sqli.cache.L2CacheResolver;
 import io.xream.sqli.core.Dialect;
 import io.xream.sqli.core.JdbcWrapper;
-import io.xream.sqli.api.TemporaryRepository;
-import io.xream.sqli.cache.L2CacheResolver;
+import io.xream.sqli.repository.api.NativeRepository;
 import io.xream.sqli.repository.builder.DefaultCriteriaToSql;
-import io.xream.sqli.repository.cache.CacheableRepository;
 import io.xream.sqli.repository.core.Repository;
-import io.xream.sqli.repository.dao.*;
-import io.xream.sqli.repository.internal.DefaultTemporaryRepository;
-import io.xream.sqli.repository.init.DefaultTemporaryTableParser;
 import io.xream.sqli.repository.init.SqlInitFactory;
-import io.xream.sqli.repository.transform.DataTransform;
-import io.xream.sqli.repository.transform.SqlDataTransform;
 import io.xream.sqli.starter.DbType;
-import io.xream.sqli.starter.ManuRepositoryStarter;
+import io.xream.sqli.starter.SqliStarter;
 import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -46,14 +38,19 @@ import org.springframework.core.env.Environment;
 
 public class RepositoryStarter  {
 
-    private Logger logger = LoggerFactory.getLogger(RepositoryStarter.class);
-
+    @Bean
+    @Order(1)
+    public CriteriaToSql criteriaParser() {
+        return  new DefaultCriteriaToSql();
+    }
 
     @Bean
     @Order(2)
     public Dialect dialect(Environment environment){
 
         String driverClassName = getDbDriverKey(environment);
+
+        isSupported(driverClassName);
 
         Dialect dialect = null;
         try {
@@ -76,102 +73,41 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(3)
-    public CriteriaToSql criteriaParser(Dialect dialect) {
-
-        return  new DefaultCriteriaToSql();
-
-    }
-
-    @Bean
-    @Order(4)
-    public TemporaryRepository.Parser temporaryTableParser(){
-        return new DefaultTemporaryTableParser();
-    }
-
-    @Bean
-    @Order(5)
-    public Dao dao(Environment environment){
-
-        String driverClassName = getDbDriverKey(environment);
-
-        Dao dao =  null;
-        if (isSupported(driverClassName)) {
-            dao = new DaoImpl();
-        }
-        return dao;
-    }
-
-    @Bean
-    @Order(6)
     public L2CacheResolver cacheResolver(){
         return new DefaultL2CacheResolver();
     }
 
     @Bean
-    @Order(7)
+    @Order(4)
     public IdGeneratorService idGenerator(){
-        DefaultIdGeneratorService idGenerator = new DefaultIdGeneratorService();
-        return idGenerator;
+        return new DefaultIdGeneratorService();
+    }
+
+    @Bean
+    @Order(5)
+    public JdbcWrapper jdbcWrapper(){
+        return new JdbcTemplateWrapper();
+    }
+
+
+    @Bean
+    @Order(6)
+    public Repository dataRepository(CriteriaToSql criteriaToSql, JdbcWrapper jdbcWrapper, Dialect dialect, L2CacheResolver cacheResolver, Environment environment){
+        return SqliStarter.getInstance().repository(criteriaToSql,jdbcWrapper,dialect,cacheResolver);
+    }
+
+    @Bean
+    @Order(7)
+    public TemporaryRepository temporaryRepository(CriteriaToSql criteriaToSql, JdbcWrapper jdbcWrapper,Dialect dialect, Repository repository){
+        return SqliStarter.getInstance().temporaryRepository(criteriaToSql,jdbcWrapper,dialect,repository);
     }
 
     @Bean
     @Order(8)
-    public Repository dataRepository(Dao dao, L2CacheResolver cacheResolver, Environment environment){
-
-        String driverClassName = getDbDriverKey(environment);
-
-        DataTransform dataTransform = null;
-        if (isSupported(driverClassName)) {
-            dataTransform = new SqlDataTransform();
-            ((SqlDataTransform) dataTransform).setDao(dao);
-        }
-
-        CacheableRepository repository = new CacheableRepository();
-        repository.setDataTransform(dataTransform);
-        repository.setCacheResolver(cacheResolver);
-
-        ManuRepositoryStarter.init(repository);
-
-        return repository;
+    public NativeRepository nativeRepository(Repository repository){
+        return SqliStarter.getInstance().nativeRepository(repository);
     }
 
-
-    @ConditionalOnMissingBean(X7Data.class)
-    @Bean
-    @Order(9)
-    public X7Data enableData(){
-        return new X7Data();
-    }
-
-
-    @Bean
-    @Order(10)
-    public TemporaryDao temporaryDao(){
-        return new TemporaryDaoImpl();
-    }
-
-    @Bean
-    @Order(11)
-    public TemporaryRepository temporaryRepository(Dao dao,TemporaryDao temporaryDao,TemporaryRepository.Parser temporaryTableParser,Environment environment){
-        String driverClassName = getDbDriverKey(environment);
-        DefaultTemporaryRepository temporaryRepository = new DefaultTemporaryRepository();
-        DataTransform dataTransform = null;
-        if (isSupported(driverClassName)) {
-            dataTransform = new SqlDataTransform();
-            ((SqlDataTransform) dataTransform).setDao(dao);
-        }
-        temporaryRepository.setDataTransform(dataTransform);
-        temporaryRepository.setTemporaryDao(temporaryDao);
-        temporaryRepository.setTemporaryRepositoryParser(temporaryTableParser);
-
-        return temporaryRepository;
-    }
-
-    @Bean
-    @Order(12)
-    public JdbcWrapper jdbcWrapper(){
-        return new JdbcTemplateWrapper();
-    }
 
     /**
      * TODO:

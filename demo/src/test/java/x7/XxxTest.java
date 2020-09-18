@@ -55,9 +55,6 @@ public class XxxTest {
     private OrderController orderController;
 
     @Autowired
-    private DistributionLockTester distributionLockTester;
-
-    @Autowired
     private CatEggController catEggController;
 
     @Autowired
@@ -320,17 +317,6 @@ public class XxxTest {
 
         ViewEntity ve = this.testServiceRemote.testResultMappedRemote(ResultMapCriteria);
         System.out.println(ve);
-    }
-
-    @FallbackOnly(exceptions = {RuntimeException.class}, fallback = FallbackOnlyTest.class)
-    public void testFallbackOnly(String test) {
-
-        System.out.println("testFallbackOnly");
-
-        boolean b = true;
-//        if (b){
-//            throw new RuntimeException("testFallbackOnly");
-//        }
     }
 
 

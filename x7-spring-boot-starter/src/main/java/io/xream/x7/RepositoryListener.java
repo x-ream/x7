@@ -16,19 +16,10 @@
  */
 package io.xream.x7;
 
-import io.xream.sqli.builder.CriteriaToSql;
-import io.xream.sqli.core.Dialect;
-import io.xream.sqli.core.JdbcWrapper;
 import io.xream.sqli.cache.L2CacheResolver;
 import io.xream.sqli.cache.L2CacheStorage;
-import io.xream.sqli.repository.cache.CacheableRepository;
-import io.xream.sqli.repository.core.Repository;
-import io.xream.sqli.repository.dao.Dao;
-import io.xream.sqli.repository.dao.DaoImpl;
-import io.xream.sqli.repository.dao.TemporaryDao;
-import io.xream.sqli.repository.dao.TemporaryDaoImpl;
-import io.xream.sqli.repository.transform.DataTransform;
-import io.xream.sqli.repository.transform.customizer.DataTransformCustomizer;
+import io.xream.sqli.core.JdbcWrapper;
+import io.xream.sqli.repository.api.NativeRepository;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
@@ -63,22 +54,23 @@ public class RepositoryListener implements
         if (!X7Data.isEnabled)
             return;
 
-        customizeDao(applicationStartedEvent);
-
         customizeCacheStorage(applicationStartedEvent);
 
         customizeL2CacheConsistency(applicationStartedEvent);
 
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
-        customizeDataTransform(applicationStartedEvent);
-
-        SqliListener.onStarted();
+        onJdbcWrapperCreated(applicationStartedEvent);
+        onStarted(applicationStartedEvent);
 
         IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
     }
 
+    private void onStarted(ApplicationStartedEvent applicationStartedEvent){
+        NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
+        SqliListener.onStarted(nativeRepository);
+    }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
         LockProviderCustomizer customizer = null;
@@ -161,79 +153,28 @@ public class RepositoryListener implements
 
     }
 
+    private void onJdbcWrapperCreated(ApplicationStartedEvent applicationStartedEvent) {
 
-    private void customizeDataTransform(ApplicationStartedEvent applicationStartedEvent) {
-        DataTransformCustomizer customizer = null;
-        try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(DataTransformCustomizer.class);
-        } catch (Exception e) {
+        SqliListener.onBeanCreated(()->{
+            JdbcTemplate jdbcTemplate = null;
+            try {
+                jdbcTemplate = applicationStartedEvent.getApplicationContext().getBean(JdbcTemplate.class);
+            }catch (Exception e) {
 
-        }
+            }
 
-        if (customizer == null)
-            return;
+            JdbcWrapper jdbcWrapper = null;
+            try{
+                jdbcWrapper = applicationStartedEvent.getApplicationContext().getBean(JdbcWrapper.class);
+                JdbcTemplateWrapper jtw = (JdbcTemplateWrapper) jdbcWrapper;
+                jtw.setJdbcTemplate(jdbcTemplate);
+            }catch (Exception e){
 
-        DataTransform dataTransform = customizer.customize();
-        if (dataTransform == null)
-            return;
+            }
+            return true;
+        });
 
-        Repository repository = applicationStartedEvent.getApplicationContext().getBean(Repository.class);
-        if (repository == null)
-            return;
-        ((CacheableRepository) repository).setDataTransform(dataTransform);
-    }
 
-    private void customizeDao(ApplicationStartedEvent applicationStartedEvent) {
-
-        JdbcTemplate jdbcTemplate = null;
-        try {
-            jdbcTemplate = applicationStartedEvent.getApplicationContext().getBean(JdbcTemplate.class);
-        }catch (Exception e) {
-
-        }
-
-        CriteriaToSql criteriaToSql = null;
-        try {
-            criteriaToSql = applicationStartedEvent.getApplicationContext().getBean(CriteriaToSql.class);
-        }catch (Exception e) {
-
-        }
-
-        Dialect dialect = null;
-        try{
-            dialect = applicationStartedEvent.getApplicationContext().getBean(Dialect.class);
-        }catch (Exception e){
-
-        }
-
-        JdbcWrapper jdbcWrapper = null;
-        try{
-            jdbcWrapper = applicationStartedEvent.getApplicationContext().getBean(JdbcWrapper.class);
-            JdbcTemplateWrapper jtw = (JdbcTemplateWrapper) jdbcWrapper;
-            jtw.setJdbcTemplate(jdbcTemplate);
-        }catch (Exception e){
-
-        }
-
-        try{
-            Dao dao = applicationStartedEvent.getApplicationContext().getBean(Dao.class);
-            DaoImpl daoImpl = (DaoImpl) dao;
-            daoImpl.setDialect(dialect);
-            daoImpl.setCriteriaToSql(criteriaToSql);
-            daoImpl.setJdbcWrapper(jdbcWrapper);
-        }catch (Exception e) {
-
-        }
-
-        try{
-            TemporaryDao temporaryDao = applicationStartedEvent.getApplicationContext().getBean(TemporaryDao.class);
-            TemporaryDaoImpl daoImpl = (TemporaryDaoImpl) temporaryDao;
-            daoImpl.setDialect(dialect);
-            daoImpl.setCriteriaToSql(criteriaToSql);
-            daoImpl.setJdbcWrapper(jdbcWrapper);
-        }catch (Exception e) {
-
-        }
     }
 
     private void customizeCacheStorage(ApplicationStartedEvent applicationStartedEvent) {
