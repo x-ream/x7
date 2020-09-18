@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * @Author Sim
  */
-public class JdbcTemplateWrapper implements JdbcWrapper {
+public final class JdbcTemplateWrapper implements JdbcWrapper {
 
     private final Logger logger = LoggerFactory.getLogger(JdbcWrapper.class);
 

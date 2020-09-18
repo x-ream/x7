@@ -20,7 +20,7 @@ package io.xream.x7.repository.id;
 /**
  * @Author Sim
  */
-public class DefaultIdGeneratorService implements IdGeneratorService {
+public final class DefaultIdGeneratorService implements IdGeneratorService {
 
     private IdGeneratorPolicy idGeneratorPolicy;
     public void setIdGeneratorPolicy(IdGeneratorPolicy policy){
