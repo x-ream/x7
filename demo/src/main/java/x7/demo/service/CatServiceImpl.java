@@ -1,8 +1,8 @@
 package x7.demo.service;
 
-import io.xream.sqli.internal.RowHandler;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.RefreshCondition;
+import io.xream.sqli.core.RowHandler;
 import io.xream.x7.fallback.FallbackOnly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

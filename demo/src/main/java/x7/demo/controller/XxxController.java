@@ -8,12 +8,16 @@ import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.Cat;
 import x7.demo.entity.CatTest;
-import x7.demo.entity.Pig;
 import x7.demo.entity.TestBoo;
-import x7.demo.repository.*;
+import x7.demo.repository.CatRepository;
+import x7.demo.repository.CatTestRepository;
+import x7.demo.repository.PetRepository;
 import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static io.xream.sqli.builder.Direction.DESC;
 import static io.xream.sqli.builder.JoinType.INNER_JOIN;
 import static io.xream.sqli.builder.Op.GT;
 import static io.xream.sqli.builder.ReduceType.COUNT_DISTINCT;
 import static io.xream.sqli.builder.ReduceType.SUM;
-import static io.xream.sqli.builder.Direction.DESC;
 
 
 @RestController
@@ -40,16 +44,17 @@ public class XxxController {
     private CatRepository catRepository;// sample
 
     @Autowired
-    private PigRepository pigRepository;
-
-    @Autowired
-    private TimeJackRepository timeJackRepository;
-
-    @Autowired
     private PetRepository petRepository;
 
     @Autowired
     private CatTestRepository catTestRepository;
+
+    @RequestMapping("/simple/test")
+    public void testSimple(){
+        this.catRepository.list();
+        this.catRepository.get(2);
+        this.catRepository.list(new Cat());
+    }
 
     @RequestMapping("/test/rest")
     public ViewEntity testRest(@RequestBody CatTest catTest, HttpServletRequest request) {
@@ -278,42 +283,6 @@ public class XxxController {
         return list;
     }
 
-
-    @CrossOrigin(origins = "http://xxxxx.com")
-    @RequestMapping(value = "/time/test", method = RequestMethod.GET)
-    public ViewEntity testTime() {
-
-        Date date = new Date();
-        System.out.println(date);
-
-        TimeJack tj = new TimeJack();
-
-        tj.setId(100);
-        tj.setName("XXXXXX");
-        tj.setDate(new Date());
-
-        this.timeJackRepository.create(tj);
-
-        List<TimeJack> list = this.timeJackRepository.list();
-
-        return ViewEntity.ok(tj);
-    }
-
-
-    @RequestMapping(value = "/pig/get/{id}", method = RequestMethod.GET)
-    public Pig getPig(@PathVariable long id) {
-
-        Pig pig = this.pigRepository.get(id);
-
-        System.out.println(pig);
-        return pig;
-    }
-
-    @RequestMapping("/reyc/base")
-    public int getBase() {
-//		return "x7-demo/xxx/reyc/str";
-        return 10;
-    }
 
     @RequestMapping("/remote/resultmapped/test")
     ViewEntity testResultMappedRemote(@RequestBody Criteria.ResultMapCriteria criteria) {

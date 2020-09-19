@@ -30,6 +30,7 @@ public class AppTest {
         xxxTest.testAlia();
         xxxTest.distinct();
         xxxTest.refreshByCondition();
+        xxxTest.testSimple();
         {
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();

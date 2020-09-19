@@ -18,7 +18,6 @@ package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.core.*;
 import io.xream.sqli.exception.ExceptionTranslator;
-import io.xream.sqli.internal.*;
 import io.xream.sqli.parser.Parsed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

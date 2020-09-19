@@ -16,7 +16,7 @@
  */
 package io.xream.x7.sqli.repository.proxy;
 
-import io.xream.sqli.internal.Repository;
+import io.xream.sqli.core.Repository;
 import io.xream.sqli.repository.internal.DefaultRepository;
 import io.xream.sqli.util.SqliLoggerProxy;
 import io.xream.x7.repository.id.IdGeneratorService;
