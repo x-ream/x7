@@ -19,17 +19,17 @@ package io.xream.x7;
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.builder.CriteriaToSql;
-import io.xream.sqli.cache.L2CacheResolver;
+import io.xream.sqli.cache.internal.DefaultL2CacheResolver;
 import io.xream.sqli.core.Dialect;
-import io.xream.sqli.core.JdbcWrapper;
 import io.xream.sqli.core.Repository;
 import io.xream.sqli.repository.init.SqlInitFactory;
+import io.xream.sqli.spi.JdbcHelper;
+import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.starter.DbType;
 import io.xream.sqli.starter.SqliStarter;
-import io.xream.x7.cache.DefaultL2CacheResolver;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
-import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -73,7 +73,7 @@ public class RepositoryStarter  {
     @Bean
     @Order(3)
     public L2CacheResolver cacheResolver(){
-        return new DefaultL2CacheResolver();
+        return DefaultL2CacheResolver.newInstance();
     }
 
     @Bean
@@ -84,21 +84,21 @@ public class RepositoryStarter  {
 
     @Bean
     @Order(5)
-    public JdbcWrapper jdbcWrapper(){
-        return new JdbcTemplateWrapper();
+    public JdbcHelper jdbcHelper(){
+        return new JdbcTemplateHelper();
     }
 
 
     @Bean
     @Order(6)
-    public Repository dataRepository(CriteriaToSql criteriaToSql, JdbcWrapper jdbcWrapper, Dialect dialect, L2CacheResolver cacheResolver, Environment environment){
-        return SqliStarter.getInstance().repository(criteriaToSql,jdbcWrapper,dialect,cacheResolver);
+    public Repository dataRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver, Environment environment){
+        return SqliStarter.getInstance().repository(criteriaToSql, jdbcHelper,dialect,cacheResolver);
     }
 
     @Bean
     @Order(7)
-    public TemporaryRepository temporaryRepository(CriteriaToSql criteriaToSql, JdbcWrapper jdbcWrapper,Dialect dialect, Repository repository){
-        return SqliStarter.getInstance().temporaryRepository(criteriaToSql,jdbcWrapper,dialect,repository);
+    public TemporaryRepository temporaryRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
+        return SqliStarter.getInstance().temporaryRepository(criteriaToSql, jdbcHelper,dialect,repository);
     }
 
     @Bean

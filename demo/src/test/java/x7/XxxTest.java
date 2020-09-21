@@ -167,9 +167,18 @@ public class XxxTest {
 
         CriteriaBuilder builder = CriteriaBuilder.builder(CatTest.class);
         builder.nonNull("type");
+        builder.or().beginSub().gt("dogId",1).and().nonNull("catFriendName").endSub();
         builder.sort("id", Direction.DESC).paged().ignoreTotalRows().page(1).rows(10);
         Criteria criteria = builder.build();
-        return controller.testCriteria(criteria);
+        controller.testCriteria(criteria);
+
+//        CriteriaBuilder builder1 = CriteriaBuilder.builder(CatTest.class);
+//        builder1.nonNull("type");
+//        builder1.beginSub().nonNull("catFriendName").or().gt("dogId",1).endSub();
+//        builder1.sort("id", Direction.DESC).paged().ignoreTotalRows().page(1).rows(10);
+//        Criteria criteria1 = builder1.build();
+//        controller.testCriteria(criteria1);
+        return ViewEntity.ok();
     }
 
     public ViewEntity testResultMapped(){

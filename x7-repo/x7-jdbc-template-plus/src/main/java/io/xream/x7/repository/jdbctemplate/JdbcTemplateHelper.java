@@ -16,9 +16,14 @@
  */
 package io.xream.x7.repository.jdbctemplate;
 
-import io.xream.sqli.core.*;
+import io.xream.sqli.core.BaseFinder;
+import io.xream.sqli.core.Dialect;
+import io.xream.sqli.core.ResultMapFinder;
+import io.xream.sqli.core.RowHandler;
 import io.xream.sqli.exception.ExceptionTranslator;
+import io.xream.sqli.mapping.ResultMapHelpful;
 import io.xream.sqli.parser.Parsed;
+import io.xream.sqli.spi.JdbcHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -40,9 +45,9 @@ import java.util.Map;
 /**
  * @Author Sim
  */
-public final class JdbcTemplateWrapper implements JdbcWrapper {
+public final class JdbcTemplateHelper implements JdbcHelper {
 
-    private final Logger logger = LoggerFactory.getLogger(JdbcWrapper.class);
+    private final Logger logger = LoggerFactory.getLogger(JdbcHelper.class);
 
     private JdbcTemplate jdbcTemplate;
 

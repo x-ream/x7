@@ -17,9 +17,9 @@
 package io.xream.x7;
 
 import io.xream.sqli.api.NativeRepository;
-import io.xream.sqli.cache.L2CacheResolver;
-import io.xream.sqli.cache.L2CacheStorage;
-import io.xream.sqli.core.JdbcWrapper;
+import io.xream.sqli.spi.JdbcHelper;
+import io.xream.sqli.spi.L2CacheResolver;
+import io.xream.sqli.spi.L2CacheStorage;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
@@ -33,7 +33,7 @@ import io.xream.x7.repository.IdGeneratorBootListener;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
-import io.xream.x7.repository.jdbctemplate.JdbcTemplateWrapper;
+import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -163,11 +163,11 @@ public class RepositoryListener implements
 
             }
 
-            JdbcWrapper jdbcWrapper = null;
+            JdbcHelper jdbcHelper = null;
             try{
-                jdbcWrapper = applicationStartedEvent.getApplicationContext().getBean(JdbcWrapper.class);
-                JdbcTemplateWrapper jtw = (JdbcTemplateWrapper) jdbcWrapper;
-                jtw.setJdbcTemplate(jdbcTemplate);
+                jdbcHelper = applicationStartedEvent.getApplicationContext().getBean(JdbcHelper.class);
+                JdbcTemplateHelper jth = (JdbcTemplateHelper) jdbcHelper;
+                jth.setJdbcTemplate(jdbcTemplate);
             }catch (Exception e){
 
             }

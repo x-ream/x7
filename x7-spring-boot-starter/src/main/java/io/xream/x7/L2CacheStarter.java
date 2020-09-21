@@ -16,7 +16,7 @@
  */
 package io.xream.x7;
 
-import io.xream.x7.cache.DefaultL2CacheResolver;
+import io.xream.sqli.cache.internal.DefaultL2CacheResolver;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
