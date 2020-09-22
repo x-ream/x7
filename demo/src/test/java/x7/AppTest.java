@@ -22,17 +22,20 @@ public class AppTest {
         xxxTest.inOrder();
         xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
+
         xxxTest.testNonPaged();
         xxxTest.testListCriteria();
         xxxTest.testResultMapped();
         xxxTest.testListPlainValue();
         xxxTest.testAlia();
         xxxTest.distinct();
-        xxxTest.refreshByCondition();
         xxxTest.testSimple();
-
         xxxTest.testCriteria();
-
+        xxxTest.refreshByCondition();
+        xxxTest.testRemove();
+//        xxxTest.createBatch();
         {
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
@@ -56,8 +59,7 @@ public class AppTest {
 //        xxxTest.createBatch();
 //        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
-//nullANDSUBANDIS_NOT_NULLcatFriendNameIS_NOT_NULLANDGTdogId1ANDIS_NOT_NULLtypeIS_NOT_NULL110idDESC
-//nullANDSUBANDIS_NOT_NULLcatFriendNameIS_NOT_NULLANDGTdogId1ANDIS_NOT_NULLtypeIS_NOT_NULL110idDESC
+
         }
 
 

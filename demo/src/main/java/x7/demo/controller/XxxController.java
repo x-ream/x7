@@ -102,17 +102,17 @@ public class XxxController {
     public ViewEntity create() {
 
         Cat cat = new Cat();
-        cat.setId(355L);
+        cat.setId(366L);
         cat.setDogId(3);
         cat.setCreateAt(new Date());
-        cat.setTestBoo(TestBoo.TEST);
-        cat.setList(Arrays.asList(7L, 8L));
-        cat.setTestList(Arrays.asList("BIG xx CAT", "small cat"));
+        cat.setTestBoo(TestBoo.BOO);
+        cat.setList(Arrays.asList(9L, 11L));
+        cat.setTestList(Arrays.asList("BIG xxX CAT", "small cat"));
 
         this.catRepository.create(cat);
 
         cat = new Cat();
-        cat.setId(356L);
+        cat.setId(367L);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -253,16 +253,14 @@ public class XxxController {
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
 
-        builder.and().eq("testBoo",TestBoo.TEST);
-        builder.and().eq("taxType", null);
-        builder.and().in("type", Arrays.asList("BL","NL"));
-        builder.sort("id", DESC).paged().ignoreTotalRows().orderIn("type", Arrays.asList("BL","NL"));
+        builder.eq("testBoo",TestBoo.TEST).eq("taxType", null)
+                .in("type", Arrays.asList("BL","NL"))
+                .or().x("(dogId > ? OR test > ?)", 1,1);
+        builder.sort("id", DESC);//当有orderIn时，sort会被过滤掉
+        builder.paged().ignoreTotalRows().page(1).rows(10).orderIn("testBoo", Arrays.asList("TEST","BOO"));
 
-//		Criteria.ResultMapCriteria criteria = builder.build();
         Criteria criteria = builder.build();
 
-        String str = JsonX.toJson(criteria);
-        criteria = JsonX.toObject(str, Criteria.class);
         Page p = catRepository.find(criteria);
 
         return ViewEntity.ok(p);
@@ -271,11 +269,6 @@ public class XxxController {
     @RequestMapping(value = "/reyc/test")
     public List<Cat> testRecClient() {
 
-//		try {
-//			TimeUnit.HOURS.sleep(1);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
         List<Cat> list = new ArrayList<>();
         Cat cat = new Cat();
         cat.setTest(100);
@@ -327,23 +320,16 @@ public class XxxController {
      
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
-//		builder.resultKey("id").resultKey("type");
         builder
                 .in("testBoo", Arrays.asList("BOO"))
                 .eq("type","XXXX")
                 .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
-//		builder.paged().orderIn("type",inList);
+
         builder.forceIndex("IDX_CAT_DOG_ID");
         builder.paged().ignoreTotalRows().orderIn("testBoo",Arrays.asList("BOO"));
 
-
-//		Criteria.ResultMapCriteria criteria = builder.build();
         Criteria criteria = builder.build();
-
-        String str = JsonX.toJson(criteria);
-        criteria = JsonX.toObject(str, Criteria.class);
-        System.out.println(criteria);
 
         catRepository.find(criteria);
 
@@ -359,7 +345,7 @@ public class XxxController {
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(5013);
+        boolean flag = this.catRepository.remove(367);
         return ViewEntity.ok(flag);
     }
 
@@ -368,7 +354,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(503);
+        cat.setId(506);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -377,7 +363,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(504);
+        cat1.setId(507);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
