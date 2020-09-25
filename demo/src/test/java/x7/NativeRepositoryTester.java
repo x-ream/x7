@@ -1,6 +1,8 @@
 package x7;
 
 import io.xream.sqli.api.NativeRepository;
+import io.xream.x7.db.tools.entity.DbProcess;
+import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,19 @@ public class NativeRepositoryTester {
     @Test
     public void test(){
 
-        String query = "select * from t_cat";
+        String query = "show processlist";
 
         List<Map<String,Object>> list = this.nativeRepository.list(query, null);
+        for (Map<String,Object> map : list) {
+            DbProcess dbProcess = new DbProcess();
+            try {
+                BeanUtils.populate(dbProcess, map);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
         System.out.println(list);
 
     }

@@ -10,6 +10,7 @@ ENV JAVA_OPTS -Xms1024m -Xmx1024m -Xmn320m
 ADD target/x7-demo-2.5.0.RELEASE.jar /data/deploy/demo/app.jar
 
 #RUN apk add --no-cache curl
+#/usr/lib/jvm/java-1.8-openjdk/jre/lib/fonts/fallback/simsun.ttc
 
 VOLUME /data/logs /data/logs
 
