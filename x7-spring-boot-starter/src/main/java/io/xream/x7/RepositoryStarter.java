@@ -27,15 +27,17 @@ import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.starter.DbType;
 import io.xream.sqli.starter.SqliStarter;
+import io.xream.x7.base.util.StringUtil;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
+import io.xream.x7.sqli.repository.dialect.DialectAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 
-public class RepositoryStarter  {
+public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(1)
@@ -49,25 +51,7 @@ public class RepositoryStarter  {
 
         String driverClassName = getDbDriverKey(environment);
 
-        isSupported(driverClassName);
-
-        Dialect dialect = null;
-        try {
-            if (driverClassName.contains(DbType.MYSQL)) {
-                DbType.setValue(DbType.MYSQL);
-                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
-            }else if (driverClassName.contains(DbType.CLICKHOUSE)) {
-                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
-            }else if (driverClassName.contains(DbType.ORACLE)) {
-                DbType.setValue(DbType.ORACLE);
-                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
-            }
-            initDialect(dialect);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return dialect;
+        return adapter(driverClassName);
     }
 
     @Bean
@@ -105,34 +89,6 @@ public class RepositoryStarter  {
     @Order(8)
     public NativeRepository nativeRepository(Repository dataRepository){
         return SqliStarter.getInstance().nativeRepository(dataRepository);
-    }
-
-
-    /**
-     * TODO:
-     *      改成Map,可以动态获取方言
-     * @param dialect
-     */
-    private void initDialect(Dialect dialect) {
-        SqlInitFactory.DIALECT = dialect;
-    }
-
-    private String getDbDriverKey(Environment environment) {
-        String driverClassName = null;
-        try {
-            driverClassName = environment.getProperty("spring.datasource.driver-class-name");
-        }catch (Exception e){
-
-        }
-        if (driverClassName == null)
-            return DbType.MYSQL;
-        return driverClassName.toLowerCase();
-    }
-
-    private boolean isSupported(String driverClassName){
-        return driverClassName.toLowerCase().contains(DbType.MYSQL)
-                ||driverClassName.toLowerCase().contains(DbType.CLICKHOUSE)
-                || driverClassName.toLowerCase().contains(DbType.ORACLE);
     }
 
 }
