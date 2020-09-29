@@ -159,11 +159,6 @@
             <version>1.9.4</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.xream.x7</groupId>
-            <artifactId>x7-db-tools</artifactId>
-            <version>2.5.0.RELEASE</version>
-        </dependency>
 
         <!--
                 <dependency>
