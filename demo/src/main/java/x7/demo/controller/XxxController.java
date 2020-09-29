@@ -8,10 +8,7 @@ import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import x7.demo.entity.Cat;
 import x7.demo.entity.CatTest;
 import x7.demo.entity.TestBoo;
@@ -472,4 +469,9 @@ public class XxxController {
         return ViewEntity.ok(cat);
     }
 
+
+    @RequestMapping(value = "/test/get/{dog}" ,method = RequestMethod.GET)
+    public String testGet(@PathVariable String dog){
+        return dog;
+    }
 }

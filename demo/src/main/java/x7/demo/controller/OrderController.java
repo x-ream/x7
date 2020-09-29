@@ -99,7 +99,7 @@ public class OrderController {
                             .beginSub().eq("o.type",OrderType.SINGLE).endSub().or()
                     .endSub().x("i.orderId > 1");
 
-        builder.sourceBuilder().sub(//demo for clickhouse
+        builder.sourceBuilder().sub(
                 subBuilder -> {
                     subBuilder
                             .resultKey("ol.orderId", "orderId")
