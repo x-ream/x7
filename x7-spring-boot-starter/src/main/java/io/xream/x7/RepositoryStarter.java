@@ -53,12 +53,12 @@ public class RepositoryStarter  {
 
         Dialect dialect = null;
         try {
-            if (driverClassName.contains(DbType.MYSQL)
-                ||driverClassName.contains(DbType.CLICKHOUSE)
-            ) {
+            if (driverClassName.contains(DbType.MYSQL)) {
                 DbType.setValue(DbType.MYSQL);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
-            } else if (driverClassName.contains(DbType.ORACLE)) {
+            }else if (driverClassName.contains(DbType.CLICKHOUSE)) {
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
+            }else if (driverClassName.contains(DbType.ORACLE)) {
                 DbType.setValue(DbType.ORACLE);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
             }
@@ -114,7 +114,7 @@ public class RepositoryStarter  {
      * @param dialect
      */
     private void initDialect(Dialect dialect) {
-        SqlInitFactory.Dialect = dialect;
+        SqlInitFactory.DIALECT = dialect;
     }
 
     private String getDbDriverKey(Environment environment) {
