@@ -14,21 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package x7.config;
+package io.xream.x7.config;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
 import java.util.Date;
 
+@Configuration
+public class JacksonConfig {
 
-public class DateToLongSerializer extends JsonSerializer<Date> {
-    @Override
-    public void serialize(Date date, JsonGenerator jsonGenerator,
-                          SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeNumber(date.getTime() );
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializerByType(Date.class, new DateToLongSerializer());
     }
-
 }
