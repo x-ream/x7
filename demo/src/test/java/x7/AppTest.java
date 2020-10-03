@@ -21,13 +21,13 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-//        xxxTest.testOrderFindByAlia();
+        xxxTest.testOrderFindByAlia();
 //
 //        xxxTest.testNonPaged();
 //        xxxTest.testListCriteria();
 //        xxxTest.testResultMapped();
 //        xxxTest.testListPlainValue();
-        xxxTest.testAlia();
+//        xxxTest.testAlia();
 //        xxxTest.distinct();
 //        xxxTest.testSimple();
 //        xxxTest.testCriteria();
