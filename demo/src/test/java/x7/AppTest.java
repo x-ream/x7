@@ -17,21 +17,21 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.testFindToHandle();
-        xxxTest.testTemporaryTable();
-        xxxTest.inOrder();
-        xxxTest.testOrderFind();
-        xxxTest.testOrderFindByAlia();
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
+//        xxxTest.inOrder();
+//        xxxTest.testOrderFind();
+//        xxxTest.testOrderFindByAlia();
 //
-        xxxTest.testNonPaged();
-        xxxTest.testListCriteria();
-        xxxTest.testResultMapped();
-        xxxTest.testListPlainValue();
+//        xxxTest.testNonPaged();
+//        xxxTest.testListCriteria();
+//        xxxTest.testResultMapped();
+//        xxxTest.testListPlainValue();
         xxxTest.testAlia();
-        xxxTest.distinct();
-        xxxTest.testSimple();
-        xxxTest.testCriteria();
-        xxxTest.refreshByCondition();
+//        xxxTest.distinct();
+//        xxxTest.testSimple();
+//        xxxTest.testCriteria();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testRemove();
 //        xxxTest.createBatch();
         {
@@ -44,7 +44,7 @@ public class AppTest {
         {
 //        xxxTest.testOne();
 //        xxxTest.testListCriteria();
-        xxxTest.refreshByCondition();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testListCriteria();
 //        xxxTest.testRemove();
 //        xxxTest.testListCriteria();
@@ -55,7 +55,7 @@ public class AppTest {
 //        xxxTest.testListCriteria();
 //        xxxTest.create();
 //        xxxTest.createBatch();
-        xxxTest.testRemove();
+//        xxxTest.testRemove();
 //        xxxTest.testRestTemplate();
 
         }

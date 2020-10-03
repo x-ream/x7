@@ -73,13 +73,7 @@ public class XxxTest {
     }
 
     public  void testAlia() {
-
-        CatRO cat = new CatRO();
-
-        ViewEntity ve = this.controller.testAlia(cat);
-
-        System.out.println("\n______Result: " + ve);
-
+       this.controller.testAlia(new CatRO());
     }
 
     public  void testOne() {

@@ -16,7 +16,8 @@
  */
 package io.xream.x7.sqli.repository.dialect;
 
-import io.xream.sqli.core.Dialect;
+import io.xream.sqli.dialect.Dialect;
+import io.xream.sqli.dialect.DynamicDialect;
 import io.xream.sqli.repository.init.SqlInitFactory;
 import io.xream.sqli.starter.DbType;
 import io.xream.x7.base.util.StringUtil;
@@ -35,8 +36,8 @@ public interface DialectAdapter {
 
         isSupported(driverClassName);
 
-        Dialect dialect = null;
         try {
+            Dialect dialect = null;
             if (driverClassName.contains(MYSQL) || driverClassName.contains(OCEANBASE)) {
                 DbType.setValue(MYSQL);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
@@ -50,11 +51,16 @@ public interface DialectAdapter {
 
             SqlInitFactory.DIALECT = dialect;
 
+            DynamicDialect dynamicDialect = new DynamicDialect();
+            dynamicDialect.setDefaultDialect(dialect);
+
+            return dynamicDialect;
+
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return dialect;
+        return null;
     }
 
      static boolean isSupported(String driverClassName) {

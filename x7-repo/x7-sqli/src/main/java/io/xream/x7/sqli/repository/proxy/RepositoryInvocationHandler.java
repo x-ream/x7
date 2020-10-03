@@ -17,6 +17,7 @@
 package io.xream.x7.sqli.repository.proxy;
 
 
+import io.xream.sqli.dialect.DynamicDialectKeyRemovable;
 import io.xream.sqli.util.SqliLoggerProxy;
 
 import java.lang.reflect.InvocationHandler;
@@ -26,7 +27,7 @@ import java.lang.reflect.Method;
 /**
  * @Author Sim
  */
-public class RepositoryInvocationHandler implements InvocationHandler {
+public class RepositoryInvocationHandler implements InvocationHandler, DynamicDialectKeyRemovable {
 
     private RepositoryProxy repository;
 
@@ -61,6 +62,8 @@ public class RepositoryInvocationHandler implements InvocationHandler {
             return obj;
         } catch (InvocationTargetException e){
             throw e.getCause();
+        }finally {
+            removeDialectKey();
         }
     }
 }

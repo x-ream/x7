@@ -3,7 +3,6 @@ package x7.demo.controller;
 
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
-import io.xream.x7.base.cache.CacheableL3;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import x7.demo.ro.CatRO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static io.xream.sqli.builder.Direction.DESC;
 import static io.xream.sqli.builder.JoinType.INNER_JOIN;
@@ -168,7 +166,7 @@ public class XxxController {
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("catTest.id");
-        builder.beginSub().gte("dogTest.id", 1000).endSub();
+        builder.beginSub().gte("dogTest.id", 1).endSub();
 
         builder.sourceScript("FROM catTest INNER JOIN dogTest ON dogTest.id = catTest.dogId");
         //或者如下
@@ -186,24 +184,18 @@ public class XxxController {
 
 
     @RequestMapping("/testAlia")
-    @CacheableL3(expireTime = 2, timeUnit = TimeUnit.MINUTES)
+//    @CacheableL3(expireTime = 2, timeUnit = TimeUnit.MINUTES)
     public ViewEntity testAlia(@RequestBody CatRO ro) {
-
-        List<Object> inList = new ArrayList<>();
-        inList.add("gggg");
-        inList.add("xxxxx");
-
-
-//		ro.setSortList(sortList);
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
-        builder.resultKey("c.dogId","c_id");
-        builder.or().in("c.catFriendName", inList);
+        builder.resultKey("c.id").resultKey("c.dogId","c_id");
         builder.or().eq("d.petId", 0);
         builder.or().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(0));
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
+        builder.sortIn("c.id",Arrays.asList(2,4,3,1,6,5));
+        builder.resultWithDottedKey();
         Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
 
@@ -215,19 +207,6 @@ public class XxxController {
     @RequestMapping("/testOne")
     public ViewEntity testOne(@RequestBody CatRO ro) {
 
-
-        String[] resultKeys = {
-                "c.id",
-                "c.type"
-        };
-//		ro.setOrderBy("cat.dogId");
-
-        ro.setResultKeys(resultKeys);
-
-        List<Object> inList = new ArrayList<>();
-        inList.add("WHITE");
-        inList.add("BLACK");
-
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
         builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
@@ -236,7 +215,6 @@ public class XxxController {
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
         Page<Map<String, Object>> pagination = repository.find(resultMapped);
-
 
         return ViewEntity.ok(pagination);
 

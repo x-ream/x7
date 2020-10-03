@@ -17,9 +17,9 @@
 package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.core.BaseFinder;
-import io.xream.sqli.core.Dialect;
 import io.xream.sqli.core.ResultMapFinder;
 import io.xream.sqli.core.RowHandler;
+import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.exception.ExceptionTranslator;
 import io.xream.sqli.mapping.ResultMapHelpful;
 import io.xream.sqli.parser.Parsed;
