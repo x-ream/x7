@@ -203,7 +203,6 @@ public class XxxController {
         builder.or().eq("d.petId", 0);
         builder.or().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(0));
-        builder.paged().orderIn("c.catFriendName", inList);
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
@@ -232,7 +231,6 @@ public class XxxController {
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
         builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
-        builder.paged().orderIn("c.type", Arrays.asList("WHITE", "BLACK"));
         builder.sourceBuilder().source("catTest").alia("c");
 
         Criteria.ResultMapCriteria resultMapped = builder.build();
@@ -253,8 +251,9 @@ public class XxxController {
         builder.eq("testBoo",TestBoo.TEST).eq("taxType", null)
                 .in("type", Arrays.asList("BL","NL"))
                 .or().x("(dogId > ? OR test > ?)", 1,1);
-        builder.sort("id", DESC);//当有orderIn时，sort会被过滤掉
-        builder.paged().ignoreTotalRows().page(1).rows(10).orderIn("testBoo", Arrays.asList("TEST","BOO"));
+        builder.sort("id", DESC);
+        builder.sortIn("testBoo", Arrays.asList("TEST","BOO"));//当有sortIn时，sort会被过滤掉
+        builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria criteria = builder.build();
 
@@ -324,7 +323,8 @@ public class XxxController {
                 .or().in("id", Arrays.asList(247, 248));
 
         builder.forceIndex("IDX_CAT_DOG_ID");
-        builder.paged().ignoreTotalRows().orderIn("testBoo",Arrays.asList("BOO"));
+        builder.sortIn("testBoo",Arrays.asList("BOO"));
+        builder.paged().ignoreTotalRows();
 
         Criteria criteria = builder.build();
 

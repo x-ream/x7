@@ -294,7 +294,6 @@ public class XxxTest {
         inList.add("NL");
         builder.and().ne("taxType",664);
         builder.and().in("type",inList);
-        builder.paged().orderIn("type",inList);
 
 //		Criteria.ResultMapCriteria criteria = builder.build();
         Criteria criteria = builder.build();
