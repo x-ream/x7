@@ -90,6 +90,7 @@ public class X7Env implements ApplicationContextAware {
                 String mapping = info.getPatternsCondition().toString().replace("[", "").replace("]", "");
                 HandlerMethod hm = map.get(info);
                 mappingMap.put(hm.getMethod(), mapping);
+                logger.info("{}, {}", mapping, hm.getMethod());
             }
         }
     }
