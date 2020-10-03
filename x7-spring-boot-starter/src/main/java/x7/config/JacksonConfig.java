@@ -28,15 +28,6 @@ public class JacksonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        Jackson2ObjectMapperBuilderCustomizer cunstomizer = new Jackson2ObjectMapperBuilderCustomizer() {
-
-            @Override
-            public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
-
-                jacksonObjectMapperBuilder.serializerByType(Date.class, new DateToLongSerializer());
-            }
-        };
-
-        return cunstomizer;
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializerByType(Date.class, new DateToLongSerializer());
     }
 }
