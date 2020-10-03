@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
+@EnableReadOnly
 @EnableX7L2Caching(timeSeconds = 300)
 @EnableX7Repository(baseTypeSupported = true, mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient
