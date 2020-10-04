@@ -60,7 +60,7 @@ public class RepositoryListener implements
 
         customizeIdGeneratorPolicy(applicationStartedEvent);
 
-        onJdbcWrapperCreated(applicationStartedEvent);
+        onJdbcHelperCreated(applicationStartedEvent);
         onStarted(applicationStartedEvent);
 
         IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
@@ -153,7 +153,7 @@ public class RepositoryListener implements
 
     }
 
-    private void onJdbcWrapperCreated(ApplicationStartedEvent applicationStartedEvent) {
+    private void onJdbcHelperCreated(ApplicationStartedEvent applicationStartedEvent) {
 
         SqliListener.onBeanCreated(()->{
             JdbcTemplate jdbcTemplate = null;
@@ -215,10 +215,10 @@ public class RepositoryListener implements
         if (customizer == null || customizer.customize() == null)
             return;
 
-        L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
-        if (levelTwoCacheResolver == null)
+        L2CacheResolver l2CacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
+        if (l2CacheResolver == null)
             return;
-        levelTwoCacheResolver.setL2CacheConsistency(customizer.customize());
+        SqliListener.onL2CacheEnabled(l2CacheResolver, customizer.customize());
     }
 
 
