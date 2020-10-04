@@ -20,6 +20,7 @@ import io.xream.x7.base.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -44,21 +45,37 @@ public class CorsFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
+        HttpServletResponse response = (HttpServletResponse) res;
+
         if (StringUtil.isNullOrEmpty(origins)){
             origins = "*";
         }
 
-        HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", origins);//FIXME *改成域名
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        if (origins.contains(",")){
+            HttpServletRequest request = (HttpServletRequest)req;
+            String origin = request.getHeader("Origin");
+            if (origin == null) {
+                response.setHeader("Access-Control-Allow-Origin", origins);
+            }else {
+                String[] arr = origins.split(",");
+                for (String o : arr) {
+                    if (o.contains(origin)){
+                        response.setHeader("Access-Control-Allow-Origin", origin);
+                        break;
+                    }
+                }
+            }
+        }else{
+            response.setHeader("Access-Control-Allow-Origin", origins);
+        }
 
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Customizer");
         chain.doFilter(req, res);
     }
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-
-
     }
+
 }
