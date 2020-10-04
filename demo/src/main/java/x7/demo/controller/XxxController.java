@@ -122,7 +122,6 @@ public class XxxController {
     @RequestMapping("/refreshByCondition")
     public ViewEntity refreshByCondition() {
 
-
         boolean flag = this.catRepository.refresh(
                 RefreshCondition.build()
                         .refresh("testBoo", TestBoo.BOO)
@@ -130,7 +129,7 @@ public class XxxController {
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248))
+                        .in("id", Arrays.asList(247, 248,512))
 //                        .sourceScript("cat LEFT JOIN dogTest on dogTest.id = cat.dogId")
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
@@ -329,21 +328,21 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(506);
+        cat.setId(513);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
         cat.setList(Arrays.asList(6L, 8L));
-        cat.setTestList(Arrays.asList("BIG CAT", "small cat"));
+        cat.setTestList(Arrays.asList("BIG CATX", "small catX"));
 
 
         Cat cat1 = new Cat();
-        cat1.setId(507);
+        cat1.setId(515);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
         cat1.setList(Arrays.asList(1L, 2L));
-        cat1.setTestList(Arrays.asList("THR CAT", "moo cat"));
+        cat1.setTestList(Arrays.asList("THR CAT", "moo cat510"));
 
         List<Cat> catList = new ArrayList<>();
         catList.add(cat);

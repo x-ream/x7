@@ -19,7 +19,6 @@ package io.xream.x7.sqli.repository.dialect;
 import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.dialect.DynamicDialect;
 import io.xream.sqli.repository.init.SqlInitFactory;
-import io.xream.sqli.starter.DbType;
 import io.xream.x7.base.util.StringUtil;
 import org.springframework.core.env.Environment;
 
@@ -39,13 +38,10 @@ public interface DialectAdapter {
         try {
             Dialect dialect = null;
             if (driverClassName.contains(MYSQL) || driverClassName.contains(OCEANBASE)) {
-                DbType.setValue(MYSQL);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             }else if (driverClassName.contains(CLICKHOUSE)) {
-                DbType.setValue(CLICKHOUSE);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
             }else if (driverClassName.contains(ORACLE)) {
-                DbType.setValue(ORACLE);
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
             }
 

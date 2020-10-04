@@ -17,22 +17,22 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.testFindToHandle();
-//        xxxTest.testTemporaryTable();
-//        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
+        xxxTest.testFindToHandle();
+        xxxTest.testTemporaryTable();
+        xxxTest.inOrder();
+        xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
-//
-//        xxxTest.testNonPaged();
-//        xxxTest.testListCriteria();
-//        xxxTest.testResultMapped();
-//        xxxTest.testListPlainValue();
-//        xxxTest.testAlia();
-//        xxxTest.distinct();
-//        xxxTest.testSimple();
-//        xxxTest.testCriteria();
-//        xxxTest.refreshByCondition();
-//        xxxTest.testRemove();
+
+        xxxTest.testNonPaged();
+        xxxTest.testListCriteria();
+        xxxTest.testResultMapped();
+        xxxTest.testListPlainValue();
+        xxxTest.testAlia();
+        xxxTest.distinct();
+        xxxTest.testSimple();
+        xxxTest.testCriteria();
+        xxxTest.refreshByCondition();
+        xxxTest.testRemove();
 //        xxxTest.createBatch();
         {
 //        xxxTest.testRefreshConditionRemote();
