@@ -26,23 +26,24 @@ import org.springframework.core.env.Environment;
  * @Author Sim
  */
 public interface DialectAdapter {
-    String MYSQL = "mysql";
+    String MYSQL = "mysql"; //mysql, oceanbase, tidb ....
+    String IMPALA = "impala";
     String CLICKHOUSE = "clickhouse";
-    String OCEANBASE = "oceanbase";
     String ORACLE = "oracle";
+    //not support: db2, sqlserver, sybase,
 
     default Dialect adapter(String driverClassName) {
 
-        isSupported(driverClassName);
-
         try {
             Dialect dialect = null;
-            if (driverClassName.contains(MYSQL) || driverClassName.contains(OCEANBASE)) {
-                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
+            if (driverClassName.contains(IMPALA)) {
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ImpalaDialect").newInstance();
             }else if (driverClassName.contains(CLICKHOUSE)) {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
             }else if (driverClassName.contains(ORACLE)) {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
+            }else {
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             }
 
             SqlInitFactory.DIALECT = dialect;
@@ -59,12 +60,6 @@ public interface DialectAdapter {
         return null;
     }
 
-     static boolean isSupported(String driverClassName) {
-        return driverClassName.toLowerCase().contains(MYSQL)
-                ||driverClassName.toLowerCase().contains(CLICKHOUSE)
-                ||driverClassName.toLowerCase().contains(OCEANBASE)
-                || driverClassName.toLowerCase().contains(ORACLE);
-    }
 
     default String getDbDriverKey(Environment environment) {
         String driverClassName = null;
