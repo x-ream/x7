@@ -139,15 +139,16 @@ public class XxxController {
     }
 
 
-    @RequestMapping("/distinct")
-    public ViewEntity distinct(@RequestBody CatRO ro) {
+    @RequestMapping("/resultKeyFuntion")
+    public ViewEntity resultKeyFuntion(@RequestBody CatRO ro) {
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.resultWithDottedKey().distinct("catTest.dogId")
                 .distinct("catTest.catFriendName")
                 .reduce(COUNT_DISTINCT, "catTest.id")
-                .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
-                .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(?)","catTest.time")
+//                .reduce(SUM, "dogTest.petId", Having.of(GT, 1)).groupBy("catTest.xxx")
+                .resultKeyFunction(ResultKeyAlia.of("dogTest","petIdSum"),"SUM(dogTest.petId)").groupBy("catTest.xxx").having("SUM(dogTest.petId)", GT,1)
+                .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(catTest.time)")
                 .sourceScript("FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id")
                 .sort(ro.getOrderBy(),ro.getDirection())
                 .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows());
@@ -260,7 +261,7 @@ public class XxxController {
     }
 
     @RequestMapping("/resultmap/test")
-    public ViewEntity testResultMap() {
+    public ViewEntity testResultMapSimpleSource() {
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder
@@ -268,7 +269,6 @@ public class XxxController {
                 .reduce(COUNT_DISTINCT, "dogId")
                 .groupBy("id")
         ;
-        builder.and().eq("type", "NL");
         builder.sort("id", DESC).paged().page(2).rows(2);
         builder.sourceBuilder().source("catTest");
 

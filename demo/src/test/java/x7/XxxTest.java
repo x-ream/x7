@@ -113,13 +113,13 @@ public class XxxTest {
         this.controller.create();
     }
 
-    public void distinct(){
+    public void resultKeyFuntion(){
 
         CatRO ro = new CatRO();
         ro.setOrderBy("catTest.id");
         ro.setDirection(Direction.DESC);
         ro.setTotalRowsIgnored(true);
-        ViewEntity ve = this.controller.distinct(ro);
+        ViewEntity ve = this.controller.resultKeyFuntion(ro);
         System.out.println(ve);
     }
 
@@ -175,9 +175,9 @@ public class XxxTest {
         return ViewEntity.ok();
     }
 
-    public ViewEntity testResultMapped(){
+    public ViewEntity testResultMapSimpleSource(){
 
-        ViewEntity ve =  controller.testResultMap();
+        ViewEntity ve =  controller.testResultMapSimpleSource();
         System.out.println(ve);
         return ve;
     }

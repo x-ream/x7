@@ -52,10 +52,11 @@ public class OrderController {
         System.out.println(profile);
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.resultWithDottedKey().distinct("o.id");
-        builder.resultKeyFunction(ResultKeyAlia.of("o","at"),"YEAR(?)","o.createAt");
-        builder.resultKeyFunction(ResultKeyAlia.of("o","xxx"),"CASE WHEN ISNULL(?) THEN 0 ELSE YEAR(?) END","o.name","o.createAt");
-        builder.eq("o.name","test");
-        builder.and().eq("i.name","test");
+        builder.resultKeyFunction(ResultKeyAlia.of("o","cl"),"CHAR_LENGTH(?)","RUNOOB");
+        builder.resultKeyFunction(ResultKeyAlia.of("o","at"),"YEAR(o.createAt)");
+        builder.resultKeyFunction(ResultKeyAlia.of("o","xxx"),"CASE WHEN ISNULL(o.name) THEN 0 ELSE YEAR(o.createAt) END");
+//        builder.eq("o.name","test");
+//        builder.and().eq("i.name","test");
 //        builder.and().nonNull("l.log");
 //        builder.and().nonNull("i.name");
 //        builder.and().in("i.name", Arrays.asList("xxx"));

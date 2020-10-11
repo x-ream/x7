@@ -26,8 +26,8 @@ import org.springframework.core.env.Environment;
  * @Author Sim
  */
 public interface DialectAdapter {
-    String MYSQL = "mysql"; //mysql, oceanbase, tidb ....
-    String IMPALA = "impala";
+    String MYSQL = "mysql"; //mysql, oceanbase, tidb, presto ....
+    String IMPALA = "impala"; //upsert ,while mysql replace
     String CLICKHOUSE = "clickhouse";
     String ORACLE = "oracle";
     //not support: db2, sqlserver, sybase,

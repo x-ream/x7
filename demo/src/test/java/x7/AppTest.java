@@ -22,13 +22,12 @@ public class AppTest {
         xxxTest.inOrder();
         xxxTest.testOrderFind();
         xxxTest.testOrderFindByAlia();
-
         xxxTest.testNonPaged();
         xxxTest.testListCriteria();
-        xxxTest.testResultMapped();
+        xxxTest.testResultMapSimpleSource();
         xxxTest.testListPlainValue();
         xxxTest.testAlia();
-        xxxTest.distinct();
+        xxxTest.resultKeyFuntion();
         xxxTest.testSimple();
         xxxTest.testCriteria();
         xxxTest.refreshByCondition();
