@@ -24,7 +24,7 @@ public class AppTest {
 //        xxxTest.testOrderFindByAlia();
 //        xxxTest.testNonPaged();
 //        xxxTest.testListCriteria();
-//        xxxTest.testResultMapSimpleSource();
+        xxxTest.testResultMapSimpleSource();
 //        xxxTest.testListPlainValue();
 //        xxxTest.testAlia();
 //        xxxTest.resultKeyFuntion();
