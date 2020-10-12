@@ -273,6 +273,7 @@ public class XxxController {
         ;
         builder.sort("id", DESC).paged().page(2).rows(2);
         builder.sourceBuilder().source("catTest");
+//        builder.sourceScript("catTest");
 
         Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
         Page<Map<String, Object>> page = this.petRepository.find(ResultMapCriteria); //un workable
@@ -330,7 +331,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(513);
+        cat.setId(516);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -339,12 +340,12 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(515);
+        cat1.setId(517);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
-        cat1.setList(Arrays.asList(1L, 2L));
-        cat1.setTestList(Arrays.asList("THR CAT", "moo cat510"));
+        cat1.setList(Arrays.asList(15L, 2L));
+        cat1.setTestList(Arrays.asList("THRa CAT", "moo cat510"));
 
         List<Cat> catList = new ArrayList<>();
         catList.add(cat);

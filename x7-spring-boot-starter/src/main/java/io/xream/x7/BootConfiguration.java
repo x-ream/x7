@@ -26,10 +26,10 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan({"io.xream.x7.repository.redis"})
 public class BootConfiguration  {
 
-    @ConditionalOnMissingBean(X7Env.class)
+    @ConditionalOnMissingBean(SpringHelper.class)
     @Bean
-    public X7Env x7Env(){
-        return new X7Env();
+    public SpringHelper x7Env(){
+        return new SpringHelper();
     }
 
 }

@@ -30,12 +30,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class X7Env implements ApplicationContextAware {
+public class SpringHelper implements ApplicationContextAware {
 
-    private static final Logger logger = LoggerFactory.getLogger(X7Env.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringHelper.class);
 
-    public X7Env(){
-        logger.info("X7 Environment Start....");
+    public SpringHelper(){
     }
 
     private static ApplicationContext applicationContext;
@@ -46,9 +45,6 @@ public class X7Env implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext arg0) throws BeansException {
         applicationContext = arg0;
         getMapPaths();
-
-        System.out.println("\n");
-        logger.info("X7Env started, static methods[getContext,getObject,getRequestMapping] ");
     }
 
     public static Object getObject(String beanName) {

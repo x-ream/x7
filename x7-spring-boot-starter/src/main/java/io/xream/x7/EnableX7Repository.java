@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({X7Env.class, ParserStarter.class, RepositoryBeanRegistrar.class, RepositoryStarter.class})
+@Import({SpringHelper.class, ParserStarter.class, RepositoryBeanRegistrar.class, RepositoryStarter.class})
 public @interface EnableX7Repository {
 
     /**
