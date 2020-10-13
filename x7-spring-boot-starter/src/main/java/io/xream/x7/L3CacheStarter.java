@@ -26,14 +26,11 @@ import java.util.Map;
 
 public class L3CacheStarter implements ImportBeanDefinitionRegistrar {
 
-
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
         Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7L3Caching.class.getName());
-
         Object obj = attributes.get("waitTimeMills");
-
         L3CacheConfig.waitTimeMills = Long.valueOf(obj.toString());
-
     }
+
 }

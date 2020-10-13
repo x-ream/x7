@@ -18,6 +18,7 @@ package io.xream.x7;
 
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.dialect.Dialect;
+import io.xream.sqli.repository.init.SqlInit;
 import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
@@ -71,7 +72,8 @@ public class RepositoryListener implements
     private void onStarted(ApplicationStartedEvent applicationStartedEvent){
         NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
         Dialect dialect = applicationStartedEvent.getApplicationContext().getBean(Dialect.class);
-        SqliListener.onStarted(nativeRepository,dialect);
+        SqlInit sqlInit = applicationStartedEvent.getApplicationContext().getBean(SqlInit.class);
+        SqliListener.onStarted(nativeRepository,dialect,sqlInit);
     }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {

@@ -26,15 +26,12 @@ import java.util.Map;
 
 public class L2CacheStarter implements ImportBeanDefinitionRegistrar {
 
-
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
         Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableX7L2Caching.class.getName());
-
         Object obj = attributes.get("timeSeconds");
-
         DefaultL2CacheResolver.setValidSecond(Integer.valueOf(obj.toString()));
         DefaultL2CacheResolver.enabled();
-
     }
+
 }

@@ -22,6 +22,7 @@ import io.xream.sqli.builder.CriteriaToSql;
 import io.xream.sqli.cache.internal.DefaultL2CacheResolver;
 import io.xream.sqli.core.Repository;
 import io.xream.sqli.dialect.Dialect;
+import io.xream.sqli.repository.init.SqlInit;
 import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.starter.SqliStarter;
@@ -86,6 +87,12 @@ public class RepositoryStarter  implements DialectAdapter {
     @Order(8)
     public NativeRepository nativeRepository(Repository dataRepository){
         return SqliStarter.getInstance().nativeRepository(dataRepository);
+    }
+
+    @Bean
+    @Order(9)
+    public SqlInit sqlInit(Dialect dialect){
+        return SqliStarter.getInstance().sqlInit(dialect);
     }
 
 }

@@ -271,6 +271,7 @@ public class XxxController {
                 .reduce(COUNT_DISTINCT, "dogId")
                 .groupBy("id")
         ;
+
         builder.sort("id", DESC).paged().page(2).rows(2);
         builder.sourceBuilder().source("catTest");
 //        builder.sourceScript("catTest");
@@ -331,7 +332,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(516);
+        cat.setId(518);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -340,7 +341,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(517);
+        cat1.setId(519);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);

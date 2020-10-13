@@ -169,7 +169,6 @@
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
             </plugin>
-            <!-- follows for deploy -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -207,7 +206,7 @@
                     </execution>
                 </executions>
             </plugin>
-<!--
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -222,7 +221,7 @@
                     </execution>
                 </executions>
             </plugin>
--->
+
         </plugins>
         <resources>
             <resource>
