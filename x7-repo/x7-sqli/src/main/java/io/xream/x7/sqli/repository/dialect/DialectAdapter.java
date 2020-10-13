@@ -28,6 +28,7 @@ public interface DialectAdapter {
     String MYSQL = "mysql"; //mysql, oceanbase, tidb, presto ....
     String IMPALA = "impala"; //upsert ,while mysql replace
     String CLICKHOUSE = "clickhouse";
+    String POSTGRESQL = "postgresql";
     String ORACLE = "oracle";
     //not support: db2, sqlserver, sybase,
 
@@ -35,7 +36,9 @@ public interface DialectAdapter {
 
         try {
             Dialect dialect = null;
-            if (driverClassName.contains(IMPALA)) {
+            if (driverClassName.contains(POSTGRESQL)) {
+                dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();//TODO , buildTableSql, upsert
+            }else if (driverClassName.contains(IMPALA)) {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ImpalaDialect").newInstance();
             }else if (driverClassName.contains(CLICKHOUSE)) {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
