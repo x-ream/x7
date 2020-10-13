@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>io.xream.x7</groupId>
 		<artifactId>x7-parent</artifactId>
-		<version>2.7.0</version>
+		<version>2.6.0.RELEASE</version>
 	</parent>
 
 	<properties>
@@ -51,42 +51,42 @@
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-base</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-id-generator</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-lock</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-cache</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-sqli</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-jdbc-template-plus</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-redis-integration</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.xream.x7</groupId>
 			<artifactId>x7-reyc</artifactId>
-			<version>2.7.0</version>
+			<version>2.6.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
