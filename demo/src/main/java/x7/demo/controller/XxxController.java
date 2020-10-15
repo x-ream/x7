@@ -226,7 +226,10 @@ public class XxxController {
 
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
-        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
+        builder.in("testBoo",Arrays.asList(
+                "TEST ' ); DELETE FROM t_pig; SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"
+        ));
+//        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
 //        builder.x("testBoo = ? ","TEST' or '1'='1");
 //        builder.sort("id", DESC);
 //        builder.paged().ignoreTotalRows().page(1).rows(10);

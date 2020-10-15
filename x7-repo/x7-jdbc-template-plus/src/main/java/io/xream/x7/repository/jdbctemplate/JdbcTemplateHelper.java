@@ -125,8 +125,12 @@ public final class JdbcTemplateHelper implements JdbcHelper {
     }
 
     @Override
-    public boolean execute(String sql) {
-        this.jdbcTemplate.execute(sql);
+    public boolean execute(String sql,Object...objs) {
+        if (objs == null){
+            this.jdbcTemplate.execute(sql);
+        }else {
+            this.jdbcTemplate.update(sql, objs);
+        }
         return true;
     }
 
@@ -253,7 +257,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
             if (resultMapHelpful == null) {
                 try {
                     Class<T> clzz = orParsed.getClzz();
-                    t = (T) clzz.newInstance();
+                    t = clzz.newInstance();
                     toObject(t, dataMap, orParsed.getBeanElementList(), dialect);
                 } catch (Exception e) {
                     throw ExceptionTranslator.onQuery(e, logger);
