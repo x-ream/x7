@@ -226,13 +226,10 @@ public class XxxController {
 
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
-
-        builder.eq("testBoo",TestBoo.TEST).eq("taxType", null)
-                .in("type", Arrays.asList("BL","NL"))
-                .or().x("(dogId > ? OR test > ?)", 1,1);
-        builder.sort("id", DESC);
-        builder.sortIn("testBoo", Arrays.asList("TEST","BOO"));//当有sortIn时，sort会被过滤掉
-        builder.paged().ignoreTotalRows().page(1).rows(10);
+        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
+//        builder.x("testBoo = ? ","TEST' or '1'='1");
+//        builder.sort("id", DESC);
+//        builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria criteria = builder.build();
 
