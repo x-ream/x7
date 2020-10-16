@@ -17,7 +17,6 @@
 package io.xream.x7.sqli.repository.dialect;
 
 import io.xream.sqli.dialect.Dialect;
-import io.xream.sqli.dialect.DynamicDialect;
 import io.xream.x7.base.util.StringUtil;
 import org.springframework.core.env.Environment;
 
@@ -48,10 +47,7 @@ public interface DialectAdapter {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             }
 
-            DynamicDialect dynamicDialect = new DynamicDialect();
-            dynamicDialect.setDefaultDialect(dialect);
-
-            return dynamicDialect;
+            return dialect;
 
         }catch (Exception e){
             e.printStackTrace();

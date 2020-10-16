@@ -49,7 +49,9 @@ public class RepositoryStarter  implements DialectAdapter {
 
         String driverClassName = getDbDriverKey(environment);
 
-        return adapter(driverClassName);
+        Dialect dialect = adapter(driverClassName);
+
+        return SqliStarter.getInstance().dialect(dialect);
     }
 
     @Bean
