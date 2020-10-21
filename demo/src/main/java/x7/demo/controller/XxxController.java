@@ -129,6 +129,7 @@ public class XxxController {
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
                         .in("id", Arrays.asList(247, 248,512))
+//                .lt("id",10)
 //                        .sourceScript("cat LEFT JOIN dogTest on dogTest.id = cat.dogId")
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
@@ -230,7 +231,7 @@ public class XxxController {
                 "TEST ' ); DELETE FROM t_pig; SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"
         ));
 //        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
-//        builder.x("testBoo = ? ","TEST' or '1'='1");
+        builder.x("userId>=((((((id*10))))+@xxx-1)) AND id=1");
 //        builder.sort("id", DESC);
 //        builder.paged().ignoreTotalRows().page(1).rows(10);
 

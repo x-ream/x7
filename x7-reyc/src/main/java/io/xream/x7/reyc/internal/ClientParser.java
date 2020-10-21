@@ -63,8 +63,11 @@ public class ClientParser {
         parsed.setObjectType(clz);
         parsed.setUrl(url);
 
-        map.put(clz.getName(),parsed);
-
+        String clzName = clz.getName();
+        if (map.containsKey(clzName)) {
+                logger.error("Parsing {}, found repeated class: {}", "ReyClient",clzName);
+        }
+        map.put(clzName,parsed);
 
         /*
          * fallback
