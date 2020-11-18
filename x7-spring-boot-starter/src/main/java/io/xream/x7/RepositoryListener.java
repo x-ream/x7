@@ -16,6 +16,7 @@
  */
 package io.xream.x7;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.customizer.DialectCustomizer;
 import io.xream.sqli.dialect.Dialect;
@@ -24,6 +25,7 @@ import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
 import io.xream.sqli.starter.SqliListener;
+import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
 import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
@@ -57,6 +59,8 @@ public class RepositoryListener implements
         if (!X7Data.isEnabled)
             return;
 
+        customizeJsonConfig(applicationStartedEvent);
+
         customizeCacheStorage(applicationStartedEvent);
 
         customizeL2CacheConsistency(applicationStartedEvent);
@@ -67,6 +71,20 @@ public class RepositoryListener implements
         onStarted(applicationStartedEvent);
 
         IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
+
+    }
+
+    private void customizeJsonConfig(ApplicationStartedEvent applicationStartedEvent){
+
+        try{
+            SqliJsonUtil.Customizer customizer = applicationStartedEvent.getApplicationContext().getBean(SqliJsonUtil.Customizer.class);
+            ObjectMapper objectMapper = customizer.customize();
+            if (objectMapper == null)
+                return;
+            customizer.onStarted(objectMapper);
+        }catch (Exception e){
+
+        }
 
     }
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.Order;
 import x7.demo.entity.OrderType;
+import x7.demo.remote.OrderRemote;
 import x7.demo.repository.OmsRepository;
 import x7.demo.repository.OrderRepository;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController implements OrderRemote {
 
     @Value("${spring.profiles.active:dev}")
     private String profile;

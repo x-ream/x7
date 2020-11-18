@@ -3,6 +3,7 @@ package x7.demo.controller;
 
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
+import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,14 +122,20 @@ public class XxxController {
     @RequestMapping("/refreshByCondition")
     public ViewEntity refreshByCondition() {
 
-        boolean flag = this.catRepository.refresh(
+        RefreshCondition<Cat> refreshCondition =
                 RefreshCondition.build()
                         .refresh("testBoo", TestBoo.BOO)
-                        .refresh("testList", Arrays.asList("238989","112222"))
+                        .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,512))
+                        .in("id", Arrays.asList(247, 248,512));
+
+        String jackStr = SqliJsonUtil.toJson(refreshCondition);
+        refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
+
+        boolean flag = this.catRepository.refreshUnSafe(
+         refreshCondition
 //                .lt("id",10)
 //                        .sourceScript("cat LEFT JOIN dogTest on dogTest.id = cat.dogId")
         );//必须带ID更新，没ID报错
@@ -225,15 +232,16 @@ public class XxxController {
 
     public ViewEntity nonPaged(@RequestBody CatRO ro) {
 
-        CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
+        CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 
-        builder.in("testBoo",Arrays.asList(
-                "TEST ' ); DELETE FROM t_pig; SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"
-        ));
+//        builder.in("testBoo",Arrays.asList(
+//                "TEST ' ); DELETE FROM t_pig; SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"
+//        ));
 //        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
         builder.x("userId>=((((((id*10))))+@xxx-1)) AND id=1");
-//        builder.sort("id", DESC);
-//        builder.paged().ignoreTotalRows().page(1).rows(10);
+        builder.resultKey("id").resultKey("testBoo");
+        builder.sort("id", DESC);
+        builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria criteria = builder.build();
 
@@ -332,7 +340,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(518);
+        cat.setId(520);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -341,7 +349,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(519);
+        cat1.setId(521);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
@@ -387,22 +395,22 @@ public class XxxController {
 
         Date date = new Date();
         Cat cat1 = new Cat();
-        cat1.setId(466);
+        cat1.setId(619);
         cat1.setType("XL");
         cat1.setTestBoo(TestBoo.BOO);
         cat1.setCreateAt(date);
 
         Cat cat2 = new Cat();
-        cat2.setId(251);
+        cat2.setId(620);
         cat2.setType("BL");
         cat2.setTestBoo(TestBoo.BOO);
 
         List<Cat> list = Arrays.asList(cat1, cat2);
 
-        RemoveRefreshCreate<Cat> wrapper = RemoveRefreshCreate.of(list, new Object[]{1, 251});
+        RemoveRefreshCreate<Cat> wrapper = RemoveRefreshCreate.of(list, new Object[]{471});
 
-        String str = JsonX.toJson(wrapper);
-        wrapper = JsonX.toObject(str, RemoveRefreshCreate.class);
+        String str = SqliJsonUtil.toJson(wrapper);
+        wrapper = SqliJsonUtil.toObject(str, RemoveRefreshCreate.class);
         System.out.println(wrapper);
 
         this.catRepository.removeRefreshCreate(wrapper);
@@ -455,4 +463,5 @@ public class XxxController {
     public String testGet(@PathVariable String dog){
         return dog;
     }
+
 }

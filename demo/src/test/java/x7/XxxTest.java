@@ -20,10 +20,12 @@ import x7.demo.controller.CatEggController;
 import x7.demo.controller.OrderController;
 import x7.demo.controller.XxxController;
 import x7.demo.entity.*;
+import x7.demo.remote.OrderRemote;
 import x7.demo.remote.TestServiceRemote;
 import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +53,8 @@ public class XxxTest {
 
     @Autowired
     private CatEggController catEggController;
+    @Resource(name = "x7.demo.remote.OrderRemote")
+    private OrderRemote orderRemote;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -383,5 +387,9 @@ public class XxxTest {
 
     public void testSimple(){
         this.controller.testSimple();
+    }
+
+    public void testOrderRemote(){
+        this.orderRemote.verify();
     }
 }

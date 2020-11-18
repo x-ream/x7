@@ -163,15 +163,15 @@ public class HttpClientResolver {
         return obj;
     }
 
-
     protected static String wrap(HttpClientProxy proxy, BackendService<String> backendService) {
 
-        String result = reyTemplate.support(proxy.getBackend(),proxy.isRetry(),backendService);
+        if (reyTemplate == null)
+            return null;
+        String handlerName = proxy.getObjectType().getSimpleName();
+        String result = reyTemplate.support(handlerName, proxy.getBackend(),proxy.isRetry(),backendService);
 
         return result;
     }
-
-
 
     public static String fallback(String intfName, String methodName, Object[] args) {
 
@@ -198,6 +198,5 @@ public class HttpClientResolver {
         }
 
     }
-
 
 }

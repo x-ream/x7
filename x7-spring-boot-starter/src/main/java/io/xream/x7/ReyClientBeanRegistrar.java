@@ -21,6 +21,7 @@ import io.xream.x7.base.util.ClassFileReader;
 import io.xream.x7.reyc.ReyClient;
 import io.xream.x7.reyc.internal.ClientParser;
 import io.xream.x7.reyc.internal.HttpClientProxy;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -56,7 +57,6 @@ public class ReyClientBeanRegistrar implements EnvironmentAware,ImportBeanDefini
             }
         }
 
-        List<String> beanNameList = new ArrayList<>();
 
         for (Class clz : set) {
             ReyClient annotation = (ReyClient)clz.getAnnotation(ReyClient.class);
@@ -66,7 +66,6 @@ public class ReyClientBeanRegistrar implements EnvironmentAware,ImportBeanDefini
             ClientParser.parse(clz,environment);
 
             String beanName = clz.getName();
-            beanNameList.add(beanName);
 
             String backend = annotation.circuitBreaker();
             if (backend.equals(" ")){
@@ -74,6 +73,7 @@ public class ReyClientBeanRegistrar implements EnvironmentAware,ImportBeanDefini
             }
 
             boolean retry = annotation.retry();
+
 
             if (!registry.containsBeanDefinition(beanName)) {
 

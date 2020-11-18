@@ -156,7 +156,7 @@ public class JsonX {
 			return  Byte.valueOf(unknown);
 
 		if (clz == String.class)
-			return  String.valueOf(unknown);
+			return  unknown;
 
 		if (clz == Date.class)
 			return  new Date(Long.valueOf(unknown));
