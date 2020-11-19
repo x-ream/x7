@@ -18,7 +18,7 @@ package io.xream.x7;
 
 
 import io.xream.x7.base.util.ClassFileReader;
-import io.xream.x7.base.api.ReyClient;
+import io.xream.x7.annotation.ReyClient;
 import io.xream.x7.reyc.internal.ClientParser;
 import io.xream.x7.reyc.internal.HttpClientProxy;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
