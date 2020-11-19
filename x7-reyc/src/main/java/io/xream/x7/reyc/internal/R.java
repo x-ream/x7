@@ -17,7 +17,7 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.base.KV;
-import io.xream.x7.reyc.api.GroupRouter;
+import io.xream.x7.base.api.GroupRouter;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Arrays;

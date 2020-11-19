@@ -16,7 +16,7 @@
  */
 package io.xream.x7.reyc.internal;
 
-import io.xream.x7.reyc.api.GroupRouter;
+import io.xream.x7.base.api.GroupRouter;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

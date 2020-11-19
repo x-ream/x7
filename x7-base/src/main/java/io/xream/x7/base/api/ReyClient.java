@@ -14,13 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc.api;
+package io.xream.x7.base.api;
+
+import java.lang.annotation.*;
+
 
 /**
- * route to service grouped, like k8s namespace with suffix of sharding key
  * @Author Sim
  */
-public interface GroupRouter {
-    String replaceHolder();
-    String replaceValue(Object obj);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+public @interface ReyClient {
+
+    /**
+     * dns or value
+     */
+    String value() default  "";
+
+    /**
+     * "" or configed backend name in application.properties
+     */
+    String circuitBreaker() default " ";
+
+    /**
+     * true | false
+     */
+    boolean retry() default false;
+
+    /**
+     * handle fallback for the important method <br>
+     * Fallback class,  the method name must same as the method of service. and the parameters must same
+     */
+    Class<?> fallback() default void.class;
+
+    /**
+     * route to service grouped, like k8s namespace with suffix of sharding key
+     */
+    Class<? extends GroupRouter> groupRouter() default GroupRouter.class;
 }
