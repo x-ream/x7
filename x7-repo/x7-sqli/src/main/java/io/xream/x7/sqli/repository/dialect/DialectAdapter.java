@@ -29,6 +29,7 @@ public interface DialectAdapter {
     String CLICKHOUSE = "clickhouse";
     String POSTGRESQL = "postgresql";
     String ORACLE = "oracle";
+    String TAOS = "taosdata";
     //not support: db2, sqlserver, sybase,
 
     default Dialect adapter(String driverClassName) {
@@ -43,6 +44,8 @@ public interface DialectAdapter {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.ClickhouseDialect").newInstance();
             }else if (driverClassName.contains(ORACLE)) {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.OracleDialect").newInstance();
+            }else if (driverClassName.contains(TAOS)){
+                dialect =(Dialect) Class.forName("io.xream.sqli.dialect.TAOSDialect").newInstance();
             }else {
                 dialect = (Dialect) Class.forName("io.xream.sqli.dialect.MySqlDialect").newInstance();
             }

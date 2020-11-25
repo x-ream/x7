@@ -4,7 +4,6 @@ package x7.demo.controller;
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
 import io.xream.sqli.util.SqliJsonUtil;
-import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -340,7 +339,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(520);
+        cat.setId(522);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -349,7 +348,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(521);
+        cat1.setId(523);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);

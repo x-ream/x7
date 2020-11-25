@@ -17,7 +17,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
-        xxxTest.testOrderRemote();
+//        xxxTest.testOrderRemote();
 
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
@@ -32,9 +32,9 @@ public class AppTest {
 //        xxxTest.resultKeyFuntion();
 //        xxxTest.testSimple();
 //        xxxTest.testCriteria();
-        xxxTest.refreshByCondition();
+//        xxxTest.refreshByCondition();
 //        xxxTest.testRemove();
-//        xxxTest.createBatch();
+        xxxTest.createBatch();
 //        xxxTest.removeRefreshCreate();
         {
 //        xxxTest.testRefreshConditionRemote();

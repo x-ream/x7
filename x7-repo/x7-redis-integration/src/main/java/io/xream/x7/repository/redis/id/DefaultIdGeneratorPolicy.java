@@ -16,7 +16,6 @@
  */
 package io.xream.x7.repository.redis.id;
 
-import io.xream.sqli.annotation.X;
 import io.xream.sqli.api.BaseRepository;
 import io.xream.sqli.api.ResultMapRepository;
 import io.xream.sqli.builder.Criteria;
@@ -35,7 +34,9 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -96,16 +97,16 @@ public class DefaultIdGeneratorPolicy implements IdGeneratorPolicy {
             if (clzz == Void.class)
                 continue;
             Parsed parsed = Parser.get(clzz);
-            String key = parsed.getKey(X.KEY_ONE);
+            String key = parsed.getKey();
             BeanElement be = parsed.getElement(key);
-            if (be.getClz() == String.class)
+            if (be.getClz() == String.class || be.getClz() == Date.class || be.getClz() == Timestamp.class)
                 continue;
             builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
-            Criteria.ResultMapCriteria ResultMapCriteria = builder.build();
+            Criteria.ResultMapCriteria resultMapCriteria = builder.build();
             List<Long> idList = null;
             if (baseRepository instanceof ResultMapRepository){
                 ResultMapRepository resultMapRepository = (ResultMapRepository) baseRepository;
-                idList = resultMapRepository.listPlainValue(Long.class,ResultMapCriteria);
+                idList = resultMapRepository.listPlainValue(Long.class,resultMapCriteria);
             }
 
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);

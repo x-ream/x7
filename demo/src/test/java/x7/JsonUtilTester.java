@@ -9,7 +9,6 @@ import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import x7.demo.entity.Cat;
-import x7.demo.entity.DogTest;
 import x7.demo.entity.TestBoo;
 
 import java.util.*;
@@ -32,9 +31,6 @@ public class JsonUtilTester {
         cat.setTestBoo(TestBoo.BOO);
         cat.setTaxType("XXXX");
         cat.setTestList(Arrays.asList("gr53","3342"));
-        cat.setSmallB(false);
-        cat.setBigB(false);
-        cat.setMapTest(mapTest);
 
         Cat cat1 = new Cat();
         cat1.setId(11);
@@ -48,8 +44,6 @@ public class JsonUtilTester {
         System.out.println("toJackson: " + str);
         System.out.println("toFastjson: " + JsonX.toJson(cat));
         cat = SqliJsonUtil.toObject(str, Cat.class);
-        System.out.println("_________property: " + cat.getMapTest());
-        System.out.println("_________property: " + JsonX.toObject(str,Cat.class).getMapTest());
         System.out.println("-------->" + SqliJsonUtil.toObject(str,SmallCat.class));
         SmallCat smallCat = SqliJsonUtil.toObject(str,SmallCat.class);
         System.out.println("-------->" + SqliJsonUtil.toObject(SqliJsonUtil.toJson(smallCat),Cat.class));

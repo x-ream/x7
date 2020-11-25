@@ -26,9 +26,6 @@ public class Cat implements Serializable {
 	private Date createAt;
 	private TestBoo testBoo;
 	private List<String> testList;
-	private boolean smallB;
-	private Boolean bigB;
-	private Map<String,String> mapTest;
 
 
 	private transient Map<Object,Object> viewMap;
@@ -120,30 +117,6 @@ public class Cat implements Serializable {
 		this.testList = testList;
 	}
 
-	public boolean isSmallB() {
-		return smallB;
-	}
-
-	public void setSmallB(boolean smallB) {
-		this.smallB = smallB;
-	}
-
-	public Boolean getBigB() {
-		return bigB;
-	}
-
-	public void setBigB(Boolean bigB) {
-		this.bigB = bigB;
-	}
-
-
-	public Map<String, String> getMapTest() {
-		return mapTest;
-	}
-
-	public void setMapTest(Map<String, String> mapTest) {
-		this.mapTest = mapTest;
-	}
 
 	@Override
 	public String toString() {
@@ -159,8 +132,6 @@ public class Cat implements Serializable {
 				", createAt=" + createAt +
 				", testBoo=" + testBoo +
 				", testList=" + testList +
-				", smallB=" + smallB +
-				", bigB=" + bigB +
 				", viewMap=" + viewMap +
 				'}';
 	}

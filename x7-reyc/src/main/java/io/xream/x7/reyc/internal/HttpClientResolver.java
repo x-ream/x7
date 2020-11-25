@@ -16,13 +16,13 @@
  */
 package io.xream.x7.reyc.internal;
 
+import io.xream.x7.annotation.ReyClient;
 import io.xream.x7.base.KV;
 import io.xream.x7.base.api.BackendService;
+import io.xream.x7.base.api.GroupRouter;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.util.StringUtil;
-import io.xream.x7.annotation.ReyClient;
 import io.xream.x7.reyc.Url;
-import io.xream.x7.base.api.GroupRouter;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.slf4j.Logger;
