@@ -63,7 +63,6 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     private Class<?> objectType;
     public void setObjectType(Class<?> objectType) {
         this.objectType = objectType;
-        super.setChildClzz(objectType);
     }
 
     @Override
