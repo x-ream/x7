@@ -339,7 +339,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(532);
+        cat.setId(534);
         cat.setDogId(2);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.TEST);
@@ -348,7 +348,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(533);
+        cat1.setId(535);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
