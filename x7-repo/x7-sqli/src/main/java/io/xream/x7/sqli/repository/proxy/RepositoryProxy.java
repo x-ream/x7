@@ -18,8 +18,8 @@ package io.xream.x7.sqli.repository.proxy;
 
 import io.xream.sqli.core.Repository;
 import io.xream.sqli.repository.internal.DefaultRepository;
+import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.sqli.util.SqliLoggerProxy;
-import io.xream.x7.repository.id.IdGeneratorService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
@@ -52,8 +52,8 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     }
 
 
-    public void setIdGeneratorService(IdGeneratorService service){
-        super.setIdGeneratorService(service);
+    public void setIdGenerator(IdGeneratorProxy idGeneratorService){
+        super.setIdGenerator(idGeneratorService);
     }
     @Override
     public void setRepository(Repository dataRepository){

@@ -61,12 +61,8 @@ public class RepositoryListener implements
 
         customizeL2CacheConsistency(applicationStartedEvent);
 
-//        customizeIdGeneratorPolicy(applicationStartedEvent);
-
         onJdbcHelperCreated(applicationStartedEvent);
         onStarted(applicationStartedEvent);
-
-//        IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
     }
 
@@ -246,34 +242,5 @@ public class RepositoryListener implements
         SqliListener.onL2CacheEnabled(l2CacheResolver, customizer.customize());
     }
 
-
-//    private void customizeIdGeneratorPolicy(ApplicationStartedEvent applicationStartedEvent) {
-//        IdGeneratorPolicyCustomizer customizer = null;
-//        try {
-//            customizer = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicyCustomizer.class);
-//        } catch (Exception e) {
-//
-//        }
-//
-//        IdGeneratorPolicy idGeneratorPolicy = null;
-//        if (customizer != null && customizer.customize() != null) {
-//            idGeneratorPolicy = customizer.customize();
-//        }else{
-//            try {
-//                idGeneratorPolicy = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicy.class);
-//            }catch (Exception e){
-//
-//            }
-//        }
-//
-//        if (idGeneratorPolicy == null)
-//            return;
-//
-//        IdGeneratorService service = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorService.class);
-//        if (service == null)
-//            return;
-//        service.setIdGeneratorPolicy(idGeneratorPolicy);
-//
-//    }
 
 }

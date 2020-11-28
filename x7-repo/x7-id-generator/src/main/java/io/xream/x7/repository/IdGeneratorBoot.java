@@ -18,15 +18,12 @@ package io.xream.x7.repository;
 
 import io.xream.sqli.core.RepositoryManagement;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 
 
 /**
  * @Author Sim
  */
 public class IdGeneratorBoot {
-
 
     public static void onStarted(IdGeneratorPolicy idGeneratorPolicy) {
 
