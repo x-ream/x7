@@ -17,34 +17,30 @@
 package io.xream.x7.repository;
 
 import io.xream.sqli.core.RepositoryManagement;
+import io.xream.sqli.spi.IdGenerator;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 
 
 /**
  * @Author Sim
  */
-public class IdGeneratorBootListener {
+public class IdGeneratorBootListener implements
+        ApplicationListener<ApplicationStartedEvent> {
 
-    public static void onStarted(ConfigurableApplicationContext applicationContext) {
+
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
 
         IdGeneratorPolicy idGeneratorPolicy = null;
         try {
-            idGeneratorPolicy = applicationContext.getBean(IdGeneratorPolicy.class);
+            idGeneratorPolicy = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicy.class);
         } catch (Exception e) {
 
         }
 
-
-        try {
-            Thread.sleep(1000);
-            if (idGeneratorPolicy != null) {
-                idGeneratorPolicy.onStart(RepositoryManagement.REPOSITORY_LIST);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        IdGeneratorBoot.onStarted(idGeneratorPolicy);
     }
-    
 }

@@ -14,14 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.id.customizer;
+package io.xream.x7.repository;
 
+import io.xream.sqli.core.RepositoryManagement;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+
 
 /**
  * @Author Sim
  */
-public interface IdGeneratorPolicyCustomizer {
+public class IdGeneratorBoot {
 
-    IdGeneratorPolicy customize();
+
+    public static void onStarted(IdGeneratorPolicy idGeneratorPolicy) {
+
+        try {
+            Thread.sleep(1000);
+            if (idGeneratorPolicy != null) {
+                idGeneratorPolicy.onStart(RepositoryManagement.REPOSITORY_LIST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

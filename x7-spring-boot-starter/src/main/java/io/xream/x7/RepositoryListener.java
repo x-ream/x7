@@ -34,10 +34,6 @@ import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
-import io.xream.x7.repository.IdGeneratorBootListener;
-import io.xream.x7.repository.id.IdGeneratorPolicy;
-import io.xream.x7.repository.id.IdGeneratorService;
-import io.xream.x7.repository.id.customizer.IdGeneratorPolicyCustomizer;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
@@ -65,12 +61,12 @@ public class RepositoryListener implements
 
         customizeL2CacheConsistency(applicationStartedEvent);
 
-        customizeIdGeneratorPolicy(applicationStartedEvent);
+//        customizeIdGeneratorPolicy(applicationStartedEvent);
 
         onJdbcHelperCreated(applicationStartedEvent);
         onStarted(applicationStartedEvent);
 
-        IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
+//        IdGeneratorBootListener.onStarted(applicationStartedEvent.getApplicationContext());
 
     }
 
@@ -251,33 +247,33 @@ public class RepositoryListener implements
     }
 
 
-    private void customizeIdGeneratorPolicy(ApplicationStartedEvent applicationStartedEvent) {
-        IdGeneratorPolicyCustomizer customizer = null;
-        try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicyCustomizer.class);
-        } catch (Exception e) {
-
-        }
-
-        IdGeneratorPolicy idGeneratorPolicy = null;
-        if (customizer != null && customizer.customize() != null) {
-            idGeneratorPolicy = customizer.customize();
-        }else{
-            try {
-                idGeneratorPolicy = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicy.class);
-            }catch (Exception e){
-
-            }
-        }
-
-        if (idGeneratorPolicy == null)
-            return;
-
-        IdGeneratorService service = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorService.class);
-        if (service == null)
-            return;
-        service.setIdGeneratorPolicy(idGeneratorPolicy);
-
-    }
+//    private void customizeIdGeneratorPolicy(ApplicationStartedEvent applicationStartedEvent) {
+//        IdGeneratorPolicyCustomizer customizer = null;
+//        try {
+//            customizer = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicyCustomizer.class);
+//        } catch (Exception e) {
+//
+//        }
+//
+//        IdGeneratorPolicy idGeneratorPolicy = null;
+//        if (customizer != null && customizer.customize() != null) {
+//            idGeneratorPolicy = customizer.customize();
+//        }else{
+//            try {
+//                idGeneratorPolicy = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorPolicy.class);
+//            }catch (Exception e){
+//
+//            }
+//        }
+//
+//        if (idGeneratorPolicy == null)
+//            return;
+//
+//        IdGeneratorService service = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorService.class);
+//        if (service == null)
+//            return;
+//        service.setIdGeneratorPolicy(idGeneratorPolicy);
+//
+//    }
 
 }
