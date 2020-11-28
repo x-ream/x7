@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.redis.id;
+package io.xream.x7.repository.id;
 
 import io.xream.sqli.api.BaseRepository;
 import io.xream.sqli.api.ResultMapRepository;
@@ -25,7 +25,6 @@ import io.xream.sqli.parser.BeanElement;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.parser.Parser;
 import io.xream.x7.base.util.VerifyUtil;
-import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -16,12 +16,6 @@
 
         <dependency>
             <groupId>io.xream.x7</groupId>
-            <artifactId>x7-id-generator</artifactId>
-            <version>${x7.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.xream.x7</groupId>
             <artifactId>x7-lock</artifactId>
             <version>${x7.version}</version>
         </dependency>

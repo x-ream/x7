@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository.redis.autoconfigure;
+package io.xream.x7.repository.id.autoconfigure;
 
 import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.x7.repository.IdGeneratorBootListener;
+import io.xream.x7.repository.id.DefaultIdGeneratorPolicy;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import io.xream.x7.repository.id.IdGeneratorPolicy;
-import io.xream.x7.repository.redis.id.DefaultIdGeneratorPolicy;
 import org.springframework.context.annotation.Bean;
 
 /**
