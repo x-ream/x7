@@ -26,8 +26,6 @@ import io.xream.sqli.repository.init.SqlInit;
 import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.starter.SqliStarter;
-import io.xream.x7.repository.id.DefaultIdGeneratorService;
-import io.xream.x7.repository.id.IdGeneratorService;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
 import io.xream.x7.sqli.repository.dialect.DialectAdapter;
 import org.springframework.context.annotation.Bean;
@@ -60,11 +58,6 @@ public class RepositoryStarter  implements DialectAdapter {
         return DefaultL2CacheResolver.newInstance();
     }
 
-    @Bean
-    @Order(4)
-    public IdGeneratorService idGenerator(){
-        return new DefaultIdGeneratorService();
-    }
 
     @Bean
     @Order(5)

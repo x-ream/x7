@@ -98,7 +98,7 @@ public class RepositoryListener implements
 
         NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
         SqlInit sqlInit = applicationStartedEvent.getApplicationContext().getBean(SqlInit.class);
-        SqliListener.onStarted(nativeRepository,dialect,sqlInit);
+        SqliListener.onStarted(nativeRepository,sqlInit);
     }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
