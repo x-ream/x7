@@ -57,6 +57,9 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", createAt=" + createAt +
+                ", type=" + type +
+                ", userId=" + userId +
                 '}';
     }
 }

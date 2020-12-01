@@ -52,6 +52,7 @@ public class RepositoryStarter  implements DialectAdapter {
         return SqliStarter.getInstance().dialect(dialect);
     }
 
+
     @Bean
     @Order(3)
     public L2CacheResolver cacheResolver(){
@@ -60,32 +61,32 @@ public class RepositoryStarter  implements DialectAdapter {
 
 
     @Bean
-    @Order(5)
+    @Order(4)
     public JdbcHelper jdbcHelper(){
         return new JdbcTemplateHelper();
     }
 
 
     @Bean
-    @Order(6)
+    @Order(5)
     public Repository dataRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver, Environment environment){
         return SqliStarter.getInstance().repository(criteriaToSql, jdbcHelper,dialect,cacheResolver);
     }
 
     @Bean
-    @Order(7)
+    @Order(6)
     public TemporaryRepository temporaryRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
         return SqliStarter.getInstance().temporaryRepository(criteriaToSql, jdbcHelper,dialect,repository);
     }
 
     @Bean
-    @Order(8)
+    @Order(7)
     public NativeRepository nativeRepository(Repository dataRepository){
         return SqliStarter.getInstance().nativeRepository(dataRepository);
     }
 
     @Bean
-    @Order(9)
+    @Order(8)
     public SqlInit sqlInit(Dialect dialect){
         return SqliStarter.getInstance().sqlInit(dialect);
     }

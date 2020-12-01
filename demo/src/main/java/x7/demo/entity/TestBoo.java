@@ -2,37 +2,43 @@ package x7.demo.entity;
 
 
 import io.xream.x7.base.web.Viewable;
+import x7.config.EnumCodeable;
 
-public enum TestBoo implements Viewable<String> {
+public enum TestBoo implements EnumCodeable, Viewable<String> {
 
 
-    TEST("0000"){
+    TEST{
+        @Override
+        public String getCode() {
+            return "T";
+        }
+
         @Override
         public String getView() {
             return "测试";
         }
     },
-    BOO("1111"){
+    BOO{
+        @Override
+        public String getCode() {
+            return "B";
+        }
         @Override
         public String getView() {
             return "不要的";
         }
+    },
+
+    HLL{
+        @Override
+        public String getCode() {
+            return "H";
+        }
+        @Override
+        public String getView() {
+            return "好好的";
+        }
     };
 
-    private String id;
-    public String getId() {
-        return id;
-    }
 
-    private TestBoo(String id){
-        this.id = id;
-    }
-
-    public TestBoo get(String id) {
-        for (TestBoo noticeType : values()) {
-            if (noticeType.getId().equals(id))
-                return noticeType;
-        }
-        return TEST;
-    }
 }

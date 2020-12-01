@@ -17,11 +17,12 @@ public class AppTest {
     @Test
     public void testAll(){
 
+        xxxTest.listCat();
 //        xxxTest.testOrderRemote();
 
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
-//        xxxTest.inOrder();
+        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
 //        xxxTest.testOrderFindByAlia();
 //        xxxTest.testNonPaged();
@@ -32,9 +33,10 @@ public class AppTest {
 //        xxxTest.resultKeyFuntion();
 //        xxxTest.testSimple();
 //        xxxTest.testCriteria();
-//        xxxTest.refreshByCondition();
+        xxxTest.testOne();
+        xxxTest.refreshByCondition();
 //        xxxTest.testRemove();
-        xxxTest.createBatch();
+//        xxxTest.createBatch();
 //        xxxTest.removeRefreshCreate();
         {
 //        xxxTest.testRefreshConditionRemote();

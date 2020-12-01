@@ -23,17 +23,14 @@ public class Cat implements Serializable {
 	private long dogId;
 	private long test;
 	private List<Long> list;
-	private Date createAt;
 	private TestBoo testBoo;
 	private List<String> testList;
-
+	private Date createAt;
 
 	private transient Map<Object,Object> viewMap;
 
-
 	public String getName(){
 		return MapUtils.getString(viewMap,""+id);
-
 	}
 
 	public long getId() {
@@ -89,16 +86,7 @@ public class Cat implements Serializable {
 	}
 
 	public void setList(List<Long> list) {
-
 		this.list = list;
-	}
-
-	public Date getCreateAt() {
-		return createAt;
-	}
-
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
 	}
 
 	public TestBoo getTestBoo() {
@@ -117,6 +105,14 @@ public class Cat implements Serializable {
 		this.testList = testList;
 	}
 
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
 
 	@Override
 	public String toString() {
@@ -129,10 +125,10 @@ public class Cat implements Serializable {
 				", dogId=" + dogId +
 				", test=" + test +
 				", list=" + list +
-				", createAt=" + createAt +
 				", testBoo=" + testBoo +
 				", testList=" + testList +
 				", viewMap=" + viewMap +
+				", createAt=" + createAt +
 				'}';
 	}
 }

@@ -91,27 +91,22 @@ public class XxxController {
         return ViewEntity.ok(flag);
     }
 
+    public ViewEntity listCat(){
+        List<Cat> list = this.catRepository.list();
+        return ViewEntity.ok(list);
+    }
+
     @RequestMapping("/create")
     @Transactional
     public ViewEntity create() {
 
         Cat cat = new Cat();
-        cat.setId(366L);
+        cat.setId(540);
         cat.setDogId(3);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.BOO);
         cat.setList(Arrays.asList(9L, 11L));
         cat.setTestList(Arrays.asList("BIG xxX CAT", "small cat"));
-
-        this.catRepository.create(cat);
-
-        cat = new Cat();
-        cat.setId(367L);
-        cat.setDogId(2);
-        cat.setCreateAt(new Date());
-        cat.setTestBoo(TestBoo.TEST);
-        cat.setList(Arrays.asList(1L, 2L));
-        cat.setTestList(Arrays.asList("THR CAT", "moo cat"));
 
         this.catRepository.create(cat);
 
@@ -123,12 +118,12 @@ public class XxxController {
 
         RefreshCondition<Cat> refreshCondition =
                 RefreshCondition.build()
-                        .refresh("testBoo", TestBoo.BOO)
+                        .refresh("testBoo", TestBoo.TEST)
                         .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,512));
+                        .in("id", Arrays.asList(247, 248,513));
 
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
@@ -217,12 +212,12 @@ public class XxxController {
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
         builder.distinct("c.id").reduce(COUNT_DISTINCT, "c.dogId").groupBy("c.id");
-        builder.and().nin("c.type", Arrays.asList("WHITE", "BLACK"));
-        builder.sourceBuilder().source("catTest").alia("c");
+        builder.and().nin("c.testBoo", Arrays.asList(TestBoo.BOO, TestBoo.HLL));
+        builder.sourceBuilder().source("cat").alia("c");
 
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
-        Page<Map<String, Object>> pagination = repository.find(resultMapped);
+        Page<Map<String, Object>> pagination = catRepository.find(resultMapped);
 
         return ViewEntity.ok(pagination);
 
@@ -339,16 +334,16 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(534);
-        cat.setDogId(2);
+        cat.setId(538);
+        cat.setDogId(3);
         cat.setCreateAt(new Date());
-        cat.setTestBoo(TestBoo.TEST);
+        cat.setTestBoo(TestBoo.HLL);
         cat.setList(Arrays.asList(6L, 8L));
         cat.setTestList(Arrays.asList("BIG CATX", "small catX"));
 
 
         Cat cat1 = new Cat();
-        cat1.setId(535);
+        cat1.setId(539);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);

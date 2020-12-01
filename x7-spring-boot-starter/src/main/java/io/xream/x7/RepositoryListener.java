@@ -19,11 +19,14 @@ package io.xream.x7;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.customizer.DialectCustomizer;
+import io.xream.sqli.api.customizer.EnumSupportCustomizer;
 import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.repository.init.SqlInit;
+import io.xream.sqli.repository.internal.DefaultEnumSupport;
 import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
+import io.xream.sqli.starter.EnumSupportListener;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.cache.*;
@@ -55,6 +58,8 @@ public class RepositoryListener implements
         if (!X7Data.isEnabled)
             return;
 
+        customizeEnumSupport(applicationStartedEvent);
+
         customizeJsonConfig(applicationStartedEvent);
 
         customizeCacheStorage(applicationStartedEvent);
@@ -66,17 +71,33 @@ public class RepositoryListener implements
 
     }
 
-    private void customizeJsonConfig(ApplicationStartedEvent applicationStartedEvent){
+    private void customizeEnumSupport(ApplicationStartedEvent applicationStartedEvent) {
 
-        try{
-            SqliJsonUtil.Customizer customizer = applicationStartedEvent.getApplicationContext().getBean(SqliJsonUtil.Customizer.class);
-            ObjectMapper objectMapper = customizer.customize();
-            if (objectMapper == null)
-                return;
-            customizer.onStarted(objectMapper);
+        EnumSupportCustomizer customizer = null;
+        try {
+            customizer = applicationStartedEvent.getApplicationContext().getBean(EnumSupportCustomizer.class);
         }catch (Exception e){
 
         }
+        if (customizer == null || customizer.customize() == null) {
+            EnumSupportListener.onStarted(new DefaultEnumSupport());
+        }else {
+            EnumSupportListener.onStarted(customizer.customize());
+        }
+    }
+
+    private void customizeJsonConfig(ApplicationStartedEvent applicationStartedEvent){
+        SqliJsonUtil.Customizer customizer = null;
+        try{
+            customizer = applicationStartedEvent.getApplicationContext().getBean(SqliJsonUtil.Customizer.class);
+        }catch (Exception e){
+        }
+        if (customizer == null)
+            return;
+        ObjectMapper objectMapper = customizer.customize();
+        if (objectMapper == null)
+            return;
+        customizer.onStarted(objectMapper);
 
     }
 

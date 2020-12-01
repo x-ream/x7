@@ -255,7 +255,7 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(472L);
+        cat.setId(540);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);
@@ -344,6 +344,10 @@ public class XxxTest {
 
     public void inOrder(){
         this.orderController.in();
+    }
+
+    public ViewEntity listCat(){
+        return this.controller.listCat();
     }
 
     public void testTemporaryTable(){
