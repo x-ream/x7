@@ -305,15 +305,14 @@ public class XxxController {
                 .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
 
-        builder.forceIndex("IDX_CAT_DOG_ID");
         builder.sortIn("testBoo",Arrays.asList("BOO"));
         builder.paged().ignoreTotalRows();
 
         Criteria criteria = builder.build();
 
-        catRepository.find(criteria);
+        Page<Cat> page = catRepository.find(criteria);
 
-        return ViewEntity.ok(null);
+        return ViewEntity.ok(page);
     }
 
     @RequestMapping("/list")

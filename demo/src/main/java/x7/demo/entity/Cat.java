@@ -113,7 +113,6 @@ public class Cat implements Serializable {
 		this.createAt = createAt;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Cat{" +

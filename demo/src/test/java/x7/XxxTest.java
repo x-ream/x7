@@ -26,6 +26,7 @@ import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -255,10 +256,12 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(540);
+        cat.setId(541);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);
+        cat.setCreateAt(new Date());
+        LocalDateTime localDateTime = LocalDateTime.now();
 
         this.controller.createCat(cat);
     }

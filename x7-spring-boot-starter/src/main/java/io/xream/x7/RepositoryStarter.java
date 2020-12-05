@@ -37,13 +37,13 @@ public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(1)
-    public CriteriaToSql criteriaToSql() {
+    public CriteriaToSql __criteriaToSql() {
         return  SqliStarter.getInstance().criteriaToSql();
     }
 
     @Bean
     @Order(2)
-    public Dialect dialect(Environment environment){
+    public Dialect __dialect(Environment environment){
 
         String driverClassName = getDbDriverKey(environment);
 
@@ -55,39 +55,39 @@ public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(3)
-    public L2CacheResolver cacheResolver(){
+    public L2CacheResolver __cacheResolver(){
         return DefaultL2CacheResolver.newInstance();
     }
 
 
     @Bean
     @Order(4)
-    public JdbcHelper jdbcHelper(){
+    public JdbcHelper __jdbcHelper(){
         return new JdbcTemplateHelper();
     }
 
 
     @Bean
     @Order(5)
-    public Repository dataRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver, Environment environment){
+    public Repository __repository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver){
         return SqliStarter.getInstance().repository(criteriaToSql, jdbcHelper,dialect,cacheResolver);
     }
 
     @Bean
     @Order(6)
-    public TemporaryRepository temporaryRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
+    public TemporaryRepository __temporaryRepository(CriteriaToSql criteriaToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
         return SqliStarter.getInstance().temporaryRepository(criteriaToSql, jdbcHelper,dialect,repository);
     }
 
     @Bean
     @Order(7)
-    public NativeRepository nativeRepository(Repository dataRepository){
-        return SqliStarter.getInstance().nativeRepository(dataRepository);
+    public NativeRepository __nativeRepository(Repository repository){
+        return SqliStarter.getInstance().nativeRepository(repository);
     }
 
     @Bean
     @Order(8)
-    public SqlInit sqlInit(Dialect dialect){
+    public SqlInit __sqlInit(Dialect dialect){
         return SqliStarter.getInstance().sqlInit(dialect);
     }
 
