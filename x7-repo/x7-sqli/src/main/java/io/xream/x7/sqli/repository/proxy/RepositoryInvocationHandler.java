@@ -43,6 +43,7 @@ public class RepositoryInvocationHandler implements InvocationHandler, DynamicDi
             if (methodName.equals("toString"))
                 return null;
             final Class clz = repository.getClzz() == Void.class ? repository.getObjectType() : repository.getClzz();
+            repository.setRepositoryClzz(repository.getObjectType());
 
             SqliLoggerProxy.debug(clz, () -> {
                 String argStr = (args != null && args.length > 0) ? args[0].getClass().getSimpleName() : "";

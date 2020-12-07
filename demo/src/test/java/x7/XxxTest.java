@@ -399,4 +399,8 @@ public class XxxTest {
     public void testOrderRemote(){
         this.orderRemote.verify();
     }
+
+    public void testInCondtion(){
+        this.controller.testInCondition();
+    }
 }

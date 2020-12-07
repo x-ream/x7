@@ -96,7 +96,7 @@ public class OrderController implements OrderRemote {
                 .more().or()
                     .beginSub()
                         .x("i.orderId > ? and YEAR(o.createAt) >= ?", 2,2020).or().lte("i.orderId",2)
-                            .beginSub().eq("i.type", OrderType.SINGLE).endSub()
+                            .beginSub().eq("i.type", "SINGLE").endSub()
                         .or().eq("i.type", null)
                             .beginSub().eq("o.type",OrderType.SINGLE).endSub().or()
                     .endSub().x("i.orderId > 1");

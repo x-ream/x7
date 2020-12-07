@@ -79,4 +79,9 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
     public boolean isSingleton() {
         return true;
     }
+
+    @Override
+    public void setRepositoryClzz(Class clzz) {
+        super.setRepositoryClzz(clzz);
+    }
 }

@@ -4,6 +4,7 @@ package x7.demo.controller;
 import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
 import io.xream.sqli.util.SqliJsonUtil;
+import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -234,7 +235,8 @@ public class XxxController {
 //        builder.in("testBoo",Arrays.asList("TEST') UNION SELECT * FROM t_cat WHERE 1 = 1 OR test_boo IN ('ddd"));
         builder.x("userId>=((((((id*10))))+@xxx-1)) AND id=1");
         builder.resultKey("id").resultKey("testBoo");
-        builder.sort("id", DESC);
+//        builder.sort("id", DESC);
+        builder.xAggr("ORDER BY id DESC");
         builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria criteria = builder.build();
@@ -301,7 +303,7 @@ public class XxxController {
 
         builder
                 .in("testBoo", Arrays.asList("BOO"))
-                .eq("type","XXXX")
+                .eq("testBoo","BOO")
                 .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
 
@@ -333,7 +335,7 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(538);
+        cat.setId(542);
         cat.setDogId(3);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.HLL);
@@ -342,7 +344,7 @@ public class XxxController {
 
 
         Cat cat1 = new Cat();
-        cat1.setId(539);
+        cat1.setId(543);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
@@ -455,6 +457,17 @@ public class XxxController {
     @RequestMapping(value = "/test/get/{dog}" ,method = RequestMethod.GET)
     public String testGet(@PathVariable String dog){
         return dog;
+    }
+
+    @RequestMapping("/in/test")
+    public ViewEntity testInCondition(){
+        InCondition inCondition = InCondition.of("testBoo",Arrays.asList(TestBoo.BOO));
+        String str = JsonX.toJson(inCondition);
+        inCondition = SqliJsonUtil.toObject(str, InCondition.class);
+
+        List<Cat> list = this.catRepository.in("testBoo", inCondition.getInList());
+
+        return ViewEntity.ok(list);
     }
 
 }
