@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-@SpringBootApplication
+@SpringBootApplication()
 @EnableTransactionManagement
 @EnableReadOnly
 //@EnableX7L2Caching(timeSeconds = 300)

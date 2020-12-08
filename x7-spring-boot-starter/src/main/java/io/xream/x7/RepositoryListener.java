@@ -18,9 +18,11 @@ package io.xream.x7;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.xream.sqli.api.NativeRepository;
+import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.api.customizer.DialectCustomizer;
 import io.xream.sqli.api.customizer.EnumSupportCustomizer;
 import io.xream.sqli.dialect.Dialect;
+import io.xream.sqli.dialect.Schema;
 import io.xream.sqli.repository.init.SqlInit;
 import io.xream.sqli.repository.internal.DefaultEnumSupport;
 import io.xream.sqli.spi.JdbcHelper;
@@ -28,6 +30,7 @@ import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
 import io.xream.sqli.starter.EnumSupportListener;
 import io.xream.sqli.starter.SqliListener;
+import io.xream.sqli.starter.TemporaryTableParserListener;
 import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.cache.*;
 import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
@@ -111,7 +114,10 @@ public class RepositoryListener implements
 
         NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
         SqlInit sqlInit = applicationStartedEvent.getApplicationContext().getBean(SqlInit.class);
-        SqliListener.onStarted(nativeRepository,sqlInit);
+        Schema schema = applicationStartedEvent.getApplicationContext().getBean(Schema.class);
+        TemporaryRepository temporaryRepository = applicationStartedEvent.getApplicationContext().getBean(TemporaryRepository.class);
+        TemporaryTableParserListener.onStarted(temporaryRepository,schema);
+        SqliListener.onStarted(nativeRepository,sqlInit,schema);
     }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
