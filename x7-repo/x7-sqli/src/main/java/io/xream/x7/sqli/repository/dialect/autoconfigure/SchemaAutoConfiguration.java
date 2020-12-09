@@ -19,8 +19,8 @@
 package io.xream.x7.sqli.repository.dialect.autoconfigure;
 
 
-import io.xream.sqli.dialect.Schema;
 import io.xream.sqli.repository.init.DefaultMySqlSchema;
+import io.xream.sqli.spi.Schema;
 import org.springframework.context.annotation.Bean;
 
 /**
