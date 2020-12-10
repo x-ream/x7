@@ -119,12 +119,12 @@ public class XxxController {
 
         RefreshCondition<Cat> refreshCondition =
                 RefreshCondition.build()
-                        .refresh("testBoo", TestBoo.TEST)
+                        .refresh("testBoo", "B")
                         .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,513));
+                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo","H").x("testBoo = ?",TestBoo.HLL);
 
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
@@ -296,18 +296,18 @@ public class XxxController {
         throw new RuntimeException("TEST AOP");
     }
 
-    @RequestMapping("/listCriteria")
-    public ViewEntity listCriteria() {
+    @RequestMapping("/listWithEnum")
+    public ViewEntity listWithEnum() {
      
         CriteriaBuilder builder = CriteriaBuilder.builder(Cat.class);
 
         builder
                 .in("testBoo", Arrays.asList("BOO"))
-                .eq("testBoo","BOO")
+                .x("testBoo = ?",TestBoo.BOO)
                 .eq("dogId",1)
                 .or().in("id", Arrays.asList(247, 248));
 
-        builder.sortIn("testBoo",Arrays.asList("BOO"));
+        builder.sortIn("testBoo",Arrays.asList(TestBoo.BOO));
         builder.paged().ignoreTotalRows();
 
         Criteria criteria = builder.build();
@@ -326,7 +326,7 @@ public class XxxController {
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(367);
+        boolean flag = this.catRepository.remove(544);
         return ViewEntity.ok(flag);
     }
 
@@ -335,21 +335,21 @@ public class XxxController {
     public ViewEntity createBatch() {
 
         Cat cat = new Cat();
-        cat.setId(542);
+        cat.setId(544);
         cat.setDogId(3);
         cat.setCreateAt(new Date());
         cat.setTestBoo(TestBoo.HLL);
-        cat.setList(Arrays.asList(6L, 8L));
-        cat.setTestList(Arrays.asList("BIG CATX", "small catX"));
+        cat.setList(Arrays.asList(2L, 11L));
+        cat.setTestList(Arrays.asList("d BIG CATX", "small catX"));
 
 
         Cat cat1 = new Cat();
-        cat1.setId(543);
+        cat1.setId(545);
         cat1.setDogId(2);
         cat1.setCreateAt(new Date());
         cat1.setTestBoo(TestBoo.BOO);
         cat1.setList(Arrays.asList(15L, 2L));
-        cat1.setTestList(Arrays.asList("THRa CAT", "moo cat510"));
+        cat1.setTestList(Arrays.asList("r THRa CAT", "moo cat510"));
 
         List<Cat> catList = new ArrayList<>();
         catList.add(cat);

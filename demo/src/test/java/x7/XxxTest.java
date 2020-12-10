@@ -197,8 +197,8 @@ public class XxxTest {
 
 
 
-    public ViewEntity testListCriteria(){
-        ViewEntity ve = this.controller.listCriteria();
+    public ViewEntity testListWithEnum(){
+        ViewEntity ve = this.controller.listWithEnum();
         return ve;
     }
 
