@@ -25,7 +25,7 @@ public class AppTest {
 //        xxxTest.testOrderFind();
 //        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
-        xxxTest.testListWithEnum();
+//        xxxTest.testListWithEnum();
 //        xxxTest.testResultMapSimpleSource();
 //        xxxTest.testListPlainValue();
 //        xxxTest.testAlia();

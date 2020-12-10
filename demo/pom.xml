@@ -46,12 +46,6 @@
             <groupId>io.xream.x7</groupId>
             <artifactId>x7-spring-boot-starter</artifactId>
             <version>${x7.version}</version>
-            <exclusions>
-<!--                <exclusion>-->
-<!--                    <groupId>io.xream.x7</groupId>-->
-<!--                    <artifactId>x7-id-generator</artifactId>-->
-<!--                </exclusion>-->
-            </exclusions>
         </dependency>
 
         <!--<dependency>-->
@@ -106,7 +100,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-macro -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-macro</artifactId>
