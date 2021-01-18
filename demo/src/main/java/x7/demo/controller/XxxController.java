@@ -124,7 +124,7 @@ public class XxxController {
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
                         .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo","HLL").x("testBoo = ?",TestBoo.HLL);
+                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo","HLL").x("createAt > ?",1);
 
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
