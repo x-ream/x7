@@ -28,15 +28,12 @@ import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
 import io.xream.sqli.spi.Schema;
+import io.xream.sqli.spi.customizer.L2CacheConsistencyCustomizer;
+import io.xream.sqli.spi.customizer.L2CacheStorageCustomizer;
 import io.xream.sqli.starter.EnumSupportListener;
 import io.xream.sqli.starter.SqliListener;
 import io.xream.sqli.starter.TemporaryTableParserListener;
 import io.xream.sqli.util.SqliJsonUtil;
-import io.xream.x7.cache.*;
-import io.xream.x7.cache.customizer.L2CacheConsistencyCustomizer;
-import io.xream.x7.cache.customizer.L2CacheStorageCustomizer;
-import io.xream.x7.cache.customizer.L3CacheArgsToStringCustomizer;
-import io.xream.x7.cache.customizer.L3CacheStorageCustomizer;
 import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
@@ -54,9 +51,6 @@ public class RepositoryListener implements
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
 
         customizeLockProvider(applicationStartedEvent);
-
-        customizeL3CacheArgsToString(applicationStartedEvent);
-        customizeL3CacheStorage(applicationStartedEvent);
 
         if (!X7Data.isEnabled)
             return;
@@ -138,67 +132,6 @@ public class RepositoryListener implements
         }
 
         DistributionLock.init(lockProvider);
-    }
-
-    private void customizeL3CacheStorage(ApplicationStartedEvent applicationStartedEvent) {
-
-        L3CacheAspect bean = null;
-        try {
-            bean = applicationStartedEvent.getApplicationContext().getBean(L3CacheAspect.class);
-        } catch (Exception e) {
-        }
-        if (bean == null)
-            return;
-
-        L3CacheStorageCustomizer customizer = null;
-        try {
-            customizer = applicationStartedEvent.getApplicationContext().getBean(L3CacheStorageCustomizer.class);
-        } catch (Exception e) {
-        }
-
-        L3CacheResolver resolver;
-
-        if (customizer != null && customizer.customize() != null) {
-            final L3CacheStorage storage = customizer.customize();
-            resolver = () -> storage;
-        } else {
-            try {
-                final L3CacheStorage storage = applicationStartedEvent.getApplicationContext().getBean(L3CacheStorage.class);
-                resolver = () -> storage;
-            } catch (Exception e) {
-                resolver = () -> null;
-            }
-        }
-
-        bean.setResolver(resolver);
-
-    }
-
-    private void customizeL3CacheArgsToString(ApplicationStartedEvent applicationStartedEvent) {
-
-        try {
-            L3CacheAspect bean = applicationStartedEvent.getApplicationContext().getBean(L3CacheAspect.class);
-            if (bean == null)
-                return;
-
-            L3CacheArgsToStringCustomizer customizer = null;
-            try {
-                customizer = applicationStartedEvent.getApplicationContext().getBean(L3CacheArgsToStringCustomizer.class);
-            } catch (Exception e) {
-
-            }
-
-            ArgsToString argsToString = null;
-            if (customizer != null && customizer.customize() !=null) {
-                argsToString = customizer.customize();
-            } else {
-                argsToString = new DefaultArgsToString();
-            }
-            bean.setArgsToString(argsToString);
-        } catch (Exception e) {
-
-        }
-
     }
 
     private void onJdbcHelperCreated(ApplicationStartedEvent applicationStartedEvent) {

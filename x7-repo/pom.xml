@@ -16,7 +16,6 @@
 
 	<modules>
 		<module>x7-lock</module>
-		<module>x7-cache</module>
 		<module>x7-id-generator</module>
 		<module>x7-sqli</module>
 		<module>x7-jdbc-template-plus</module>
