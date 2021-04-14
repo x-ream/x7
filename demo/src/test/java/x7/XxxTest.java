@@ -256,11 +256,12 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(541);
+        cat.setId(621);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);
         cat.setCreateAt(new Date());
+        cat.setIsDone(true);
         LocalDateTime localDateTime = LocalDateTime.now();
 
         this.controller.createCat(cat);

@@ -26,6 +26,7 @@ public class Cat implements Serializable {
 	private TestBoo testBoo;
 	private List<String> testList;
 	private Date createAt;
+	private Boolean isDone;
 
 	private transient Map<Object,Object> viewMap;
 
@@ -111,6 +112,14 @@ public class Cat implements Serializable {
 
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	public Boolean getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(Boolean done) {
+		isDone = done;
 	}
 
 	@Override
