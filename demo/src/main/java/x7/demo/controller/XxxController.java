@@ -44,6 +44,11 @@ public class XxxController {
     @Autowired
     private CatTestRepository catTestRepository;
 
+    @RequestMapping("/id/create")
+    public long createId(){
+        return this.catRepository.createId();
+    }
+
     @RequestMapping("/simple/test")
     public void testSimple(){
         this.catRepository.list();

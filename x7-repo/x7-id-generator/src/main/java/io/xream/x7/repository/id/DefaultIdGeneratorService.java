@@ -17,22 +17,34 @@
 package io.xream.x7.repository.id;
 
 
+import io.xream.sqli.spi.IdGeneratorProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
 /**
  * @Author Sim
  */
 public final class DefaultIdGeneratorService implements IdGeneratorService {
 
-    private IdGeneratorPolicy idGeneratorPolicy;
-    public void setIdGeneratorPolicy(IdGeneratorPolicy policy){
-        this.idGeneratorPolicy = policy;
+    private Logger logger = LoggerFactory.getLogger(IdGeneratorProxy.class);
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Override
+    public Logger getLogger(){
+        return logger;
     }
     @Override
-    public long createId(String clzName) {
-        return this.idGeneratorPolicy.createId(clzName);
+    public StringRedisTemplate getStringRedisTemplate(){
+        return stringRedisTemplate;
     }
 
     @Override
-    public IdGeneratorPolicy getIdGeneratorPolicy() {
-        return this.idGeneratorPolicy;
+    public long createId(String clzName) {
+        return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,clzName,1);
     }
+
 }

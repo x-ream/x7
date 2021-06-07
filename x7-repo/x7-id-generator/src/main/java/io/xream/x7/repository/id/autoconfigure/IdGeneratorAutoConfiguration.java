@@ -18,9 +18,7 @@ package io.xream.x7.repository.id.autoconfigure;
 
 import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.x7.repository.IdGeneratorBootListener;
-import io.xream.x7.repository.id.DefaultIdGeneratorPolicy;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
-import io.xream.x7.repository.id.IdGeneratorPolicy;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -29,14 +27,8 @@ import org.springframework.context.annotation.Bean;
 public class IdGeneratorAutoConfiguration {
 
     @Bean
-    public IdGeneratorPolicy idGeneratorPolicy(){
-        return new DefaultIdGeneratorPolicy();
-    }
-
-    @Bean
-    public IdGeneratorProxy idGeneratorProxy(IdGeneratorPolicy idGeneratorPolicy){
+    public IdGeneratorProxy idGeneratorProxy(){
         DefaultIdGeneratorService idGeneratorService = new DefaultIdGeneratorService();
-        idGeneratorService.setIdGeneratorPolicy(idGeneratorPolicy);
         return idGeneratorService;
     }
 

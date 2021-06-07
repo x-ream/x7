@@ -60,6 +60,11 @@ public class XxxTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public long createId(){
+        return this.controller.createId();
+    }
+
+
     public  void refreshByCondition() {
         RateLimiterConfig config;
 
@@ -256,7 +261,7 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(621);
+        cat.setId(622);
         cat.setTest(255442L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.BOO);

@@ -17,6 +17,7 @@ public class AppTest {
     @Test
     public void testAll(){
 
+        xxxTest.createId();
         xxxTest.testInCondtion();
         xxxTest.listCat();
         xxxTest.testFindToHandle();
