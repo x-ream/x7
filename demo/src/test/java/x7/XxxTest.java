@@ -26,7 +26,7 @@ import x7.demo.ro.CatRO;
 import x7.demo.service.DogService;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -268,7 +268,7 @@ public class XxxTest {
         cat.setTest(542223L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.TEST);
-        cat.setCreateAt(LocalDateTime.now());
+        cat.setCreateAt(LocalDate.now());
         cat.setIsDone(true);
 
         this.controller.createCat(cat);

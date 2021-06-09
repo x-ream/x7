@@ -5,7 +5,7 @@ import io.xream.sqli.annotation.X;
 import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class Cat implements Serializable {
 	private List<Long> list;
 	private TestBoo testBoo;
 	private List<String> testList;
-	private LocalDateTime createAt;
+	private LocalDate createAt;
 	private Boolean isDone;
 
 	private transient Map<Object,Object> viewMap;
@@ -106,11 +106,11 @@ public class Cat implements Serializable {
 		this.testList = testList;
 	}
 
-	public LocalDateTime getCreateAt() {
+	public LocalDate getCreateAt() {
 		return createAt;
 	}
 
-	public void setCreateAt(LocalDateTime createAt) {
+	public void setCreateAt(LocalDate createAt) {
 		this.createAt = createAt;
 	}
 

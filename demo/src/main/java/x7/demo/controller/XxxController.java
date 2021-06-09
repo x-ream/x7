@@ -19,7 +19,7 @@ import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -113,7 +113,7 @@ public class XxxController {
         Cat cat = new Cat();
         cat.setId(540);
         cat.setDogId(3);
-        cat.setCreateAt(LocalDateTime.now());
+        cat.setCreateAt(LocalDate.now());
         cat.setTestBoo(TestBoo.BOO);
         cat.setList(Arrays.asList(9L, 11L));
         cat.setTestList(Arrays.asList("BIG xxX CAT", "small cat"));
@@ -346,7 +346,7 @@ public class XxxController {
         Cat cat = new Cat();
         cat.setId(544);
         cat.setDogId(3);
-        cat.setCreateAt(LocalDateTime.now());
+        cat.setCreateAt(LocalDate.now());
         cat.setTestBoo(TestBoo.HLL);
         cat.setList(Arrays.asList(2L, 11L));
         cat.setTestList(Arrays.asList("d BIG CATX", "small catX"));
@@ -355,7 +355,7 @@ public class XxxController {
         Cat cat1 = new Cat();
         cat1.setId(545);
         cat1.setDogId(2);
-        cat1.setCreateAt(LocalDateTime.now());
+        cat1.setCreateAt(LocalDate.now());
         cat1.setTestBoo(TestBoo.BOO);
         cat1.setList(Arrays.asList(15L, 2L));
         cat1.setTestList(Arrays.asList("r THRa CAT", "moo cat510"));
@@ -401,7 +401,7 @@ public class XxxController {
         cat1.setId(619);
         cat1.setType("XL");
         cat1.setTestBoo(TestBoo.BOO);
-        cat1.setCreateAt(LocalDateTime.now());
+        cat1.setCreateAt(LocalDate.now());
 
         Cat cat2 = new Cat();
         cat2.setId(620);
