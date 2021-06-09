@@ -11,6 +11,7 @@ import io.xream.x7.base.web.ViewEntity;
 import x7.demo.entity.Cat;
 import x7.demo.entity.TestBoo;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -27,7 +28,7 @@ public class JsonUtilTester {
         Cat cat = new Cat();
         cat.setId(10);
         cat.setDogId(11);
-        cat.setCreateAt(new Date());
+        cat.setCreateAt(LocalDateTime.now());
         cat.setTestBoo(TestBoo.BOO);
         cat.setTaxType("XXXX");
         cat.setTestList(Arrays.asList("gr53","3342"));
@@ -35,7 +36,7 @@ public class JsonUtilTester {
         Cat cat1 = new Cat();
         cat1.setId(11);
         cat1.setDogId(11);
-        cat1.setCreateAt(new Date());
+        cat1.setCreateAt(LocalDateTime.now());
         cat1.setTestBoo(TestBoo.TEST);
         cat1.setTaxType("XXXX");
         cat1.setTestList(Arrays.asList("gr53ED","334223"));

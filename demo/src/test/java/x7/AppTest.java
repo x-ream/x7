@@ -17,23 +17,24 @@ public class AppTest {
     @Test
     public void testAll(){
 
-//        xxxTest.createId();
-//        xxxTest.testInCondtion();
-//        xxxTest.listCat();
-//        xxxTest.testFindToHandle();
-//        xxxTest.testTemporaryTable();
-//        xxxTest.inOrder();
-//        xxxTest.testOrderFind();
-//        xxxTest.testNonPaged();
-//        xxxTest.testOrderFindByAlia();
-//        xxxTest.testListWithEnum();
-//        xxxTest.testResultMapSimpleSource();
-//        xxxTest.testListPlainValue();
-//        xxxTest.testAlia();
-//        xxxTest.resultKeyFuntion();
+        xxxTest.createId();
+        xxxTest.testInCondtion();
+        xxxTest.listCat();
+        xxxTest.testFindToHandle();
+        xxxTest.testTemporaryTable();
+        xxxTest.inOrder();
+        xxxTest.testOrderFind();
+        xxxTest.testNonPaged();
+        xxxTest.testOrderFindByAlia();
+        xxxTest.testListWithEnum();
+        xxxTest.testResultMapSimpleSource();//
+        xxxTest.testListPlainValue();
+        xxxTest.testAlia();
+        xxxTest.resultKeyFuntion();
         xxxTest.testSimple();
-//        xxxTest.testCriteria();
-//        xxxTest.testOne();
+        xxxTest.testCriteria();
+        xxxTest.testOne();
+//        xxxTest.testCreate();
 //        xxxTest.refreshByCondition();
 //        xxxTest.testRemove();
 //        xxxTest.createBatch();
@@ -43,25 +44,6 @@ public class AppTest {
 //        xxxTest.testCriteriaRemote();
 
 //        xxxTest.testResultMappedRemote();
-        }
-
-        {
-//        xxxTest.testOne();
-//        xxxTest.testListCriteria();
-//        xxxTest.refreshByCondition();
-//        xxxTest.testListCriteria();
-//        xxxTest.testRemove();
-//        xxxTest.testListCriteria();
-//        xxxTest.testCreate();
-//        xxxTest.testListCriteria();
-//        xxxTest.testCreateOrReplace();
-//        xxxTest.testListCriteria();
-//        xxxTest.testListCriteria();
-//        xxxTest.create();
-//        xxxTest.createBatch();
-//        xxxTest.testRemove();
-//        xxxTest.testRestTemplate();
-
         }
 
 

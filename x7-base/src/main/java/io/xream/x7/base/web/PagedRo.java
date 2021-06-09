@@ -31,6 +31,7 @@ public class PagedRo implements Paged {
 	private boolean totalRowsIgnored;
 	private int page;
 	private int rows;
+	private long last;
 	private String orderBy;
 	private Direction direction;
 	private List<Sort> sortList;
@@ -59,6 +60,16 @@ public class PagedRo implements Paged {
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
+
+	@Override
+	public long getLast() {
+		return last;
+	}
+
+	public void setLast(long last) {
+		this.last = last;
+	}
+
 	public String getOrderBy() {
 		return orderBy;
 	}
@@ -99,6 +110,7 @@ public class PagedRo implements Paged {
 				"totalRowsIgnored=" + totalRowsIgnored +
 				", page=" + page +
 				", rows=" + rows +
+				", last=" + last +
 				", orderBy='" + orderBy + '\'' +
 				", direction=" + direction +
 				", sortList=" + sortList +

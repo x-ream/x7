@@ -129,6 +129,9 @@ public class XxxTest {
         ro.setOrderBy("catTest.id");
         ro.setDirection(Direction.DESC);
         ro.setTotalRowsIgnored(true);
+        ro.setRows(10);
+        ro.setPage(2);
+        ro.setLast(10);
         ViewEntity ve = this.controller.resultKeyFuntion(ro);
         System.out.println(ve);
     }
@@ -261,13 +264,12 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(622);
-        cat.setTest(255442L);
+        cat.setId(623);
+        cat.setTest(542223L);
         cat.setType("NL");
-        cat.setTestBoo(TestBoo.BOO);
-        cat.setCreateAt(new Date());
+        cat.setTestBoo(TestBoo.TEST);
+        cat.setCreateAt(LocalDateTime.now());
         cat.setIsDone(true);
-        LocalDateTime localDateTime = LocalDateTime.now();
 
         this.controller.createCat(cat);
     }

@@ -19,7 +19,11 @@ import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static io.xream.sqli.builder.Direction.DESC;
 import static io.xream.sqli.builder.JoinType.INNER_JOIN;
@@ -109,7 +113,7 @@ public class XxxController {
         Cat cat = new Cat();
         cat.setId(540);
         cat.setDogId(3);
-        cat.setCreateAt(new Date());
+        cat.setCreateAt(LocalDateTime.now());
         cat.setTestBoo(TestBoo.BOO);
         cat.setList(Arrays.asList(9L, 11L));
         cat.setTestList(Arrays.asList("BIG xxX CAT", "small cat"));
@@ -160,12 +164,12 @@ public class XxxController {
                 .resultKeyFunction(ResultKeyAlia.of("catTest","xxx"),"YEAR(catTest.time)")
                 .sourceScript("FROM catTest INNER JOIN dogTest ON catTest.dogId = dogTest.id")
                 .sort(ro.getOrderBy(),ro.getDirection())
-                .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows());
+                .paged().ignoreTotalRows().page(ro.getPage()).rows(ro.getRows()).last(ro.getLast());
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
-        Page<Map<String, Object>> page = repository.find(resultMapped);
+        List<Map<String, Object>> list = repository.list(resultMapped);
 
-        return ViewEntity.ok(page);
+        return ViewEntity.ok(list);
     }
 
 
@@ -281,7 +285,7 @@ public class XxxController {
                 .groupBy("id")
         ;
 
-        builder.sort("id", DESC).paged().page(2).rows(2);
+        builder.sort("id", DESC).paged().page(2).rows(2).last(4);
         builder.sourceBuilder().source("catTest");
 //        builder.sourceScript("catTest");
 
@@ -342,7 +346,7 @@ public class XxxController {
         Cat cat = new Cat();
         cat.setId(544);
         cat.setDogId(3);
-        cat.setCreateAt(new Date());
+        cat.setCreateAt(LocalDateTime.now());
         cat.setTestBoo(TestBoo.HLL);
         cat.setList(Arrays.asList(2L, 11L));
         cat.setTestList(Arrays.asList("d BIG CATX", "small catX"));
@@ -351,7 +355,7 @@ public class XxxController {
         Cat cat1 = new Cat();
         cat1.setId(545);
         cat1.setDogId(2);
-        cat1.setCreateAt(new Date());
+        cat1.setCreateAt(LocalDateTime.now());
         cat1.setTestBoo(TestBoo.BOO);
         cat1.setList(Arrays.asList(15L, 2L));
         cat1.setTestList(Arrays.asList("r THRa CAT", "moo cat510"));
@@ -393,12 +397,11 @@ public class XxxController {
     @RequestMapping("/rrc")
     public ViewEntity removeRefreshCreate() {
 
-        Date date = new Date();
         Cat cat1 = new Cat();
         cat1.setId(619);
         cat1.setType("XL");
         cat1.setTestBoo(TestBoo.BOO);
-        cat1.setCreateAt(date);
+        cat1.setCreateAt(LocalDateTime.now());
 
         Cat cat2 = new Cat();
         cat2.setId(620);
