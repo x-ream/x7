@@ -3,7 +3,7 @@ package x7.demo.controller;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.builder.Criteria;
 import io.xream.sqli.builder.CriteriaBuilder;
-import io.xream.sqli.builder.RefreshCondition;
+import io.xream.sqli.builder.RefreshBuilder;
 import io.xream.x7.base.web.ViewEntity;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class CatEggController {
             try {
                 //service | fallback, not suggest to use transaction
                 this.catService.refresh(
-                        RefreshCondition.build().refresh("type", "NNLL").eq("id", id)
+                        RefreshBuilder.builder().refresh("type", "NNLL").eq("id", id).build()
                 );
             }catch (Exception e){
 
@@ -82,7 +82,7 @@ public class CatEggController {
             try {
                 //service | fallback, not suggest to use transaction
                 this.catService.refresh(
-                        RefreshCondition.build().refresh("type", "NNLL").eq("id", id)
+                        RefreshBuilder.builder().refresh("type", "NNLL").eq("id", id).build()
                 );
             }catch (Exception e){
 

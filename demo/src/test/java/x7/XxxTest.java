@@ -199,7 +199,7 @@ public class XxxTest {
     public ViewEntity testRefreshConditionRemote(){
 
         return testServiceRemote.testRefreshConditionnRemote(
-                RefreshCondition.build().refresh("createAt",new Date()).eq("id",100)
+                RefreshBuilder.builder().refresh("createAt",new Date()).eq("id",100).build()
         );
     }
 

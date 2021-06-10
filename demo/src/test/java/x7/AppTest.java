@@ -1,6 +1,7 @@
 package x7;
 
 
+import io.xream.sqli.builder.ConditionBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ public class AppTest {
     @Test
     public void testAll(){
 
-
 //        xxxTest.createId();
 //        xxxTest.testInCondtion();
 //        xxxTest.listCat();
@@ -28,7 +28,7 @@ public class AppTest {
 //        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
 //        xxxTest.testListWithEnum();
-//        xxxTest.testResultMapSimpleSource();//
+//        xxxTest.testResultMapSimpleSource();
 //        xxxTest.testListPlainValue();
 //        xxxTest.testAlia();
 //        xxxTest.resultKeyFuntion();

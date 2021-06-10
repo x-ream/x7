@@ -1,9 +1,6 @@
 package x7;
 
-import io.xream.sqli.builder.Bb;
-import io.xream.sqli.builder.Criteria;
-import io.xream.sqli.builder.InCondition;
-import io.xream.sqli.builder.RefreshCondition;
+import io.xream.sqli.builder.*;
 import io.xream.sqli.page.Page;
 import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.base.util.JsonX;
@@ -90,13 +87,13 @@ public class JsonUtilTester {
         System.out.println(inCondition);
 
 
-        RefreshCondition refreshCondition = RefreshCondition.build()
+        RefreshCondition refreshCondition = RefreshBuilder.builder()
                 .refresh("testBoo", TestBoo.BOO)
                 .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                 .refresh("test = test - 3")
                 .refresh("createAt", System.currentTimeMillis())
-                .lt("createAt", 0)
-                .in("id", Arrays.asList(247, 248,512));
+                .gt("createAt", 0)
+                .in("id", Arrays.asList(247, 248,512)).build();
         String fastStr = JsonX.toJson(refreshCondition);
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         System.out.println("__fastStr: " + fastStr);

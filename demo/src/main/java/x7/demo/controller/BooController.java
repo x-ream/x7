@@ -2,7 +2,7 @@ package x7.demo.controller;
 
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
-import io.xream.sqli.builder.RefreshCondition;
+import io.xream.sqli.builder.RefreshBuilder;
 import io.xream.x7.base.util.ExceptionUtil;
 import io.xream.x7.base.web.ViewEntity;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class BooController {
     public ViewEntity test(){
         return this.execute(() -> {
              catService.refresh(
-                    RefreshCondition.build().refresh("name","xxx").eq("id",1)
+                    RefreshBuilder.builder().refresh("name","xxx").eq("id",1).build()
              );
              return ViewEntity.ok("REFRESHED");
         });

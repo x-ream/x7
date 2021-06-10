@@ -127,17 +127,17 @@ public class XxxController {
     public ViewEntity refreshByCondition() {
 
         RefreshCondition<Cat> refreshCondition =
-                RefreshCondition.build()
-                        .refresh("testBoo", "B")
+                RefreshBuilder.builder()
+                        .refresh("testBoo", "H")
                         .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
-                        .lt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo","HLL").x("createAt > ?",1);
+                        .gt("createAt", 0)
+                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo",TestBoo.HLL).x("createAt > ?",1).build();
 
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
-
+refreshCondition.getClz();
         boolean flag = this.catRepository.refreshUnSafe(
          refreshCondition
 //                .lt("id",10)
@@ -448,7 +448,7 @@ public class XxxController {
         this.catRepository.get(10L);
 
         this.catRepository.refresh(
-                RefreshCondition.build().refresh("type", "XXXX").eq("id", 10L)
+                RefreshBuilder.builder().refresh("type", "XXXX").eq("id", 10L).build()
         );
 
         this.catRepository.getOne(cat);
