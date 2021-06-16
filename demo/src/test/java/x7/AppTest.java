@@ -25,7 +25,7 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-//        xxxTest.testNonPaged();
+        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
 //        xxxTest.testListWithEnum();
 //        xxxTest.testResultMapSimpleSource();

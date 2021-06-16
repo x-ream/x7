@@ -169,7 +169,7 @@ public class XxxController {
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
         List<Map<String, Object>> list = repository.list(resultMapped);
-
+        this.petRepository.list(resultMapped);// ONCE BUILD, ONCE USE
         return ViewEntity.ok(list);
     }
 
@@ -190,7 +190,7 @@ public class XxxController {
         Criteria.ResultMapCriteria resultMapped = builder.build();
 
         List<Long> idList = repository.listPlainValue(Long.class, resultMapped);
-
+        this.petRepository.listPlainValue(Long.class, resultMapped);
 
         return ViewEntity.ok(idList);
 
@@ -204,9 +204,9 @@ public class XxxController {
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
         builder.resultKey("c.id").resultKey("c.dogId","c_id");
-        builder.or().eq("d.petId", 0);
+        builder.or().eq("d.petId", 1);
         builder.or().lt("c.time",System.currentTimeMillis());
-        builder.and().in("c.dogId", Arrays.asList(0));
+        builder.and().in("c.dogId", Arrays.asList(1));
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         builder.sortIn("c.id",Arrays.asList(2,4,3,1,6,5));
         builder.resultWithDottedKey();
@@ -247,11 +247,12 @@ public class XxxController {
         builder.resultKey("id").resultKey("testBoo");
 //        builder.sort("id", DESC);
         builder.xAggr("ORDER BY id DESC");
+        builder.sourceBuilder().source("cat");
         builder.paged().ignoreTotalRows().page(1).rows(10);
 
-        Criteria criteria = builder.build();
+        Criteria.ResultMapCriteria resultMapCriteria = builder.build();
 
-        Page p = catRepository.find(criteria);
+        Page p = catRepository.find(resultMapCriteria);
 
         return ViewEntity.ok(p);
     }
