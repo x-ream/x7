@@ -212,7 +212,7 @@ public class XxxController {
         builder.resultWithDottedKey();
         Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
-
+        this.petRepository.find(resultMapped);//增加独立的ResultMapRepository测试
         return ViewEntity.ok(page);
 
     }
