@@ -29,7 +29,12 @@
        x7-spring-boot-starter
        
        x7-seata-spring-boot-starter
-       
+
+
+###  如何使用第三方id生成器
+       1. @SpringBootApplication(exclude = IdGeneratorAutoConfiguration.class)
+       2. 参照x7-id-generator工程， 新建工程，实现自定义的IdGeneratorService, 代码如下:
+            public interface MyIdGeneratorService extends IdGeneratorProxy       
        
 ### NOTES
        1. A method, coded with io.xream/reliable or seata, maybe we can not use:

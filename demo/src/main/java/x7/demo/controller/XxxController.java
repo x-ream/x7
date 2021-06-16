@@ -247,7 +247,7 @@ public class XxxController {
         builder.resultKey("id").resultKey("testBoo");
 //        builder.sort("id", DESC);
         builder.xAggr("ORDER BY id DESC");
-        builder.sourceBuilder().source("cat");
+        builder.sourceBuilder().source("cat");//CatRepository.class
         builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria.ResultMapCriteria resultMapCriteria = builder.build();
