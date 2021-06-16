@@ -19,7 +19,9 @@ import x7.demo.ro.CatRO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,19 +127,18 @@ public class XxxController {
 
     @RequestMapping("/refreshByCondition")
     public ViewEntity refreshByCondition() {
-
+        LocalDate localDate = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate();
         RefreshCondition<Cat> refreshCondition =
                 RefreshBuilder.builder()
-                        .refresh("testBoo", "H")
+                        .refresh("testBoo", "B")
                         .refresh("testList", Arrays.asList("ZZZZZ","xxxx"))
                         .refresh("test = test - 3")
                         .refresh("createAt", System.currentTimeMillis())
-                        .gt("createAt", 0)
-                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo",TestBoo.HLL).x("createAt > ?",1).build();
+                        .lte("createAt", System.currentTimeMillis())
+                        .in("id", Arrays.asList(247, 248,513)).eq("testBoo",TestBoo.BOO).build();
 
         String jackStr = SqliJsonUtil.toJson(refreshCondition);
         refreshCondition = SqliJsonUtil.toObject(jackStr,RefreshCondition.class);
-refreshCondition.getClz();
         boolean flag = this.catRepository.refreshUnSafe(
          refreshCondition
 //                .lt("id",10)
@@ -335,7 +336,7 @@ refreshCondition.getClz();
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(544);
+        boolean flag = this.catRepository.remove(545);
         return ViewEntity.ok(flag);
     }
 
