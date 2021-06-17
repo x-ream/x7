@@ -25,9 +25,9 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-        xxxTest.testNonPaged();
+//        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
-//        xxxTest.testListWithEnum();
+        xxxTest.testListWithEnum();
 //        xxxTest.testResultMapSimpleSource();
 //        xxxTest.testListPlainValue();
 //        xxxTest.testAlia();
@@ -35,9 +35,9 @@ public class AppTest {
 //        xxxTest.testSimple();
 //        xxxTest.testCriteria();
 //        xxxTest.testOne();
+//        xxxTest.testRemove();
 //        xxxTest.testCreate();
 //        xxxTest.refreshByCondition();
-//        xxxTest.testRemove();
 //        xxxTest.createBatch();
 //        xxxTest.removeRefreshCreate();
         {

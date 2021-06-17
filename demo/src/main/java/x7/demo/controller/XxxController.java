@@ -252,7 +252,7 @@ public class XxxController {
 
         Criteria.ResultMapCriteria resultMapCriteria = builder.build();
 
-        Page p = catRepository.find(resultMapCriteria);
+        Page<Map<String, Object>> p = catRepository.find(resultMapCriteria);
 
         return ViewEntity.ok(p);
     }
@@ -337,7 +337,7 @@ public class XxxController {
     @RequestMapping("/remove")
     public ViewEntity remove() {
 
-        boolean flag = this.catRepository.remove(545);
+        boolean flag = this.catRepository.remove(625);
         return ViewEntity.ok(flag);
     }
 
