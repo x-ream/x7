@@ -17,107 +17,81 @@
 package io.xream.x7.reyc.internal;
 
 import io.xream.x7.base.KV;
+import io.xream.x7.base.util.JsonX;
+import io.xream.x7.base.util.LoggerProxy;
 import io.xream.x7.reyc.api.HeaderRequestInterceptor;
 import io.xream.x7.reyc.api.HeaderResponseInterceptor;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
-import org.apache.http.Header;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Sim
  */
 public class DefaultRestTemplate implements SimpleRestTemplate {
 
-    private HttpProperties properties;
+    private RestTemplate restTemplate;
 
-    private List<HttpRequestInterceptor> httpRequestInterceptorList = new ArrayList<>();
-    private List<HttpResponseInterceptor> httpResponseInterceptorList = new ArrayList<>();
+    private HttpProperties properties;
 
     private List<HeaderResponseInterceptor> headerResponseInterceptorList = new ArrayList<>();
     private List<HeaderRequestInterceptor> headerRequestInterceptorList = new ArrayList<>();
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    @Override
     public void add(HeaderResponseInterceptor headerResponseInterceptor) {
         this.headerResponseInterceptorList.add(headerResponseInterceptor);
     }
+    @Override
     public void add(HeaderRequestInterceptor headerRequestInterceptor) {
         this.headerRequestInterceptorList.add(headerRequestInterceptor);
     }
-    public void add(HttpRequestInterceptor httpRequestInterceptor) {
-        this.httpRequestInterceptorList.add(httpRequestInterceptor);
-    }
-    public void add(HttpResponseInterceptor httpResponseInterceptor){
-        this.httpResponseInterceptorList.add(httpResponseInterceptor);
-    }
 
     public DefaultRestTemplate(
-            HttpProperties properties){
+            HttpProperties properties) {
         this.properties = properties;
     }
 
     @Override
     public String post(Class clz, String url, Object requestObject, List<KV> headerList) {
-        return execute(clz,url,requestObject,headerList,
-                (httpclient) -> HttpClientUtil.post(clz,url, requestObject, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
-        );
+        return execute(clz, url, requestObject, headerList, HttpMethod.POST);
     }
 
     @Override
     public String get(Class clz, String url, List<KV> headerList) {
-        return execute(clz,url,null,headerList,
-                    (httpclient) -> HttpClientUtil.get(clz,url, properties.getConnectTimeout(),properties.getSocketTimeout(),httpclient)
-                );
+        return execute(clz, url, null, headerList, HttpMethod.GET);
     }
 
-    private  HttpClientBuilder builder() {
-        return HttpClients.custom();
-    }
-
-    private String execute(Class clz, String url, Object request, List<KV> headerList, Client client) {
-
-        HttpClientBuilder builder = builder();
-        for (HttpRequestInterceptor httpRequestInterceptor : httpRequestInterceptorList) {
-            builder.addInterceptorFirst(httpRequestInterceptor);
+    private String execute(Class clz, String url, Object request, List<KV> headerList, HttpMethod method) {
+        // build http headers
+        HttpHeaders headers = new HttpHeaders();
+        if (headerList != null) {
+            for (KV kv1 : headerList) {
+                headers.add(kv1.k, String.valueOf(kv1.v));
+            }
         }
-        for (HttpResponseInterceptor httpResponseInterceptor : httpResponseInterceptorList) {
-            builder.addInterceptorFirst(httpResponseInterceptor);
+
+        for (HeaderResponseInterceptor headerInterceptor : headerResponseInterceptorList) {
+            KV kv = headerInterceptor.apply();
+
+            headers.add(kv.k, String.valueOf(kv.v));
         }
-        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> {
-            if (headerList != null) {
-                for (KV kv1 : headerList) {
-                    httpRequest.addHeader(kv1.k, String.valueOf(kv1.v));
-                }
-            }
-            for (HeaderResponseInterceptor headerInterceptor : headerResponseInterceptorList){
-                KV kv = headerInterceptor.apply();
-                httpRequest.addHeader(kv.k,String.valueOf(kv.v));
-            }
-        });
 
+        // check content type
+        if (headers.getContentType()==null) {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+        }
 
-        builder.addInterceptorFirst((HttpResponseInterceptor) (httpResponse, httpContext) -> {
-            for (HeaderRequestInterceptor headerRequestInterceptor : headerRequestInterceptorList) {
+        String json = request == null ? "" : JsonX.toJson(request);
+        LoggerProxy.info(clz,"Request: " + url + " -H 'Content-type:application/json' -d '" +json + "'");
 
-                Map<String,String> map = new HashMap<>();
-                Header[] arr = httpResponse.getAllHeaders();
-                for (Header header : arr){
-                    map.put(header.getName(),header.getValue());
-                }
-                headerRequestInterceptor.handle(clz,map);
-            }
-        });
-
-        CloseableHttpClient httpclient  = builder.build();
-
-        return client.execute(httpclient);
-
+        return restTemplate.exchange(url, method, new HttpEntity<>(json, headers), String.class).getBody();
     }
 
 

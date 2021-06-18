@@ -18,16 +18,18 @@ package io.xream.x7.reyc;
 
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import io.xream.x7.reyc.api.custom.RestTemplateCustomizer;
+import io.xream.x7.reyc.internal.DefaultRestTemplate;
 import io.xream.x7.reyc.internal.HttpClientResolver;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.web.client.RestTemplate;
 
 public class ReyListener implements
         ApplicationListener<ApplicationStartedEvent> {
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
-
+        initSimpleRestTemplate(event);
         customizeRestTemplate(event);
     }
 
@@ -44,5 +46,19 @@ public class ReyListener implements
         }catch (Exception e) {
 
         }
+    }
+
+    private void initSimpleRestTemplate(ApplicationStartedEvent applicationStartedEvent) {
+        RestTemplate restTemplate = applicationStartedEvent.getApplicationContext().getBean(RestTemplate.class);
+        if (restTemplate == null) {
+            return;
+        }
+
+        DefaultRestTemplate defaultRestTemplate = applicationStartedEvent.getApplicationContext().getBean(DefaultRestTemplate.class);
+        if (defaultRestTemplate == null) {
+            return;
+        }
+
+        defaultRestTemplate.setRestTemplate(restTemplate);
     }
 }

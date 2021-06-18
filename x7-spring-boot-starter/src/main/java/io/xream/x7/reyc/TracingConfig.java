@@ -18,24 +18,29 @@ package io.xream.x7.reyc;
 
 
 import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
 import com.github.kristofa.brave.Sampler;
-import com.github.kristofa.brave.SpanCollector;
 import com.github.kristofa.brave.http.DefaultSpanNameProvider;
-import com.github.kristofa.brave.http.HttpSpanCollector;
-import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
-import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
+import com.github.kristofa.brave.http.SpanNameProvider;
+import com.github.kristofa.brave.spring.BraveClientHttpRequestInterceptor;
+import com.github.kristofa.brave.spring.ServletHandlerInterceptor;
 import io.xream.x7.base.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import zipkin.Span;
+import zipkin.reporter.AsyncReporter;
+import zipkin.reporter.Reporter;
+import zipkin.reporter.Sender;
+import zipkin.reporter.okhttp3.OkHttpSender;
 
-@Import(TracingProperties.class)
+/**
+ * @author Rolyer Luo
+ */
+@Import({TracingProperties.class, BraveClientHttpRequestInterceptor.class, ServletHandlerInterceptor.class})
 public class TracingConfig {
 
     private static Logger logger = LoggerFactory.getLogger(TracingConfig.class);
@@ -48,25 +53,36 @@ public class TracingConfig {
         logger.info("Prefix: tracing.zipkin   ;   " + properties.toString());
     }
 
-    @ConditionalOnMissingBean(Brave.class)
-    @ConditionalOnProperty(
-            value = {"tracing.zipkin.url"})
+    /**
+     * 发送器配置
+     * @return
+     */
+    @ConditionalOnProperty(value = {"tracing.zipkin.url"})
     @Bean
-    public SpanCollector spanCollector() {
-        HttpSpanCollector.Config config = HttpSpanCollector.Config.builder().compressionEnabled(properties.isCompressionEnabled()).connectTimeout(properties.getConnectTimeout())
-                .flushInterval(properties.getFlushInterval()).readTimeout(properties.getReadTimeout()).build();
-        return HttpSpanCollector.create(properties.getUrl(), config, new EmptySpanCollectorMetricsHandler());
+    Sender sender() {
+        return OkHttpSender.create(properties.getUrl()+"/api/v1/spans");
+    }
+
+    /**
+     * 用什么方式显示span信息
+     * @param sender
+     * @return
+     */
+    @Bean
+    Reporter<Span> reporter(Sender sender) {
+        //取消注释,日志打印span信息
+        //return new LoggingReporter(); // 打印日志本地，通过日志收集到ES
+        return AsyncReporter.builder(sender).build();
     }
 
     @ConditionalOnMissingBean(Brave.class)
-    @ConditionalOnBean(SpanCollector.class)
     @Bean
-    public Brave brave(SpanCollector spanCollector, Environment env) {
+    public Brave brave(Reporter<Span> reporter, Environment env) {
         String applicationName = env.getProperty("spring.application.name");
-        if (StringUtil.isNullOrEmpty(applicationName))
+        if (StringUtil.isNullOrEmpty(applicationName)){
             throw new RuntimeException("spring.application.name=null, config it or #tracing.zipkin.url=");
-        Brave.Builder builder = new Brave.Builder(applicationName);
-        builder.spanCollector(spanCollector);
+        }
+        Brave.Builder builder = new Brave.Builder(applicationName).reporter(reporter);
         builder.traceSampler(Sampler.create(properties.getSampleRate()));
         logger.info("Tracing(ZipKin): Brave instance created, default add tracing to ReyClient" );
         logger.info("Config Zipkin Servlet Tracing by: @EnableTracingServlet");
@@ -79,21 +95,12 @@ public class TracingConfig {
         return builder.build();
     }
 
-
-    @ConditionalOnMissingBean(BraveHttpRequestInterceptor.class)
-    @ConditionalOnBean(Brave.class)
+    /**
+     * span命名提供者，默认为http方法
+     * @return
+     */
     @Bean
-    public BraveHttpRequestInterceptor requestInterceptor(Brave brave) {
-        return new BraveHttpRequestInterceptor(brave.clientRequestInterceptor(),
-                new DefaultSpanNameProvider());
+    SpanNameProvider spanNameProvider() {
+        return new DefaultSpanNameProvider();
     }
-
-    @ConditionalOnMissingBean(BraveHttpResponseInterceptor.class)
-    @ConditionalOnBean(Brave.class)
-    @Bean
-    public BraveHttpResponseInterceptor responseInterceptor(Brave brave){
-        return new BraveHttpResponseInterceptor(brave.clientResponseInterceptor());
-    }
-
-
 }

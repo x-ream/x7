@@ -7,3 +7,5 @@ target/
 */application-prod.properties
 *.iml
 .settings/
+
+.idea

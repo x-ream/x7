@@ -16,32 +16,27 @@
  */
 package io.xream.x7.reyc;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.http.DefaultSpanNameProvider;
-import com.github.kristofa.brave.servlet.BraveServletFilter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
+import com.github.kristofa.brave.spring.ServletHandlerInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-public class TracingServletRegistrary {
+/**
+ * @author Rolyer Luo
+ */
+@Configuration
+public class TracingServletRegistrary implements WebMvcConfigurer {
 
-    @ConditionalOnMissingBean(BraveServletFilter.class)
-    @ConditionalOnBean(Brave.class)
-    @Bean
-    public BraveServletFilter braveServletFilter(Brave brave) {
-        return new BraveServletFilter(brave.serverRequestInterceptor(), brave.serverResponseInterceptor(),
-                new DefaultSpanNameProvider());
-    }
+    @Autowired
+    private ServletHandlerInterceptor serverInterceptor;
 
-    @Bean
-    public FilterRegistrationBean braveServletFilterRegistration(BraveServletFilter braveServletFilter) {
-
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(braveServletFilter);
-        registration.addUrlPatterns("/*");
-        registration.setName(BraveServletFilter.class.getSimpleName());
-        registration.setOrder(10);
-        return registration;
+    /**
+     * 添加Severlet拦截器
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(serverInterceptor);
     }
 }
