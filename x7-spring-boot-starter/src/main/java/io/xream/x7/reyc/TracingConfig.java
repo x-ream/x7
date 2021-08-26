@@ -18,6 +18,7 @@ package io.xream.x7.reyc;
 
 
 import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.LoggingReporter;
 import com.github.kristofa.brave.Sampler;
 import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.SpanNameProvider;
@@ -59,19 +60,17 @@ public class TracingConfig {
      */
     @ConditionalOnProperty(value = {"tracing.zipkin.url"})
     @Bean
-    Sender sender() {
+    public Sender sender() {
         return OkHttpSender.create(properties.getUrl()+"/api/v1/spans");
     }
 
     /**
-     * 用什么方式显示span信息
+     * 显示span信息
      * @param sender
      * @return
      */
     @Bean
-    Reporter<Span> reporter(Sender sender) {
-        //取消注释,日志打印span信息
-        //return new LoggingReporter(); // 打印日志本地，通过日志收集到ES
+    public Reporter<Span> reporter(Sender sender) {
         return AsyncReporter.builder(sender).build();
     }
 
@@ -100,7 +99,7 @@ public class TracingConfig {
      * @return
      */
     @Bean
-    SpanNameProvider spanNameProvider() {
+    public SpanNameProvider spanNameProvider() {
         return new DefaultSpanNameProvider();
     }
 }

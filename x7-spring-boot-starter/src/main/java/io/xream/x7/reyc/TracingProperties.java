@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 public class TracingProperties {
 
 
-    private String url;
+    private String url = "http://127.0.0.1:9411";
     private int connectTimeout = 60000;
     private int readTimeout = 60000;
     private int flushInterval = 1;
