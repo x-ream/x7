@@ -1,6 +1,5 @@
 package x7.demo.builder;
 
-import io.xream.sqli.annotation.GenSql;
 import io.xream.sqli.builder.*;
 import x7.demo.ro.OrderFindDto;
 

@@ -18,7 +18,6 @@ package io.xream.x7.reyc;
 
 
 import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.LoggingReporter;
 import com.github.kristofa.brave.Sampler;
 import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.SpanNameProvider;

@@ -17,7 +17,6 @@
 package io.xream.x7.reyc;
 
 import com.github.kristofa.brave.Brave;
-
 import com.github.kristofa.brave.spring.BraveClientHttpRequestInterceptor;
 import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
@@ -25,7 +24,6 @@ import io.xream.x7.reyc.internal.DefaultRestTemplate;
 import io.xream.x7.reyc.internal.HttpClientResolver;
 import io.xream.x7.reyc.internal.HttpProperties;
 import io.xream.x7.reyc.internal.ReyProperties;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

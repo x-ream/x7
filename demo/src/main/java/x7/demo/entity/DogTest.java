@@ -46,4 +46,14 @@ public class DogTest  {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    @Override
+    public String toString() {
+        return "DogTest{" +
+                "id=" + id +
+                ", number=" + number +
+                ", petId=" + petId +
+                ", userName='" + userName + '\'' +
+                '}';
+    }
 }

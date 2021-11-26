@@ -2,6 +2,7 @@ package x7.demo.controller;
 
 
 import io.xream.sqli.builder.*;
+import io.xream.sqli.converter.ResultMapToBean;
 import io.xream.sqli.page.Page;
 import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.base.util.JsonX;
@@ -16,6 +17,7 @@ import x7.demo.repository.CatRepository;
 import x7.demo.repository.CatTestRepository;
 import x7.demo.repository.PetRepository;
 import x7.demo.ro.CatRO;
+import x7.vo.CatDogVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -203,16 +205,27 @@ public class XxxController {
 
         CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
 //        builder.distinct("c.dogId").reduce(ReduceType.GROUP_CONCAT_DISTINCT, "c.type").groupBy("c.dogId");
-        builder.resultKey("c.id").resultKey("c.dogId","c_id");
+        builder.resultKey("c.id").resultKey("c.dogId","c_id").resultKey("c.time","tt");
+        builder.resultKey("d.id").resultKey("d.number","nA");
         builder.or().eq("d.petId", 1);
         builder.or().lt("c.time",System.currentTimeMillis());
         builder.and().in("c.dogId", Arrays.asList(1));
         builder.sourceScript("catTest c LEFT JOIN dogTest d on c.dogId = d.id");
         builder.sortIn("c.id",Arrays.asList(2,4,3,1,6,5));
-        builder.resultWithDottedKey();
         Criteria.ResultMapCriteria resultMapped = builder.build();
         Page<Map<String, Object>> page = repository.find(resultMapped);
-        this.petRepository.find(resultMapped);//增加独立的ResultMapRepository测试
+
+//        builder.resultWithDottedKey(); //以下测试不支持resultWithDottedKey
+        List<Map<String,Object>> list = this.petRepository.list(resultMapped);//增加独立的ResultMapRepository测试
+
+        list.stream().forEach(
+                map -> {
+                    CatDogVo vo = ResultMapToBean.copy(CatDogVo.class, map);
+                    System.out.println(vo);
+                }
+        );
+
+
         return ViewEntity.ok(page);
 
     }

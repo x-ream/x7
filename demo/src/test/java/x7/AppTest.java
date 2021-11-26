@@ -1,11 +1,9 @@
 package x7;
 
 
-import io.xream.sqli.builder.ConditionBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import x7.demo.remote.OrderRemote;
@@ -27,6 +25,7 @@ public class AppTest {
         System.out.println(this.orderRemote.verify());
     }
 
+
     @Test
     public void testAll(){
 
@@ -37,7 +36,7 @@ public class AppTest {
 //        xxxTest.testTemporaryTable();
 //        xxxTest.inOrder();
 //        xxxTest.testOrderFind();
-        xxxTest.testNonPaged();
+//        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
 //        xxxTest.testListWithEnum();
 //        xxxTest.testResultMapSimpleSource();
@@ -52,12 +51,10 @@ public class AppTest {
 //        xxxTest.testRemove();
 //        xxxTest.createBatch();
 //        xxxTest.removeRefreshCreate();
-        {
 //        xxxTest.testRefreshConditionRemote();
 //        xxxTest.testCriteriaRemote();
 
 //        xxxTest.testResultMappedRemote();
-        }
 
 
     }

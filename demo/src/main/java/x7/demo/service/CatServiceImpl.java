@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import x7.demo.entity.Cat;
 import x7.demo.repository.CatRepository;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,6 +35,11 @@ public class CatServiceImpl implements CatService{
     @Override
     public void findToHandleC(Criteria criteria, RowHandler<Cat> rowHandler) {
         this.catRepository.findToHandle(criteria,rowHandler);
+    }
+
+    @Override
+    public List<Map<String, Object>> listByResultMap(Criteria.ResultMapCriteria criteria) {
+        return this.catRepository.list(criteria);
     }
 
 
