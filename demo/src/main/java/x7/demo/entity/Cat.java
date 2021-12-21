@@ -21,7 +21,7 @@ public class Cat implements Serializable {
 	private String name;
 	private String taxType;
 	private long dogId;
-	private long test;
+	private Long test;
 	private List<Long> list;
 	private TestBoo testBoo;
 	private List<String> testList;
@@ -74,11 +74,11 @@ public class Cat implements Serializable {
 		this.dogId = dogId;
 	}
 
-	public long getTest() {
+	public Long getTest() {
 		return test;
 	}
 
-	public void setTest(long test) {
+	public void setTest(Long test) {
 		this.test = test;
 	}
 

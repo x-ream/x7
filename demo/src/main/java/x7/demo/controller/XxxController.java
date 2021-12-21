@@ -59,7 +59,10 @@ public class XxxController {
 
     @RequestMapping("/simple/test")
     public void testSimple(){
-        this.catRepository.list();
+        List<Cat> list = this.catRepository.list();
+        list.stream().forEach(cat -> {
+            System.out.println(cat);
+        });
         this.catRepository.get(2);
         this.catRepository.list(new Cat());
     }
@@ -260,12 +263,16 @@ public class XxxController {
         builder.resultKey("id").resultKey("testBoo");
 //        builder.sort("id", DESC);
         builder.xAggr("ORDER BY id DESC");
+        builder.eq("dogId",0);
         builder.sourceBuilder().source("cat");//CatRepository.class
         builder.paged().ignoreTotalRows().page(1).rows(10);
 
         Criteria.ResultMapCriteria resultMapCriteria = builder.build();
 
         Page p = catRepository.find(resultMapCriteria);
+
+        Cat cat = this.catRepository.get(0);
+        System.out.println(cat);
 
         return ViewEntity.ok(p);
     }
@@ -275,7 +282,7 @@ public class XxxController {
 
         List<Cat> list = new ArrayList<>();
         Cat cat = new Cat();
-        cat.setTest(100);
+        cat.setTest(100L);
         list.add(cat);
         return list;
     }

@@ -56,7 +56,8 @@ public class AppTest {
 
 //        xxxTest.testResultMappedRemote();
 
-
+//        xxxTest.testCreate();
+        xxxTest.testSimple();
     }
 
 }

@@ -18,13 +18,16 @@ package io.xream.x7.repository.redis.autoconfigure;
 
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.repository.redis.lock.DefaultLockProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @Author Sim
  */
 public class LockProviderAutoConfiguration {
 
+    @ConditionalOnBean(StringRedisTemplate.class)
     @Bean
     public LockProvider lockProvider(){
         return new DefaultLockProvider();

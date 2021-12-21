@@ -19,13 +19,16 @@ package io.xream.x7.repository.id.autoconfigure;
 import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.x7.repository.IdGeneratorBootListener;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @Author Sim
  */
 public class IdGeneratorAutoConfiguration {
 
+    @ConditionalOnBean(StringRedisTemplate.class)
     @Bean
     public IdGeneratorProxy idGeneratorProxy(){
         DefaultIdGeneratorService idGeneratorService = new DefaultIdGeneratorService();

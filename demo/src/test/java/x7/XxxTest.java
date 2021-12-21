@@ -264,8 +264,8 @@ public class XxxTest {
         CacheFilter.filter("BL");
 
         Cat cat = new Cat();
-        cat.setId(625);
-        cat.setTest(542223L);
+        cat.setId(626);
+//        cat.setTest(542223L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.TEST);
         cat.setCreateAt(LocalDate.now());

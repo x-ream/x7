@@ -49,16 +49,20 @@ public class ReyListener implements
     }
 
     private void initSimpleRestTemplate(ApplicationStartedEvent applicationStartedEvent) {
-        RestTemplate restTemplate = applicationStartedEvent.getApplicationContext().getBean(RestTemplate.class);
-        if (restTemplate == null) {
-            return;
-        }
+        try {
+            RestTemplate restTemplate = applicationStartedEvent.getApplicationContext().getBean(RestTemplate.class);
+            if (restTemplate == null) {
+                return;
+            }
 
-        DefaultRestTemplate defaultRestTemplate = applicationStartedEvent.getApplicationContext().getBean(DefaultRestTemplate.class);
-        if (defaultRestTemplate == null) {
-            return;
-        }
+            DefaultRestTemplate defaultRestTemplate = applicationStartedEvent.getApplicationContext().getBean(DefaultRestTemplate.class);
+            if (defaultRestTemplate == null) {
+                return;
+            }
 
-        defaultRestTemplate.setRestTemplate(restTemplate);
+            defaultRestTemplate.setRestTemplate(restTemplate);
+        }catch (Exception e) {
+
+        }
     }
 }
