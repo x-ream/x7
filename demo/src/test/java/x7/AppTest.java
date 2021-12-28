@@ -27,7 +27,7 @@ public class AppTest {
 
 
     @Test
-    public void testAll(){
+    public void testAll() throws Exception {
 
 //        xxxTest.createId();
 //        xxxTest.testInCondtion();
@@ -35,6 +35,7 @@ public class AppTest {
 //        xxxTest.testFindToHandle();
 //        xxxTest.testTemporaryTable();
 //        xxxTest.inOrder();
+        xxxTest.testOrderFindByAlia();
 //        xxxTest.testOrderFind();
 //        xxxTest.testNonPaged();
 //        xxxTest.testOrderFindByAlia();
@@ -57,7 +58,7 @@ public class AppTest {
 //        xxxTest.testResultMappedRemote();
 
 //        xxxTest.testCreate();
-        xxxTest.testSimple();
+//        xxxTest.testSimple();
     }
 
 }

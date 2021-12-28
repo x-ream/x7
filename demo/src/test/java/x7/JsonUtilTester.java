@@ -23,16 +23,16 @@ public class JsonUtilTester {
         mapTest.put("JOO","nana");
 
         Cat cat = new Cat();
-        cat.setId(10);
-        cat.setDogId(11);
+        cat.setId(10L);
+        cat.setDogId(11L);
         cat.setCreateAt(LocalDate.now());
         cat.setTestBoo(TestBoo.BOO);
         cat.setTaxType("XXXX");
         cat.setTestList(Arrays.asList("gr53","3342"));
 
         Cat cat1 = new Cat();
-        cat1.setId(11);
-        cat1.setDogId(11);
+        cat1.setId(11L);
+        cat1.setDogId(11L);
         cat1.setCreateAt(LocalDate.now());
         cat1.setTestBoo(TestBoo.TEST);
         cat1.setTaxType("XXXX");

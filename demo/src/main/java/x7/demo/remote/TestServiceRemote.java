@@ -8,7 +8,7 @@ import io.xream.x7.base.web.ViewEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import x7.demo.entity.Cat;
-import x7.demo.ro.CatRO;
+import x7.demo.ro.CatFindRo;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface TestServiceRemote {
 
 
     @RequestMapping(value = "/reyc/test")
-    List<Cat> testFallBack(CatRO ro);
+    List<Cat> testFallBack(CatFindRo ro);
 
     @RequestMapping(value = "/time/test", method = RequestMethod.GET)
     Boolean testTimeJack();

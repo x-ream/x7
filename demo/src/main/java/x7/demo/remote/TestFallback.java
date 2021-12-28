@@ -1,11 +1,11 @@
 package x7.demo.remote;
 
 import io.xream.x7.reyc.Url;
-import x7.demo.ro.CatRO;
+import x7.demo.ro.CatFindRo;
 
 public class TestFallback {
 
-    public void testFallBack(CatRO ro){
+    public void testFallBack(CatFindRo ro){
 
         /*
          * send to kafka
@@ -14,7 +14,7 @@ public class TestFallback {
         System.out.println("fallBack");
     }
 
-    public void test(CatRO ro, Url url){
+    public void test(CatFindRo ro, Url url){
 
         /*
          * send to kafka

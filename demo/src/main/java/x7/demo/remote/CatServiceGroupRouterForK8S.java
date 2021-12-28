@@ -5,7 +5,7 @@ import io.xream.x7.base.api.GroupRouter;
 import io.xream.x7.base.util.StringUtil;
 import io.xream.x7.base.util.VerifyUtil;
 import x7.demo.entity.Cat;
-import x7.demo.ro.CatRO;
+import x7.demo.ro.CatFindRo;
 
 import java.util.Objects;
 
@@ -36,8 +36,8 @@ public class CatServiceGroupRouterForK8S implements GroupRouter {
         } else if (obj instanceof Long) {
             long mod = ((Long) obj) / DIVIDOR;
             return String.valueOf(mod);
-        } else if (obj instanceof CatRO) {
-            CatRO ro = (CatRO) obj;
+        } else if (obj instanceof CatFindRo) {
+            CatFindRo ro = (CatFindRo) obj;
             String key = ro.getCatFriendName();
             if (StringUtil.isNullOrEmpty(key))
                 return null;

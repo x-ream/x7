@@ -2,25 +2,23 @@ package x7.demo.entity;
 
 
 import io.xream.sqli.annotation.X;
-import org.apache.commons.collections.MapUtils;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public class Cat implements Serializable {
 
 	private static final long serialVersionUID = 5708147778966785698L;
 
 	@X.Key
-	private long id;
-	private long userId;
+	private Long id;
+	private Long userId;
 	@X.Mapping("cat_type")
 	private String type;
 	private String name;
 	private String taxType;
-	private long dogId;
+	private Long dogId;
 	private Long test;
 	private List<Long> list;
 	private TestBoo testBoo;
@@ -28,25 +26,23 @@ public class Cat implements Serializable {
 	private LocalDate createAt;
 	private Boolean isDone;
 
-	private transient Map<Object,Object> viewMap;
-
-	public String getName(){
-		return MapUtils.getString(viewMap,""+id);
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -58,6 +54,14 @@ public class Cat implements Serializable {
 		this.type = type;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getTaxType() {
 		return taxType;
 	}
@@ -66,11 +70,11 @@ public class Cat implements Serializable {
 		this.taxType = taxType;
 	}
 
-	public long getDogId() {
+	public Long getDogId() {
 		return dogId;
 	}
 
-	public void setDogId(long dogId) {
+	public void setDogId(Long dogId) {
 		this.dogId = dogId;
 	}
 
@@ -135,8 +139,8 @@ public class Cat implements Serializable {
 				", list=" + list +
 				", testBoo=" + testBoo +
 				", testList=" + testList +
-				", viewMap=" + viewMap +
 				", createAt=" + createAt +
+				", isDone=" + isDone +
 				'}';
 	}
 }

@@ -56,7 +56,13 @@ public class CatTest {
 
 	@Override
 	public String toString() {
-		return "CatTest [id=" + id + ", dogId=" + dogId + ", catFriendName=" + catFriendName + ", time=" + time + "]";
+		return "CatTest{" +
+				"id=" + id +
+				", dogId=" + dogId +
+				", catFriendName='" + catFriendName + '\'' +
+				", time=" + time +
+				", type='" + type + '\'' +
+				", isCat=" + isCat +
+				'}';
 	}
-
 }

@@ -5,7 +5,7 @@ import io.xream.x7.base.web.TokenedAndPagedRo;
 
 import java.util.Arrays;
 
-public class CatRO extends TokenedAndPagedRo  {
+public class CatFindRo extends TokenedAndPagedRo  {
 
 	private String catFriendName;
 	

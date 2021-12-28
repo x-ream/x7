@@ -22,7 +22,8 @@ import x7.demo.controller.XxxController;
 import x7.demo.entity.*;
 import x7.demo.remote.OrderRemote;
 import x7.demo.remote.TestServiceRemote;
-import x7.demo.ro.CatRO;
+import x7.demo.ro.CatCreateRo;
+import x7.demo.ro.CatFindRo;
 import x7.demo.service.DogService;
 
 import javax.annotation.Resource;
@@ -74,7 +75,7 @@ public class XxxTest {
 
     public  void testListPlainValue() {
 
-        CatRO cat = new CatRO();
+        CatFindRo cat = new CatFindRo();
 
         ViewEntity ve = this.controller.testListPlainValue(cat);
 
@@ -83,12 +84,12 @@ public class XxxTest {
     }
 
     public  void testAlia() {
-       this.controller.testAlia(new CatRO());
+       this.controller.testAlia(new CatFindRo());
     }
 
     public  void testOne() {
 
-        CatRO cat = new CatRO();
+        CatFindRo cat = new CatFindRo();
 
 
 
@@ -102,7 +103,7 @@ public class XxxTest {
 
         CacheFilter.filter("BL");
 
-        CatRO ro = new CatRO();
+        CatFindRo ro = new CatFindRo();
 
         ViewEntity ve = this.controller.nonPaged(ro);
 
@@ -111,7 +112,7 @@ public class XxxTest {
 
     public void testNonPaged(){
 
-        CatRO ro = new CatRO();
+        CatFindRo ro = new CatFindRo();
 
         ViewEntity ve = this.controller.nonPaged(ro);
 
@@ -125,7 +126,7 @@ public class XxxTest {
 
     public void resultKeyFuntion(){
 
-        CatRO ro = new CatRO();
+        CatFindRo ro = new CatFindRo();
         ro.setOrderBy("catTest.id");
         ro.setDirection(Direction.DESC);
         ro.setTotalRowsIgnored(true);
@@ -146,9 +147,9 @@ public class XxxTest {
 //            }
 //        });
 
-        CatRO catRO = new CatRO();
-        catRO.setCatFriendName("DOG");
-        List<Cat> list = testServiceRemote.testFallBack(catRO);
+        CatFindRo catFindRo = new CatFindRo();
+        catFindRo.setCatFriendName("DOG");
+        List<Cat> list = testServiceRemote.testFallBack(catFindRo);
 
 //        testServiceRemote.test(new CatRO(),null);
 
@@ -259,17 +260,17 @@ public class XxxTest {
 
 
 
-    public void testCreate() {
+    public void testCreate() throws Exception {
 
         CacheFilter.filter("BL");
 
-        Cat cat = new Cat();
-        cat.setId(626);
+        CatCreateRo cat = new CatCreateRo();
+        cat.setId(629);
 //        cat.setTest(542223L);
         cat.setType("NL");
         cat.setTestBoo(TestBoo.TEST);
         cat.setCreateAt(LocalDate.now());
-        cat.setIsDone(true);
+        cat.setIsDone(false);
 
         this.controller.createCat(cat);
     }

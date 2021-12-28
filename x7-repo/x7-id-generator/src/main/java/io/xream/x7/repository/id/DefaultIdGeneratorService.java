@@ -20,7 +20,6 @@ package io.xream.x7.repository.id;
 import io.xream.sqli.spi.IdGeneratorProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
@@ -30,8 +29,11 @@ public final class DefaultIdGeneratorService implements IdGeneratorService {
 
     private Logger logger = LoggerFactory.getLogger(IdGeneratorProxy.class);
 
-    @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    public DefaultIdGeneratorService(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+    }
 
     @Override
     public Logger getLogger(){
