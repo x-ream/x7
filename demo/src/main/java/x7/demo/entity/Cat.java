@@ -26,6 +26,7 @@ public class Cat implements Serializable {
 	private LocalDate createAt;
 	private Boolean isDone;
 
+
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
@@ -143,4 +144,5 @@ public class Cat implements Serializable {
 				", isDone=" + isDone +
 				'}';
 	}
+
 }

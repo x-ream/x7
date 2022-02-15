@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTracingServlet
 @EnableDateToLongForJackson
 @EnableDistributionLock
-@EnableFallbackOnly
 @EnableCorsConfig("${access.domain}")
 @EnableRateLimiter
 public class App {

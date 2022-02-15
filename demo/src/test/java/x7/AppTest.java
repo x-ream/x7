@@ -6,6 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.Assert;
+import x7.demo.entity.CatTest;
+import x7.demo.entity.TestBoo;
 import x7.demo.remote.OrderRemote;
 
 import javax.annotation.Resource;
@@ -29,26 +32,28 @@ public class AppTest {
     @Test
     public void testAll() throws Exception {
 
+        Assert.isTrue(TestBoo.BOO != TestBoo.HLL, "XXX");
+
 //        xxxTest.createId();
-        xxxTest.testInCondtion();
-        xxxTest.listCat();
-        xxxTest.testFindToHandle();
-        xxxTest.testTemporaryTable();
-        xxxTest.inOrder();
-        xxxTest.testOrderFindByAlia();
-        xxxTest.testOrderFind();
-        xxxTest.testNonPaged();
-        xxxTest.testOrderFindByAlia();
-        xxxTest.testListWithEnum();
-        xxxTest.testResultMapSimpleSource();
-        xxxTest.testListPlainValue();
-        xxxTest.testAlia();
-        xxxTest.resultKeyFuntion();
-        xxxTest.testSimple();
-        xxxTest.testCriteria();
+//        xxxTest.testInCondtion();
+//        xxxTest.listCat();
+//        xxxTest.testFindToHandle();
+//        xxxTest.testTemporaryTable();
+//        xxxTest.inOrder();
+//        xxxTest.testOrderFindByAlia();
+//        xxxTest.testOrderFind();
+//        xxxTest.testNonPaged();
+//        xxxTest.testOrderFindByAlia();
+//        xxxTest.testListWithEnum();
+//        xxxTest.testResultMapSimpleSource();
+//        xxxTest.testListPlainValue();
+//        xxxTest.testAlia();
+//        xxxTest.resultKeyFuntion();
+//        xxxTest.testSimple();
+//        xxxTest.testCriteria();
 //        xxxTest.testOne();
 //        xxxTest.testCreate();
-//        xxxTest.refreshByCondition();
+        xxxTest.refreshByCondition();
 //        xxxTest.testRemove();
 //        xxxTest.createBatch();
 //        xxxTest.removeRefreshCreate();

@@ -27,8 +27,10 @@ import io.xream.x7.reyc.api.ReyTemplate;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;

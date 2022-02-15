@@ -114,9 +114,7 @@ public class XxxController {
 
     public ViewEntity listCat(){
         List<Cat> list = this.catRepository.list();
-        for (Cat cat : list) {
-            System.out.println("_________: " + cat.getIsDone());
-        }
+
         return ViewEntity.ok(list);
     }
 
@@ -157,7 +155,6 @@ public class XxxController {
 //                        .sourceScript("cat LEFT JOIN dogTest on dogTest.id = cat.dogId")
         );//必须带ID更新，没ID报错
 //		this.catRepository.refreshUnSafe(refreshCondition);//可以多条更新
-
 
         return ViewEntity.ok(flag);
     }
