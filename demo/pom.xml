@@ -177,6 +177,7 @@
                     <mainClass>x7.App</mainClass>
                 </configuration>
             </plugin>
+<!--
             <plugin>
                 <groupId>io.xream.sqli.plugin</groupId>
                 <artifactId>sqli-maven-plugin</artifactId>
@@ -187,7 +188,7 @@
                     </basePackages>
                 </configuration>
             </plugin>
-
+-->
         </plugins>
 
     </build>
