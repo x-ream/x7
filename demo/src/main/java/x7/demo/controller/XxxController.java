@@ -8,6 +8,8 @@ import io.xream.sqli.util.SqliJsonUtil;
 import io.xream.x7.base.util.JsonX;
 import io.xream.x7.base.web.ViewEntity;
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.xream.sqli.builder.Direction.DESC;
 import static io.xream.sqli.builder.JoinType.INNER_JOIN;
@@ -41,6 +40,8 @@ import static io.xream.sqli.builder.ReduceType.COUNT_DISTINCT;
 @RequestMapping("/xxx")
 //@Transactional
 public class XxxController {
+
+    private static final Logger logger = LoggerFactory.getLogger(XxxController.class);
 
     @Autowired
     private CatTestRepository repository;// sample
@@ -504,6 +505,12 @@ public class XxxController {
         List<Cat> list = this.catRepository.in("testBoo", inCondition.getInList());
 
         return ViewEntity.ok(list);
+    }
+
+    @RequestMapping(value = "/time/test", method = RequestMethod.GET)
+    public Boolean testTime(){
+        logger.info(new Date().toString());
+        return true;
     }
 
 }

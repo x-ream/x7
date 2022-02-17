@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @Configuration
-public class VersionResponseConfig implements WebMvcConfigurer {
+public class ServletVersionResponseConfig implements WebMvcConfigurer {
 
     @Value("project.version")
     private String version;

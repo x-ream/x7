@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@EnableX7L2Caching(timeSeconds = 300)
 @EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
 @EnableReyClient
-@EnableTracingServlet
 @EnableDateToLongForJackson
 @EnableDistributionLock
 @EnableCorsConfig("${access.domain}")
 @EnableRateLimiter
+@EnableLogWithTraceId
 public class App {
 
     public static void main( String[] args )

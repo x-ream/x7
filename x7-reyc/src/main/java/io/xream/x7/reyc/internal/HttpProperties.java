@@ -25,10 +25,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HttpProperties {
 
-    @Value("${http.connectTimeout:6000}")
-    private int connectTimeout = 6000;
-    @Value("${http.socketTimeout:15000}")
+    @Value("${http.connect-timeout:20000}")
+    private int connectTimeout = 20000;
+    @Value("${http.socket-timeout:15000}")
     private int socketTimeout = 15000;
+    @Value("${http.read-timeout:15000}")
+    private int readTimeout = 15000;
+    @Value("${http.write-timeout:15000}")
+    private int writeTimeout = 15000;
+    @Value("${http.max-idle-connections:100}")
+    private int maxIdleConnections = 100;
+    @Value("${http.keep-alive-duration:5000}")
+    private int keepAliveDuration = 5000;
 
     public int getConnectTimeout() {
         return connectTimeout;
@@ -46,11 +54,35 @@ public class HttpProperties {
         this.socketTimeout = socketTimeout;
     }
 
-    @Override
-    public String toString() {
-        return "HttpProperties{" +
-                "connectTimeout=" + connectTimeout +
-                ", socketTimeout=" + socketTimeout +
-                '}';
+    public int getMaxIdleConnections() {
+        return maxIdleConnections;
+    }
+
+    public void setMaxIdleConnections(int maxIdleConnections) {
+        this.maxIdleConnections = maxIdleConnections;
+    }
+
+    public int getKeepAliveDuration() {
+        return keepAliveDuration;
+    }
+
+    public void setKeepAliveDuration(int keepAliveDuration) {
+        this.keepAliveDuration = keepAliveDuration;
+    }
+
+    public int getReadTimeout() {
+        return readTimeout;
+    }
+
+    public void setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+
+    public int getWriteTimeout() {
+        return writeTimeout;
+    }
+
+    public void setWriteTimeout(int writeTimeout) {
+        this.writeTimeout = writeTimeout;
     }
 }

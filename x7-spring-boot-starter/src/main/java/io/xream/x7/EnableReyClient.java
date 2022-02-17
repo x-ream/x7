@@ -16,9 +16,9 @@
  */
 package io.xream.x7;
 
+import io.xream.x7.reyc.RestTemplateConfig;
 import io.xream.x7.reyc.ReyClientConfig;
 import io.xream.x7.reyc.ReyTemplateConfig;
-import io.xream.x7.reyc.TracingConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -26,7 +26,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({TracingConfig.class, ReyTemplateConfig.class, ReyClientConfig.class,ReyClientBeanRegistrar.class})
+@Import({RestTemplateConfig.class, ReyTemplateConfig.class, ReyClientConfig.class,ReyClientBeanRegistrar.class})
 public @interface EnableReyClient {
 
     String[] basePackages() default {};

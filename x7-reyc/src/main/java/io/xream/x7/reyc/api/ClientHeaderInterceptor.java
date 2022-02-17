@@ -16,13 +16,11 @@
  */
 package io.xream.x7.reyc.api;
 
-import java.util.Map;
+import io.xream.x7.base.KV;
 
 /**
  * @Author Sim
  */
-public interface HeaderRequestInterceptor {
-
-    void handle(Class clzz, Map<String,String> map);
-
+public interface ClientHeaderInterceptor {
+    KV apply();
 }

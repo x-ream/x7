@@ -14,15 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.reyc.api;
+package io.xream.x7.config;
 
-import io.xream.x7.base.KV;
+import io.xream.x7.EnableCorsConfig;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
 
-/**
- * @Author Sim
- */
-public interface HeaderResponseInterceptor {
+import java.util.Map;
 
-    KV apply();
 
+public class CorsRegistrar implements ImportBeanDefinitionRegistrar {
+
+
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
+        Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(EnableCorsConfig.class.getName());
+
+
+        Object obj = attributes.get("value");
+
+        CorsConfig.arr = (String[]) obj;
+    }
 }

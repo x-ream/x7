@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import x7.demo.entity.DogTest;
+import x7.demo.remote.TestServiceRemote;
 import x7.demo.service.CatService;
 import x7.demo.service.DogService;
 
+import javax.annotation.Resource;
 import java.util.concurrent.Callable;
 
 
@@ -30,6 +32,8 @@ public class BooController {
     private CatService catService;
     @Autowired
     private DogService dogService;
+    @Resource
+    private TestServiceRemote testServiceRemote;
 
 
     public BooController(RateLimiterRegistry rateLimiterRegistry){
@@ -58,6 +62,7 @@ public class BooController {
     @RequestMapping(value = "/opp", method = RequestMethod.GET)
     public ViewEntity opp(){
         logger.info("opp");
+        testServiceRemote.testTimeJack();
         return ViewEntity.ok("xxxx");
     }
 

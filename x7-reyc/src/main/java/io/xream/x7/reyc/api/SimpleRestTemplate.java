@@ -25,8 +25,7 @@ import java.util.List;
  */
 public interface SimpleRestTemplate {
 
-    void add(HeaderResponseInterceptor headerRequestInterceptor);
-    void add(HeaderRequestInterceptor headerResponseInterceptor);
+    void headerInterceptor(ClientHeaderInterceptor headerRequestInterceptor);
 
     String post(Class clz, String url, Object request, List<KV> headerList);
 

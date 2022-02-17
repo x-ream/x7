@@ -17,20 +17,15 @@
 package io.xream.x7;
 
 
-import io.xream.x7.config.CorsConfig;
-import io.xream.x7.config.CorsRegistrar;
+import io.xream.x7.config.LogWithTraceIdConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * Alter @CrossOrgin , as global CorsConfig
- */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({CorsRegistrar.class, CorsConfig.class})
-public @interface EnableCorsConfig {
-
-    String[] value() default {};
+@Import({LogWithTraceIdConfig.class})
+public @interface EnableLogWithTraceId {
 }

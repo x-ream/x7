@@ -14,23 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7;
+package io.xream.x7.reyc;
 
-
-import io.xream.x7.config.CorsConfig;
-import io.xream.x7.config.CorsRegistrar;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.xream.x7.base.KV;
+import io.xream.x7.reyc.api.ClientHeaderInterceptor;
 
 /**
- * Alter @CrossOrgin , as global CorsConfig
+ * @Author Sim
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Import({CorsRegistrar.class, CorsConfig.class})
-public @interface EnableCorsConfig {
+public class TracingClientHeaderInterceptor implements ClientHeaderInterceptor {
 
-    String[] value() default {};
+
+    private Tracer tracer;
+
+    public TracingClientHeaderInterceptor(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
+    @Override
+    public KV apply() {
+
+        Span span = tracer.scopeManager().activeSpan();
+        if (span == null)
+            return null;
+        String traceId = span.context().toTraceId();
+        return new KV("TraceId",traceId);
+    }
 }
