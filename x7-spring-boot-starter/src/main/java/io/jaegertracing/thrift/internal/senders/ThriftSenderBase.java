@@ -15,8 +15,6 @@
 package io.jaegertracing.thrift.internal.senders;
 
 import io.jaegertracing.thrift.internal.reporters.protocols.ThriftUdpTransport;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TBase;
 import org.apache.thrift.TConfiguration;
 import org.apache.thrift.TSerializer;
@@ -25,8 +23,7 @@ import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
 import org.apache.thrift.transport.AutoExpandingBufferWriteTransport;
 
-@ToString
-@Slf4j
+
 public abstract class ThriftSenderBase {
 
     public enum ProtocolType {
@@ -39,9 +36,27 @@ public abstract class ThriftSenderBase {
     protected final TProtocolFactory protocolFactory;
     private TSerializer serializer;
     private final int maxBatchBytes;
-
-    @ToString.Exclude
     private AutoExpandingBufferWriteTransport memoryTransport;
+
+    public TProtocolFactory getProtocolFactory() {
+        return protocolFactory;
+    }
+
+    public TSerializer getSerializer() {
+        return serializer;
+    }
+
+    public void setSerializer(TSerializer serializer) {
+        this.serializer = serializer;
+    }
+
+    public AutoExpandingBufferWriteTransport getMemoryTransport() {
+        return memoryTransport;
+    }
+
+    public void setMemoryTransport(AutoExpandingBufferWriteTransport memoryTransport) {
+        this.memoryTransport = memoryTransport;
+    }
 
     /**
      * @param protocolType  protocol type (compact or binary)
