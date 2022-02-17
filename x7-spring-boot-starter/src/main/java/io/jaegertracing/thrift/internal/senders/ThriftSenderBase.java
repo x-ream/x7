@@ -29,63 +29,64 @@ import org.apache.thrift.transport.AutoExpandingBufferWriteTransport;
 @Slf4j
 public abstract class ThriftSenderBase {
 
-  public enum ProtocolType {
-    Binary,
-    Compact
-  }
+    public enum ProtocolType {
+        Binary,
+        Compact
+    }
 
-  public static final int EMIT_BATCH_OVERHEAD = 33;
+    public static final int EMIT_BATCH_OVERHEAD = 33;
 
-  protected final TProtocolFactory protocolFactory;
-  private  TSerializer serializer;
-  private final int maxBatchBytes;
+    protected final TProtocolFactory protocolFactory;
+    private TSerializer serializer;
+    private final int maxBatchBytes;
 
-  @ToString.Exclude private AutoExpandingBufferWriteTransport memoryTransport;
+    @ToString.Exclude
+    private AutoExpandingBufferWriteTransport memoryTransport;
 
-  /**
-   * @param protocolType protocol type (compact or binary)
-   * @param maxPacketSize if 0 it will use default value {@value ThriftUdpTransport#MAX_PACKET_SIZE}
-   */
-  public ThriftSenderBase(ProtocolType protocolType, int maxPacketSize) {
-    switch (protocolType) {
-      case Binary:
-        this.protocolFactory = new TBinaryProtocol.Factory();
-        break;
-      case Compact:
-        this.protocolFactory = new TCompactProtocol.Factory();
-        break;
-      default:
-        this.protocolFactory = null;
+    /**
+     * @param protocolType  protocol type (compact or binary)
+     * @param maxPacketSize if 0 it will use default value {@value ThriftUdpTransport#MAX_PACKET_SIZE}
+     */
+    public ThriftSenderBase(ProtocolType protocolType, int maxPacketSize) {
+        switch (protocolType) {
+            case Binary:
+                this.protocolFactory = new TBinaryProtocol.Factory();
+                break;
+            case Compact:
+                this.protocolFactory = new TCompactProtocol.Factory();
+                break;
+            default:
+                this.protocolFactory = null;
 //        log.error("Unknown thrift protocol type specified: " + protocolType);
-        break;
+                break;
+        }
+
+        if (maxPacketSize == 0) {
+            maxPacketSize = ThriftUdpTransport.MAX_PACKET_SIZE;
+        }
+
+        maxBatchBytes = maxPacketSize - EMIT_BATCH_OVERHEAD;
+        TConfiguration tConfiguration = new TConfiguration();
+        try {
+            memoryTransport = new AutoExpandingBufferWriteTransport(tConfiguration, maxPacketSize, 2);
+            serializer = new TSerializer(protocolFactory);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    if (maxPacketSize == 0) {
-      maxPacketSize = ThriftUdpTransport.MAX_PACKET_SIZE;
+    protected int getMaxBatchBytes() {
+        return maxBatchBytes;
     }
 
-    maxBatchBytes = maxPacketSize - EMIT_BATCH_OVERHEAD;
-    TConfiguration tConfiguration = new TConfiguration();
-    try {
-    memoryTransport = new AutoExpandingBufferWriteTransport(tConfiguration, maxPacketSize, 2);
-      serializer = new TSerializer(protocolFactory);
-    }catch (Exception e){
-
+    protected byte[] serialize(TBase<?, ?> thriftBase) throws Exception {
+        return serializer.serialize(thriftBase);
     }
-  }
 
-  protected int getMaxBatchBytes() {
-    return maxBatchBytes;
-  }
-
-  protected byte[] serialize(TBase<?,?> thriftBase) throws Exception {
-    return serializer.serialize(thriftBase);
-  }
-
-  public int getSize(TBase<?,?> thriftBase) throws Exception {
-    memoryTransport.reset();
-    thriftBase.write(protocolFactory.getProtocol(memoryTransport));
-    return memoryTransport.getLength();
-  }
+    public int getSize(TBase<?, ?> thriftBase) throws Exception {
+        memoryTransport.reset();
+        thriftBase.write(protocolFactory.getProtocol(memoryTransport));
+        return memoryTransport.getLength();
+    }
 
 }
