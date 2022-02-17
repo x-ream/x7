@@ -42,7 +42,7 @@ import java.util.function.Supplier;
  *  Retry>CircuitBreaker>RateLimiter>Bulkhead  </br>
  *  but connection problem will retry immediately
  *
- * @Author Sim
+ * @author Sim
  */
 public class R4JTemplate implements ReyTemplate {
 

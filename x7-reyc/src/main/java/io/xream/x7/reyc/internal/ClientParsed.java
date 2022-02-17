@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class ClientParsed {
 

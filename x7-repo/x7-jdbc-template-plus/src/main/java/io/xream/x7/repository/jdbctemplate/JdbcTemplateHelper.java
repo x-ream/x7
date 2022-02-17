@@ -43,7 +43,7 @@ import java.util.Map;
 
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public final class JdbcTemplateHelper implements JdbcHelper {
 

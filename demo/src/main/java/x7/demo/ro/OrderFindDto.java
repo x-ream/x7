@@ -1,7 +1,7 @@
 package x7.demo.ro;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class OrderFindDto {
 }

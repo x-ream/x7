@@ -5,7 +5,7 @@ import io.xream.sqli.util.SqliJsonUtil;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 //@Configuration
 public class JsonConfig {

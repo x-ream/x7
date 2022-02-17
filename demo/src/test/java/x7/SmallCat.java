@@ -5,7 +5,7 @@ import x7.demo.entity.TestBoo;
 import java.util.Date;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class SmallCat {
     private Date createAt;

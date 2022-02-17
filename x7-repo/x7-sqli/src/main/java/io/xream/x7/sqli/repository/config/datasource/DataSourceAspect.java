@@ -26,7 +26,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.Ordered;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 @Aspect
 public class DataSourceAspect implements Ordered {

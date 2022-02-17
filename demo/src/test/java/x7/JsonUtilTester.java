@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class JsonUtilTester {
 

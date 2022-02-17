@@ -29,6 +29,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.thrift</groupId>
+                <artifactId>libthrift</artifactId>
+                <version>0.15.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -177,18 +182,45 @@
                     <mainClass>x7.App</mainClass>
                 </configuration>
             </plugin>
-<!--
+
+            <!--log4j 0day 漏洞修复 项目打包检查-->
             <plugin>
-                <groupId>io.xream.sqli.plugin</groupId>
-                <artifactId>sqli-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <configuration>
-                    <basePackages>
-                        <basePackage>x7.demo</basePackage>
-                    </basePackages>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-banned-dependencies</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <bannedDependencies>
+                                    <includes>
+                                        <include>org.apache.thrift:libthrift:0.9.3:jar</include>
+                                        <include>org.apache.thrift:libthrift:0.13.0:jar</include>
+                                    </includes>
+                                </bannedDependencies>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
--->
+
+            <!--
+                        <plugin>
+                            <groupId>io.xream.sqli.plugin</groupId>
+                            <artifactId>sqli-maven-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <configuration>
+                                <basePackages>
+                                    <basePackage>x7.demo</basePackage>
+                                </basePackages>
+                            </configuration>
+                        </plugin>
+            -->
         </plugins>
 
     </build>

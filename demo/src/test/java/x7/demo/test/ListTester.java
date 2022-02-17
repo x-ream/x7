@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class ListTester {
 

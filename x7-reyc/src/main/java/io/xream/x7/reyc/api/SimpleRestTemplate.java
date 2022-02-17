@@ -21,7 +21,7 @@ import io.xream.x7.base.KV;
 import java.util.List;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface SimpleRestTemplate {
 

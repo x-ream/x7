@@ -3,7 +3,7 @@ package x7.config;
 import io.xream.sqli.support.EnumSupport;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class MyEnumSupport implements EnumSupport {
     @Override

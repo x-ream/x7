@@ -29,7 +29,7 @@ import java.util.jar.JarFile;
 
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class ClassFileReader {
 

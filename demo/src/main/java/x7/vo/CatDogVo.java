@@ -4,7 +4,7 @@ import x7.demo.entity.CatTest;
 import x7.demo.entity.DogTest;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class CatDogVo {
     private CatTest c;

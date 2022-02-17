@@ -11,7 +11,7 @@ import x7.demo.entity.OrderLog;
 import java.util.Arrays;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class CriterialToSqlTester {
 

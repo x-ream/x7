@@ -22,7 +22,7 @@ import io.xream.x7.base.KV;
 import io.xream.x7.reyc.api.ClientHeaderInterceptor;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class TracingClientHeaderInterceptor implements ClientHeaderInterceptor {
 

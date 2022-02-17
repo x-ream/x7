@@ -5,7 +5,7 @@ import io.xream.x7.repository.redis.cache.DefaultL2CacheStorage;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class L2CacheStorageAutoConfiguration {
 

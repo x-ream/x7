@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class IdGeneratorAutoConfiguration {
 

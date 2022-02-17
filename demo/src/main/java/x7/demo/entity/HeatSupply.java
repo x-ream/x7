@@ -1,7 +1,7 @@
 package x7.demo.entity;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class HeatSupply {
 }

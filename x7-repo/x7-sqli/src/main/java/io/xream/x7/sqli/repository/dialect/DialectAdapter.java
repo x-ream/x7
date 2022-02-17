@@ -21,7 +21,7 @@ import io.xream.x7.base.util.StringUtil;
 import org.springframework.core.env.Environment;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface DialectAdapter {
     String MYSQL = "mysql"; //mysql, oceanbase, tidb, presto ....

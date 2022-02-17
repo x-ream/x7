@@ -19,7 +19,7 @@ package io.xream.x7.reyc.api;
 import io.xream.x7.base.KV;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface ClientHeaderInterceptor {
     KV apply();

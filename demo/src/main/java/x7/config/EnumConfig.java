@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 @Configuration
 public class EnumConfig {

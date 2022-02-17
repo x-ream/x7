@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface IdGeneratorService extends IdGeneratorProxy {
 

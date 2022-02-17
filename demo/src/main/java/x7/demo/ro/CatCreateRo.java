@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class CatCreateRo {
 

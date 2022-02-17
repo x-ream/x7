@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationListener;
 
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class IdGeneratorBootListener implements
         ApplicationListener<ApplicationStartedEvent> {

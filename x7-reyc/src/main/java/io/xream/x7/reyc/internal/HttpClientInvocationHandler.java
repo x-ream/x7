@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class HttpClientInvocationHandler implements InvocationHandler {
 

@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class HttpClientResolver {
 

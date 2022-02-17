@@ -6,7 +6,7 @@ import x7.demo.builder.OmsBuilder;
 import x7.demo.ro.OrderFindDto;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 @GenSql
 public class OmsBuilderToSql {

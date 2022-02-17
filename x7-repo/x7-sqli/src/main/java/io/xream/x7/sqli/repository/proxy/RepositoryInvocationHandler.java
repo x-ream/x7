@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class RepositoryInvocationHandler implements InvocationHandler, DynamicDialectKeyRemovable {
 

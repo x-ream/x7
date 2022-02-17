@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class MethodParsed {
 

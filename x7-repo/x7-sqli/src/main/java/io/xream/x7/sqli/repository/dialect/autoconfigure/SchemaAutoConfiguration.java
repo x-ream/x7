@@ -24,7 +24,7 @@ import io.xream.sqli.spi.Schema;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class SchemaAutoConfiguration {
 

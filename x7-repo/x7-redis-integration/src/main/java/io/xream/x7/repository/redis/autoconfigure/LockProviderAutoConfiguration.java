@@ -21,7 +21,7 @@ import io.xream.x7.repository.redis.lock.DefaultLockProvider;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class LockProviderAutoConfiguration {
 

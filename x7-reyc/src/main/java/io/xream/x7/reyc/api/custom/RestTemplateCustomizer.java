@@ -19,7 +19,7 @@ package io.xream.x7.reyc.api.custom;
 import io.xream.x7.reyc.api.SimpleRestTemplate;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface RestTemplateCustomizer {
 

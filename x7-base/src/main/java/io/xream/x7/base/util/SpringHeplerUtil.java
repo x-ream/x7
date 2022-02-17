@@ -25,7 +25,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import java.lang.reflect.Method;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class SpringHeplerUtil {
 

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public final class DefaultIdGeneratorService implements IdGeneratorService {
 

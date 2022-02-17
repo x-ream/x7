@@ -23,7 +23,7 @@ import org.springframework.beans.factory.FactoryBean;
 import java.lang.reflect.Proxy;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public class HttpClientProxy implements FactoryBean {
 

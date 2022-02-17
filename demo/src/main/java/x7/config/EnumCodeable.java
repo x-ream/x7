@@ -1,7 +1,7 @@
 package x7.config;
 
 /**
- * @Author Sim
+ * @author Sim
  */
 public interface EnumCodeable {
 

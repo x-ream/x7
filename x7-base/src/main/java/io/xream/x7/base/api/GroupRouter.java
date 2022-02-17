@@ -18,7 +18,7 @@ package io.xream.x7.base.api;
 
 /**
  * route to service grouped, like k8s namespace with suffix of sharding key
- * @Author Sim
+ * @author Sim
  */
 public interface GroupRouter {
     String replaceHolder();

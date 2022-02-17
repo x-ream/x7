@@ -1,6 +1,10 @@
 package x7;
 
 
+import io.jaegertracing.thrift.internal.senders.ThriftSenderBase;
+import io.opentracing.contrib.java.spring.jaeger.starter.JaegerAutoConfiguration;
+import io.opentracing.contrib.spring.web.starter.ServerTracingAutoConfiguration;
+import org.apache.thrift.transport.AutoExpandingBufferWriteTransport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
