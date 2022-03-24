@@ -76,11 +76,6 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.thrift</groupId>
-                <artifactId>libthrift</artifactId>
-                <version>0.15.0</version>
-            </dependency>
-            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
@@ -162,17 +157,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.xream.internal-util</groupId>
-            <artifactId>internal-util</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.xream.internal-util</groupId>-->
+<!--            <artifactId>internal-util</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>io.xream.rey</groupId>
-            <artifactId>rey</artifactId>
-            <version>1.0.0</version>
-        </dependency>
 
     </dependencies>
 
@@ -223,7 +213,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -238,7 +228,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+-->
         </plugins>
         <resources>
             <resource>

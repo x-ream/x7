@@ -24,7 +24,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import java.util.Map;
 
 
-public class L2CacheStarter implements ImportBeanDefinitionRegistrar {
+class L2CacheStarter implements ImportBeanDefinitionRegistrar {
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
