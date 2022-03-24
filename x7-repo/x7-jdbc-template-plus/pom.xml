@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.xream.x7</groupId>
+		<artifactId>x7-repo</artifactId>
+		<version>3.0.0</version>
+	</parent>
+
+	<artifactId>x7-jdbc-template-plus</artifactId>
+	<packaging>jar</packaging>
+
+	<name>x7-jdbc-template-plus</name>
+	<description>http://x7.xream.io</description>
+	<url>http://x7.xream.io</url>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat</groupId>
+					<artifactId>tomcat-jdbc</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+	</dependencies>
+
+</project>
