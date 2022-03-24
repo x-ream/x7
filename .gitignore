@@ -1,3 +1,4 @@
+demo/
 target/
 */target/
 */classes/
@@ -8,3 +9,4 @@ target/
 *.iml
 .settings/
 .idea
+/demo/
