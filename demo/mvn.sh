@@ -1,1 +1,0 @@
-mvn clean install sqli:gensql -DskipTests=true
