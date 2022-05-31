@@ -17,7 +17,6 @@
 package io.xream.x7;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.TemporaryRepository;
 import io.xream.sqli.api.customizer.DialectCustomizer;
@@ -41,7 +40,6 @@ import io.xream.x7.lock.DistributionLock;
 import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
-import io.xream.x7.repository.redis.cache.DefaultL2CacheStorage;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -199,15 +197,6 @@ public class RepositoryListener implements
         if (levelTwoCacheResolver == null)
             return;
         levelTwoCacheResolver.setCacheStorage(cacheStorage);
-        if (cacheStorage instanceof DefaultL2CacheStorage) {
-            try {
-                CircuitBreakerRegistry registry = applicationStartedEvent.getApplicationContext()
-                        .getBean(CircuitBreakerRegistry.class);
-                ((DefaultL2CacheStorage) cacheStorage).setCircuitBreakerRegistry(registry);
-            }catch (Exception e){
-
-            }
-        }
 
     }
 
