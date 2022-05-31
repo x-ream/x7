@@ -62,10 +62,14 @@ public final class DefaultL2CacheStorage implements L2CacheStorage {
 
 
     public boolean delete(String key) {
+        if (key == null || key.equals(""))
+            return false;
         return stringRedisTemplate.delete(key);
     }
 
     public Set<String> keys(String pattern) {
+        if (pattern == null || pattern.equals(""))
+            return null;
         return stringRedisTemplate.keys(pattern);
     }
 
