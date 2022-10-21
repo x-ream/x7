@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.xream.x7</groupId>
     <artifactId>x7-parent</artifactId>
-    <version>2.17.0.RELEASE</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
     <name>x7-parent</name>
     <description>http://x7.xream.io</description>
@@ -17,17 +17,16 @@
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <maven.test.skip>true</maven.test.skip>
         <springboot.version>2.3.12.RELEASE</springboot.version>
-        <sqli.version>1.7.0.RELEASE</sqli.version>
-        <x7.version>2.17.0.RELEASE</x7.version>
-        <fastjson.version>1.2.79</fastjson.version>
-        <io.xream.util.version>1.0.0</io.xream.util.version>
+        <sqli.version>2.0.0</sqli.version>
+        <x7.version>3.0.0</x7.version>
+<!--        <fastjson.version>1.2.79</fastjson.version>-->
     </properties>
 
     <scm>
         <connection>scm:git:https://github.com/x-ream/x7</connection>
         <developerConnection>scm:git:https://github.com/x-ream/x7</developerConnection>
         <url>scm:git:https://github.com/x-ream/x7</url>
-        <tag>2.17.0.RELEASE</tag>
+        <tag>3.0.0</tag>
     </scm>
 
     <licenses>
@@ -74,11 +73,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba</groupId>-->
+<!--                <artifactId>fastjson</artifactId>-->
+<!--                <version>${fastjson.version}</version>-->
+<!--            </dependency>-->
 
         </dependencies>
     </dependencyManagement>
@@ -149,18 +148,18 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
 <!--        <dependency>-->
-<!--            <groupId>io.xream.internal-util</groupId>-->
-<!--            <artifactId>internal-util</artifactId>-->
-<!--            <version>1.0.0</version>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>fastjson</artifactId>-->
+<!--            <version>${fastjson.version}</version>-->
+<!--            <scope>provided</scope>-->
 <!--        </dependency>-->
+
+        <dependency>
+            <groupId>io.xream.internal-util</groupId>
+            <artifactId>internal-util</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
 
     </dependencies>

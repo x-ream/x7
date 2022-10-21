@@ -5,18 +5,14 @@
     <parent>
         <artifactId>x7-parent</artifactId>
         <groupId>io.xream.x7</groupId>
-        <version>2.17.0.RELEASE</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>x7-base</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>io.xream.internal-util</groupId>
-            <artifactId>internal-util</artifactId>
-            <version>1.1.0.RELEASE</version>
-        </dependency>
+
         <dependency>
             <groupId>io.xream.sqli</groupId>
             <artifactId>sqli-core</artifactId>
@@ -27,7 +23,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.26</version>
+            <version>1.7.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -35,13 +31,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

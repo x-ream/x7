@@ -41,16 +41,27 @@ import io.xream.x7.lock.LockProvider;
 import io.xream.x7.lock.customizer.LockProviderCustomizer;
 import io.xream.x7.repository.jdbctemplate.JdbcTemplateHelper;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.SmartApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
 public class RepositoryListener implements
-        ApplicationListener<ApplicationStartedEvent> {
-
+        SmartApplicationListener {
 
     @Override
-    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
+    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+        return eventType == ApplicationStartedEvent.class;
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MAX_VALUE-1;
+    }
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+
+        ApplicationStartedEvent applicationStartedEvent = (ApplicationStartedEvent)event;
 
         customizeLockProvider(applicationStartedEvent);
 
@@ -121,12 +132,16 @@ public class RepositoryListener implements
         }catch (Exception e) {}
         SqliListener.customizeDialectOnStarted(dialect, dialectCustomizer);
 
-        NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
-        SqlInit sqlInit = applicationStartedEvent.getApplicationContext().getBean(SqlInit.class);
-        Schema schema = applicationStartedEvent.getApplicationContext().getBean(Schema.class);
-        TemporaryRepository temporaryRepository = applicationStartedEvent.getApplicationContext().getBean(TemporaryRepository.class);
-        TemporaryTableParserListener.onStarted(temporaryRepository,schema);
-        SqliListener.onStarted(nativeRepository,sqlInit,schema);
+        try {
+            NativeRepository nativeRepository = applicationStartedEvent.getApplicationContext().getBean(NativeRepository.class);
+            SqlInit sqlInit = applicationStartedEvent.getApplicationContext().getBean(SqlInit.class);
+            Schema schema = applicationStartedEvent.getApplicationContext().getBean(Schema.class);
+            TemporaryRepository temporaryRepository = applicationStartedEvent.getApplicationContext().getBean(TemporaryRepository.class);
+            TemporaryTableParserListener.onStarted(temporaryRepository, schema);
+            SqliListener.onStarted(nativeRepository, sqlInit, schema);
+        }catch (Exception e) {
+
+        }
     }
 
     private void customizeLockProvider(ApplicationStartedEvent applicationStartedEvent) {
@@ -145,8 +160,11 @@ public class RepositoryListener implements
             } catch (Exception e) {
             }
         }
+        try {
+            DistributionLock.init(lockProvider);
+        }catch (Exception e) {
 
-        DistributionLock.init(lockProvider);
+        }
     }
 
     private void onJdbcHelperCreated(ApplicationStartedEvent applicationStartedEvent) {
@@ -193,10 +211,14 @@ public class RepositoryListener implements
             }
         }
 
-        L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
-        if (levelTwoCacheResolver == null)
-            return;
-        levelTwoCacheResolver.setCacheStorage(cacheStorage);
+        try {
+            L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
+            if (levelTwoCacheResolver == null)
+                return;
+            levelTwoCacheResolver.setCacheStorage(cacheStorage);
+        }catch (Exception e) {
+
+        }
 
     }
 
@@ -211,11 +233,17 @@ public class RepositoryListener implements
         if (customizer == null || customizer.customize() == null)
             return;
 
-        L2CacheResolver l2CacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
-        if (l2CacheResolver == null)
-            return;
-        SqliListener.onL2CacheEnabled(l2CacheResolver, customizer.customize());
+        try {
+            L2CacheResolver l2CacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);
+
+            if (l2CacheResolver == null)
+                return;
+            SqliListener.onL2CacheEnabled(l2CacheResolver, customizer.customize());
+        }catch (Exception e) {
+
+        }
     }
 
 
+ 
 }
