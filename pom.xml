@@ -16,10 +16,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <maven.test.skip>true</maven.test.skip>
-        <springboot.version>2.3.12.RELEASE</springboot.version>
+        <springboot.version>2.6.13</springboot.version>
         <sqli.version>2.0.0</sqli.version>
         <x7.version>3.0.0</x7.version>
-<!--        <fastjson.version>1.2.79</fastjson.version>-->
     </properties>
 
     <scm>
@@ -73,11 +72,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.alibaba</groupId>-->
-<!--                <artifactId>fastjson</artifactId>-->
-<!--                <version>${fastjson.version}</version>-->
-<!--            </dependency>-->
 
         </dependencies>
     </dependencyManagement>
@@ -147,13 +141,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>fastjson</artifactId>-->
-<!--            <version>${fastjson.version}</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>io.xream.internal-util</groupId>

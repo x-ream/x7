@@ -31,19 +31,20 @@ public final class DefaultIdGeneratorService implements IdGeneratorService {
 
     private StringRedisTemplate stringRedisTemplate;
 
-    public DefaultIdGeneratorService(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
+    public DefaultIdGeneratorService() {
     }
-
     @Override
     public Logger getLogger(){
         return logger;
     }
     @Override
+    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+    }
+    @Override
     public StringRedisTemplate getStringRedisTemplate(){
         return stringRedisTemplate;
     }
-
     @Override
     public long createId(String clzName) {
         return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,clzName,1);

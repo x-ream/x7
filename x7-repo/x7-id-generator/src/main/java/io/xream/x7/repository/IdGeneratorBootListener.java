@@ -20,6 +20,7 @@ import io.xream.sqli.core.RepositoryManagement;
 import io.xream.x7.repository.id.IdGeneratorService;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 
 /**
@@ -34,7 +35,9 @@ public class IdGeneratorBootListener implements
 
         IdGeneratorService idGeneratorService = null;
         try {
+            StringRedisTemplate stringRedisTemplate = applicationStartedEvent.getApplicationContext().getBean(StringRedisTemplate.class);
             idGeneratorService = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorService.class);
+            idGeneratorService.setStringRedisTemplate(stringRedisTemplate);
             idGeneratorService.onStart(RepositoryManagement.REPOSITORY_LIST);
         } catch (Exception e) {
 

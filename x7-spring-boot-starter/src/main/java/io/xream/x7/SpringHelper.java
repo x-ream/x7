@@ -83,6 +83,8 @@ public class SpringHelper implements ApplicationContextAware {
         if (rmhp != null) {
             Map<RequestMappingInfo, HandlerMethod> map = rmhp.getHandlerMethods();
             for (RequestMappingInfo info : map.keySet()) {
+                if (info.getPatternsCondition() == null)
+                    continue;
                 String mapping = info.getPatternsCondition().toString().replace("[", "").replace("]", "");
                 HandlerMethod hm = map.get(info);
                 mappingMap.put(hm.getMethod(), mapping);

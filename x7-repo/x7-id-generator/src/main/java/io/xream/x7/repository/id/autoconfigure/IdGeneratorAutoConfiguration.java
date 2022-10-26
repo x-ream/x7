@@ -20,7 +20,6 @@ import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.x7.repository.IdGeneratorBootListener;
 import io.xream.x7.repository.id.DefaultIdGeneratorService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @author Sim
@@ -28,9 +27,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class IdGeneratorAutoConfiguration {
 
     @Bean
-    public IdGeneratorProxy idGeneratorProxy(StringRedisTemplate redisTemplate){
-        DefaultIdGeneratorService idGeneratorService = new DefaultIdGeneratorService(redisTemplate);
-        return idGeneratorService;
+    public IdGeneratorProxy idGeneratorProxy(){
+        return new DefaultIdGeneratorService();
     }
 
     @Bean

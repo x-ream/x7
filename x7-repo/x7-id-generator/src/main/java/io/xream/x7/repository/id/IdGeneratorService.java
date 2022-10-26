@@ -46,6 +46,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
 
     Logger getLogger();
     StringRedisTemplate getStringRedisTemplate();
+    void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate);
 
     default void onStart(List<BaseRepository> repositoryList) {
         if (repositoryList == null)
