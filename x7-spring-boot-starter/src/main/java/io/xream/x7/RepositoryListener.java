@@ -125,11 +125,18 @@ public class RepositoryListener implements
     }
 
     private void onStarted(ApplicationStartedEvent applicationStartedEvent){
-        Dialect dialect = applicationStartedEvent.getApplicationContext().getBean(Dialect.class);
+        Dialect dialect = null;
+        try {
+            dialect = applicationStartedEvent.getApplicationContext().getBean(Dialect.class);
+        }catch (Exception e){
+
+        }
         DialectCustomizer dialectCustomizer = null;
         try{
             dialectCustomizer = applicationStartedEvent.getApplicationContext().getBean(DialectCustomizer.class);
         }catch (Exception e) {}
+        if (dialect == null && dialectCustomizer == null)
+            return;
         SqliListener.customizeDialectOnStarted(dialect, dialectCustomizer);
 
         try {
