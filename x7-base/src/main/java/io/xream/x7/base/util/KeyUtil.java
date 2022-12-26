@@ -25,8 +25,8 @@ public class KeyUtil {
     private KeyUtil() {
     }
 
-    public static String makeKey(String prefix, String suffix, String condition,Method method,Object[] args) {
+    public static String makeKey(String prefix, String condition,Method method,Object[] args) {
         String str = SpringHeplerUtil.parseSPEL(condition,method,args);
-        return VerifyUtil.toMD5(prefix + str) + suffix;
+        return VerifyUtil.toMD5(prefix + str);
     }
 }
