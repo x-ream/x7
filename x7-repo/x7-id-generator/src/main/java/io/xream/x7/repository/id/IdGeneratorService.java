@@ -20,8 +20,8 @@ package io.xream.x7.repository.id;
 import io.xream.internal.util.VerifyUtil;
 import io.xream.sqli.api.BaseRepository;
 import io.xream.sqli.api.ResultMapRepository;
-import io.xream.sqli.builder.Criteria;
-import io.xream.sqli.builder.CriteriaBuilder;
+import io.xream.sqli.builder.Builder;
+import io.xream.sqli.builder.Built;
 import io.xream.sqli.builder.ReduceType;
 import io.xream.sqli.parser.BeanElement;
 import io.xream.sqli.parser.Parsed;
@@ -86,7 +86,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
         };
 
         for (BaseRepository baseRepository : repositoryList) {
-            CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
+            Builder.BuilderX builder = Builder.resultMapBuilder();
             Class clzz = baseRepository.getClzz();
             if (clzz == Void.class)
                 continue;
@@ -96,11 +96,11 @@ public interface IdGeneratorService extends IdGeneratorProxy {
             if (be.getClz() == String.class || be.getClz() == Date.class || be.getClz() == Timestamp.class)
                 continue;
             builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
-            Criteria.ResultMapCriteria resultMapCriteria = builder.build();
+            Built.ResultMap resultMap = builder.build();
             List<Long> idList = null;
             if (baseRepository instanceof ResultMapRepository){
                 ResultMapRepository resultMapRepository = (ResultMapRepository) baseRepository;
-                idList = resultMapRepository.listPlainValue(Long.class,resultMapCriteria);
+                idList = resultMapRepository.listPlainValue(Long.class,resultMap);
             }
 
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
