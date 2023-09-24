@@ -1,1 +1,1 @@
-io.xream.x7.sqli.repository.dialect.autoconfigure.SchemaAutoConfiguration
+io.xream.x7.repository.id.autoconfigure.IdGeneratorAutoConfiguration
