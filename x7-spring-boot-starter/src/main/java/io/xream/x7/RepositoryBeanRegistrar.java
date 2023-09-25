@@ -18,9 +18,9 @@ package io.xream.x7;
 
 import io.xream.internal.util.ClassFileReader;
 import io.xream.sqli.api.BaseRepository;
-import io.xream.sqli.api.ResultMapRepository;
+import io.xream.sqli.api.RepositoryX;
 import io.xream.sqli.filter.BaseTypeFilter;
-import io.xream.x7.sqli.repository.proxy.RepositoryProxy;
+import io.xream.x7.sqli.repository.proxy.RepositoryProxyX;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -74,7 +74,7 @@ class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
             if (types.length == 0)
                 continue;
             if (! ((types[0].getTypeName().startsWith(BaseRepository.class.getName()))
-                    || (types[0].getTypeName().startsWith(ResultMapRepository.class.getName()))))
+                    || (types[0].getTypeName().startsWith(RepositoryX.class.getName()))))
                 continue;
 
             list.add(clz);
@@ -101,7 +101,7 @@ class RepositoryBeanRegistrar implements ImportBeanDefinitionRegistrar {
                 GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
                 definition.getPropertyValues().add("objectType", clz);
                 definition.getPropertyValues().add("clz", clazz);
-                definition.setBeanClass(RepositoryProxy.class);
+                definition.setBeanClass(RepositoryProxyX.class);
                 definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
 
                 registry.registerBeanDefinition(beanName, definition);

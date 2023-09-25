@@ -18,7 +18,7 @@ package io.xream.x7.sqli.repository.proxy;
 
 
 import io.xream.sqli.api.BaseRepository;
-import io.xream.sqli.api.ResultMapRepository;
+import io.xream.sqli.api.RepositoryX;
 import io.xream.sqli.dialect.DynamicDialectKeyRemovable;
 import io.xream.sqli.util.SqliLoggerProxy;
 
@@ -31,9 +31,9 @@ import java.lang.reflect.Method;
  */
 public class RepositoryInvocationHandler implements InvocationHandler, DynamicDialectKeyRemovable {
 
-    private RepositoryProxy repository;
+    private RepositoryProxyX repository;
 
-    public RepositoryInvocationHandler(RepositoryProxy repository){
+    public RepositoryInvocationHandler(RepositoryProxyX repository){
         this.repository = repository;
     }
 
@@ -42,7 +42,7 @@ public class RepositoryInvocationHandler implements InvocationHandler, DynamicDi
         if (BaseRepository.class.isAssignableFrom(repository.getObjectType())) {
             str = "BaseRepository<" + repository.getClzz().getSimpleName() + ">";
         }
-        if (ResultMapRepository.class.isAssignableFrom(repository.getObjectType())) {
+        if (RepositoryX.class.isAssignableFrom(repository.getObjectType())) {
             if (str == null){
                 str = "ResultMapRepository";
             }else {

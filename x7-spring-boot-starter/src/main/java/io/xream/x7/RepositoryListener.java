@@ -25,7 +25,7 @@ import io.xream.sqli.core.IdGenerator;
 import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.repository.init.SqlInit;
 import io.xream.sqli.repository.internal.DefaultEnumSupport;
-import io.xream.sqli.repository.internal.DefaultRepository;
+import io.xream.sqli.repository.internal.DefaultRepositoryX;
 import io.xream.sqli.spi.JdbcHelper;
 import io.xream.sqli.spi.L2CacheResolver;
 import io.xream.sqli.spi.L2CacheStorage;
@@ -86,8 +86,8 @@ public class RepositoryListener implements
         try {
             IdGenerator idGenerator = applicationStartedEvent.getApplicationContext()
                     .getBean(IdGenerator.class);
-            DefaultRepository defaultRepository = applicationStartedEvent.getApplicationContext()
-                    .getBean(DefaultRepository.class);
+            DefaultRepositoryX defaultRepository = applicationStartedEvent.getApplicationContext()
+                    .getBean(DefaultRepositoryX.class);
             defaultRepository.setIdGenerator(idGenerator);
         }catch (Exception e) {
 

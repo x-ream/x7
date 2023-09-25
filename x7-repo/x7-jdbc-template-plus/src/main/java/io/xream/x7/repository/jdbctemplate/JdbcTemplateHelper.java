@@ -21,7 +21,7 @@ import io.xream.sqli.core.ResultMapFinder;
 import io.xream.sqli.core.RowHandler;
 import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.exception.ExceptionTranslator;
-import io.xream.sqli.mapping.ResultMapHelpful;
+import io.xream.sqli.mapping.XHelpful;
 import io.xream.sqli.parser.Parsed;
 import io.xream.sqli.spi.JdbcHelper;
 import org.slf4j.Logger;
@@ -187,9 +187,9 @@ public final class JdbcTemplateHelper implements JdbcHelper {
     }
 
     @Override
-    public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, ResultMapHelpful resultMapHelpful, Class orClzz, Dialect dialect) {
+    public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, XHelpful xHelpful, Class orClzz, Dialect dialect) {
 
-        boolean isResultWithDottedKey = resultMapHelpful == null? false: resultMapHelpful.isResultWithDottedKey();
+        boolean isResultWithDottedKey = xHelpful == null? false: xHelpful.isResultWithDottedKey();
         return toResultMapList(
                 isResultWithDottedKey,
                 fixedRowMapper -> queryForMapList0(
@@ -197,20 +197,20 @@ public final class JdbcTemplateHelper implements JdbcHelper {
                         valueList,
                         dialect,
                         jdbcTemplate,
-                        resultMapHelpful,
+                        xHelpful,
                         orClzz,
                         fixedRowMapper));
 
     }
 
-    private List<Map<String, Object>> queryForMapList0(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, ResultMapHelpful resultMapHelpful, Class orClzz, ResultMapFinder.FixedRowMapper fixedRowMapper) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, XHelpful xHelpful, Class orClzz, ResultMapFinder.FixedRowMapper fixedRowMapper) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<Map<String, Object>> rowMapper = (resultSet, i) -> {
 
             Map<String, Object> map = columnMapRowMapper.mapRow(resultSet, i);
             try {
-                return fixedRowMapper.mapRow(map, orClzz, resultMapHelpful, dialect);
+                return fixedRowMapper.mapRow(map, orClzz, xHelpful, dialect);
             } catch (Exception e) {
                 throw ExceptionTranslator.onQuery(e, logger);
             }
@@ -226,7 +226,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
     }
 
     @Override
-    public <T> void queryForMapToHandle(String sql, Collection<Object> valueList, Dialect dialect, ResultMapHelpful resultMapHelpful, Parsed orParsed, RowHandler<T> handler) {
+    public <T> void queryForMapToHandle(String sql, Collection<Object> valueList, Dialect dialect, XHelpful xHelpful, Parsed orParsed, RowHandler<T> handler) {
 
         RowMapper<Map<String, Object>> rowMapper = new ColumnMapRowMapper();
 
@@ -254,7 +254,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
             Map<String, Object> dataMap = rowMapper.mapRow(resultSet, 0);
 
             T t = null;
-            if (resultMapHelpful == null) {
+            if (xHelpful == null) {
                 try {
                     Class<T> clzz = orParsed.getClzz();
                     t = clzz.newInstance();
@@ -263,7 +263,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
                     throw ExceptionTranslator.onQuery(e, logger);
                 }
             } else {
-                 t = (T) toResultMap(resultMapHelpful,dialect,dataMap);
+                 t = (T) toResultMap(xHelpful,dialect,dataMap);
             }
             if (t != null) {
                 handler.handle(t);

@@ -125,27 +125,27 @@
         
         代码片段:
             {
-                CriteriaBuilder builder = CriteriaBuilder.builder(Order.class); 
-                builder.eq("userId",obj.getUserId()).eq("status","PAID");
-                Criteria criteria = builer.build();
+                CriteriaBuilder QB = CriteriaBuilder.QB(Order.class); 
+                QB.eq("userId",obj.getUserId()).eq("status","PAID");
+                Criteria q = builer.build();
                 orderRepository.find(Built);
             }
         
             {
-                CriteriaBuilder.ResultMapBuilder builder = CriteriaBuilder.resultMapBuilder();
-                builder.resultKey("o.id");
-                builder.eq("o.status","PAID");
-                builder.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
-                builder.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
-                builder.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
-                builder.paged(obj);
-                Criteria.ResultMapCriteria criteria = builder.build();
+                CriteriaBuilder.ResultMapBuilder QB = CriteriaBuilder.resultMapBuilder();
+                QB.resultKey("o.id");
+                QB.eq("o.status","PAID");
+                QB.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
+                QB.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
+                QB.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
+                QB.paged(obj);
+                Criteria.ResultMapCriteria q = QB.build();
                 orderRepository.find(Built);
             }
             
             {
                 orderRepository.refresh(
-                    RefreshBuilder.builder().refresh("status","PAYING").eq("id",1).eq("status","UN_PAID").build()
+                    RefreshBuilder.QB().refresh("status","PAYING").eq("id",1).eq("status","UN_PAID").build()
                 );
             }
         
@@ -201,7 +201,7 @@
             sourceScript/sourceBuilder
                 如果条件和返回都不包括sourceScript里的连表，框架会优化移除连接（但目标连接表有用时，中间表不会
                 被移除）。
-                关闭优化: builder.withoutOptimization()
+                关闭优化: QB.withoutOptimization()
             in
                 每500个条件会切割出一次in查询
             

@@ -17,7 +17,7 @@
 package io.xream.x7.sqli.repository.proxy;
 
 import io.xream.sqli.core.Repository;
-import io.xream.sqli.repository.internal.DefaultRepository;
+import io.xream.sqli.repository.internal.DefaultRepositoryX;
 import io.xream.sqli.spi.IdGeneratorProxy;
 import io.xream.sqli.util.SqliLoggerProxy;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import java.lang.reflect.Proxy;
  * @param <T>
  * @author Sim
  */
-public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryBean {
+public class RepositoryProxyX<T> extends DefaultRepositoryX<T> implements FactoryBean {
 
     @Override
     public Class<T> getClzz() {
@@ -47,7 +47,7 @@ public class RepositoryProxy<T> extends DefaultRepository<T> implements FactoryB
         }
     }
 
-    public RepositoryProxy(){
+    public RepositoryProxyX(){
     }
 
 
