@@ -13,11 +13,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
         <maven.test.skip>true</maven.test.skip>
-        <springboot.version>2.6.13</springboot.version>
-<!--        <springboot.version>3.1.2</springboot.version>-->
+        <springboot.version>3.1.2</springboot.version>
         <sqli.version>2.0.0</sqli.version>
         <x7.version>3.0.0</x7.version>
     </properties>
@@ -111,16 +110,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
         </dependency>
 
         <dependency>

@@ -18,7 +18,7 @@ package io.xream.x7;
 
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.TemporaryRepository;
-import io.xream.sqli.builder.BuiltToSql;
+import io.xream.sqli.builder.Q2Sql;
 import io.xream.sqli.cache.internal.DefaultL2CacheResolver;
 import io.xream.sqli.core.Repository;
 import io.xream.sqli.dialect.Dialect;
@@ -37,8 +37,8 @@ public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(1)
-    public BuiltToSql __builtToSql() {
-        return  SqliStarter.getInstance().builtToSql();
+    public Q2Sql __q2Sql() {
+        return  SqliStarter.getInstance().q2Sql();
     }
 
     @Bean
@@ -69,13 +69,13 @@ public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(5)
-    public Repository __repository(BuiltToSql builtToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver){
+    public Repository __repository(Q2Sql builtToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver){
         return SqliStarter.getInstance().repository(builtToSql, jdbcHelper,dialect,cacheResolver);
     }
 
     @Bean
     @Order(6)
-    public TemporaryRepository __temporaryRepository(BuiltToSql BuiltToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
+    public TemporaryRepository __temporaryRepository(Q2Sql BuiltToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
         return SqliStarter.getInstance().temporaryRepository(BuiltToSql, jdbcHelper,dialect,repository);
     }
 

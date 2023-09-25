@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +55,7 @@ public class DefaultLockProvider implements LockProvider {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public boolean lock(String key, String value, @NotNull Integer timeOut){
+    public boolean lock(String key, String value, Integer timeOut){
         if (timeOut.intValue() == 0)
             timeOut = DEFAULT_TIMEOUT;
         try {
