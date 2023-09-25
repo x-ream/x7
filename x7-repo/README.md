@@ -39,9 +39,9 @@
     包含二级缓存的BaseRepository的API：
         1. in(property, inList)
         2. list(Object)
-        3. find(Built)
-        4. list(Built)
-        5. get(Id)
+        3. find(q)
+        4. list(q)
+        5. get(id)
         6. getOne(Object)
         
     不含二级缓存的BaseRepository, RepositoryX的API:
@@ -99,7 +99,7 @@
             12. remove(Id)//根据主键删除
             13. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
             
-### ResultMapRepository API
+###     RepositoryX API
             14. find(xq) //标准拼接查询，返回Map形式记录，返回分页对象
             15. list(xq) //标准拼接查询，返回Map形式记录，不返回分页对象
             16. listPlainValue(Class<K>, qx)//返回没有key的单列数据列表 (结果优化1)
