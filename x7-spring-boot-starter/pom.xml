@@ -26,10 +26,6 @@
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.xream.sqli</groupId>
 			<artifactId>sqli-QB</artifactId>
 			<version>${sqli.version}</version>

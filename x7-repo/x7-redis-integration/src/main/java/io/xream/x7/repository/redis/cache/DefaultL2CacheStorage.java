@@ -18,16 +18,16 @@ package io.xream.x7.repository.redis.cache;
 
 
 import io.xream.sqli.spi.L2CacheStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public final class DefaultL2CacheStorage implements L2CacheStorage {
 
-    @Resource
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
 
