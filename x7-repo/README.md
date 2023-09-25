@@ -44,18 +44,18 @@
         5. get(Id)
         6. getOne(Object)
         
-    不含二级缓存的BaseRepository, ResultMapRepository的API:
+    不含二级缓存的BaseRepository, RepositoryX的API:
         1. list()
-        2. find(ResultMap)
-        3. list(ResultMap)
-        4. listPlainValue(ResultMap)
+        2. find(qx)
+        3. list(qx)
+        4. listPlainValue(qx)
         
     以上设计意味着，如果in和list查询返回记录条数超过20条, 二级缓存
     会失去高速响应的效果，请务必关闭二级缓存. 
     如果需要返回很多条记录，需要自定义返回列, 请使用:
-        find(ResultMap)
-        list(ResultMap)
-        listPlainValue(ResultMap)
+        find(qx)
+        list(qx)
+        listPlainValue(qx)
         
         
 ###  三级缓存 + 一级缓存  
@@ -83,7 +83,7 @@
     @Repository
     public interface FooRepository extends BaseRepository<Foo> {}
     @Repository
-    public interface BarRepository extends ResultMapRepository {}
+    public interface BarRepository extends RepositoryX {}
     
 ###    实体类注解
     @X.Key //主键, 必须
@@ -107,49 +107,49 @@
             7. list() //无条件查全表, 几乎没使用场景
             8. creaet(Object) //插入一条, 不支持返回自增键, 框架自带ID生成器
             9. createBatch(List<Object>) //批量插入
-            10. refresh(RefreshCondition) //根据主键更新
-            11. refreshUnSafe(RefreshCondition)//不根据主键更新
+            10. refresh( qr) //根据主键更新
+            11. refreshUnSafe( qr)//不根据主键更新
             12. remove(Id)//根据主键删除
             13. removeRefreshCreate(RemoveRefreshCreate<T>) //编辑页面列表时写数据库
             
 ### ResultMapRepository API
-            14. find(ResultMap) //标准拼接查询，返回Map形式记录，返回分页对象
-            15. list(ResultMap) //标准拼接查询，返回Map形式记录，不返回分页对象
-            16. listPlainValue(Class<K>, ResultMapCriteria)//返回没有key的单列数据列表 (结果优化1)
-            17. findToHandle(ResultMap, RowHandler<Map<String,Object>>) //流处理API
+            14. find(xq) //标准拼接查询，返回Map形式记录，返回分页对象
+            15. list(xq) //标准拼接查询，返回Map形式记录，不返回分页对象
+            16. listPlainValue(Class<K>, qx)//返回没有key的单列数据列表 (结果优化1)
+            17. findToHandle(xq, RowHandler<Map<String,Object>>) //流处理API
             
-###    标准拼接API
-        CriteriaBuilder // 返回Criteria, 查出对象形式记录
-        CriteriaBuilder.ResultMapBuilder //返回ResultMapCriteria, 查出Map形式记录，支持连表查询
-        RefreshBuilder //构建要更新的字段和条件
+###     QueryBuilder拼接API
+        QB // 返回q, 查出对象形式记录
+        QB.X //xq, 查出Map形式记录，支持连表查询
+        RB //构建要更新的字段和条件
         
         代码片段:
             {
-                CriteriaBuilder QB = CriteriaBuilder.QB(Order.class); 
-                QB.eq("userId",obj.getUserId()).eq("status","PAID");
-                Criteria q = builer.build();
-                orderRepository.find(Built);
+                QB qb = QB.of(Order.class); 
+                qb.eq("userId",obj.getUserId()).eq("status","PAID");
+                Q q = qb.build();
+                orderRepository.find(q);
             }
         
             {
-                CriteriaBuilder.ResultMapBuilder QB = CriteriaBuilder.resultMapBuilder();
-                QB.resultKey("o.id");
-                QB.eq("o.status","PAID");
-                QB.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
-                QB.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
-                QB.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
-                QB.paged(obj);
-                Criteria.ResultMapCriteria q = QB.build();
-                orderRepository.find(Built);
+                QB.X qbx =  QB.x();
+                qbx.resultKey("o.id");
+                qbx.eq("o.status","PAID");
+                qbx.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
+                qbx.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
+                qbx.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
+                qbx.paged(obj);
+                Q.X xq = qbx.build();
+                orderRepository.find(xq);
             }
             
             {
                 orderRepository.refresh(
-                    RefreshBuilder.QB().refresh("status","PAYING").eq("id",1).eq("status","UN_PAID").build()
+                    RB.of(Order.class).refresh("status","PAYING").eq("id",1).eq("status","UN_PAID").build()
                 );
             }
         
-        条件构建API  (BuiltBuilder | ResultMapBuilder)
+        条件构建API  (QB | QB.X)
             1. and // AND 默认, 可省略，也可不省略
             2. or // OR
             3. eq // = (eq, 以及其它的API, 值为null，不会被拼接到SQL)
@@ -169,7 +169,7 @@
             17. beginSub // 左括号
             18. endSub // 右括号
 
-        MAP查询结果构建API  (ResultMapBuilder)
+        MAP查询结果构建API  (QB.X)
             19. distinct //去重
             20. reduce //归并计算
                     // .reduce(ReduceType.SUM, "dogTest.petId") 
@@ -181,7 +181,7 @@
                     // .resultKeyFunction(ResultKeyAlia.of("o","at"),"FFF(o.createAt, ?)", 100000) 
             24. resultWithDottedKey //连表查询返回非JSON格式数据,map的key包含"."  (结果优化2)
            
-        连表构建API  (ResultMapBuilder)
+        连表构建API  (QB.X)
             25. sourceScript(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
             26. sourceBuilder.source("order").alia("o") //连表里的主表
             27. sourceBuilder().source("orderItem").alia("i").join(JoinType.LEFT_JOIN)
@@ -190,11 +190,11 @@
             29. sourceBuilder().sub(....) // INNER JOIN (....) i  有限支持clickhouse等数据库
                             .alia("i").join("ANY INNER JOIN").on("orderId", JoinFrom.of("o","id")) //fluent构建连表sql
         
-        分页及排序API  (BuiltBuilder | ResultMapBuilder)
+        分页及排序API  (QB | QB.X)
             30. sort("o.id", Direction.DESC)
             31. paged().ignoreTotalRows().page(1).rows(10).last(10000) //设置last(long),会忽略page(int); 
                                            
-        更新构建API  (RefreshCondition)
+        更新构建API  ( qr)
             32. refresh
             
         框架优化
