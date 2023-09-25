@@ -57,20 +57,7 @@
         list(qx)
         listPlainValue(qx)
         
-        
-###  三级缓存 + 一级缓存  
 
-     注解使用
-        @EnableX7L3Caching(waitTimeMills = 1000)
-        public class App{
-            main()
-     
-        @CacheableL3(expireTime = 1000, condition="#foo.getId()") //默认condition为对象JSON的MD5值
-        public void doSomething(Foo foo)
-
-     可在项目里单独使用，使用场景:
-         1. 报表
-         2. 耗性能的远程请求, 且远程数据很少更新，更新时间间隔可预计
          
 ##  x7-sqli SQL的简单编程接口(SQL INTERFACE)
 
