@@ -17,7 +17,7 @@
 package io.xream.x7.repository.jdbctemplate;
 
 import io.xream.sqli.core.BaseFinder;
-import io.xream.sqli.core.ResultMapFinder;
+import io.xream.sqli.core.XFinder;
 import io.xream.sqli.core.RowHandler;
 import io.xream.sqli.dialect.Dialect;
 import io.xream.sqli.exception.ExceptionTranslator;
@@ -187,10 +187,10 @@ public final class JdbcTemplateHelper implements JdbcHelper {
     }
 
     @Override
-    public List<Map<String, Object>> queryForResultMapList(String sql, Collection<Object> valueList, XHelpful xHelpful, Class orClzz, Dialect dialect) {
+    public List<Map<String, Object>> queryForXList(String sql, Collection<Object> valueList, XHelpful xHelpful, Class orClzz, Dialect dialect) {
 
         boolean isResultWithDottedKey = xHelpful == null? false: xHelpful.isResultWithDottedKey();
-        return toResultMapList(
+        return toXList(
                 isResultWithDottedKey,
                 fixedRowMapper -> queryForMapList0(
                         sql,
@@ -203,7 +203,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
 
     }
 
-    private List<Map<String, Object>> queryForMapList0(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, XHelpful xHelpful, Class orClzz, ResultMapFinder.FixedRowMapper fixedRowMapper) {
+    private List<Map<String, Object>> queryForMapList0(String sql, Collection<Object> list, Dialect dialect, JdbcTemplate jdbcTemplate, XHelpful xHelpful, Class orClzz, XFinder.FixedRowMapper fixedRowMapper) {
 
         final ColumnMapRowMapper columnMapRowMapper = new ColumnMapRowMapper();
         final RowMapper<Map<String, Object>> rowMapper = (resultSet, i) -> {
@@ -263,7 +263,7 @@ public final class JdbcTemplateHelper implements JdbcHelper {
                     throw ExceptionTranslator.onQuery(e, logger);
                 }
             } else {
-                 t = (T) toResultMap(xHelpful,dialect,dataMap);
+                 t = (T) toXq(xHelpful,dialect,dataMap);
             }
             if (t != null) {
                 handler.handle(t);

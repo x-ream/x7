@@ -44,9 +44,9 @@ public class RepositoryInvocationHandler implements InvocationHandler, DynamicDi
         }
         if (RepositoryX.class.isAssignableFrom(repository.getObjectType())) {
             if (str == null){
-                str = "ResultMapRepository";
+                str = "RepositoryX";
             }else {
-                str += ", ResultMapRepository";
+                str += ", RepositoryX";
             }
         }
         return str;

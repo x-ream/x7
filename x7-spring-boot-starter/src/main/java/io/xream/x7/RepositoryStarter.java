@@ -69,14 +69,14 @@ public class RepositoryStarter  implements DialectAdapter {
 
     @Bean
     @Order(5)
-    public Repository __repository(Q2Sql builtToSql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver){
-        return SqliStarter.getInstance().repository(builtToSql, jdbcHelper,dialect,cacheResolver);
+    public Repository __repository(Q2Sql q2Sql, JdbcHelper jdbcHelper, Dialect dialect, L2CacheResolver cacheResolver){
+        return SqliStarter.getInstance().repository(q2Sql, jdbcHelper,dialect,cacheResolver);
     }
 
     @Bean
     @Order(6)
-    public TemporaryRepository __temporaryRepository(Q2Sql BuiltToSql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
-        return SqliStarter.getInstance().temporaryRepository(BuiltToSql, jdbcHelper,dialect,repository);
+    public TemporaryRepository __temporaryRepository(Q2Sql q2Sql, JdbcHelper jdbcHelper, Dialect dialect, Repository repository){
+        return SqliStarter.getInstance().temporaryRepository(q2Sql, jdbcHelper,dialect,repository);
     }
 
     @Bean

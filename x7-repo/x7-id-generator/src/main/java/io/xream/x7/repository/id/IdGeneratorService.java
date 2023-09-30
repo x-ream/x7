@@ -96,11 +96,11 @@ public interface IdGeneratorService extends IdGeneratorProxy {
             if (be.getClz() == String.class || be.getClz() == Date.class || be.getClz() == Timestamp.class)
                 continue;
             builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
-            Q.X resultMap = builder.build();
+            Q.X xq = builder.build();
             List<Long> idList = null;
             if (baseRepository instanceof RepositoryX){
                 RepositoryX repositoryX = (RepositoryX) baseRepository;
-                idList = repositoryX.listPlainValue(Long.class,resultMap);
+                idList = repositoryX.listPlainValue(Long.class,xq);
             }
 
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
