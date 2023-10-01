@@ -17,7 +17,7 @@
 package io.xream.x7.repository.redis.autoconfigure;
 
 import io.xream.x7.lock.LockProvider;
-import io.xream.x7.repository.redis.lock.DefaultLockProvider;
+import io.xream.x7.repository.redis.lock.NotRedLockRedisLockProvider;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -27,6 +27,6 @@ public class LockProviderAutoConfiguration {
 
     @Bean
     public LockProvider lockProvider(){
-        return new DefaultLockProvider();
+        return new NotRedLockRedisLockProvider();
     }
 }

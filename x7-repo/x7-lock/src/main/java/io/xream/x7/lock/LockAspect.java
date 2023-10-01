@@ -42,7 +42,7 @@ public class LockAspect {
         String condition = lock.condition();
         Object[] args = proceedingJoinPoint.getArgs();
 
-        String key = KeyUtil.makeKey(prefix,condition,ms.getMethod(),args);
+        String key = KeyUtil.makeLockKey(prefix,condition,ms.getMethod(),args);
         int interval = lock.interval();
         int timeout = lock.timeout();
         boolean abortingIfNoLock = lock.abortingIfNoLock();

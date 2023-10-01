@@ -30,11 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultLockProvider implements LockProvider {
+/**
+ * not implement RedLock, suggest use etcd
+ */
+public class NotRedLockRedisLockProvider implements LockProvider {
 
-    private final static Logger logger = LoggerFactory.getLogger(LockProvider.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(LockProvider.class);
 
-    private RedisScript<Long> unLockScript = new RedisScript<Long>() {
+    private RedisScript<Long> unLockScript = new RedisScript<>() {
         @Override
         public String getSha1() {
             return VerifyUtil.toMD5("x7-lock");
@@ -51,17 +54,38 @@ public class DefaultLockProvider implements LockProvider {
         }
     };
 
+    private RedisScript<Long> delayExpireScript = new RedisScript<>() {
+        @Override
+        public String getSha1() {
+            return VerifyUtil.toMD5("x7-lock");
+        }
+
+        @Override
+        public Class<Long> getResultType() {
+            return Long.class;
+        }
+
+        @Override
+        public String getScriptAsString() {
+            String script =
+                    "if (redis.call('get', KEYS[1]) == ARGV[1]) then " +
+                            "return redis.call('pexpire', KEYS[1], tonumber(ARGV[2])) else " +
+                            "return 0 end";
+            return script;
+        }
+    };
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public boolean lock(String key, String value, Integer timeOut){
-        if (timeOut.intValue() == 0)
+    public boolean lock(String key, String value, long timeOut){
+        if (timeOut == 0)
             timeOut = DEFAULT_TIMEOUT;
         try {
             return this.stringRedisTemplate.opsForValue().setIfAbsent(key, value, timeOut, TimeUnit.MILLISECONDS);
         }catch (Exception e) {
-            logger.error("DistributionLock.lock Exception: {}", ExceptionUtil.getMessage(e));
+            LOGGER.error("DistributionLock.lock Exception: {}", ExceptionUtil.getMessage(e));
             return true;
         }
     }
@@ -73,7 +97,22 @@ public class DefaultLockProvider implements LockProvider {
             keys.add(lock.getKey());
             this.stringRedisTemplate.execute(unLockScript, keys, lock.getValue());
         }catch (Exception e){
-            logger.error("DistributionLock.unlock Exception: {}", ExceptionUtil.getMessage(e));
+            LOGGER.error("DistributionLock.unlock Exception: {}", ExceptionUtil.getMessage(e));
         }
+    }
+
+    @Override
+    public boolean delayExpire(DistributionLock.Lock lock) {
+        try {
+            List<String> keys = new ArrayList<>();
+            keys.add(lock.getKey());
+            long r =this.stringRedisTemplate.execute(delayExpireScript, keys, lock.getValue(), ""+lock.getExpireMs());
+            LOGGER.info("{}, delayExpire: {}", lock.getKey(), r!=0 ? "OK":"FAIL" );
+            return r != 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("DistributionLock.delayExpire Exception: {}", ExceptionUtil.getMessage(e));
+        }
+        return false;
     }
 }

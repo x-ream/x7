@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface Lock {
     int interval() default 1000;
-    int timeout() default 100000;
+    int timeout() default 10000;
     String condition() default "";
     boolean abortingIfNoLock() default false;
 }

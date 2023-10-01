@@ -13,11 +13,9 @@
        
        x7-repo     (sqli,  Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
-          @EnableX7L3Caching            @CacheableL3
           @EnableDistributionLock       @Lock             or  
              { DistributionLock.by(key).lock(task) }
-             
-           
+
         
        x7-spring-boot-starter
 

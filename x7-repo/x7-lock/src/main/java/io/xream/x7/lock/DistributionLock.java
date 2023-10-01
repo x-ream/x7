@@ -17,17 +17,19 @@
 package io.xream.x7.lock;
 
 
-import io.xream.internal.util.VerifyUtil;
+import io.xream.internal.util.JsonX;
 import io.xream.x7.base.exception.DistributionLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 
 public class DistributionLock {
 
-    private static Logger logger = LoggerFactory.getLogger(DistributionLock.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(DistributionLock.class);
 
     private static int INTERVAL = 1000;
     protected static int TIMEOUT = 10 * 1000;
@@ -38,7 +40,7 @@ public class DistributionLock {
     }
 
 
-    private static void lock(String key, String value, int interval, int timeout, boolean abortingIfNoLock) {
+    private static Lock tryToLock(String key, String value, int interval, int timeout, boolean abortingIfNoLock) {
 
         if (lockProvider == null)
             throw new RuntimeException("No implements of LockProvider, like the project x7-repo/x7-redis-integration");
@@ -60,37 +62,43 @@ public class DistributionLock {
         }
 
         if (!locked) {
-            logger.info("Get distributed lock failed, lockKey: " + key);
+            LOGGER.info("Get distributed lock failed, lockKey: " + key);
             throw new DistributionLockException();
         }
+        Lock lock = new Lock();
+        lock.setKey(key);
+        lock.setValue(value);
+        lock.setExpireMs(timeout);
+        lock.setIntervalMs(interval);
+        return lock;
     }
 
     private static void unLock( Lock lock){
         lockProvider.unLock(lock);
     }
 
-    private static void unLockAsync( String key){
-    }
 
     public static Lock by(String key){
         Lock ml = new Lock();
-        ml.setKey(key+"~LOCK");
-        String random = VerifyUtil.toMD5("LOCK" + System.nanoTime());
-        ml.setValue(random);
+        ml.setKey(key);
+        ml.setValue("~LOCK");
         return ml;
     }
 
-    public static class Lock{
-        private  String key;
+    public static class Lock {
+        private String key;
         private String value;
+        private long intervalMs;
+        private long expireMs;
 
-        private Lock(){}
+        private Lock() {
+        }
 
-        private void setKey(String key){
+        private void setKey(String key) {
             this.key = key;
         }
 
-        public String getKey(){
+        public String getKey() {
             return this.key;
         }
 
@@ -102,53 +110,81 @@ public class DistributionLock {
             this.value = value;
         }
 
-        public <T> T lock(Task<T> obj){
-            return lock(INTERVAL,TIMEOUT,false,obj);
+        public long getIntervalMs() {
+            return intervalMs;
+        }
+
+        public void setIntervalMs(long intervalMs) {
+            this.intervalMs = intervalMs;
+        }
+
+        public long getExpireMs() {
+            return expireMs;
+        }
+
+        public void setExpireMs(long expireMs) {
+            this.expireMs = expireMs;
+        }
+
+        public <T> T lock(Task<T> obj) {
+            return lock(INTERVAL, TIMEOUT, false, obj);
         }
 
         public <T> T lock(
                 int intervalMS,
                 int timeoutMS,
                 boolean abortingIfNoLock,
-                Task<T> obj){
+                Task<T> obj) {
 
-            DistributionLock.lock(key,value,intervalMS,timeoutMS,abortingIfNoLock);
+            final Lock lock = DistributionLock.tryToLock(key, value, intervalMS, timeoutMS, abortingIfNoLock);
             T o = null;
+            Timer timer = new Timer();
             try {
+
+                long delay = lock.expireMs - lock.intervalMs;
+
+                if (delay < lock.intervalMs) {
+                    throw new DistributionLockException("expireMs should times than intervalMs");
+                }
+
+                if (delay > 1900) {
+                    delay -= 100;
+                }
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        LOGGER.info(lock.toString());
+                        boolean delayed = lockProvider.delayExpire(lock);
+
+                        if (!delayed) {
+                            cancel();
+                        }
+                    }
+                }, delay, delay);
+
                 o = obj.run(obj);
-            }catch (Exception e) {
-                DistributionLock.unLock(this);
+            } catch (Exception e) {
+                DistributionLock.unLock(lock);
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
-                }else {
+                } else {
                     throw new RuntimeException(e.getMessage());
                 }
-            }finally {
-                DistributionLock.unLock(this);
+            } finally {
+                DistributionLock.unLock(lock);
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
             return o;
         }
 
-        public <T> T lockAsync(Task<T> obj){
-            DistributionLock.lock(key,value,INTERVAL,TIMEOUT,false);
-            T o = null;
-            try {
-                o = obj.run(obj);
-            }catch (Exception e) {
-                DistributionLock.unLock(this);
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                }else {
-                    throw new RuntimeException(e.getMessage());
-                }
-            }finally {
-                DistributionLock.unLockAsync(key);
-            }
-            return o;
+        @Override
+        public String toString() {
+            return this.getClass().getSimpleName() + ": " + JsonX.toJson(this);
         }
     }
-
-
 
     public interface Task<T> {
         T run(Object obj);

@@ -29,4 +29,11 @@ public class KeyUtil {
         String str = SpringHeplerUtil.parseSPEL(condition,method,args);
         return VerifyUtil.toMD5(prefix + str);
     }
+
+    public static String makeLockKey(String prefix, String condition,Method method,Object[] args) {
+        String value = SpringHeplerUtil.parseSPEL(condition,method,args);
+        String root = VerifyUtil.toMD5(prefix).toLowerCase();
+        root = root.substring(0,10);
+        return "/lock/" + root + "/" + value;
+    }
 }

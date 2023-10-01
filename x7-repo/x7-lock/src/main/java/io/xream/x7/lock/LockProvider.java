@@ -21,6 +21,8 @@ public interface LockProvider {
     String VALUE = "~LOCK";
     int DEFAULT_TIMEOUT = 100000;
 
-    boolean lock(String key, String value,  Integer timeOut);
+    boolean lock(String key, String value,  long timeOut);
     void unLock(DistributionLock.Lock lock);
+
+    boolean delayExpire(DistributionLock.Lock lock);
 }
