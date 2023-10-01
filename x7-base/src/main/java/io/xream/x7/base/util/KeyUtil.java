@@ -30,10 +30,10 @@ public class KeyUtil {
         return VerifyUtil.toMD5(prefix + str);
     }
 
-    public static String makeLockKey(String prefix, String condition,Method method,Object[] args) {
+    public static String makeLockKey(String clzzShortName,String prefix, String condition,Method method,Object[] args) {
         String value = SpringHeplerUtil.parseSPEL(condition,method,args);
-        String root = VerifyUtil.toMD5(prefix).toLowerCase();
-        root = root.substring(0,10);
-        return "/lock/" + root + "/" + value;
+        String md5 = VerifyUtil.toMD5(prefix).toLowerCase();
+        md5 = md5.substring(0,7);
+        return "/lock/" + clzzShortName + "/" + method.getName() + "/" + md5 + "/" + value;
     }
 }

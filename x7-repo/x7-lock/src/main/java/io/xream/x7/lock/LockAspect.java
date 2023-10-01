@@ -38,11 +38,17 @@ public class LockAspect {
         org.aspectj.lang.Signature signature = proceedingJoinPoint.getSignature();
         MethodSignature ms = ((MethodSignature) signature);
 
-        final String prefix = signature.toString();
+        String clzzName = ms.getDeclaringTypeName();
+        int start = clzzName.lastIndexOf(".") + 1;
+        int length = clzzName.length();
+        clzzName = clzzName.substring(start,start + 3 > length ? length : start + 3);
         String condition = lock.condition();
         Object[] args = proceedingJoinPoint.getArgs();
 
-        String key = KeyUtil.makeLockKey(prefix,condition,ms.getMethod(),args);
+        String key = KeyUtil.makeLockKey(
+                clzzName,
+                signature.toString(),
+                condition,ms.getMethod(),args);
         int interval = lock.interval();
         int timeout = lock.timeout();
         boolean abortingIfNoLock = lock.abortingIfNoLock();

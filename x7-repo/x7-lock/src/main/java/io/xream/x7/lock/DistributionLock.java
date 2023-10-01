@@ -43,7 +43,7 @@ public class DistributionLock {
     private static Lock tryToLock(String key, String value, int interval, int timeout, boolean abortingIfNoLock) {
 
         if (lockProvider == null)
-            throw new RuntimeException("No implements of LockProvider, like the project x7-repo/x7-redis-integration");
+            throw new RuntimeException("No implements of LockProvider");
 
         int i = 1;
         boolean locked = lockProvider.lock(key,value,timeout);
