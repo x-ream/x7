@@ -18,7 +18,7 @@ package io.xream.x7;
 
 import io.xream.sqli.api.NativeRepository;
 import io.xream.sqli.api.TemporaryRepository;
-import io.xream.sqli.builder.Q2Sql;
+import io.xream.sqli.builder.internal.Q2Sql;
 import io.xream.sqli.cache.internal.DefaultL2CacheResolver;
 import io.xream.sqli.core.Repository;
 import io.xream.sqli.dialect.Dialect;

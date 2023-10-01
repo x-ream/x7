@@ -19,7 +19,7 @@ package io.xream.x7.base.web;
 
 import io.xream.internal.util.StringUtil;
 import io.xream.sqli.builder.Direction;
-import io.xream.sqli.builder.Sort;
+import io.xream.sqli.builder.internal.Sort;
 import io.xream.sqli.page.Paged;
 
 import java.util.ArrayList;
