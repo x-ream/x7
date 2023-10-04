@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Configuration
@@ -27,6 +28,11 @@ public class JacksonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializerByType(Date.class, new DateToLongSerializer());
+        return builder -> {
+            builder.serializerByType(LocalDateTime.class, new LocalDateTimeToLongSerializer());
+            builder.deserializerByType(LocalDateTime.class, new LongToLocalDateTimeDeserializer());
+
+            builder.serializerByType(Date.class, new DateToLongSerializer());
+        };
     }
 }
