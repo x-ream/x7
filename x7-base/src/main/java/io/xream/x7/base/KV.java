@@ -16,11 +16,7 @@
  */
 package io.xream.x7.base;
 
-import java.io.Serializable;
-
-public class KV implements Serializable{
-
-	private static final long serialVersionUID = -3617796537738183236L;
+public class KV {
 	public String k;
 	public Object v;
 	public KV(){}
