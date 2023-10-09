@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.xream.x7</groupId>
     <artifactId>x7-parent</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <packaging>pom</packaging>
     <name>x7-parent</name>
     <description>http://x7.xream.io</description>
@@ -17,15 +17,15 @@
         <maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
         <maven.test.skip>true</maven.test.skip>
         <springboot.version>3.1.2</springboot.version>
-        <sqli.version>2.1.0</sqli.version>
-        <x7.version>3.1.0</x7.version>
+        <sqli.version>2.1.1</sqli.version>
+        <x7.version>3.1.1</x7.version>
     </properties>
 
     <scm>
         <connection>scm:git:https://github.com/x-ream/x7</connection>
         <developerConnection>scm:git:https://github.com/x-ream/x7</developerConnection>
         <url>scm:git:https://github.com/x-ream/x7</url>
-        <tag>3.1.0</tag>
+        <tag>3.1.1</tag>
     </scm>
 
     <licenses>
