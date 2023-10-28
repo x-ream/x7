@@ -88,7 +88,9 @@ public class RepositoryListener implements
                     .getBean(IdGenerator.class);
             DefaultRepositoryX defaultRepository = applicationStartedEvent.getApplicationContext()
                     .getBean(DefaultRepositoryX.class);
-            defaultRepository.setIdGenerator(idGenerator);
+            if (defaultRepository != null && idGenerator != null) {
+                defaultRepository.setIdGenerator(idGenerator);
+            }
         }catch (Exception e) {
 
         }
@@ -187,6 +189,8 @@ public class RepositoryListener implements
             JdbcHelper jdbcHelper = null;
             try{
                 jdbcHelper = applicationStartedEvent.getApplicationContext().getBean(JdbcHelper.class);
+                if (jdbcHelper == null)
+                    return false;
                 JdbcTemplateHelper jth = (JdbcTemplateHelper) jdbcHelper;
                 jth.setJdbcTemplate(jdbcTemplate);
             }catch (Exception e){
@@ -217,6 +221,9 @@ public class RepositoryListener implements
 
             }
         }
+
+        if (cacheStorage == null)
+            return;
 
         try {
             L2CacheResolver levelTwoCacheResolver = applicationStartedEvent.getApplicationContext().getBean(L2CacheResolver.class);

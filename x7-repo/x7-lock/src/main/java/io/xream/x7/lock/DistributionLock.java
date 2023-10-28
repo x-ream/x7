@@ -36,7 +36,9 @@ public class DistributionLock {
 
     private static LockProvider lockProvider;
     public static void init(LockProvider lp) {
-        lockProvider = lp;
+        if (lp != null) {
+            lockProvider = lp;
+        }
     }
 
 
