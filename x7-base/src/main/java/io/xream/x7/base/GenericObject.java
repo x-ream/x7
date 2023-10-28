@@ -30,6 +30,10 @@ public class GenericObject<T> {
 		this.obj = t;
 	}
 
+	public static <T> GenericObject<T> of(T t){
+		return new GenericObject<T>(t);
+	}
+
 	public String getClzz() {
 		if (this.clzz == null) {
 			this.clzz =  obj.getClass().getName();
@@ -41,11 +45,6 @@ public class GenericObject<T> {
 	}
 
 	public Object getObj() {
-//		if (Objects.nonNull(obj) ){
-//			if (this.obj instanceof JSON) {
-//				this.obj = JsonX.toObject(obj, clzz);
-//			}
-//		}
 		return obj;
 	}
 	public void setObj(Object obj) {
