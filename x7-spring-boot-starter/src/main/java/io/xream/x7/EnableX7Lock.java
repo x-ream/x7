@@ -26,4 +26,4 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Import({LockAspect.class})
-public @interface EnableDistributionLock { }
+public @interface EnableX7Lock { }
