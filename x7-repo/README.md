@@ -124,7 +124,7 @@
                 qbx.eq("o.status","PAID");
                 qbx.beginSub().gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()).endSub();
                 qbx.beginSub().eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()).endSub();
-                qbx.sourceScript("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
+                qbx.froms("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
                 qbx.paged(obj);
                 Q.X xq = qbx.build();
                 orderRepository.find(xq);
@@ -163,37 +163,34 @@
                     // .reduce(ReduceType.SUM, "dogTest.petId", Having.of(Op.GT, 1))
                     //含Having接口 (仅仅在reduc查询后,有限支持Having)
             21. groupBy //分组
-            22. resultKey //指定返回列
-            23. resultKeyFunction //返回列函数支持
-                    // .resultKeyFunction(ResultKeyAlia.of("o","at"),"FFF(o.createAt, ?)", 100000) 
+            22. select //指定返回列
+            23. selectWithFunc //返回列函数支持
+                    // .selectWithFunc(ResultKeyAlia.of("o","at"),"FFF(o.createAt, ?)", 100000) 
             24. resultWithDottedKey //连表查询返回非JSON格式数据,map的key包含"."  (结果优化2)
            
         连表构建API  (QB.X)
-            25. sourceScript(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
-            26. sourceBuilder.source("order").alia("o") //连表里的主表
-            27. sourceBuilder().source("orderItem").alia("i").join(JoinType.LEFT_JOIN)
-                                              .on("orderId", JoinFrom.of("o","id")) //fluent构建连表sql
-            28.               .more().[1~18] // LEFT JOIN等, 更多条件
-            29. sourceBuilder().sub(....) // INNER JOIN (....) i  有限支持clickhouse等数据库
-                            .alia("i").join("ANY INNER JOIN").on("orderId", JoinFrom.of("o","id")) //fluent构建连表sql
+            25. from(joinSql) //简单的连表SQL，不支持LEFT JOIN  ON 多条件; 多条件，请用API[28]
+            26. fromBuilder.of(Order.class).alia("o") //连表里的主表
+            27. fromBuilder.JOIN(LEFT).of(OrderItem.class).alia("i")
+                                              .on("orderItem.orderId = order.id", 
+            28                  on -> on.gt(...)) //LEFT JOIN等, 更多条件
+            29. fromBuilder.sub(....) // INNER JOIN (....) i  有限支持clickhouse等数据库
+                            .alia("i").JOIN("ANY INNER JOIN").on(....) //fluent构建连表sql
         
         分页及排序API  (QB | QB.X)
             30. sort("o.id", Direction.DESC)
-            31. paged().ignoreTotalRows().page(1).rows(10).last(10000) //设置last(long),会忽略page(int); 
+            31. paged(pb -> pb.ignoreTotalRows().page(1).rows(10).last(10000)) //设置last(long),会忽略page(int); 
                                            
         更新构建API  ( qr)
             32. refresh
             
         框架优化
-            sourceScript/sourceBuilder
+            froms/fromBuilder
                 如果条件和返回都不包括sourceScript里的连表，框架会优化移除连接（但目标连接表有用时，中间表不会
                 被移除）。
-                关闭优化: QB.withoutOptimization()
+                关闭优化: qb.withoutOptimization()
             in
                 每500个条件会切割出一次in查询
             
         不支持项
-            in(sql) // 和连表查询及二级缓存的设计有一定的冲突
             union // 过于复杂
-            
-                
