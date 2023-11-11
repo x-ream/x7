@@ -95,7 +95,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
             BeanElement be = parsed.getElement(key);
             if (be.getClz() == String.class || be.getClz() == Date.class || be.getClz() == Timestamp.class)
                 continue;
-            builder.reduce(ReduceType.MAX, be.getProperty()).paged().ignoreTotalRows();
+            builder.reduce(ReduceType.MAX, be.getProperty()).paged(pageBuilder -> pageBuilder.ignoreTotalRows());
             Q.X xq = builder.build();
             List<Long> idList = null;
             if (baseRepository instanceof RepositoryX){
