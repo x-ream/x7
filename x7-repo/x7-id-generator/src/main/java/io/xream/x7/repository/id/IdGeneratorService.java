@@ -98,8 +98,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
             builder.reduce(ReduceType.MAX, be.getProperty()).paged(pageBuilder -> pageBuilder.ignoreTotalRows());
             Q.X xq = builder.build();
             List<Long> idList = null;
-            if (baseRepository instanceof RepositoryX){
-                RepositoryX repositoryX = (RepositoryX) baseRepository;
+            if (baseRepository instanceof RepositoryX repositoryX){
                 idList = repositoryX.listPlainValue(Long.class,xq);
             }
 

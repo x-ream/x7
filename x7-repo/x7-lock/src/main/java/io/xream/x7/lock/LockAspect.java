@@ -67,8 +67,8 @@ public class LockAspect {
                     return proceedingJoinPoint.proceed();
                 }
             } catch (Throwable e) {
-                if (e instanceof RuntimeException){
-                    throw (RuntimeException) e;
+                if (e instanceof RuntimeException re){
+                    throw re;
                 }
                 throw new RuntimeException(ExceptionUtil.getMessage(e));
             }

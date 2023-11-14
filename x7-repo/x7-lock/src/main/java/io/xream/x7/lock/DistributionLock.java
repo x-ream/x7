@@ -168,8 +168,8 @@ public class DistributionLock {
                 o = obj.run(obj);
             } catch (Exception e) {
                 DistributionLock.unLock(lock);
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
+                if (e instanceof RuntimeException re) {
+                    throw re;
                 } else {
                     throw new RuntimeException(e.getMessage());
                 }
