@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- io.xream.x7.repository.id.autoconfigure.IdGeneratorAutoConfiguration

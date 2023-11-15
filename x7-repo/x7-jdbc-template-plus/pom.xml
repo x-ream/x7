@@ -25,6 +25,7 @@
 					<artifactId>tomcat-jdbc</artifactId>
 				</exclusion>
 			</exclusions>
+			<version>${spring.version}</version>
 		</dependency>
 
 

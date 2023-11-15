@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.xream.x7.repository;
+package io.xream.x7.listener;
 
 import io.xream.sqli.core.RepositoryManagement;
 import io.xream.x7.repository.id.IdGeneratorService;

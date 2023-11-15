@@ -17,5 +17,5 @@
 package io.xream.x7;
 
 public class X7Data {
-    protected static boolean isEnabled = false;
+    public static boolean isEnabled = false;
 }
