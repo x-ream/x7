@@ -13,7 +13,7 @@
        
        x7-repo     (sqli,  Spring JdbcTemplate, Distribution Lock, Cache and so on....)
           @EnableX7Repository           @Repository       and { interface FooRepository extends BaseRepository<Foo> }
-          @EnableDistributionLock       @Lock             or  
+          @EnableX7Lock                 @Lock             or  
              { DistributionLock.by(key).lock(task) }
 
         
@@ -26,7 +26,7 @@
             public interface MyIdGeneratorService extends IdGeneratorProxy       
        
 ### NOTES
-       1. A method, coded with io.xream/reliable or seata, maybe we can not use:
+       1. A method, coded with io.xream/acku or seata, maybe we can not use:
             @Lock  or 
             { DistributionLock.by(key).lock(task) }
  
