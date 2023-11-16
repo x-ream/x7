@@ -11,7 +11,7 @@
         DistributionLock.by(key).lock(o -> {});
         
     注解使用
-        @EnableDistributionLock
+        @EnableX7Lock
         public class App{
             main()
          
@@ -73,10 +73,10 @@
     public interface BarRepository extends RepositoryX {}
     
 ###    实体类注解
-    @X.Key //主键, 必须
+    @X.Key //主键, or: @Id, @ID
     private Long id;
     
-    @X.Mapping("t_dog_demo") // 可选, 默认表名是 dog
+    @X.Mapping("t_dog_demo") // 可选, 默认表名是 dog; @Column unavailable
     public class Dog {
     
     @X.Mapping("dog_name") // 可选, 默认列名是 name
