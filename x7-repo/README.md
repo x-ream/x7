@@ -146,7 +146,7 @@
             7. lt // <
             8. lte // <=
             9. like //like %xxx%
-            10. likeRight // like xxx%
+            10. likeLeft // like xxx%
             11. notLike // not like %xxx%
             12. in // in
             13. nin // not in
@@ -193,4 +193,4 @@
                 每500个条件会切割出一次in查询
             
         不支持项
-            union // 过于复杂
+            union 
