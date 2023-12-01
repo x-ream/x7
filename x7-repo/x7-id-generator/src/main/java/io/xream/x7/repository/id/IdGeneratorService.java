@@ -17,7 +17,6 @@
 package io.xream.x7.repository.id;
 
 
-import io.xream.internal.util.VerifyUtil;
 import io.xream.sqli.api.BaseRepository;
 import io.xream.sqli.api.RepositoryX;
 import io.xream.sqli.builder.Q;
@@ -42,7 +41,8 @@ import java.util.List;
  */
 public interface IdGeneratorService extends IdGeneratorProxy {
 
-    String SLOT_KEY = "{x-ream:}";
+    String PREFIX = "{x-ream}";
+    String SLOT_KEY = PREFIX + ":";
     String ID_MAP_KEY = SLOT_KEY + "id_hk";
 
     Logger getLogger();
@@ -72,7 +72,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
 
             @Override
             public String getSha1(){
-                return SLOT_KEY;
+                return PREFIX;
             }
 
             @Override
