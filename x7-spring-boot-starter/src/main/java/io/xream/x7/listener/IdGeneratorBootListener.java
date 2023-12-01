@@ -37,10 +37,14 @@ public class IdGeneratorBootListener implements
         try {
             StringRedisTemplate stringRedisTemplate = applicationStartedEvent.getApplicationContext().getBean(StringRedisTemplate.class);
             idGeneratorService = applicationStartedEvent.getApplicationContext().getBean(IdGeneratorService.class);
-            idGeneratorService.setStringRedisTemplate(stringRedisTemplate);
-            idGeneratorService.onStart(RepositoryManagement.REPOSITORY_LIST);
+            if (idGeneratorService.getStringRedisTemplate() == null) {
+                idGeneratorService.setStringRedisTemplate(stringRedisTemplate);
+                idGeneratorService.onStart(RepositoryManagement.REPOSITORY_LIST);
+            }else {
+                idGeneratorService.setStringRedisTemplate(stringRedisTemplate);
+            }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

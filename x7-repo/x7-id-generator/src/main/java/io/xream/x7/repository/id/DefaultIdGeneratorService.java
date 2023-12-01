@@ -47,7 +47,7 @@ public final class DefaultIdGeneratorService implements IdGeneratorService {
     }
     @Override
     public long createId(String clzName) {
-        return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,clzName,1);
+        return this.stringRedisTemplate.opsForHash().increment(ID_MAP_KEY,SLOT_KEY + clzName,1);
     }
 
 }

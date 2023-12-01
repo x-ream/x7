@@ -42,7 +42,8 @@ import java.util.List;
  */
 public interface IdGeneratorService extends IdGeneratorProxy {
 
-    String ID_MAP_KEY = "ID_MAP_KEY";
+    String SLOT_KEY = "{x-ream:}";
+    String ID_MAP_KEY = SLOT_KEY + "id_hk";
 
     Logger getLogger();
     StringRedisTemplate getStringRedisTemplate();
@@ -71,7 +72,7 @@ public interface IdGeneratorService extends IdGeneratorProxy {
 
             @Override
             public String getSha1(){
-                return VerifyUtil.toMD5("id_map_key");
+                return SLOT_KEY;
             }
 
             @Override
@@ -105,12 +106,12 @@ public interface IdGeneratorService extends IdGeneratorProxy {
             Long maxId = idList.stream().filter(id -> id != null).findFirst().orElse(0L);
             String name = baseRepository.getClzz().getName();
 
-            getLogger().info("Db    : " + name + ".maxId = " + maxId);
+            getLogger().info("Db    : {}.maxId = {}",name, maxId);
 
-            List<String> keys = Arrays.asList(ID_MAP_KEY,name);
+            List<String> keys = Arrays.asList(ID_MAP_KEY,SLOT_KEY+name);
             long result = getStringRedisTemplate().execute(redisScript,keys,String.valueOf(maxId));
 
-            getLogger().info("Redis : " + name + ".maxId = " + result);
+            getLogger().info("Redis : {}.maxId = {}",name, result);
 
         }
         getLogger().info("..................................................");
