@@ -18,7 +18,6 @@ package io.xream.x7.lock;
 
 public interface LockProvider {
 
-    String VALUE = "~LOCK";
     int DEFAULT_TIMEOUT = 100000;
 
     boolean lock(String key, String value,  long timeOut);
