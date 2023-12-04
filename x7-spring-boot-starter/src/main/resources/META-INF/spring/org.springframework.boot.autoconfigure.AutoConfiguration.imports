@@ -1,4 +1,0 @@
-io.xream.x7.sqli.repository.dialect.autoconfigure.SchemaAutoConfiguration
-io.xream.x7.repository.redis.autoconfigure.L2CacheStorageAutoConfiguration
-io.xream.x7.repository.redis.autoconfigure.LockProviderAutoConfiguration
-io.xream.x7.repository.id.autoconfigure.IdGeneratorAutoConfiguration

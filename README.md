@@ -17,7 +17,7 @@
              { DistributionLock.by(key).lock(task) }
 
         
-       x7-spring-boot-starter
+## [x7-spring-boot-starter](https://github.com/x-ream/x7-spring-boot-starter)
 
 
 ###  如何使用第三方id生成器
