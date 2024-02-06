@@ -18,25 +18,39 @@ package io.xream.x7.base.util;
 
 import io.xream.internal.util.StringUtil;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.lang.Nullable;
+import org.springframework.util.function.SingletonSupplier;
 
 import java.lang.reflect.Method;
+import java.util.function.Supplier;
 
 /**
  * @author Sim
  */
 public class SpringHeplerUtil {
 
+    @Nullable
+    private static Supplier<ParameterNameDiscoverer> parameterNameDiscoverer;
+
+    public static ParameterNameDiscoverer getParameterNameDiscoverer() {
+        if (parameterNameDiscoverer == null) {
+            parameterNameDiscoverer = SingletonSupplier.of(new LocalVariableTableParameterNameDiscoverer());
+        }
+        return parameterNameDiscoverer.get();
+    }
     public static String parseSPEL(String condition, Method method, Object[] args) {
         if (StringUtil.isNullOrEmpty(condition))
             return "";
         if (!condition.contains("#") || (args == null || args.length==0))
             return condition;
         ExpressionParser parser = new SpelExpressionParser();
-        LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
+        ParameterNameDiscoverer discoverer = getParameterNameDiscoverer();
+
         String[] names = discoverer.getParameterNames(method);
         EvaluationContext ctx = new StandardEvaluationContext();
         int length = names.length;
@@ -45,4 +59,5 @@ public class SpringHeplerUtil {
         }
         return parser.parseExpression(condition).getValue(ctx, String.class);
     }
+
 }

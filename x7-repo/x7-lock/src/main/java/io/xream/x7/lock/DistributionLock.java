@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -83,7 +84,7 @@ public class DistributionLock {
     public static Lock by(String key){
         Lock ml = new Lock();
         ml.setKey(key);
-        ml.setValue("~LOCK");
+        ml.setValue(UUID.randomUUID()+"~LOCK");
         return ml;
     }
 

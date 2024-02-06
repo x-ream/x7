@@ -39,6 +39,7 @@ public class LockAspect {
         MethodSignature ms = ((MethodSignature) signature);
 
         String clzzName = ms.getDeclaringTypeName();
+
         int start = clzzName.lastIndexOf(".") + 1;
         int length = clzzName.length();
         clzzName = clzzName.substring(start,start + 3 > length ? length : start + 3);
