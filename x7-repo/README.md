@@ -38,11 +38,10 @@
     
     包含二级缓存的BaseRepository的API：
         1. in(property, inList)
-        2. list(Object)
-        3. find(q)
-        4. list(q)
-        5. get(id)
-        6. getOne(Object)
+        2. find(q)
+        3. list(q)
+        4. get(id)
+        5. getOne(q)
         
     不含二级缓存的BaseRepository, RepositoryX的API:
         1. list()
@@ -86,11 +85,11 @@
 ###    BaseRepository API
     
             1. in(property, inList) //in查询, 例如: 页面上需要的主表ID或记录已经查出后，补充查询其他表的文本说明数据时使用
-            2. list(Object) //对象查列表
-            3. find(Built) //标准拼接查询，返回对象形式记录，返回分页对象
-            4. list(Built) //标准拼接查询，返回对象形式记录，不返回分页对象
+            2. list(q) //对象查列表
+            3. find(q) //标准拼接查询，返回对象形式记录，返回分页对象
+            4. list(q) //标准拼接查询，返回对象形式记录，不返回分页对象
             5. get(Id) //根据主键查询记录
-            6. getOne(Object) //数据库只有一条记录时，就返回那条记录
+            6. getOne(q) //数据库只有一条记录时，就返回那条记录
             7. list() //无条件查全表, 几乎没使用场景
             8. creaet(Object) //插入一条, 不支持返回自增键, 框架自带ID生成器
             9. createBatch(List<Object>) //批量插入
@@ -125,7 +124,7 @@
                 qbx.and(sub -> sub.gt("o.createAt",obj.getStartTime()).lt("o.createAt",obj.getEndTime()));
                 qbx.or(sub -> sub.eq("o.test",obj.getTest()).or().eq("i.test",obj.getTest()));
                 qbx.froms("FROM order o INNER JOIN orderItem i ON i.orderId = o.id");
-                qbx.paged(obj);
+                qbx.paged(pageBuilder -> pageBuilder.page(obj.getPage()).rows(obj.getSize()));
                 Q.X xq = qbx.build();
                 orderRepository.find(xq);
             }
