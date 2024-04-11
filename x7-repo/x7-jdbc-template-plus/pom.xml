@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.xream.x7</groupId>
 		<artifactId>x7-repo</artifactId>
-		<version>3.1.8</version>
+		<version>3.1.9</version>
 	</parent>
 
 	<artifactId>x7-jdbc-template-plus</artifactId>
