@@ -5,19 +5,13 @@
     <parent>
         <artifactId>x7-parent</artifactId>
         <groupId>io.xream.x7</groupId>
-        <version>3.1.9</version>
+        <version>3.1.10</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>x7-base</artifactId>
 
     <dependencies>
-
-        <dependency>
-            <groupId>io.xream.sqli</groupId>
-            <artifactId>sqli-core</artifactId>
-            <version>${sqli.version}</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
@@ -27,17 +21,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpclient</artifactId>-->
+<!--            <version>4.5.13</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>commons-collections</groupId>-->
+<!--            <artifactId>commons-collections</artifactId>-->
+<!--            <version>3.2.2</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

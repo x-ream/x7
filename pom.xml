@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.xream.x7</groupId>
     <artifactId>x7-parent</artifactId>
-    <version>3.1.9</version>
+    <version>3.1.10</version>
     <packaging>pom</packaging>
     <name>x7-parent</name>
     <description>http://x7.xream.io</description>
@@ -23,14 +23,14 @@
         <jackson.version>2.17.0</jackson.version>
         <slf4j.version>2.0.13</slf4j.version>
         <sqli.version>2.1.9</sqli.version>
-        <x7.version>3.1.9</x7.version>
+        <x7.version>3.1.10</x7.version>
     </properties>
 
     <scm>
         <connection>scm:git:https://github.com/x-ream/x7</connection>
         <developerConnection>scm:git:https://github.com/x-ream/x7</developerConnection>
         <url>scm:git:https://github.com/x-ream/x7</url>
-        <tag>3.1.9</tag>
+        <tag>3.1.10</tag>
     </scm>
 
     <licenses>
